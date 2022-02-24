@@ -1,0 +1,17 @@
+# Object files
+*.o
+*.d
+*.o.d
+*.exe
+*.res
+*.a
+*.dll
+
+# Sensitive files used by NetBeans
+nbproject
+
+# Export folders & relatives
+dist
+build
+
+# Misc
