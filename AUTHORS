@@ -1,6 +1,18 @@
-Creator and maintainer:
+This list includes all the contributors and code owners of this project. The
+list must be kept alphabetically sorted and it must include some identification
+fields that are mandatory, and some other optional. The list is must be kept
+ordered and with consistent format in order to allow it to be beautified by
+grep or similar tools.
 
-Javier Marrero <jv.freelancerdevteam.qba@gmail.com>
+If you have contributed to the project somehow, feel free to include yourself
+into this list, but keep it sorted ;)
 
-Contributors 
-(feel free to add yourself to the list, but please, keep it alphabetically sorted)
+The fields are:
+Name 		(N)
+Description	(D)
+E-mail		(E)
+
+--
+(N)	Javier Marrero
+(D)	Original author and maintainer
+(E)	jv.freelancerdevteam.qba@gmail.com
