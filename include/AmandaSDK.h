@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #define AMANDASDK_H
 
 /* AmandaSDK C interface (code library only) */
+#include <amanda-vm-c/sdk-assert-helper.h>
 #include <amanda-vm-c/sdk-definitions.h>
 #include <amanda-vm-c/sdk-toolchains.h>
 #include <amanda-vm-c/sdk-types.h>
@@ -36,6 +37,8 @@
 #include <amanda-vm/Pointer.h>
 #include <amanda-vm/ReferenceCounted.h>
 #include <amanda-vm/String.h>
+
+#include <amanda-vm/ADT/BinaryBuffer.h>
 
 #include <amanda-vm/IO/Console.h>
 #include <amanda-vm/IO/File.h>

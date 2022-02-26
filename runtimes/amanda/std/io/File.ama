@@ -1,0 +1,19 @@
+namespace std::io
+{
+
+/**
+ * The file class provides basic I/O functionality.
+ */
+final class File
+{
+public:
+
+	native bool exists();
+	native bool isFile();
+	
+private:
+
+	string name;
+};
+
+}

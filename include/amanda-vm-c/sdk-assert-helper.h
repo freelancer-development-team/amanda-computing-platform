@@ -16,44 +16,25 @@
  */
 
 /* 
- * File:   PrintStream.h
+ * File:   sdk-assert-helper.h
  * Author: Javier Marrero
  *
- * Created on February 15, 2022, 12:31 AM
+ * Created on February 26, 2022, 9:26 AM
  */
 
-#ifndef PRINTSTREAM_H
-#define PRINTSTREAM_H
-
-#include <amanda-vm/Object.h>
-#include <amanda-vm/io/File.h>
-
-#include <cstdarg>
-
-namespace amanda
+#ifndef SDK_ASSERT_HELPER_H
+#define SDK_ASSERT_HELPER_H
+#ifdef __cplusplus
+extern "C"
 {
-namespace io
-{
+#endif
 
-class PrintStream : public amanda::core::Object
-{
-    AMANDA_OBJECT(PrintStream, amanda::core::Object)
-    
-public:
+#include <assert.h>
 
-    PrintStream(File* file);
-    virtual ~PrintStream();
+#define ASSERT_MESSAGE(message) __FILE__ ": " message
 
-    virtual bool println(const core::String& fmt, ...);
-    virtual bool printf(const core::String& fmt, ...);
-
-protected:
-
-    File* file;
-} ;
-
+#ifdef __cplusplus
 }
-}
-
-#endif /* PRINTSTREAM_H */
+#endif
+#endif /* SDK_ASSERT_HELPER_H */
 
