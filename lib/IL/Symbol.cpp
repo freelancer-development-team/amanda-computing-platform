@@ -16,43 +16,28 @@
  */
 
 /* 
- * File:   Option.h
+ * File:   Symbol.cpp
  * Author: Javier Marrero
- *
- * Created on February 23, 2022, 6:41 PM
+ * 
+ * Created on February 24, 2022, 11:46 PM
  */
 
-#ifndef OPTION_H
-#define OPTION_H
+#include <amanda-vm/IL/Symbol.h>
 
-#include <cwchar>
+using amanda::il::Symbol;
+using amanda::core::String;
 
-namespace amanda
+Symbol::Symbol(const core::String& name)
+:
+name(name)
 {
-namespace options
-{
-
-/*
- * This structure represents an option from the command line. These are
- * initialized in an array.
- */
-typedef struct
-{
-    const wchar_t   shortOption;
-    const wchar_t*  longOption;
-    const wchar_t*  description;
-
-    unsigned int    arity;
-    unsigned int    flags;
-} Option;
-
-typedef Option OptionList[];
-
-#define OPTION_INIITIALIZER(s, l, d, a, f)  { s, l, d, a, f }
-#define OPTION_LIST_END()                   { 0, NULL, NULL, 0, 0 }
-
-}
 }
 
-#endif /* OPTION_H */
+Symbol::~Symbol()
+{
+}
 
+const String& Symbol::getName() const
+{
+    return name;
+}

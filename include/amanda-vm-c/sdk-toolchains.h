@@ -16,31 +16,36 @@
  */
 
 /* 
- * File:   OptionParser.cpp
+ * File:   sdk-toolchains.h
  * Author: Javier Marrero
- * 
- * Created on February 23, 2022, 12:39 PM
+ *
+ * Created on February 24, 2022, 11:15 PM
  */
 
-#include <amanda-vm/Option/OptionParser.h>
-
-#include <amanda-vm/IO/Path.h>
-
-using amanda::options::OptionParser;
-
-using amanda::core::String;
-using amanda::io::Path;
-
-OptionParser::OptionParser(const int argc, const char** argv, OptionList options)
-:
-argc(argc),
-argv(argv),
-options((OptionList*) &options)
+#ifndef SDK_TOOLCHAINS_H
+#define SDK_TOOLCHAINS_H
+#ifdef __cplusplus
+extern "C"
 {
-}
+#endif
 
-OptionParser::~OptionParser()
-{
-}
+#ifndef HAS_SDK_TOOLCHAINS_INCLUDED
+#   define HAS_SDK_TOOLCHAINS_INCLUDED  1
+#endif
 
+/**
+ * State all the supported tool-chains.
+ */
+#define AMANDA_ARCH_TOOLCHAIN_GCC   1
+#define AMANDA_ARCH_TOOLCHAIN_CLANG 2
+
+#if defined(__GNUC__)
+#   define AMANDA_ARCH_TOOLCHAIN    AMANDA_ARCH_TOOLCHAIN_GCC
+#   include <amanda-vm-c/sdk-gcc.h>
+#endif
+
+#ifdef __cplusplus
+}
+#endif
+#endif /* SDK_TOOLCHAINS_H */
 

@@ -16,31 +16,45 @@
  */
 
 /* 
- * File:   AmandaSDK.h
+ * File:   Symbol.h
  * Author: Javier Marrero
  *
- * Created on February 13, 2022, 2:14 PM
+ * Created on February 24, 2022, 11:46 PM
  */
 
-#ifndef AMANDASDK_H
-#define AMANDASDK_H
+#ifndef SYMBOL_H
+#define SYMBOL_H
 
-/* AmandaSDK C interface (code library only) */
-#include <amanda-vm-c/sdk-definitions.h>
-#include <amanda-vm-c/sdk-toolchains.h>
-#include <amanda-vm-c/sdk-types.h>
-
-/* AmandaSDK C++ interface (core library only) */
-#include <amanda-vm/Class.h>
 #include <amanda-vm/Object.h>
-#include <amanda-vm/Pointer.h>
-#include <amanda-vm/ReferenceCounted.h>
 #include <amanda-vm/String.h>
 
-#include <amanda-vm/IO/Console.h>
-#include <amanda-vm/IO/File.h>
-#include <amanda-vm/IO/Path.h>
-#include <amanda-vm/IO/PrintStream.h>
+namespace amanda
+{
+namespace il
+{
 
-#endif /* AMANDASDK_H */
+/**
+ * A symbol represents a reference to some memory space, address, constant or
+ * binary object defined inside an object or executable file.
+ */
+class Symbol : public core::Object
+{
+    AMANDA_OBJECT(Symbol, core::Object)
+
+public:
+
+    Symbol(const core::String& name);
+    virtual ~Symbol();
+    
+    const core::String& getName() const;
+
+private:
+
+    core::String    name;
+} ;
+
+}
+}
+
+#endif /* SYMBOL_H */
 

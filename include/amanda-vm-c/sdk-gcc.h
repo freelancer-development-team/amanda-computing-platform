@@ -16,43 +16,25 @@
  */
 
 /* 
- * File:   OptionParser.h
+ * File:   sdk-gcc.h
  * Author: Javier Marrero
  *
- * Created on February 23, 2022, 12:39 PM
+ * Created on February 24, 2022, 11:22 PM
  */
 
-#ifndef OPTIONPARSER_H
-#define OPTIONPARSER_H
-
-#include <amanda-vm/Option/Option.h>
-#include <amanda-vm/String.h>
-
-#include <vector>
-
-namespace amanda
+#ifndef SDK_GCC_H
+#define SDK_GCC_H
+#ifdef __cplusplus
+extern "C"
 {
-namespace options
-{
+#endif
 
-class OptionParser
-{
-public:
+#ifndef HAS_SDK_TOOLCHAINS_INCLUDED
+#   error "Please, do not include this file directly. Include <sdk-toolchains.h> instead."
+#endif
 
-    OptionParser(const int argc, const char** argv, OptionList options);
-    virtual ~OptionParser();
-
-    virtual wchar_t getNextOption();
-
-private:
-
-    const int       argc;
-    const char**    argv;
-    OptionList*     options;
-} ;
-
+#ifdef __cplusplus
 }
-}
-
-#endif /* OPTIONPARSER_H */
+#endif
+#endif /* SDK_GCC_H */
 
