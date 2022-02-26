@@ -287,14 +287,14 @@ public:
     }
 
     /// Return char at index.
-    char& At(unsigned index)
+    char& charAt(unsigned index)
     {
         assert(index < bufferLength);
         return buffer[index];
     }
 
     /// Return const char at index.
-    const char& At(unsigned index) const
+    const char& charAt(unsigned index) const
     {
         assert(index < bufferLength);
         return buffer[index];
