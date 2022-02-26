@@ -1,0 +1,42 @@
+Target Release: 0.2.0
+=====================
+
+* integrate Jakob's register allocator
+* CFG-based liveness analysis and dead code elimination
+* new code memory allocator able to free functions 
+
+Target release: 0.2.2
+=====================
+
+* win64 port
+* get rid of manual rules
+
+Target release: 0.3.0
+=====================
+
+* global copy and constant propagation
+* jitruby
+* sync jitplus with jit (jump tables, compile driver, debug)
+* fix catch/throw within finally
+* add direct conversion opcodes to/from float32 and float64
+* add rounding towards zero
+* try to be smarter with %rax for variadic functions on x86-64
+* improve exception handling
+* align function prolog and basic blocks
+* support cross-compilation 
+
+Long-Term Tasks
+===============
+
+* comprehensive test suite
+* ports to arm, aarh
+* fix interpreter wrt loading and storing values -- currently the generated code is too large
+* more optimizations:
+** redundancy elimination
+** alias analysis
+** strength reduction
+** loop optimization
+** array data type, ABCD
+* tree-based IR and instruction selection ?
+* instruction scheduling ?
+* finish ELF writer/reader
