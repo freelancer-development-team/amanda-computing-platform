@@ -22,8 +22,8 @@
  * Created on February 28, 2022, 12:07 AM
  */
 
-#ifndef PACKAGE__HXX
-#define PACKAGE__HXX
+#ifndef PACKAGE_OPTION_HXX
+#define PACKAGE_OPTION_HXX
 
 #include "HelpFormatter.h"
 #include "Option.h"

@@ -73,7 +73,7 @@ static inline void fill(T array[], T value, size_t count)
 template <typename T>
 static inline void fill(T array[], T value, size_t start, size_t end)
 {
-    for (size_t i = start; i < end; i++)
+    for (size_t i = start; i < end; ++i)
     {
         array[i] = value;
     }

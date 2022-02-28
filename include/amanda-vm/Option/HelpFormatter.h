@@ -52,15 +52,20 @@ public:
     static const core::String   DEFAULT_ARG_NAME;
 
     virtual void printHelp(const unsigned width, const core::String& cmdLineSyntax,
-                           const core::String& header, const void* options,
+                           const core::String& header, const Options& options,
                            const core::String& footer, const bool autoUsage = false,
                            const io::PrintStream& stream = io::console().out,
                            const unsigned descPad = DEFAULT_DESC_PAD,
                            const unsigned leftPad = DEFAULT_LEFT_PAD) const;
+    virtual void printOptions(const io::PrintStream& stream, const unsigned width,
+                              const Options& options, const unsigned leftPad,
+                              const unsigned descPad) const;
+    virtual void printUsage(const io::PrintStream& stream, const unsigned width,
+                            const core::String& cmdLineSyntax) const;
     virtual void printUsage(const io::PrintStream& stream, const unsigned width,
                             const core::String& app, const Options& options) const;
     virtual void printWrapped(const io::PrintStream& stream, const unsigned width,
-                              const unsigned nextLineTabStop, const core::String& text) const;
+                              const core::String& text, const unsigned nextLineTabStop = 0) const;
 
 protected:
 
@@ -70,10 +75,17 @@ protected:
                                              const unsigned int startPosition) const;
     virtual core::String&   renderOptions(core::String& sb, const unsigned width, const Options& options,
                                           const unsigned leftPad, const unsigned descPad) const;
+    virtual core::String&   renderWrappedText(core::String& sb, const unsigned width,
+                                              unsigned nextTabLineStop,
+                                              core::String& text) const;
+    virtual core::String    rtrim(const core::String& s) const;
 
 private:
 
-    void appendOption(core::String& buffer, const Option& option, bool required) const;
+    void                    appendOption(core::String& buffer, const Option& option, bool required) const;
+    core::String&           renderWrappedTextBlock(core::String& buffer, const unsigned width,
+                                                   const unsigned nextLineTabStop,
+                                                   const core::String& text) const;
 
 } ;
 

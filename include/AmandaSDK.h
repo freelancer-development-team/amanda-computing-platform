@@ -30,6 +30,7 @@
 #include <amanda-vm-c/sdk-definitions.h>
 #include <amanda-vm-c/sdk-toolchains.h>
 #include <amanda-vm-c/sdk-types.h>
+#include <amanda-vm-c/sdk-version.h>
 
 /* AmandaSDK C++ interface (core library only) */
 #include <amanda-vm/Class.h>

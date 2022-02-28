@@ -102,10 +102,6 @@ handle(NULL)
     }
 }
 
-File::~File()
-{
-}
-
 bool File::canExecute() const
 {
     return (_access(name.toCharArray(), X_OK) == 0);

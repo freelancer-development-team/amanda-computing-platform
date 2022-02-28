@@ -22,8 +22,8 @@
  * Created on February 28, 2022, 12:09 AM
  */
 
-#ifndef PACKAGE_HXX
-#define PACKAGE_HXX
+#ifndef PACKAGE_IL_HXX
+#define PACKAGE_IL_HXX
 
 #include "Symbol.h"
 #include "SymbolTable.h"

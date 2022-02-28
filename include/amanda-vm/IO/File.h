@@ -59,7 +59,6 @@ public:
     File(int descriptor, FileAccessMode accessMode);
     File(const core::String& name, FileAccessMode accessMode, bool inmediate = false);
     File(const Path& path, FileAccessMode accessMode, bool inmediate = false);
-    virtual ~File();
 
     bool                canExecute() const;
     bool                canRead() const;

@@ -27,6 +27,7 @@
 #include <amanda-vm-c/sdk-assert-helper.h>
 
 #include <list>
+#include <cctype>
 
 using amanda::cli::HelpFormatter;
 using amanda::core::String;
@@ -38,7 +39,7 @@ const String HelpFormatter::DEFAULT_LONG_OPT_SEPARATOR = " ";
 const String HelpFormatter::DEFAULT_ARG_NAME = "arg";
 
 void HelpFormatter::printHelp(const unsigned width, const core::String& cmdLineSyntax,
-                              const core::String& header, const void* options,
+                              const core::String& header, const Options& options,
                               const core::String& footer, const bool autoUsage,
                               const io::PrintStream& stream,
                               const unsigned descPad,
@@ -49,22 +50,39 @@ void HelpFormatter::printHelp(const unsigned width, const core::String& cmdLineS
 
     if (autoUsage)
     {
-
+        printUsage(stream, width, cmdLineSyntax, options);
     }
     else
     {
-
+        printUsage(stream, width, cmdLineSyntax);
     }
 
     if (!header.isEmpty())
     {
-
+        printWrapped(stream, width, header);
     }
+
+    printOptions(stream, width, options, leftPad, descPad);
 
     if (!footer.isEmpty())
     {
-
+        printWrapped(stream, width, footer);
     }
+}
+
+void HelpFormatter::printOptions(const io::PrintStream& stream, const unsigned width,
+                                 const Options& options, const unsigned leftPad,
+                                 const unsigned descPad) const
+{
+    String buffer;
+    renderOptions(buffer, width, options, leftPad, descPad);
+    stream.println(buffer);
+}
+
+void HelpFormatter::printUsage(const io::PrintStream& stream, const unsigned width, const String& cmdLineSyntax) const
+{
+    const unsigned argumentPosition = cmdLineSyntax.find(' ') + 1;
+    printWrapped(stream, width, DEFAULT_SYNTAX_PREFIX + cmdLineSyntax, DEFAULT_SYNTAX_PREFIX.length() + argumentPosition);
 }
 
 void HelpFormatter::printUsage(const io::PrintStream& stream, const unsigned width,
@@ -90,13 +108,16 @@ void HelpFormatter::printUsage(const io::PrintStream& stream, const unsigned wid
             buff.append(" ");
         }
     }
+
+    printWrapped(stream, width, buff, buff.find(' ') + 1);
 }
 
 void HelpFormatter::printWrapped(const io::PrintStream& stream, const unsigned width,
-                                 const unsigned nextLineTabStop,
-                                 const core::String& text) const
+                                 const core::String& text, const unsigned nextLineTabStop) const
 {
     String sb;
+    renderWrappedTextBlock(sb, width, nextLineTabStop, text);
+
     stream.println(sb);
 }
 
@@ -161,7 +182,143 @@ String& HelpFormatter::renderOptions(core::String& sb, const unsigned width,
                                      const Options& options, const unsigned leftPad,
                                      const unsigned descPad) const
 {
-    
+    const String lpad = createPadding(leftPad);
+    const String dpad = createPadding(descPad);
+
+    unsigned max = 0;
+    std::list<String> prefixList;
+    std::list<const Option*> optionList;
+
+    options.helpOptions(optionList);
+
+    // TODO: Sort the list of options.
+
+    for (std::list<const Option*>::iterator iter = optionList.begin();
+         iter != optionList.end(); ++iter)
+    {
+        const Option* option = *iter;
+        if (!option) continue;
+
+        String optionBuffer;
+        if (option->getOption() == Option::NO_OPTION)
+        {
+            optionBuffer.append(lpad).append("   ").append(DEFAULT_LONG_OPT_PREFIX).append(option->getLongOption());
+        }
+        else
+        {
+            optionBuffer.append(lpad).append(DEFAULT_OPT_PREFIX).append(option->getOption());
+
+        }
+
+        if (option->hasArgument())
+        {
+            String argumentName = option->getArgumentName();
+            if (argumentName == String::EMPTY)
+            {
+                optionBuffer.append(' ');
+            }
+            else
+            {
+                optionBuffer.append(option->hasLongOption() ? DEFAULT_LONG_OPT_SEPARATOR : " ");
+                optionBuffer.append('<').append(argumentName.isEmpty() ? option->getArgumentName() : DEFAULT_ARG_NAME).append('>');
+            }
+        }
+
+        prefixList.push_back(optionBuffer);
+        max = optionBuffer.length() > max ? optionBuffer.length() : max;
+    }
+
+    std::list<const Option*>::iterator iter = optionList.begin();
+    while (iter != optionList.end())
+    {
+        const Option* option = *iter;
+        if (!option) continue;
+
+        String optionBuffer = prefixList.front();
+        prefixList.pop_front();
+
+        if (optionBuffer.length() < max)
+        {
+            optionBuffer.append(createPadding(max - optionBuffer.length()));
+        }
+        optionBuffer.append(dpad);
+
+        unsigned nextLineTabStop = max + descPad;
+        if (option->getDescription() != String::EMPTY)
+        {
+            optionBuffer.append(option->getDescription());
+        }
+
+        renderWrappedText(sb, width, nextLineTabStop, optionBuffer);
+
+        if (++iter != optionList.end())
+        {
+            sb.append('\n');
+        }
+    }
+
+    return sb;
+}
+
+String& HelpFormatter::renderWrappedText(core::String& sb, const unsigned width,
+                                         unsigned nextTabLineStop, core::String& text) const
+{
+    unsigned pos = findWrapPosition(text, width, 0);
+
+    if (pos == String::NPOS)
+    {
+        sb.append(rtrim(text));
+    }
+    else
+    {
+        sb.append(text.substring(0, pos).trimmed()).append('\n');
+
+        if (nextTabLineStop >= width)
+        {
+            nextTabLineStop = 1;
+        }
+
+        String padding = createPadding(nextTabLineStop);
+        while (pos != String::NPOS)
+        {
+            text = padding + text.substring(pos).trimmed();
+            pos = findWrapPosition(text, width, 0);
+
+            if (pos == String::NPOS)
+            {
+                sb.append(text);
+            }
+            else
+            {
+                if (text.length() > width && (pos == nextTabLineStop - 1))
+                {
+                    pos = width;
+                }
+                sb.append(rtrim(text.substring(0, pos))).append('\n');
+            }
+        }
+    }
+    return sb;
+}
+
+String HelpFormatter::rtrim(const core::String& s) const
+{
+    String result;
+    if (s.isEmpty())
+    {
+        result = s;
+    }
+    else
+    {
+        unsigned pos = s.length();
+        while (pos > 0 && isspace(s.charAt(pos - 1)))
+        {
+            --pos;
+        }
+
+        result = s.substring(0, pos);
+    }
+    return result;
 }
 
 void HelpFormatter::appendOption(core::String& buffer, const Option& option, bool required) const
@@ -191,4 +348,38 @@ void HelpFormatter::appendOption(core::String& buffer, const Option& option, boo
     {
         buffer.append("]");
     }
+}
+
+String& HelpFormatter::renderWrappedTextBlock(core::String& buffer, const unsigned width,
+                                              const unsigned nextLineTabStop, const core::String& text) const
+{
+    unsigned start = 0;
+    unsigned end = text.find('\n') != String::NPOS ? text.find('\n') : text.length();
+    bool firstLine = true;
+    String line(text.substring(start, end - start));
+
+    while (end != String::NPOS)
+    {
+        if (!firstLine)
+        {
+            buffer.append(line);
+        }
+        else
+        {
+            firstLine = false;
+        }
+        renderWrappedText(buffer, width, nextLineTabStop, eliminateConstness(text));
+
+        // Update the markers. At this point we should be iterating over all
+        // the lines of text.
+        start = end + 1;
+        end = text.find('\n');
+
+        if (end != String::NPOS)
+        {
+            line = text.substring(start, end);
+        }
+    }
+
+    return buffer;
 }
