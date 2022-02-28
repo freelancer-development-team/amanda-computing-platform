@@ -42,9 +42,9 @@ class File : public amanda::core::Object
 
 public:
 
-    static File STDIN;
-    static File STDOUT;
-    static File STDERR;
+    static const File STDIN;
+    static const File STDOUT;
+    static const File STDERR;
 
     enum
     {
@@ -59,7 +59,7 @@ public:
     File(int descriptor, FileAccessMode accessMode);
     File(const core::String& name, FileAccessMode accessMode, bool inmediate = false);
     File(const Path& path, FileAccessMode accessMode, bool inmediate = false);
-    ~File();
+    virtual ~File();
 
     bool                canExecute() const;
     bool                canRead() const;

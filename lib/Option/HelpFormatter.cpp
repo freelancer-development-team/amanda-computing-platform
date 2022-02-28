@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,8 +23,10 @@
  */
 
 #include <amanda-vm/Option/HelpFormatter.h>
-
+#include <amanda-vm/Types.h>
 #include <amanda-vm-c/sdk-assert-helper.h>
+
+#include <list>
 
 using amanda::cli::HelpFormatter;
 using amanda::core::String;
@@ -47,31 +49,67 @@ void HelpFormatter::printHelp(const unsigned width, const core::String& cmdLineS
 
     if (autoUsage)
     {
-        
+
     }
     else
     {
-        
+
     }
 
     if (!header.isEmpty())
     {
-        
+
     }
 
     if (!footer.isEmpty())
     {
-        
+
     }
+}
+
+void HelpFormatter::printUsage(const io::PrintStream& stream, const unsigned width,
+                               const core::String& app, const Options& options) const
+{
+    String buff("usage: ");
+    buff.append(app).append(" ");
+
+    std::list<const Option*> optionList;
+    options.getOptions(optionList);
+
+    std::list<const Option*>::iterator iter = optionList.begin();
+    while (iter != optionList.end())
+    {
+        const Option* option = *iter;
+        if (option)
+        {
+            appendOption(buff, *option, option->isRequired());
+        }
+
+        if (++iter != optionList.end())
+        {
+            buff.append(" ");
+        }
+    }
+}
+
+void HelpFormatter::printWrapped(const io::PrintStream& stream, const unsigned width,
+                                 const unsigned nextLineTabStop,
+                                 const core::String& text) const
+{
+    String sb;
+    stream.println(sb);
 }
 
 String HelpFormatter::createPadding(const unsigned int length) const
 {
     char padding[length + 1] = {0};
+#if 0
     for (unsigned int i = 0; i < length; i++)
     {
         padding[i] = ' ';
     }
+#endif
+    amanda::fill(padding, ' ', length);
 
     return String(padding);
 }
@@ -119,11 +157,34 @@ unsigned int HelpFormatter::findWrapPosition(const core::String& text, const uns
     return result;
 }
 
+String& HelpFormatter::renderOptions(core::String& sb, const unsigned width,
+                                     const Options& options, const unsigned leftPad,
+                                     const unsigned descPad) const
+{
+    
+}
+
 void HelpFormatter::appendOption(core::String& buffer, const Option& option, bool required) const
 {
     if (!required)
     {
         buffer.append("[");
+    }
+
+    if (option.getOption() != Option::NO_OPTION)
+    {
+        buffer.append("-").append(option.getOption());
+    }
+    else
+    {
+        buffer.append("--").append(option.getLongOption());
+    }
+
+    if (option.hasArgument() && (option.getArgumentName() == String::EMPTY ||
+                                 !option.getArgumentName().isEmpty()))
+    {
+        buffer.append(option.getOption() == Option::NO_OPTION ? DEFAULT_LONG_OPT_SEPARATOR : " ");
+        buffer.append("<").append(option.getArgumentName() != String::EMPTY ? option.getArgumentName() : DEFAULT_ARG_NAME).append(">");
     }
 
     if (!required)

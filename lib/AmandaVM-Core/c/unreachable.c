@@ -15,33 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <amanda-vm/Option/Option.h>
+#include <amanda-vm-c/sdk-unreachable.h>
 
-using amanda::core::String;
+#include <stdlib.h>
+#include <stdio.h>
 
-String amanda::cli::stripLeadingAndTrailingQuotes(const core::String& str)
+noreturn void amanda_sdk_unreachable(const char* message)
 {
-    String result(str);
-    const int length = str.length();
-    
-    if ((length > 1) && (str.startsWith("\"") && (str.endsWith("\""))))
-    {
-        result = str.substring(1, length - 1);
-    }
-    return result;
-}
-
-String amanda::cli::stripLeadingHyphens(const core::String& str)
-{
-    String result(str);
-    if (str.startsWith("--"))
-    {
-        result = str.substring(2);
-    }
-    else if (str.startsWith("-"))
-    {
-        result = str.substring(1);
-    }
-
-    return result;
+    fputs(message, stderr);
+    abort();
 }

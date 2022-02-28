@@ -15,33 +15,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <amanda-vm/Option/Option.h>
+/* 
+ * File:   main.cpp
+ * Author: Javier Marrero
+ *
+ * Created on February 27, 2022, 10:38 PM
+ */
 
-using amanda::core::String;
+#include <AmandaSDK.h>
+#include <amanda-vm/Option/package.hxx>
 
-String amanda::cli::stripLeadingAndTrailingQuotes(const core::String& str)
+#include <cstdio>
+#include <cstdlib>
+
+using namespace amanda;
+
+/*
+ * This is the entry point for the Amanda Programming Language compiler
+ * frontend.
+ */
+int main(int argc, char** argv)
 {
-    String result(str);
-    const int length = str.length();
-    
-    if ((length > 1) && (str.startsWith("\"") && (str.endsWith("\""))))
-    {
-        result = str.substring(1, length - 1);
-    }
-    return result;
+
+    return EXIT_SUCCESS;
 }
 
-String amanda::cli::stripLeadingHyphens(const core::String& str)
-{
-    String result(str);
-    if (str.startsWith("--"))
-    {
-        result = str.substring(2);
-    }
-    else if (str.startsWith("-"))
-    {
-        result = str.substring(1);
-    }
-
-    return result;
-}

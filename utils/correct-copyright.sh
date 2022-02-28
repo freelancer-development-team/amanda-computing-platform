@@ -16,10 +16,13 @@ cd ..
 HEADER_FILES="$(find -type f -name '*.h')"
 C_FILES="$(find -type f -name '*.c')"
 CPP_FILES="$(find -type f -name '*.cpp')"
+HPP_FILES="$(find -type f -name '*.hpp')"
 
-for file in $HEADER_FILES $C_FILES $CPP_FILES;
+for file in $HEADER_FILES $C_FILES $CPP_FILES $HPP_FILES;
 do
 	sed -i 's/Copyright (C) 2022 Javier Marrero/Copyright (C) 2022 FreeLancer Development Team/' $file
 done
 
 )
+
+echo "-- done, success!"

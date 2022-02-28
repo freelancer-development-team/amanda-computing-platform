@@ -37,8 +37,10 @@
 #include <amanda-vm/Pointer.h>
 #include <amanda-vm/ReferenceCounted.h>
 #include <amanda-vm/String.h>
+#include <amanda-vm/Types.h>
 
 #include <amanda-vm/ADT/BinaryBuffer.h>
+#include <amanda-vm/ADT/Collections.h>
 
 #include <amanda-vm/IO/Console.h>
 #include <amanda-vm/IO/File.h>

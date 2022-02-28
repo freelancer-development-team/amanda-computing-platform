@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,40 +16,18 @@
  */
 
 /* 
- * File:   ReferenceCounted.h
+ * File:   package..hxx
  * Author: Javier Marrero
  *
- * Created on February 13, 2022, 2:34 PM
+ * Created on February 28, 2022, 12:07 AM
  */
 
-#ifndef REFERENCECOUNTED_H
-#define REFERENCECOUNTED_H
+#ifndef PACKAGE__HXX
+#define PACKAGE__HXX
 
-namespace amanda
-{
-namespace core
-{
+#include "HelpFormatter.h"
+#include "Option.h"
+#include "Options.h"
 
-class ReferenceCounted
-{
-public:
-
-    ReferenceCounted();
-    virtual ~ReferenceCounted();
-
-    void grab() const;
-    void grabWeakReference() const;
-    void release() const;
-    void releaseWeakReference() const;
-    
-private:
-
-    mutable long long strongReferenceCount;
-    mutable long long weakReferenceCount;
-} ;
-
-}
-}
-
-#endif /* REFERENCECOUNTED_H */
+#endif /* PACKAGE__HXX */
 

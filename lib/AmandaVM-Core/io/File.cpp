@@ -43,9 +43,9 @@ using amanda::io::File;
 
 using amanda::core::String;
 
-File File::STDIN(STDIN_FILENO, READ);
-File File::STDERR(STDERR_FILENO, WRITE);
-File File::STDOUT(STDOUT_FILENO, WRITE);
+const File File::STDIN(STDIN_FILENO, READ);
+const File File::STDERR(STDERR_FILENO, WRITE);
+const File File::STDOUT(STDOUT_FILENO, WRITE);
 
 File::File(int descriptor, FileAccessMode accessMode)
 :
@@ -104,7 +104,6 @@ handle(NULL)
 
 File::~File()
 {
-    close();
 }
 
 bool File::canExecute() const

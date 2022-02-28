@@ -15,33 +15,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <amanda-vm/Option/Option.h>
+/* 
+ * File:   sdk-unreachable.h
+ * Author: Javier Marrero
+ *
+ * Created on February 27, 2022, 11:55 AM
+ */
 
-using amanda::core::String;
-
-String amanda::cli::stripLeadingAndTrailingQuotes(const core::String& str)
+#ifndef SDK_UNREACHABLE_H
+#define SDK_UNREACHABLE_H
+#ifdef __cplusplus
+extern "C"
 {
-    String result(str);
-    const int length = str.length();
-    
-    if ((length > 1) && (str.startsWith("\"") && (str.endsWith("\""))))
-    {
-        result = str.substring(1, length - 1);
-    }
-    return result;
-}
+#endif
 
-String amanda::cli::stripLeadingHyphens(const core::String& str)
-{
-    String result(str);
-    if (str.startsWith("--"))
-    {
-        result = str.substring(2);
-    }
-    else if (str.startsWith("-"))
-    {
-        result = str.substring(1);
-    }
+#include <stdnoreturn.h>
 
-    return result;
+noreturn void amanda_sdk_unreachable(const char* message);
+
+#ifdef __cplusplus
 }
+#endif
+#endif /* SDK_UNREACHABLE_H */
+

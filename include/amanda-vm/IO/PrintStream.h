@@ -41,15 +41,15 @@ class PrintStream : public amanda::core::Object
     
 public:
 
-    PrintStream(File* file);
+    PrintStream(const File* file);
     virtual ~PrintStream();
 
-    virtual bool println(const core::String& fmt, ...);
-    virtual bool printf(const core::String& fmt, ...);
+    virtual bool println(const core::String& fmt, ...) const;
+    virtual bool printf(const core::String& fmt, ...) const;
 
 protected:
 
-    File* file;
+    const File* file;
 } ;
 
 }

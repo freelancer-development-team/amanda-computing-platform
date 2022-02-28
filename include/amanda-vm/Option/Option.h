@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@
 #include <amanda-vm/Object.h>
 #include <amanda-vm/String.h>
 
+#include <vector>
+
 namespace amanda
 {
 namespace cli
@@ -36,10 +38,64 @@ namespace cli
 core::String stripLeadingAndTrailingQuotes(const core::String& str);
 core::String stripLeadingHyphens(const core::String& str);
 
-class Option
+/**
+ * This class represents a command line option.
+ */
+class Option : public core::Object
 {
+    AMANDA_OBJECT(Option, core::Object)
+
 public:
-    
+
+    static const int            UNINITIALIZED = -1;
+    static const int            UNLIMITED_VALUES = -2;
+    static const core::String&  NO_OPTION;
+
+    Option(const core::String& option, const core::String& longOption,
+           const core::String& description, bool required, bool hasArguments);
+    ~Option();
+
+    bool                acceptsArguments() const;
+    void                addValueForProcessing(const core::String& value);
+    void                clear();
+    const core::String& getArgumentName() const;
+    int                 getArguments() const;
+    const core::String& getDescription() const;
+    int                 getId() const;
+    const core::String& getKey() const;
+    const core::String& getLongOption() const;
+    const core::String& getOption() const;
+    char                getValueSeparator() const;
+    bool                hasArgument() const;
+    bool                hasArguments() const;
+    bool                hasLongOption() const;
+    bool                hasNoValues() const;
+    bool                hasOptionalArg() const;
+    bool                hasValueSeparator() const;
+    bool                isRequired() const;
+    bool                requiresArgument() const;
+    void                setArgumentName(const core::String& argumentName);
+    void                setArgumentCount(const int count);
+    void                setDescription(const core::String& description);
+    void                setValueSeparator(const char separator);
+    virtual core::String toString();
+
+private:
+
+    const core::String  option;
+    core::String        longOption;
+    core::String        argumentName;
+    core::String        description;
+    bool                required;
+    bool                optionalArgument;
+    int                 argumentCount;
+    char                valueSeparator;
+
+    std::vector<core::String> values;
+
+    void                add(const core::String& value);
+    void                processValue(core::String& value);
+
 } ;
 
 }

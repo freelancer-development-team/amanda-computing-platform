@@ -29,7 +29,7 @@
 
 using amanda::io::PrintStream;
 
-PrintStream::PrintStream(File* file)
+PrintStream::PrintStream(const File* file)
 :
 file(file)
 {
@@ -47,7 +47,7 @@ PrintStream::~PrintStream()
     }
 }
 
-bool PrintStream::println(const core::String& fmt, ...)
+bool PrintStream::println(const core::String& fmt, ...) const
 {
     bool result = false;
     if (file && (file->getAccessMode() & File::WRITE))
@@ -66,7 +66,7 @@ bool PrintStream::println(const core::String& fmt, ...)
     return result;
 }
 
-bool PrintStream::printf(const core::String& fmt, ...)
+bool PrintStream::printf(const core::String& fmt, ...) const
 {
     bool result = false;
     if (file && (file->getAccessMode() & File::WRITE))

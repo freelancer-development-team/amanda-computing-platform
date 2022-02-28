@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 
 #include <amanda-vm/Object.h>
 #include <amanda-vm/Option/Option.h>
+#include <amanda-vm/Option/Options.h>
 #include <amanda-vm/IO/PrintStream.h>
 #include <amanda-vm/IO/Console.h>
 
@@ -56,13 +57,19 @@ public:
                            const io::PrintStream& stream = io::console().out,
                            const unsigned descPad = DEFAULT_DESC_PAD,
                            const unsigned leftPad = DEFAULT_LEFT_PAD) const;
+    virtual void printUsage(const io::PrintStream& stream, const unsigned width,
+                            const core::String& app, const Options& options) const;
+    virtual void printWrapped(const io::PrintStream& stream, const unsigned width,
+                              const unsigned nextLineTabStop, const core::String& text) const;
 
 protected:
 
-    core::String createPadding(const unsigned int length) const;
-    unsigned int findWrapPosition(const core::String& text,
-                                  const unsigned int width,
-                                  const unsigned int startPosition) const;
+    virtual core::String    createPadding(const unsigned int length) const;
+    virtual unsigned int    findWrapPosition(const core::String& text,
+                                             const unsigned int width,
+                                             const unsigned int startPosition) const;
+    virtual core::String&   renderOptions(core::String& sb, const unsigned width, const Options& options,
+                                          const unsigned leftPad, const unsigned descPad) const;
 
 private:
 

@@ -39,17 +39,17 @@ ReferenceCounted::~ReferenceCounted()
 {
 }
 
-void ReferenceCounted::grab()
+void ReferenceCounted::grab() const
 {
     strongReferenceCount++;
 }
 
-void ReferenceCounted::grabWeakReference()
+void ReferenceCounted::grabWeakReference() const
 {
     weakReferenceCount++;
 }
 
-void ReferenceCounted::release()
+void ReferenceCounted::release() const
 {
     assert(strongReferenceCount >= 0);
     if (--strongReferenceCount <= 0)
@@ -58,7 +58,7 @@ void ReferenceCounted::release()
     }
 }
 
-void ReferenceCounted::releaseWeakReference()
+void ReferenceCounted::releaseWeakReference() const
 {
     assert(weakReferenceCount >= 0);
     if (--weakReferenceCount <= 0)
