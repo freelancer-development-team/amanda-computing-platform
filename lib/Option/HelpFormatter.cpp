@@ -59,6 +59,7 @@ void HelpFormatter::printHelp(const unsigned width, const core::String& cmdLineS
 
     if (!header.isEmpty())
     {
+        stream.printf("\n");
         printWrapped(stream, width, header);
     }
 
@@ -66,6 +67,7 @@ void HelpFormatter::printHelp(const unsigned width, const core::String& cmdLineS
 
     if (!footer.isEmpty())
     {
+        stream.printf("\n");
         printWrapped(stream, width, footer);
     }
 }

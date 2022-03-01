@@ -46,6 +46,14 @@ public:
     static const File STDOUT;
     static const File STDERR;
 
+    /**
+     * Returns true whether this file is stdin, stdout or stderr.
+     *
+     * @param file
+     * @return
+     */
+    static bool isTerminalStream(const File* file);
+
     enum
     {
         READ = 0x1,
@@ -59,6 +67,7 @@ public:
     File(int descriptor, FileAccessMode accessMode);
     File(const core::String& name, FileAccessMode accessMode, bool inmediate = false);
     File(const Path& path, FileAccessMode accessMode, bool inmediate = false);
+    ~File();
 
     bool                canExecute() const;
     bool                canRead() const;

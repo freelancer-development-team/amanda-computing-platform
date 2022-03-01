@@ -69,7 +69,6 @@ err(&File::STDERR)
 
 Console::~Console()
 {
-
 }
 
 void Console::clear()

@@ -47,6 +47,11 @@ const File File::STDIN(STDIN_FILENO, READ);
 const File File::STDERR(STDERR_FILENO, WRITE);
 const File File::STDOUT(STDOUT_FILENO, WRITE);
 
+bool File::isTerminalStream(const File* file)
+{
+    return (file == &STDERR) || (file == &STDOUT) || (file == &STDIN);
+}
+
 File::File(int descriptor, FileAccessMode accessMode)
 :
 accessMode(accessMode),
@@ -100,6 +105,11 @@ handle(NULL)
     {
         open();
     }
+}
+
+File::~File()
+{
+    close();
 }
 
 bool File::canExecute() const

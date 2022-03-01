@@ -41,7 +41,7 @@ file(file)
 
 PrintStream::~PrintStream()
 {
-    if (file)
+    if (file && !File::isTerminalStream(file))
     {
         file->release();
     }
