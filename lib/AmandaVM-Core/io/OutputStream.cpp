@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,45 +16,22 @@
  */
 
 /* 
- * File:   PrintStream.h
+ * File:   Stream.cpp
  * Author: Javier Marrero
- *
- * Created on February 15, 2022, 12:31 AM
+ * 
+ * Created on March 1, 2022, 1:37 AM
  */
 
-#ifndef PRINTSTREAM_H
-#define PRINTSTREAM_H
-
-#include <amanda-vm/Object.h>
-#include <amanda-vm/IO/File.h>
 #include <amanda-vm/IO/OutputStream.h>
-#include <amanda-vm/IO/FileOutputStream.h>
 
-#include <cstdarg>
+using amanda::io::OutputStream;
 
-namespace amanda
+OutputStream::OutputStream()
 {
-namespace io
-{
-
-class PrintStream : public FileOutputStream
-{
-    AMANDA_OBJECT(PrintStream, FileOutputStream)
     
-public:
-
-    PrintStream(const File* file);
-    virtual ~PrintStream();
-
-    virtual bool println(const core::String& fmt, ...) const;
-    virtual bool printf(const core::String& fmt, ...) const;
-
-protected:
-
-} ;
-
-}
 }
 
-#endif /* PRINTSTREAM_H */
+OutputStream::~OutputStream()
+{
+}
 

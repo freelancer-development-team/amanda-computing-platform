@@ -71,6 +71,7 @@ public:
     bool                hasLongOption() const;
     bool                hasNoValues() const;
     bool                hasOptionalArg() const;
+    bool                hasShortOption() const;
     bool                hasValueSeparator() const;
     bool                isRequired() const;
     bool                requiresArgument() const;

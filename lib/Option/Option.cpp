@@ -95,7 +95,7 @@ int Option::getId() const
 
 const String& Option::getKey() const
 {
-    return (option == Option::NO_OPTION) ? longOption : option;
+    return (option.isEmpty()) ? longOption : option;
 }
 
 const String& Option::getLongOption() const
@@ -125,7 +125,7 @@ bool Option::hasArguments() const
 
 bool Option::hasLongOption() const
 {
-    return longOption == Option::NO_OPTION;
+    return !longOption.isEmpty();
 }
 
 bool Option::hasNoValues() const
@@ -136,6 +136,11 @@ bool Option::hasNoValues() const
 bool Option::hasOptionalArg() const
 {
     return optionalArgument;
+}
+
+bool Option::hasShortOption() const
+{
+    return !option.isEmpty();
 }
 
 bool Option::hasValueSeparator() const
@@ -187,7 +192,7 @@ String Option::toString()
     String result("[ option: ");
     result.append(option);
 
-    if (longOption != Option::NO_OPTION)
+    if (!longOption.isEmpty())
     {
         result.appendWithFormat(" %s", longOption.toCharArray());
     }

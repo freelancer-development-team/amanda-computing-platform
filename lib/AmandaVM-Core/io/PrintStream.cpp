@@ -31,20 +31,12 @@ using amanda::io::PrintStream;
 
 PrintStream::PrintStream(const File* file)
 :
-file(file)
+FileOutputStream(file)
 {
-    if (file)
-    {
-        file->grab();
-    }
 }
 
 PrintStream::~PrintStream()
 {
-    if (file && !File::isTerminalStream(file))
-    {
-        file->release();
-    }
 }
 
 bool PrintStream::println(const core::String& fmt, ...) const

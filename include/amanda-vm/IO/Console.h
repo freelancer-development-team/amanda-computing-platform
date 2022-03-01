@@ -30,11 +30,16 @@
 #include <amanda-vm/io/File.h>
 #include <amanda-vm/io/PrintStream.h>
 
+#include <amanda-vm-c/sdk-definitions.h>
+
 namespace amanda
 {
 namespace io
 {
 
+/**
+ * The console is the component that handles standard I/O.
+ */
 class Console : public amanda::core::Object
 {
     AMANDA_OBJECT(Console, amanda::core::Object)
@@ -56,7 +61,11 @@ public:
 
 private:
 
-    bool ansiInitialized;
+    bool        ansiInitialized;
+
+#ifdef _W32
+    unsigned    outModeInit;
+#endif
 
     /// Do not use this constructor. Use the 'console' function instead.
     Console();

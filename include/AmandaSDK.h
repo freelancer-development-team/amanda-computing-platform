@@ -34,6 +34,7 @@
 
 /* AmandaSDK C++ interface (core library only) */
 #include <amanda-vm/Class.h>
+#include <amanda-vm/Interface.h>
 #include <amanda-vm/Object.h>
 #include <amanda-vm/Pointer.h>
 #include <amanda-vm/ReferenceCounted.h>
@@ -43,8 +44,12 @@
 #include <amanda-vm/ADT/BinaryBuffer.h>
 #include <amanda-vm/ADT/Collections.h>
 
+#include <amanda-vm/IO/Closeable.h>
 #include <amanda-vm/IO/Console.h>
 #include <amanda-vm/IO/File.h>
+#include <amanda-vm/IO/FileOutputStream.h>
+#include <amanda-vm/IO/InputStream.h>
+#include <amanda-vm/IO/OutputStream.h>
 #include <amanda-vm/IO/Path.h>
 #include <amanda-vm/IO/PrintStream.h>
 

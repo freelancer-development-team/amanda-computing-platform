@@ -36,7 +36,7 @@ namespace amanda
 namespace cli
 {
 
-class HelpFormatter : public core::Object
+class HelpFormatter : extends core::Object
 {
     AMANDA_OBJECT(HelpFormatter, core::Object)
 
@@ -51,10 +51,11 @@ public:
     static const core::String   DEFAULT_LONG_OPT_SEPARATOR;
     static const core::String   DEFAULT_ARG_NAME;
 
-    virtual void printHelp(const unsigned width, const core::String& cmdLineSyntax,
+    virtual void printHelp(const core::String& cmdLineSyntax,
                            const core::String& header, const Options& options,
                            const core::String& footer, const bool autoUsage = false,
                            const io::PrintStream& stream = io::console().out,
+                           const unsigned width = DEFAULT_WIDTH,
                            const unsigned descPad = DEFAULT_DESC_PAD,
                            const unsigned leftPad = DEFAULT_LEFT_PAD) const;
     virtual void printOptions(const io::PrintStream& stream, const unsigned width,
@@ -81,6 +82,8 @@ protected:
     virtual core::String    rtrim(const core::String& s) const;
 
 private:
+
+    static bool isNullOption(const core::String& str);
 
     void                    appendOption(core::String& buffer, const Option& option, bool required) const;
     core::String&           renderWrappedTextBlock(core::String& buffer, const unsigned width,

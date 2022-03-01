@@ -37,17 +37,19 @@ Console::Console()
 :
 in(&File::STDIN),
 out(&File::STDOUT),
-err(&File::STDERR)
+err(&File::STDERR),
+ansiInitialized(true)
 {
-    ansiInitialized = true;
-
 #ifdef _W32
+    outModeInit = 0;
+
     HANDLE outputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
     if (outputHandle != INVALID_HANDLE_VALUE)
     {
         DWORD mode = 0;
         if (GetConsoleMode(outputHandle, &mode))
         {
+            outModeInit = mode;
             mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
             if (!SetConsoleMode(outputHandle, mode))
             {
@@ -69,6 +71,19 @@ err(&File::STDERR)
 
 Console::~Console()
 {
+#ifdef _W32
+    if (outModeInit != 0)
+    {
+        HANDLE outputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+        if (outputHandle != INVALID_HANDLE_VALUE)
+        {
+            if (SetConsoleMode(outputHandle, outModeInit))
+            {
+                ansiInitialized = false;
+            }
+        }
+    }
+#endif
 }
 
 void Console::clear()

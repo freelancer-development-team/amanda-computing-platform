@@ -39,12 +39,15 @@ int main(int argc, char** argv)
     cli::Options options;
     options.addOption(new cli::Option("f", "file", "The file to be processed", true, true));
     options.addOption(new cli::Option("h", "help", "Shows help", false, false));
+    options.addOption(new cli::Option("v", "version", "Shows version information.", false, true));
+    options.addOption(new cli::Option(cli::Option::NO_OPTION, "random", "This is a random description, that is long enough to be wrapped. I believe so at least. I don't know.", true, false));
+    options.addOption(new cli::Option("n", cli::Option::NO_OPTION, "New file. Hope this description suits.", true, true));
 
     core::String header = "Do something.";
     core::String footer = "Report bugs down your ass.";
 
     cli::HelpFormatter formatter;
-    formatter.printHelp(80, "myapp", header, options, footer, true);
+    formatter.printHelp("myapp", header, options, footer, true);
 
     return EXIT_SUCCESS;
 }

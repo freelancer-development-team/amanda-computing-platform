@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,45 +16,43 @@
  */
 
 /* 
- * File:   PrintStream.h
+ * File:   Stream.h
  * Author: Javier Marrero
  *
- * Created on February 15, 2022, 12:31 AM
+ * Created on March 1, 2022, 1:37 AM
  */
 
-#ifndef PRINTSTREAM_H
-#define PRINTSTREAM_H
+#ifndef STREAM_H
+#define STREAM_H
 
 #include <amanda-vm/Object.h>
 #include <amanda-vm/IO/File.h>
-#include <amanda-vm/IO/OutputStream.h>
-#include <amanda-vm/IO/FileOutputStream.h>
+#include <amanda-vm/IO/Closeable.h>
 
-#include <cstdarg>
+#include <cstdio>
 
 namespace amanda
 {
 namespace io
 {
 
-class PrintStream : public FileOutputStream
+/**
+ * This is the base class for any stream. It presents a consistent interface
+ * to be used by writer objects.
+ */
+class OutputStream : extends core::Object, implements Closeable
 {
-    AMANDA_OBJECT(PrintStream, FileOutputStream)
-    
+    AMANDA_OBJECT(OutputStream, core::Object)
+
 public:
 
-    PrintStream(const File* file);
-    virtual ~PrintStream();
-
-    virtual bool println(const core::String& fmt, ...) const;
-    virtual bool printf(const core::String& fmt, ...) const;
-
-protected:
+    OutputStream();
+    virtual ~OutputStream();
 
 } ;
 
 }
 }
 
-#endif /* PRINTSTREAM_H */
+#endif /* STREAM_H */
 

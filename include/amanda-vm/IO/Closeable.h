@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,45 +16,40 @@
  */
 
 /* 
- * File:   PrintStream.h
+ * File:   Closeable.h
  * Author: Javier Marrero
  *
- * Created on February 15, 2022, 12:31 AM
+ * Created on March 1, 2022, 2:03 AM
  */
 
-#ifndef PRINTSTREAM_H
-#define PRINTSTREAM_H
+#ifndef CLOSEABLE_H
+#define CLOSEABLE_H
 
-#include <amanda-vm/Object.h>
-#include <amanda-vm/IO/File.h>
-#include <amanda-vm/IO/OutputStream.h>
-#include <amanda-vm/IO/FileOutputStream.h>
-
-#include <cstdarg>
+#include <amanda-vm/Interface.h>
 
 namespace amanda
 {
 namespace io
 {
 
-class PrintStream : public FileOutputStream
+/**
+ * Inheritors of this interface automatically obtain the method 'close'. It is
+ * used to implement streams, that need the method close for releasing it
+ * resources.
+ *
+ * @autor J. Marrero
+ */
+class Closeable : extends core::Interface
 {
-    AMANDA_OBJECT(PrintStream, FileOutputStream)
-    
+    AMANDA_OBJECT(Closeable, core::Interface)
+
 public:
 
-    PrintStream(const File* file);
-    virtual ~PrintStream();
-
-    virtual bool println(const core::String& fmt, ...) const;
-    virtual bool printf(const core::String& fmt, ...) const;
-
-protected:
-
-} ;
+    virtual void close() = 0;
+};
 
 }
 }
 
-#endif /* PRINTSTREAM_H */
+#endif /* CLOSEABLE_H */
 

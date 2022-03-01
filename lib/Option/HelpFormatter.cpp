@@ -38,10 +38,10 @@ const String HelpFormatter::DEFAULT_LONG_OPT_PREFIX = "--";
 const String HelpFormatter::DEFAULT_LONG_OPT_SEPARATOR = " ";
 const String HelpFormatter::DEFAULT_ARG_NAME = "arg";
 
-void HelpFormatter::printHelp(const unsigned width, const core::String& cmdLineSyntax,
+void HelpFormatter::printHelp(const core::String& cmdLineSyntax,
                               const core::String& header, const Options& options,
                               const core::String& footer, const bool autoUsage,
-                              const io::PrintStream& stream,
+                              const io::PrintStream& stream, const unsigned width,
                               const unsigned descPad,
                               const unsigned leftPad) const
 {
@@ -202,7 +202,7 @@ String& HelpFormatter::renderOptions(core::String& sb, const unsigned width,
         if (!option) continue;
 
         String optionBuffer;
-        if (option->getOption() == Option::NO_OPTION)
+        if (!option->hasShortOption())
         {
             optionBuffer.append(lpad).append("   ").append(DEFAULT_LONG_OPT_PREFIX).append(option->getLongOption());
         }
@@ -210,6 +210,10 @@ String& HelpFormatter::renderOptions(core::String& sb, const unsigned width,
         {
             optionBuffer.append(lpad).append(DEFAULT_OPT_PREFIX).append(option->getOption());
 
+            if (option->hasLongOption())
+            {
+                optionBuffer.append(',').append(DEFAULT_LONG_OPT_PREFIX).append(option->getLongOption());
+            }
         }
 
         if (option->hasArgument())
@@ -246,13 +250,12 @@ String& HelpFormatter::renderOptions(core::String& sb, const unsigned width,
         optionBuffer.append(dpad);
 
         unsigned nextLineTabStop = max + descPad;
-        if (option->getDescription() != String::EMPTY)
+        if (!option->getDescription().isEmpty())
         {
             optionBuffer.append(option->getDescription());
         }
 
         renderWrappedText(sb, width, nextLineTabStop, optionBuffer);
-
         if (++iter != optionList.end())
         {
             sb.append('\n');
@@ -273,7 +276,7 @@ String& HelpFormatter::renderWrappedText(core::String& sb, const unsigned width,
     }
     else
     {
-        sb.append(text.substring(0, pos).trimmed()).append('\n');
+        sb.append(rtrim(text.substring(0, pos))).append('\n');
 
         if (nextTabLineStop >= width)
         {
@@ -321,6 +324,11 @@ String HelpFormatter::rtrim(const core::String& s) const
         result = s.substring(0, pos);
     }
     return result;
+}
+
+bool HelpFormatter::isNullOption(const core::String& str)
+{
+    return str.isEmpty();
 }
 
 void HelpFormatter::appendOption(core::String& buffer, const Option& option, bool required) const
