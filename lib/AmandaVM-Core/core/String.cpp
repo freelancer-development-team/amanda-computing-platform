@@ -718,7 +718,7 @@ unsigned String::nextUtf8Character(unsigned& byteOffset) const
     return ret;
 }
 
-unsigned String::atUtf8(unsigned index) const
+unsigned String::utf8CharAt(unsigned index) const
 {
     unsigned byteOffset = byteOffsetUtf8(index);
     return nextUtf8Character(byteOffset);

@@ -36,6 +36,8 @@ using namespace amanda;
  */
 int main(int argc, char** argv)
 {
+    // THIS IS A TEST
+
     cli::Options options;
     options.addOption(new cli::Option("f", "file", "The file to be processed", true, true));
     options.addOption(new cli::Option("h", "help", "Shows help", false, false));
@@ -44,10 +46,12 @@ int main(int argc, char** argv)
     options.addOption(new cli::Option("n", cli::Option::NO_OPTION, "New file. Hope this description suits.", true, true));
 
     core::String header = "Do something.";
-    core::String footer = "Report bugs down your ass.";
+    core::String footer = "Report bugs to a random address.";
 
     cli::HelpFormatter formatter;
     formatter.printHelp("myapp", header, options, footer, true);
+
+    // THIS IS A TEST
 
     return EXIT_SUCCESS;
 }

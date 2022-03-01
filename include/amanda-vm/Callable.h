@@ -16,21 +16,37 @@
  */
 
 /* 
- * File:   package..hxx
+ * File:   Callable.h
  * Author: Javier Marrero
  *
- * Created on February 28, 2022, 12:07 AM
+ * Created on March 1, 2022, 1:59 PM
  */
 
-#ifndef PACKAGE_OPTION_HXX
-#define PACKAGE_OPTION_HXX
+#ifndef CALLABLE_H
+#define CALLABLE_H
 
-#include "CommandLine.h"
-#include "CommandLineParser.h"
-#include "DefaultParser.h"
-#include "HelpFormatter.h"
-#include "Option.h"
-#include "Options.h"
+#include <amanda-vm/Interface.h>
+#include <amanda-vm/ADT/Array.h>
 
-#endif /* PACKAGE__HXX */
+namespace amanda
+{
+namespace core
+{
+
+/**
+ * Callables are objects representing functions.
+ */
+class Callable : extends Interface
+{
+    AMANDA_OBJECT(Callable, Interface)
+
+public:
+
+    virtual void* call(adt::Array<void*>& arguments) = 0;
+};
+
+}
+}
+
+#endif /* CALLABLE_H */
 

@@ -26,6 +26,7 @@
 #define STRING_H
 
 #include <amanda-vm/ReferenceCounted.h>
+#include <amanda-vm-c/sdk-definitions.h>
 
 #include <cassert>
 #include <cstdarg>
@@ -368,6 +369,9 @@ public:
     /// Return whether ends with a string.
     bool endsWith(const String& str, bool caseSensitive = true) const;
 
+    /// Returns true if both strings are equals
+    bool equals(const String& rhs) { return (compare(rhs, true) == 0); }
+
     /// Return the C string.
     const char* toCharArray() const { return buffer; }
 
@@ -402,7 +406,7 @@ public:
     /// Return next Unicode character from UTF8 content and increase byte offset.
     unsigned nextUtf8Character(unsigned& byteOffset) const;
     /// Return Unicode character at index from UTF8 content.
-    unsigned atUtf8(unsigned index) const;
+    unsigned utf8CharAt(unsigned index) const;
     /// Replace Unicode character at index from UTF8 content.
     void replaceUtf8(unsigned index, unsigned unicodeChar);
     /// Append Unicode character at the end as UTF8.
@@ -413,7 +417,7 @@ public:
     String substringUtf8(unsigned pos, unsigned length) const;
 
     /// Return hash value for HashSet & HashMap.
-    unsigned toHash() const
+    unsigned hashCode() const
     {
         unsigned hash = 0;
         const char* ptr = buffer;
@@ -430,7 +434,7 @@ public:
     static void encodeUtf8(char*& dest, unsigned unicodeChar);
     /// Decode Unicode character from UTF8. Pointer will be incremented.
     static unsigned decodeUtf8(const char*& src);
-#ifdef _WIN32
+#ifdef _W32
     /// Encode Unicode character to UTF16. Pointer will be incremented.
     static void encodeUtf16(wchar_t*& dest, unsigned unicodeChar);
     /// Decode Unicode character from UTF16. Pointer will be incremented.

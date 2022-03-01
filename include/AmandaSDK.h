@@ -41,8 +41,10 @@
 #include <amanda-vm/String.h>
 #include <amanda-vm/Types.h>
 
+#include <amanda-vm/ADT/Array.h>
 #include <amanda-vm/ADT/BinaryBuffer.h>
 #include <amanda-vm/ADT/Collections.h>
+#include <amanda-vm/ADT/Iterators.h>
 
 #include <amanda-vm/IO/Closeable.h>
 #include <amanda-vm/IO/Console.h>

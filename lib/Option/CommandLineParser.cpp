@@ -16,21 +16,26 @@
  */
 
 /* 
- * File:   package..hxx
+ * File:   CommandLineParser.cpp
  * Author: Javier Marrero
- *
- * Created on February 28, 2022, 12:07 AM
+ * 
+ * Created on March 1, 2022, 1:43 PM
  */
 
-#ifndef PACKAGE_OPTION_HXX
-#define PACKAGE_OPTION_HXX
+#include <amanda-vm/Option/CommandLineParser.h>
 
-#include "CommandLine.h"
-#include "CommandLineParser.h"
-#include "DefaultParser.h"
-#include "HelpFormatter.h"
-#include "Option.h"
-#include "Options.h"
+using namespace amanda;
 
-#endif /* PACKAGE__HXX */
+using amanda::cli::CommandLineParser;
+using amanda::core::String;
 
+adt::Array<String> amanda::cli::makeArgumentsArray(int argc, char* argv[])
+{
+    adt::Array<String> array(argc - 1);
+    for (int i = 1; i < argc; i++)
+    {
+        array[i] = argv[i];
+    }
+
+    return array;
+}

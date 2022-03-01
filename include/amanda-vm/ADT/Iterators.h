@@ -16,21 +16,37 @@
  */
 
 /* 
- * File:   package..hxx
+ * File:   Iterators.h
  * Author: Javier Marrero
  *
- * Created on February 28, 2022, 12:07 AM
+ * Created on March 1, 2022, 1:11 PM
  */
 
-#ifndef PACKAGE_OPTION_HXX
-#define PACKAGE_OPTION_HXX
+#ifndef ITERATORS_H
+#define ITERATORS_H
 
-#include "CommandLine.h"
-#include "CommandLineParser.h"
-#include "DefaultParser.h"
-#include "HelpFormatter.h"
-#include "Option.h"
-#include "Options.h"
+namespace amanda
+{
+namespace adt
+{
 
-#endif /* PACKAGE__HXX */
+template <class C>
+static inline typename C::iterator begin(C& collection)
+{
+    return collection.begin();
+}
+
+template <class C>
+static inline typename C::iterator end(C& collection)
+{
+    return collection.end();
+}
+
+#define STL_ITERATOR(collection, type, identifier) \
+    std::collection<type>::iterator identifier
+
+}
+}
+
+#endif /* ITERATORS_H */
 

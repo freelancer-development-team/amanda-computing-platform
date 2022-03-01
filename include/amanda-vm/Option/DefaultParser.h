@@ -16,21 +16,30 @@
  */
 
 /* 
- * File:   package..hxx
+ * File:   DefaultParser.h
  * Author: Javier Marrero
  *
- * Created on February 28, 2022, 12:07 AM
+ * Created on March 1, 2022, 2:16 PM
  */
 
-#ifndef PACKAGE_OPTION_HXX
-#define PACKAGE_OPTION_HXX
+#ifndef DEFAULTPARSER_H
+#define DEFAULTPARSER_H
 
-#include "CommandLine.h"
-#include "CommandLineParser.h"
-#include "DefaultParser.h"
-#include "HelpFormatter.h"
-#include "Option.h"
-#include "Options.h"
+#include <amanda-vm/Option/CommandLineParser.h>
 
-#endif /* PACKAGE__HXX */
+namespace amanda
+{
+namespace cli
+{
+
+class DefaultParser
+{
+public:
+    
+} ;
+
+}
+}
+
+#endif /* DEFAULTPARSER_H */
 
