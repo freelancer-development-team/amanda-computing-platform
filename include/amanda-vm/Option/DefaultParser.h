@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,17 +25,64 @@
 #ifndef DEFAULTPARSER_H
 #define DEFAULTPARSER_H
 
+#include <amanda-vm/Pointer.h>
 #include <amanda-vm/Option/CommandLineParser.h>
+#include <amanda-vm/Option/CommandLine.h>
+#include <amanda-vm/Option/Option.h>
+#include <amanda-vm/Option/Options.h>
+
+#include <list>
 
 namespace amanda
 {
 namespace cli
 {
 
-class DefaultParser
+class DefaultParser : extends CommandLineParser
 {
+    AMANDA_OBJECT(DefaultParser, CommandLineParser)
+
 public:
-    
+
+    DefaultParser(bool allowPartialMatching, bool stripLeadingAndTrailingQuotes);
+    virtual ~DefaultParser();
+
+    virtual CommandLine* parse(Options& options, adt::Array<core::String>& arguments, bool stopAtNonOption);
+
+protected:
+        
+    bool                                allowPartialMatching;
+    core::StrongReference<CommandLine>  cmd;
+    core::String                        currentToken;
+    Option*                             currentOption;
+    std::list<const Option*>            expectedOptions;
+    core::StrongReference<Options>      options;
+    bool                                skipParsing;
+    bool                                stopAtNonOption;
+    bool                                stripLeadingAndTrailingQuotes;
+
+    bool                        checkRequiredOptions();
+    void                        handleConcatenatedOptions(const core::String& token);
+
+private:
+
+    bool                        checkRequiredArguments();
+    core::String                getLongPrefix(const core::String& token);
+    std::list<core::String>&    getMatchingLongOptions(const core::String& token, std::list<core::String>& matches);
+    void                        handleLongOption(const core::String& token);
+    void                        handleLongOptionWithEqual(const core::String& token);
+    void                        handleLongOptionWithoutEqual(const core::String& token);
+    void                        handleOption(const Option* option);
+    void                        handleShortAndLongOption(const core::String& token);
+    void                        handleToken(const core::String& token);
+    void                        handleUnknownToken(const core::String& token);
+    bool                        isArgument(const core::String& token);
+    bool                        isJavaProperty(const core::String& token);
+    bool                        isLongOption(const core::String& token);
+    bool                        isNegativeNumber(const core::String& token);
+    bool                        isOption(const core::String& token);
+    bool                        isShortOption(const core::String& token);
+
 } ;
 
 }

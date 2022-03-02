@@ -45,6 +45,12 @@ static inline T& eliminateConstness(const T& constReference)
     return const_cast<T&> (constReference);
 }
 
+template <typename T>
+static inline T* eliminateConstness(const T* constPointer)
+{
+    return const_cast<T*> (constPointer);
+}
+
 /**
  * Fills the values of an array with a specified value. The count parameter is
  * not the physical size, but the element count of the array.

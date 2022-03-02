@@ -33,6 +33,7 @@
 #include <amanda-vm-c/sdk-version.h>
 
 /* AmandaSDK C++ interface (core library only) */
+#include <amanda-vm/Callable.h>
 #include <amanda-vm/Class.h>
 #include <amanda-vm/Interface.h>
 #include <amanda-vm/Object.h>

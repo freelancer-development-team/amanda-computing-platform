@@ -408,7 +408,7 @@ String String::substring(unsigned pos) const
         return String();
 }
 
-String String::substring(unsigned pos, unsigned length) const
+String String::substringl(unsigned pos, unsigned length) const
 {
     if (pos < bufferLength)
     {
@@ -422,6 +422,11 @@ String String::substring(unsigned pos, unsigned length) const
     }
     else
         return String();
+}
+
+String String::substring(unsigned start, unsigned end) const
+{
+    return substringl(start, end - start);
 }
 
 String String::trimmed() const
@@ -444,7 +449,7 @@ String String::trimmed() const
         --trimEnd;
     }
 
-    return substring(trimStart, trimEnd - trimStart);
+    return substringl(trimStart, trimEnd - trimStart);
 }
 
 String String::toLower() const

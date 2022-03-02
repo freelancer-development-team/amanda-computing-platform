@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,9 +47,6 @@ public:
     std::list<const Option*>&   getOptionsList();
     void                        getOptions(const Option* options[], size_t size);
     
-
-protected:
-
     CommandLine();
     virtual ~CommandLine();
 

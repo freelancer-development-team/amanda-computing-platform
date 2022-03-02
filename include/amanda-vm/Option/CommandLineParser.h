@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ class CommandLineParser : extends core::Interface
 
 public:
 
-    virtual bool parse(Options& options, adt::Array<core::String>& arguments, bool stopAtNonOption) = 0;
+    virtual CommandLine* parse(Options& options, adt::Array<core::String>& arguments, bool stopAtNonOption) = 0;
     
 } ;
 

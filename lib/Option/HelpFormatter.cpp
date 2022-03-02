@@ -366,7 +366,7 @@ String& HelpFormatter::renderWrappedTextBlock(core::String& buffer, const unsign
     unsigned start = 0;
     unsigned end = text.find('\n') != String::NPOS ? text.find('\n') : text.length();
     bool firstLine = true;
-    String line(text.substring(start, end - start));
+    String line(text.substringl(start, end - start));
 
     while (end != String::NPOS)
     {

@@ -347,8 +347,10 @@ public:
 
     /// Return a substring from position to end.
     String substring(unsigned pos) const;
+    /// Return a substring from position to end.
+    String substring(unsigned start, unsigned end) const;
     /// Return a substring with length from position.
-    String substring(unsigned pos, unsigned length) const;
+    String substringl(unsigned pos, unsigned length) const;
     /// Return string with whitespace trimmed from the beginning and the end.
     String trimmed() const;
     /// Return string in uppercase.
