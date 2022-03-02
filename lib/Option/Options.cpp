@@ -63,6 +63,14 @@ Options& Options::addOption(const Option* option)
         option->grab(); // Now the object has two strong references.
     }
 
+    if (option->isRequired())
+    {
+        if (!adt::contains(requiredOptions, option))
+        {
+            requiredOptions.push_back(option);
+        }
+    }
+
     shortOptions.insert(std::make_pair(key, option));
     return *this;
 }
@@ -107,6 +115,11 @@ const Option* Options::getOption(const core::String& option)
 void Options::getOptions(std::list<const Option*>& list) const
 {
     helpOptions(list);
+}
+
+const std::list<const Option*>& Options::getRequiredOptions() const
+{
+    return requiredOptions;
 }
 
 bool Options::hasLongOption(const core::String& option)

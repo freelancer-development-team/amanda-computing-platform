@@ -47,7 +47,7 @@ class CommandLineParser : extends core::Interface
 
 public:
 
-    virtual CommandLine* parse(Options& options, adt::Array<core::String>& arguments, bool stopAtNonOption) = 0;
+    virtual CommandLine* parse(Options& options, const adt::Array<core::String>& arguments, bool stopAtNonOption) = 0;
     
 } ;
 

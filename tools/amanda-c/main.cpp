@@ -52,7 +52,10 @@ int main(int argc, char** argv)
     formatter.printHelp("myapp", header, options, footer, true);
 
     // THIS IS A TEST
+    cli::DefaultParser parser(false, false);
+    cli::CommandLine* cmd = parser.parse(options, cli::makeArgumentsArray(argc, argv), false);
 
+    delete cmd;
     return EXIT_SUCCESS;
 }
 

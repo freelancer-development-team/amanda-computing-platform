@@ -47,14 +47,14 @@ bool DefaultParser::checkRequiredOptions()
     return expectedOptions.empty();
 }
 
-CommandLine* DefaultParser::parse(Options& options, adt::Array<core::String>& arguments, bool stopAtNonOption)
+CommandLine* DefaultParser::parse(Options& options, const adt::Array<core::String>& arguments, bool stopAtNonOption)
 {
     this->options = &options;
     this->stopAtNonOption = stopAtNonOption;
 
     skipParsing = false;
     currentOption = NULL;
-    ///TODO: Add required options
+    expectedOptions = options.getRequiredOptions();
 
     cmd = new CommandLine();
     for (size_t i = 0; i < arguments.length(); ++i)
@@ -74,11 +74,13 @@ void DefaultParser::handleConcatenatedOptions(const core::String& token)
 
         if (!options->hasOption(ch))
         {
+            handleUnknownToken((stopAtNonOption && (i > 1)) ?
+                               token.substring(i) : token);
             stop = true;
         }
         else
         {
-            ///TODO: Not finished
+            handleOption(options->getOption(ch));
 
             if (currentOption != NULL && (token.length() != i + 1))
             {
@@ -91,10 +93,10 @@ void DefaultParser::handleConcatenatedOptions(const core::String& token)
 
 bool DefaultParser::checkRequiredArguments()
 {
-    bool result = true;
+    bool result = false;
     if (currentOption != NULL && currentOption->requiresArgument())
     {
-        result = false;
+        result = true;
     }
     return result;
 }
@@ -162,7 +164,7 @@ void DefaultParser::handleLongOptionWithEqual(const core::String& token)
 
     if (matchingOptions.empty())
     {
-        ///TODO: Add handle unknown token.
+        handleUnknownToken(currentToken);
     }
     else
     {
@@ -208,9 +210,10 @@ void DefaultParser::handleLongOptionWithoutEqual(const core::String& token)
 
 void DefaultParser::handleOption(const Option* option)
 {
-    if (!checkRequiredArguments())
+    if (checkRequiredArguments())
     {
-        ///TODO: Unimplemented
+        updateRequiredOptions(option);
+        cmd->addOption(option);
 
         if (option->hasArgument())
         {
@@ -236,7 +239,7 @@ void DefaultParser::handleShortAndLongOption(const core::String& token)
         }
         else
         {
-            ///TODO: Handle unknown token
+            handleUnknownToken(token);
         }
     }
     else if (pos == String::NPOS)
@@ -283,7 +286,7 @@ void DefaultParser::handleShortAndLongOption(const core::String& token)
             }
             else
             {
-                ///TODO: Handle unknown
+                handleUnknownToken(token);
             }
         }
         else
@@ -299,7 +302,7 @@ void DefaultParser::handleToken(const core::String& token)
 
     if (skipParsing)
     {
-        ///TODO: add arg
+        cmd->addArgument(token);
     }
     else if (currentToken.equals("--"))
     {
@@ -315,7 +318,7 @@ void DefaultParser::handleToken(const core::String& token)
     }
     else
     {
-        ///TODO: Handle unknown token
+        handleUnknownToken(token);
     }
 
     if (currentOption != NULL && !currentOption->acceptsArguments())
@@ -328,7 +331,7 @@ void DefaultParser::handleUnknownToken(const core::String& token)
 {
     if (!token.startsWith("-") || !(token.length() > 1) || stopAtNonOption)
     {
-        ///TODO: cmd add argument
+        cmd->addArgument(token);
         if (stopAtNonOption)
         {
             skipParsing = true;
@@ -409,4 +412,14 @@ bool DefaultParser::isShortOption(const core::String& token)
         }
     }
     return result;
+}
+
+void DefaultParser::updateRequiredOptions(const Option* option)
+{
+    if (!option->isRequired())
+    {
+        expectedOptions.remove(option);
+    }
+
+
 }

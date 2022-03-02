@@ -71,9 +71,15 @@ public:
         free(array);
     }
 
-    size_t length()
+    size_t length() const
     {
         return size;
+    }
+
+    const T& operator[](size_t index) const
+    {
+        assert(index < size && ASSERT_MESSAGE("Array index out of bounds."));
+        return array[index];
     }
 
     T& operator[](size_t index)

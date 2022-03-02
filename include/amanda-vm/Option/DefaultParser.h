@@ -47,7 +47,7 @@ public:
     DefaultParser(bool allowPartialMatching, bool stripLeadingAndTrailingQuotes);
     virtual ~DefaultParser();
 
-    virtual CommandLine* parse(Options& options, adt::Array<core::String>& arguments, bool stopAtNonOption);
+    virtual CommandLine* parse(Options& options, const adt::Array<core::String>& arguments, bool stopAtNonOption);
 
 protected:
         
@@ -82,6 +82,7 @@ private:
     bool                        isNegativeNumber(const core::String& token);
     bool                        isOption(const core::String& token);
     bool                        isShortOption(const core::String& token);
+    void                        updateRequiredOptions(const Option* option);
 
 } ;
 

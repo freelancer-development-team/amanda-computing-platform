@@ -26,6 +26,7 @@
 #define COLLECTIONS_H
 
 #include <map>
+#include <list>
 #include <vector>
 
 namespace amanda
@@ -41,7 +42,7 @@ namespace adt
  * @return
  */
 template <class C, class E>
-static inline bool contains(C& container, E& element)
+static inline bool contains(const C& container, const E& element)
 {
     return container.find(element) != container.end();
 };
@@ -55,11 +56,36 @@ static inline bool contains(C& container, E& element)
  * @return
  */
 template <typename E>
-static inline bool contains(std::vector<E>& container, E& element)
+static inline bool contains(const std::vector<E>& container, const E& element)
 {
     bool result = false;
 
-    typename std::vector<E>::iterator iter;
+    typename std::vector<E>::const_iterator iter;
+    for (iter = container.begin();
+         iter != container.end() && (!result);
+         ++iter)
+    {
+        if (*iter == element)
+        {
+            result = true;
+        }
+    }
+    return result;
+}
+
+/**
+ * Overloading of the contains method for working with STL linked lists.
+ *
+ * @param container
+ * @param element
+ * @return
+ */
+template <typename E>
+static inline bool contains(const std::list<E>& container, const E& element)
+{
+    bool result = false;
+
+    typename std::list<E>::const_iterator iter;
     for (iter = container.begin();
          iter != container.end() && (!result);
          ++iter)
