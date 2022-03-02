@@ -24,6 +24,7 @@
 
 #include <amanda-vm/Option/CommandLine.h>
 #include <amanda-vm/ADT/Iterators.h>
+#include <amanda-vm/ADT/Collections.h>
 
 using amanda::cli::CommandLine;
 using amanda::cli::Option;
@@ -87,6 +88,21 @@ void CommandLine::getOptions(const Option* options[], size_t size)
     {
         options[i++] = *iter;
     }
+}
+
+bool CommandLine::hasOption(const char opt)
+{
+    return hasOption(String(opt));
+}
+
+bool CommandLine::hasOption(const Option* opt)
+{
+    return adt::contains(options, opt);
+}
+
+bool CommandLine::hasOption(const core::String& opt)
+{
+    return hasOption(resolveOption(opt));
 }
 
 const Option* CommandLine::resolveOption(const core::String& option)

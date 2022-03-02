@@ -34,7 +34,7 @@ adt::Array<String> amanda::cli::makeArgumentsArray(int argc, char* argv[])
     adt::Array<String> array(argc - 1);
     for (int i = 1; i < argc; i++)
     {
-        array[i] = argv[i];
+        array[i - 1] = argv[i];
     }
 
     return array;

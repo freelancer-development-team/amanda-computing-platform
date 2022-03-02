@@ -37,6 +37,11 @@ using namespace amanda;
 int main(int argc, char** argv)
 {
     // THIS IS A TEST
+    adt::Array<core::String> args = cli::makeArgumentsArray(argc, argv);
+    for (size_t i = 0; i < args.length(); i++)
+    {
+        io::console().err.println("command-line %lu: %s", i, args[i].toCharArray());
+    }
 
     cli::Options options;
     options.addOption(new cli::Option("f", "file", "The file to be processed", true, true));
@@ -45,17 +50,44 @@ int main(int argc, char** argv)
     options.addOption(new cli::Option(cli::Option::NO_OPTION, "random", "This is a random description, that is long enough to be wrapped. I believe so at least. I don't know.", true, false));
     options.addOption(new cli::Option("n", cli::Option::NO_OPTION, "New file. Hope this description suits.", true, true));
 
-    core::String header = "Do something.";
-    core::String footer = "Report bugs to a random address.";
-
-    cli::HelpFormatter formatter;
-    formatter.printHelp("myapp", header, options, footer, true);
-
-    // THIS IS A TEST
     cli::DefaultParser parser(false, false);
-    cli::CommandLine* cmd = parser.parse(options, cli::makeArgumentsArray(argc, argv), false);
+    cli::CommandLine* cmd = parser.parse(options, args, false);
+    std::list<const cli::Option*>::const_iterator iter;
+    for (iter = cmd->getOptionsList().begin(); iter != cmd->getOptionsList().end(); ++iter)
+    {
+        io::console().out.println("Option: %s", const_cast<cli::Option*> ((*iter))->toString().toCharArray());
+    }
+
+    std::list<core::String>::const_iterator siter;
+    for (siter = cmd->getArgumentList().begin(); siter != cmd->getArgumentList().end(); ++siter)
+    {
+        io::console().out.println("Argument: %s", (*siter).toCharArray());
+    }
+
+    if (cmd->hasOption('f'))
+    {
+        io::console().out.println("Got the -f parameter!");
+    }
+    else
+    {
+        io::console().out.println("Did not got the -f switch.");
+    }
+    if (cmd->hasOption("help"))
+    {
+        core::String header = "Do something.";
+        core::String footer = "Report bugs to a random address.";
+
+        cli::HelpFormatter formatter;
+        formatter.printHelp("myapp", header, options, footer, true);
+    }
+    else
+    {
+        io::console().err.println("Did not got the -h parameter!");
+    }
 
     delete cmd;
+
+    // THIS IS A TEST
     return EXIT_SUCCESS;
 }
 

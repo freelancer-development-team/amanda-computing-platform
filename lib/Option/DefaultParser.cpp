@@ -62,7 +62,7 @@ CommandLine* DefaultParser::parse(Options& options, const adt::Array<core::Strin
         handleToken(arguments[i]);
     }
 
-    return cmd.get();
+    return cmd;
 }
 
 void DefaultParser::handleConcatenatedOptions(const core::String& token)
@@ -93,10 +93,10 @@ void DefaultParser::handleConcatenatedOptions(const core::String& token)
 
 bool DefaultParser::checkRequiredArguments()
 {
-    bool result = false;
+    bool result = true;
     if (currentOption != NULL && currentOption->requiresArgument())
     {
-        result = true;
+        result = false;
     }
     return result;
 }
@@ -210,19 +210,17 @@ void DefaultParser::handleLongOptionWithoutEqual(const core::String& token)
 
 void DefaultParser::handleOption(const Option* option)
 {
-    if (checkRequiredArguments())
+    checkRequiredArguments();
+    updateRequiredOptions(option);
+    
+    cmd->addOption(option);
+    if (option->hasArgument())
     {
-        updateRequiredOptions(option);
-        cmd->addOption(option);
-
-        if (option->hasArgument())
-        {
-            currentOption = const_cast<Option*> (option);
-        }
-        else
-        {
-            currentOption = NULL;
-        }
+        currentOption = const_cast<Option*> (option);
+    }
+    else
+    {
+        currentOption = NULL;
     }
 }
 
@@ -258,7 +256,7 @@ void DefaultParser::handleShortAndLongOption(const core::String& token)
         {
             String opt = getLongPrefix(t);
 
-            if (options->getOption(opt)->acceptsArguments())
+            if (options->getOption(opt) != NULL && options->getOption(opt)->acceptsArguments())
             {
                 handleOption(options->getOption(opt));
                 currentOption->addValueForProcessing(t.substring(opt.length()));
@@ -420,6 +418,4 @@ void DefaultParser::updateRequiredOptions(const Option* option)
     {
         expectedOptions.remove(option);
     }
-
-
 }

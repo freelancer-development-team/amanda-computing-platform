@@ -42,16 +42,18 @@ class CommandLine : extends core::Object
 {
 public:
 
+    CommandLine();
+    virtual ~CommandLine();
+
+    void                        addArgument(const core::String& argument);
+    void                        addOption(const Option* option);
     std::list<core::String>&    getArgumentList();
     void                        getArguments(core::String arguments[], size_t size);
     std::list<const Option*>&   getOptionsList();
     void                        getOptions(const Option* options[], size_t size);
-    
-    CommandLine();
-    virtual ~CommandLine();
-
-    void addArgument(const core::String& argument);
-    void addOption(const Option* option);
+    bool                        hasOption(const char opt);
+    bool                        hasOption(const Option* opt);
+    bool                        hasOption(const core::String& opt);
 
 private:
 

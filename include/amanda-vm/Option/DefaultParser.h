@@ -52,11 +52,11 @@ public:
 protected:
         
     bool                                allowPartialMatching;
-    core::StrongReference<CommandLine>  cmd;
+    CommandLine*                        cmd;
     core::String                        currentToken;
     Option*                             currentOption;
     std::list<const Option*>            expectedOptions;
-    core::StrongReference<Options>      options;
+    Options*                            options;
     bool                                skipParsing;
     bool                                stopAtNonOption;
     bool                                stripLeadingAndTrailingQuotes;
