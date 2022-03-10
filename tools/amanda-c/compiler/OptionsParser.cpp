@@ -18,6 +18,9 @@
 #include <amanda-c/OptionsParser.h>
 #include <amanda-c/Messages.h>
 
+#include <amanda-vm-c/sdk-version.h>
+#include <amanda-c/c/version.h>
+
 using namespace amanda;
 using namespace amanda::core;
 using namespace amanda::compiler;
@@ -39,6 +42,7 @@ cli::CommandLine* amanda::compiler::parseCommandLineArguments(adt::Array<core::S
     options->addOption(cli::OptionBuilder::build().withShortOption("S").withDescription("Produce assembly code only.").get());
     options->addOption(cli::OptionBuilder::build().withLongOption("statistics").withDescription("Shows the final compilation statistics.").get());
     options->addOption(cli::OptionBuilder::build().withLongOption("verbose").withDescription("Produces a much more complete description of the compilation process.").get());
+    options->addOption(cli::OptionBuilder::build().withShortOption("v").withLongOption("version").withDescription("Outputs version information and exits.").get());
     options->addOption(cli::OptionBuilder::build().withShortOption("W").hasRequiredArgument(true).withDescription("Sets the default warning level (none, some, all).").get());
 
     /* Parse the command line arguments. */
@@ -59,9 +63,19 @@ cli::CommandLine* amanda::compiler::parseCommandLineArguments(adt::Array<core::S
 void amanda::compiler::displayHelpMessage(cli::Options& options)
 {
     String header = "Where possible options may include:";
-    String footer = "Please, report bugs to the discussions page of the Amanda project: \n"
-            "\thttps://github.com/freelancer-development-team/amanda-computing-platform";
+    String footer = "Please, report bugs to the discussions page of the Amanda project:\n"
+            "\thttps://github.com/freelancer-development-team/amanda-computing-platform \n";
 
     StrongReference<cli::HelpFormatter> formatter = new cli::HelpFormatter();
     formatter->printHelp("amanda-c <input-file>", header, options, footer, true);
+}
+
+void amanda::compiler::displayVersionInformation()
+{
+    io::console().out.println("amanda-c (AmandaSDK %s) %s\n"
+                              "Copyright (C) 2022 FreeLancer Development Team.\n"
+                              "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
+                              "This is free software: you are free to change and redistribute it.\n"
+                              "There is NO WARRANTY, to the extent permitted by law.",
+                              SDK_FULLVERSION_STRING, AMANDA_C_FULLVERSION_STRING);
 }

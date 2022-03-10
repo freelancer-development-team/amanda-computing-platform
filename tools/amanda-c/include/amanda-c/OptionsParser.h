@@ -35,6 +35,7 @@ namespace compiler
 
 cli::CommandLine*   parseCommandLineArguments(adt::Array<core::String>& args, cli::Options* options);
 void                displayHelpMessage(cli::Options& options);
+void                displayVersionInformation();
 
 }
 }

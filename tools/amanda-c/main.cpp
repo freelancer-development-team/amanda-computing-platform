@@ -28,6 +28,7 @@
 
 /* Project includes */
 #include <amanda-c/Driver.h>
+#include <amanda-c/Messages.h>
 #include <amanda-c/OptionsParser.h>
 
 /* Standard C/C++ includes */
@@ -62,20 +63,84 @@ int main(int argc, char** argv)
     {
         compiler::displayHelpMessage(options.getReference());
     }
+    else if (commandLine->hasOption('v'))
+    {
+        compiler::displayVersionInformation();
+    }
     else
     {
-        if (commandLine->hasOption("verbose"))
+        if (commandLine->hasOption('o'))
         {
-            driver->setVerbose(true);
+
+        }
+        if (commandLine->hasOption('S'))
+        {
+
         }
         if (commandLine->hasOption("statistics"))
         {
             driver->setShowStatistics(true);
         }
-    }
+        if (commandLine->hasOption("verbose"))
+        {
+            driver->setVerbose(true);
+        }
 
-    /* Perform the compiler pass. */
-    
+        for (std::list<core::String>::iterator iter = commandLine->getArgumentList().begin();
+             iter != commandLine->getArgumentList().end(); ++iter)
+        {
+            io::File* f = new io::File(*iter, io::File::READ);
+            assert(f != NULL && "Not enough memory.");
+
+            if (!f->open() || f->isError() || !(f->isFile()))
+            {
+                compiler::log::error("unable to open file '%s' for reading.", f->getPath().toCharArray());
+            }
+            else
+            {
+                if (driver->isVerbose())
+                {
+                    compiler::log::info("added file '%s' to the input stream.", f->getPath().toCharArray());
+                }
+                driver->addInputFile(f);
+            }
+        }
+
+        /* Perform some validations to the input data. */
+        if (!driver->hasInputFiles())
+        {
+            compiler::log::fatal("no input files.");
+        }
+        if (!driver->hasOutputFiles())
+        {
+            if (driver->isVerbose())
+            {
+                compiler::log::warning("no output files. Default filenames are used.");
+            }
+
+            for (std::list<io::File*>::const_iterator iter = driver->getInputFiles().begin();
+                 iter != driver->getInputFiles().end(); ++iter)
+            {
+                const core::String& inPath = (*iter)->getPath();
+                core::String outPath = inPath.substring(0, inPath.length() - 4).append(".il");
+
+                if (driver->isVerbose())
+                {
+                    compiler::log::info("adding '%s' to the output stream.", outPath.toCharArray());
+                }
+
+                io::File* outFile = new io::File(outPath, io::File::WRITE | io::File::CREATE);
+                assert(outFile != NULL && "Not enough memory.");
+
+                driver->addOutputFile(outFile);
+            }
+        }
+
+        /* Perform the compiler pass. */
+
+        /* If statistics must be shown, display... */
+        driver->showStatistics();
+    }
     return EXIT_SUCCESS;
 }
 

@@ -27,6 +27,10 @@
 
 #include <amanda-vm/Object.h>
 #include <amanda-vm/Pointer.h>
+#include <amanda-vm/IO/File.h>
+
+#include <ctime>
+#include <list>
 
 namespace amanda
 {
@@ -45,16 +49,32 @@ public:
     Driver();
     virtual ~Driver();
 
-    bool isShowStatistics() const;
-    bool isVerbose() const;
-    void setShowStatistics(bool show);
-    void setVerbose(bool verbose);
+    void                        addInputFile(io::File* file);
+    void                        addOutputFile(io::File* file);
+    const std::list<io::File*>& getInputFiles();
+    const std::list<io::File*>& getOutputFiles();
+    bool                        hasInputFiles() const;
+    bool                        hasOutputFiles() const;
+    bool                        isShowStatistics() const;
+    bool                        isVerbose() const;
+    void                        setShowStatistics(bool show);
+    void                        setVerbose(bool verbose);
+    void                        showStatistics();
 
 protected:
 
-    bool statistics;
-    bool verbose;
+    std::list<io::File*>        inputFiles;
+    std::list<io::File*>        outputFiles;
+    bool                        statistics;
+    bool                        verbose;
 
+private:
+
+    clock_t                     initTicks;
+    clock_t                     finiTicks;
+
+    unsigned long               warningCount;
+    unsigned long               errorCount;
 } ;
 
 }

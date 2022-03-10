@@ -43,28 +43,28 @@ static void printFormatted(const core::String& fmt, va_list& va)
 void amanda::compiler::log::info(const core::String& fmt, ...)
 {
     VA_LIST_INIT();
-    printFormatted(core::String("amanda-c: \033[1m\033[32mfatal\033[0m: ").append(fmt), VA_LIST_NAME);
+    printFormatted(core::String("amanda-c: \033[1minfo\033[0m: ").append(fmt), VA_LIST_NAME);
     VA_LIST_END();
 }
 
 void amanda::compiler::log::warning(const core::String& fmt, ...)
 {
     VA_LIST_INIT();
-    printFormatted(core::String("amanda-c: \033[1m\033[33mfatal\033[0m: ").append(fmt), VA_LIST_NAME);
+    printFormatted(core::String("amanda-c: \033[1m\033[33mwarn\033[0m: ").append(fmt), VA_LIST_NAME);
     VA_LIST_END();
 }
 
 void amanda::compiler::log::error(const core::String& fmt, ...)
 {
     VA_LIST_INIT();
-    printFormatted(core::String("amanda-c: \033[1m\033[31mfatal\033[0m: ").append(fmt), VA_LIST_NAME);
+    printFormatted(core::String("amanda-c: \033[1m\033[31merror\033[0m: ").append(fmt), VA_LIST_NAME);
     VA_LIST_END();
 }
 
 void amanda::compiler::log::fatal(const core::String& fmt, ...)
 {
     VA_LIST_INIT();
-    printFormatted(core::String("amanda-c: \033[1m\033[35mfatal\033[0m: ").append(fmt), VA_LIST_NAME);
+    printFormatted(core::String("amanda-c: \033[1m\033[31mfatal error\033[0m: ").append(fmt), VA_LIST_NAME);
     VA_LIST_END();
 
     // Abort since we hit a fatal exception.

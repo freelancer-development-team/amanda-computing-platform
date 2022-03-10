@@ -23,7 +23,9 @@
  */
 
 #include <amanda-c/Driver.h>
+#include <AmandaSDK.h>
 
+using namespace amanda;
 using namespace amanda::compiler;
 
 Driver::Driver()
@@ -31,10 +33,60 @@ Driver::Driver()
 statistics(false),
 verbose(false)
 {
+    initTicks = clock();
+    errorCount = 0;
+    warningCount = 0;
 }
 
 Driver::~Driver()
 {
+    for (std::list<io::File*>::iterator iter = inputFiles.begin(); iter != inputFiles.end(); ++iter)
+    {
+        (*iter)->release();
+    }
+
+    for (std::list<io::File*>::iterator iter = outputFiles.begin(); iter != outputFiles.end(); ++iter)
+    {
+        (*iter)->release();
+    }
+}
+
+void Driver::addInputFile(io::File* file)
+{
+    if (file != NULL)
+    {
+        file->grab();
+        inputFiles.push_back(file);
+    }
+}
+
+void Driver::addOutputFile(io::File* file)
+{
+    if (file != NULL)
+    {
+        file->grab();
+        outputFiles.push_back(file);
+    }
+}
+
+const std::list<io::File*>& Driver::getInputFiles()
+{
+    return inputFiles;
+}
+
+const std::list<io::File*>& Driver::getOutputFiles()
+{
+    return outputFiles;
+}
+
+bool Driver::hasInputFiles() const
+{
+    return !inputFiles.empty();
+}
+
+bool Driver::hasOutputFiles() const
+{
+    return !outputFiles.empty();
 }
 
 bool Driver::isShowStatistics() const
@@ -55,4 +107,21 @@ void Driver::setShowStatistics(bool show)
 void Driver::setVerbose(bool verbose)
 {
     this->verbose = verbose;
+}
+
+void Driver::showStatistics()
+{
+    if (statistics && verbose)
+    {
+        finiTicks = ::clock();
+        double ellapsed = (finiTicks - initTicks) / 100.0f;
+
+        io::console().out.println("Statistics:\n"
+                                  "    errors:        %-10lu\n"
+                                  "    warnings:      %-10lu\n"
+                                  "    time ellapsed: %.2lfs",
+                                  errorCount,
+                                  warningCount,
+                                  ellapsed);
+    }
 }
