@@ -22,9 +22,15 @@
  * Created on February 27, 2022, 10:38 PM
  */
 
+/* Amanda API includes */
 #include <AmandaSDK.h>
 #include <amanda-vm/Option/package.hxx>
 
+/* Project includes */
+#include <amanda-c/Driver.h>
+#include <amanda-c/OptionsParser.h>
+
+/* Standard C/C++ includes */
 #include <cstdio>
 #include <cstdlib>
 
@@ -32,62 +38,44 @@ using namespace amanda;
 
 /*
  * This is the entry point for the Amanda Programming Language compiler
- * frontend.
+ * frontend. This function parses the arguments and calls the compiler driver
+ * with the appropriate options or switches.
  */
 int main(int argc, char** argv)
 {
-    // THIS IS A TEST
-    adt::Array<core::String> args = cli::makeArgumentsArray(argc, argv);
-    for (size_t i = 0; i < args.length(); i++)
-    {
-        io::console().err.println("command-line %lu: %s", i, args[i].toCharArray());
-    }
+    /* Create the compiler driver object. */
+    core::StrongReference<compiler::Driver> driver = new compiler::Driver();
 
-    cli::Options options;
-    options.addOption(new cli::Option("f", "file", "The file to be processed", true, true));
-    options.addOption(new cli::Option("h", "help", "Shows help", false, false));
-    options.addOption(new cli::Option("v", "version", "Shows version information.", false, true));
-    options.addOption(new cli::Option(cli::Option::NO_OPTION, "random", "This is a random description, that is long enough to be wrapped. I believe so at least. I don't know.", true, false));
-    options.addOption(new cli::Option("n", cli::Option::NO_OPTION, "New file. Hope this description suits.", true, true));
+    /* Now create the options object, parse the command line options and install
+     * the appropriate flags into the object.
+     */
+    core::StrongReference<cli::Options> options = new cli::Options();
+    adt::Array<core::String> arguments = cli::makeArgumentsArray(argc, argv);
+    core::StrongReference<cli::CommandLine> commandLine
+            = compiler::parseCommandLineArguments(arguments, options.get());
 
-    cli::DefaultParser parser(false, false);
-    cli::CommandLine* cmd = parser.parse(options, args, false);
-    std::list<const cli::Option*>::const_iterator iter;
-    for (iter = cmd->getOptionsList().begin(); iter != cmd->getOptionsList().end(); ++iter)
-    {
-        io::console().out.println("Option: %s", const_cast<cli::Option*> ((*iter))->toString().toCharArray());
-    }
+    /* Eliminate the possibility of a NULL dereference. */
+    assert(!commandLine.isNull() && "Returned a NULL command line.");
 
-    std::list<core::String>::const_iterator siter;
-    for (siter = cmd->getArgumentList().begin(); siter != cmd->getArgumentList().end(); ++siter)
+    /* Parse the command line. */
+    if (commandLine->hasOption('h'))
     {
-        io::console().out.println("Argument: %s", (*siter).toCharArray());
-    }
-
-    if (cmd->hasOption('f'))
-    {
-        io::console().out.println("Got the -f parameter!");
+        compiler::displayHelpMessage(options.getReference());
     }
     else
     {
-        io::console().out.println("Did not got the -f switch.");
-    }
-    if (cmd->hasOption("help"))
-    {
-        core::String header = "Do something.";
-        core::String footer = "Report bugs to a random address.";
-
-        cli::HelpFormatter formatter;
-        formatter.printHelp("myapp", header, options, footer, true);
-    }
-    else
-    {
-        io::console().err.println("Did not got the -h parameter!");
+        if (commandLine->hasOption("verbose"))
+        {
+            driver->setVerbose(true);
+        }
+        if (commandLine->hasOption("statistics"))
+        {
+            driver->setShowStatistics(true);
+        }
     }
 
-    delete cmd;
-
-    // THIS IS A TEST
+    /* Perform the compiler pass. */
+    
     return EXIT_SUCCESS;
 }
 

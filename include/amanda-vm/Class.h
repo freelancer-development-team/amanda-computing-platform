@@ -25,12 +25,14 @@
 #ifndef CLASS_H
 #define CLASS_H
 
+#include <amanda-vm/ReferenceCounted.h>
+
 namespace amanda
 {
 namespace core
 {
 
-class Class
+class Class : public ReferenceCounted
 {
 public:
 
@@ -42,7 +44,7 @@ public:
 
 private:
 
-    static int calculateHashFromClassName(const char* name);
+    static int      calculateHashFromClassName(const char* name);
 
     const char*     name;
     const int       hash;

@@ -98,6 +98,24 @@ static inline bool contains(const std::list<E>& container, const E& element)
     return result;
 }
 
+template <typename E>
+static inline void vectorAsList(const std::vector<E>& vector, std::list<E>& list)
+{
+    typename std::vector<E>::const_iterator iter;
+    for (iter = vector.begin(); iter != vector.end(); iter++)
+    {
+        list.push_back(*iter);
+    }
+}
+
+template <typename E>
+static inline std::list<E>& vectorAsList(const std::vector<E>& vector)
+{
+    std::list<E>& list;
+    vectorAsList(vector, list);
+    return list;
+}
+
 }
 }
 

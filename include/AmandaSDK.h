@@ -35,6 +35,7 @@
 /* AmandaSDK C++ interface (core library only) */
 #include <amanda-vm/Callable.h>
 #include <amanda-vm/Class.h>
+#include <amanda-vm/Exception.h>
 #include <amanda-vm/Interface.h>
 #include <amanda-vm/Object.h>
 #include <amanda-vm/Pointer.h>

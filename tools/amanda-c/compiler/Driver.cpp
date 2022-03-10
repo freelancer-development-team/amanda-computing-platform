@@ -16,24 +16,43 @@
  */
 
 /* 
- * File:   package..hxx
+ * File:   Driver.cpp
  * Author: Javier Marrero
- *
- * Created on February 28, 2022, 12:07 AM
+ * 
+ * Created on March 10, 2022, 9:22 AM
  */
 
-#ifndef PACKAGE_OPTION_HXX
-#define PACKAGE_OPTION_HXX
+#include <amanda-c/Driver.h>
 
-#include "CommandLine.h"
-#include "CommandLineParser.h"
-#include "DefaultParser.h"
-#include "HelpFormatter.h"
-#include "Option.h"
-#include "OptionBuilder.h"
-#include "Options.h"
-#include "ParseException.h"
-#include "UnrecognizedOptionException.h"
+using namespace amanda::compiler;
 
-#endif /* PACKAGE__HXX */
+Driver::Driver()
+:
+statistics(false),
+verbose(false)
+{
+}
 
+Driver::~Driver()
+{
+}
+
+bool Driver::isShowStatistics() const
+{
+    return statistics;
+}
+
+bool Driver::isVerbose() const
+{
+    return verbose;
+}
+
+void Driver::setShowStatistics(bool show)
+{
+    this->statistics = show;
+}
+
+void Driver::setVerbose(bool verbose)
+{
+    this->verbose = verbose;
+}

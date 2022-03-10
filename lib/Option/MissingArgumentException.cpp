@@ -16,24 +16,34 @@
  */
 
 /* 
- * File:   package..hxx
+ * File:   MissingArgumentException.cpp
  * Author: Javier Marrero
- *
- * Created on February 28, 2022, 12:07 AM
+ * 
+ * Created on March 2, 2022, 9:04 PM
  */
 
-#ifndef PACKAGE_OPTION_HXX
-#define PACKAGE_OPTION_HXX
+#include <amanda-vm/Option/MissingArgumentException.h>
 
-#include "CommandLine.h"
-#include "CommandLineParser.h"
-#include "DefaultParser.h"
-#include "HelpFormatter.h"
-#include "Option.h"
-#include "OptionBuilder.h"
-#include "Options.h"
-#include "ParseException.h"
-#include "UnrecognizedOptionException.h"
+using namespace amanda::cli;
 
-#endif /* PACKAGE__HXX */
+using amanda::core::String;
+
+MissingArgumentException::MissingArgumentException(const Option* option)
+:
+ParseException(String("Missing argument for option: ").append(option->getKey()))
+{
+}
+
+MissingArgumentException::MissingArgumentException(const core::String& message)
+:
+ParseException(message)
+{
+}
+
+MissingArgumentException::~MissingArgumentException() throw()
+{
+}
+
+
+
 

@@ -16,24 +16,32 @@
  */
 
 /* 
- * File:   package..hxx
+ * File:   Messages.h
  * Author: Javier Marrero
  *
- * Created on February 28, 2022, 12:07 AM
+ * Created on March 10, 2022, 10:01 AM
  */
 
-#ifndef PACKAGE_OPTION_HXX
-#define PACKAGE_OPTION_HXX
+#ifndef AMANDA_C_MESSAGES_H
+#define AMANDA_C_MESSAGES_H
 
-#include "CommandLine.h"
-#include "CommandLineParser.h"
-#include "DefaultParser.h"
-#include "HelpFormatter.h"
-#include "Option.h"
-#include "OptionBuilder.h"
-#include "Options.h"
-#include "ParseException.h"
-#include "UnrecognizedOptionException.h"
+#include <amanda-vm/String.h>
 
-#endif /* PACKAGE__HXX */
+namespace amanda
+{
+namespace compiler
+{
+namespace log
+{
+
+void info(const core::String& fmt, ...);
+void warning(const core::String& fmt, ...);
+void error(const core::String& fmt, ...);
+void fatal(const core::String& fmt, ...);
+
+}
+}
+}
+
+#endif /* MESSAGES_H */
 

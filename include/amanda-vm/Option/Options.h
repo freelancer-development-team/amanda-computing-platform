@@ -56,6 +56,8 @@ public:
     bool                            hasOption(const core::String& option);
     bool                            hasShortOption(const core::String& option);
     void                            helpOptions(std::list<const Option*>& list) const;
+    
+    virtual core::String            toString() const;
 
 private:
 

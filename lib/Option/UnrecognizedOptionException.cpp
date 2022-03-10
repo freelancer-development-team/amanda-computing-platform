@@ -16,24 +16,32 @@
  */
 
 /* 
- * File:   package..hxx
+ * File:   UnrecognizedOptionException.cpp
  * Author: Javier Marrero
- *
- * Created on February 28, 2022, 12:07 AM
+ * 
+ * Created on March 2, 2022, 1:01 PM
  */
 
-#ifndef PACKAGE_OPTION_HXX
-#define PACKAGE_OPTION_HXX
+#include <amanda-vm/Option/UnrecognizedOptionException.h>
 
-#include "CommandLine.h"
-#include "CommandLineParser.h"
-#include "DefaultParser.h"
-#include "HelpFormatter.h"
-#include "Option.h"
-#include "OptionBuilder.h"
-#include "Options.h"
-#include "ParseException.h"
-#include "UnrecognizedOptionException.h"
+using namespace amanda::cli;
 
-#endif /* PACKAGE__HXX */
+using amanda::core::String;
+
+UnrecognizedOptionException::UnrecognizedOptionException(const core::String& message, const core::String& option)
+:
+ParseException(message),
+option(option)
+{
+}
+
+UnrecognizedOptionException::~UnrecognizedOptionException() throw ()
+{
+}
+
+const String& UnrecognizedOptionException::getOption() const
+{
+    return option;
+}
+
 

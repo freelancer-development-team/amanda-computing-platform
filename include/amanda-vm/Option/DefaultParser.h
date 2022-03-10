@@ -44,7 +44,7 @@ class DefaultParser : extends CommandLineParser
 
 public:
 
-    DefaultParser(bool allowPartialMatching, bool stripLeadingAndTrailingQuotes);
+    DefaultParser(bool allowPartialMatching = true, bool stripLeadingAndTrailingQuotes = false);
     virtual ~DefaultParser();
 
     virtual CommandLine* parse(Options& options, const adt::Array<core::String>& arguments, bool stopAtNonOption);

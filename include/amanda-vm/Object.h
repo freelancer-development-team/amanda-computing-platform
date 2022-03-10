@@ -37,10 +37,19 @@ namespace core
 
 #define AMANDA_OBJECT(Type, Super) \
     public: \
-    typedef Type ClassName; \
-    typedef Super BaseClassName; \
-    \
-    static amanda::core::Class& getClass() { static amanda::core::Class _class(#Type, &Super::getClass()); return _class; }
+        typedef Type    ClassName; \
+        typedef Super   BaseClassName; \
+        \
+        static amanda::core::Class& getClass() { static amanda::core::Class _class(#Type, &BaseClassName::getClass()); return _class; } \
+        \
+        template <class __class> \
+        __class& cast() \
+        { \
+            return reinterpret_cast<__class&> (*this); \
+        } \
+        \
+        virtual amanda::core::Class& getClassDynamically() const { return getClass(); } \
+    private:
 
 class Object : virtual public ReferenceCounted
 {
@@ -52,19 +61,22 @@ public:
     Object(const Object& original);
     virtual ~Object();
 
-    virtual Object* clone();
-    virtual bool    equals(const Object* object);
-    virtual int     hashCode();
-    virtual String  toString() const;
+    virtual Object*                 clone();
+    virtual bool                    equals(const Object* object);
+    virtual amanda::core::Class&    getClassDynamically() const;
+    virtual int                     hashCode();
+    virtual bool                    is(const Class* type);
+    virtual String                  toString() const;
 
     template <class T>
-    bool is()
+    bool is() const
     {
-        return getClass().is(T::getClass());
+        return getClassDynamically().is(T::getClass());
     }
 
     virtual bool operator==(const Object& rhs);
     virtual bool operator==(const Object* rhs);
+
 } ;
 
 }

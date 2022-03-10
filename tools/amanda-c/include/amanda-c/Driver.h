@@ -16,24 +16,49 @@
  */
 
 /* 
- * File:   package..hxx
+ * File:   Driver.h
  * Author: Javier Marrero
  *
- * Created on February 28, 2022, 12:07 AM
+ * Created on March 10, 2022, 9:22 AM
  */
 
-#ifndef PACKAGE_OPTION_HXX
-#define PACKAGE_OPTION_HXX
+#ifndef DRIVER_H
+#define DRIVER_H
 
-#include "CommandLine.h"
-#include "CommandLineParser.h"
-#include "DefaultParser.h"
-#include "HelpFormatter.h"
-#include "Option.h"
-#include "OptionBuilder.h"
-#include "Options.h"
-#include "ParseException.h"
-#include "UnrecognizedOptionException.h"
+#include <amanda-vm/Object.h>
+#include <amanda-vm/Pointer.h>
 
-#endif /* PACKAGE__HXX */
+namespace amanda
+{
+namespace compiler
+{
+
+/**
+ * This driver class is a compiler driver front-end class.
+ */
+class Driver : public core::Object
+{
+    AMANDA_OBJECT(Driver, core::Object)
+
+public:
+
+    Driver();
+    virtual ~Driver();
+
+    bool isShowStatistics() const;
+    bool isVerbose() const;
+    void setShowStatistics(bool show);
+    void setVerbose(bool verbose);
+
+protected:
+
+    bool statistics;
+    bool verbose;
+
+} ;
+
+}
+}
+
+#endif /* DRIVER_H */
 

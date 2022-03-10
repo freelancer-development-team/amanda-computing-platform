@@ -16,24 +16,28 @@
  */
 
 /* 
- * File:   package..hxx
+ * File:   Options.h
  * Author: Javier Marrero
  *
- * Created on February 28, 2022, 12:07 AM
+ * Created on March 10, 2022, 9:15 AM
  */
 
-#ifndef PACKAGE_OPTION_HXX
-#define PACKAGE_OPTION_HXX
+#ifndef AMANDA_C_OPTIONS_H
+#define AMANDA_C_OPTIONS_H
 
-#include "CommandLine.h"
-#include "CommandLineParser.h"
-#include "DefaultParser.h"
-#include "HelpFormatter.h"
-#include "Option.h"
-#include "OptionBuilder.h"
-#include "Options.h"
-#include "ParseException.h"
-#include "UnrecognizedOptionException.h"
+#include <amanda-vm/ADT/Array.h>
+#include <amanda-vm/Option/package.hxx>
 
-#endif /* PACKAGE__HXX */
+namespace amanda
+{
+namespace compiler
+{
+
+cli::CommandLine*   parseCommandLineArguments(adt::Array<core::String>& args, cli::Options* options);
+void                displayHelpMessage(cli::Options& options);
+
+}
+}
+
+#endif /* OPTIONS_H */
 

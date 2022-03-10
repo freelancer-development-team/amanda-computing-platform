@@ -47,9 +47,11 @@ public:
     virtual ~AutomaticReferenceBase() {}
 
     T*      get() const { return pointer; }
+    T&      getReference() const { return *pointer; }
     bool    isNull() const { return pointer == NULL; }
 
     operator bool()                                             { return pointer != NULL; }
+    T&      operator*()                                         { return *pointer; }
     T*      operator->()                                        { return pointer; }
     bool    operator==(const AutomaticReferenceBase<T>& rhs)    { return pointer == rhs.pointer; }
     bool    operator==(const T* rhs)                            { return pointer == rhs; }

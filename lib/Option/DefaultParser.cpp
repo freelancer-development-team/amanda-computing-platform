@@ -22,9 +22,14 @@
  * Created on March 1, 2022, 2:16 PM
  */
 
+#include <amanda-vm/ADT/Collections.h>
 #include <amanda-vm/Option/DefaultParser.h>
 #include <amanda-vm/Option/Option.h>
 #include <amanda-vm/Option/Options.h>
+#include <amanda-vm/Option/MissingArgumentException.h>
+#include <amanda-vm/Option/MissingOptionException.h>
+#include <amanda-vm/Option/UnrecognizedOptionException.h>
+
 #include <ctype.h>
 
 using namespace amanda::cli;
@@ -44,7 +49,12 @@ DefaultParser::~DefaultParser()
 
 bool DefaultParser::checkRequiredOptions()
 {
-    return expectedOptions.empty();
+    bool result = expectedOptions.empty();
+    if (!result)
+    {
+        throw MissingOptionException(expectedOptions);
+    }
+    return result;
 }
 
 CommandLine* DefaultParser::parse(Options& options, const adt::Array<core::String>& arguments, bool stopAtNonOption)
@@ -61,6 +71,9 @@ CommandLine* DefaultParser::parse(Options& options, const adt::Array<core::Strin
     {
         handleToken(arguments[i]);
     }
+
+    checkRequiredArguments();
+    checkRequiredOptions();
 
     return cmd;
 }
@@ -97,6 +110,7 @@ bool DefaultParser::checkRequiredArguments()
     if (currentOption != NULL && currentOption->requiresArgument())
     {
         result = false;
+        throw MissingArgumentException(currentOption);
     }
     return result;
 }
@@ -125,7 +139,10 @@ std::list<String>& DefaultParser::getMatchingLongOptions(const core::String& tok
 {
     if (allowPartialMatching)
     {
+        std::vector<core::String> matchingVector;
+        options->getMatchingOptions(token, matchingVector);
 
+        adt::vectorAsList(matchingVector, matches);
     }
     else
     {
@@ -181,7 +198,7 @@ void DefaultParser::handleLongOptionWithEqual(const core::String& token)
             }
             else
             {
-
+                handleUnknownToken(token);
             }
         }
     }
@@ -194,7 +211,7 @@ void DefaultParser::handleLongOptionWithoutEqual(const core::String& token)
 
     if (matchingOptions.empty())
     {
-
+        handleUnknownToken(token);
     }
     else
     {
@@ -212,7 +229,7 @@ void DefaultParser::handleOption(const Option* option)
 {
     checkRequiredArguments();
     updateRequiredOptions(option);
-    
+
     cmd->addOption(option);
     if (option->hasArgument())
     {
@@ -306,9 +323,13 @@ void DefaultParser::handleToken(const core::String& token)
     {
         skipParsing = true;
     }
-    else if (currentOption != NULL && currentOption->acceptsArguments())
+    else if (currentOption != NULL && currentOption->acceptsArguments() && isArgument(token))
     {
         currentOption->addValueForProcessing(token);
+    }
+    else if (currentToken.startsWith("--"))
+    {
+        handleLongOption(token);
     }
     else if (currentToken.startsWith("-") && !(currentToken.equals("-")))
     {
@@ -335,6 +356,10 @@ void DefaultParser::handleUnknownToken(const core::String& token)
             skipParsing = true;
         }
     }
+    else
+    {
+        throw UnrecognizedOptionException(String("Unrecognized option: ").append(token), token);
+    }
 }
 
 bool DefaultParser::isArgument(const core::String& token)
@@ -347,7 +372,7 @@ bool DefaultParser::isJavaProperty(const core::String& token)
     String opt = token.substring(0, 1);
     const Option* option = options->getOption(opt);
 
-    return option == NULL && (option->getArguments() >= 2 || option->getArguments() == Option::UNLIMITED_VALUES);
+    return option != NULL && (option->getArguments() >= 2 || option->getArguments() == Option::UNLIMITED_VALUES);
 }
 
 bool DefaultParser::isLongOption(const core::String& token)
@@ -398,8 +423,9 @@ bool DefaultParser::isShortOption(const core::String& token)
     bool result = false;
     if (token.startsWith("-") && token.length() != 1)
     {
-        unsigned pos = token.find(token);
-        String optName = pos == String::NPOS ? token.substring(1) : token.substring(1, pos);
+        unsigned pos = token.find("=");
+        String optName = (pos == String::NPOS ? token.substring(1) : token.substring(1, pos));
+        
         if (options->hasShortOption(optName))
         {
             result = true;

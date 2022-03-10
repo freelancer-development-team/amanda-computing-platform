@@ -62,18 +62,16 @@ const Class* Class::getSuperClass() const
 bool Class::is(const Class& type) const
 {
     bool result = false;
-    if (!result)
+
+    const Class* current = this;
+    while (current != NULL && !result)
     {
-        const Class* current = this;
-        while (current != NULL)
+        if (current->hash == type.hash)
         {
-            if (current->hash == type.hash)
-            {
-                result = true;
-                break;
-            }
-            current = current->super;
+            result = true;
         }
+        current = current->super;
     }
+
     return result;
 }

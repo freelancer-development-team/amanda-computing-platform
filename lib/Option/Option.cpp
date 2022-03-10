@@ -25,6 +25,7 @@
 #include <amanda-vm/Option/Option.h>
 
 #include <amanda-vm/Types.h>
+#include <amanda-vm/Exception.h>
 #include <amanda-vm-c/sdk-assert-helper.h>
 
 using amanda::cli::Option;
@@ -65,7 +66,7 @@ void Option::addValueForProcessing(const core::String& value)
 {
     assert(argumentCount != UNINITIALIZED
            && ASSERT_MESSAGE("NO_ARGS_ALLOWED"));
-    processValue(amanda::eliminateConstness(value));
+    processValue(amanda::eliminateConstness(String(value)));
 }
 
 void Option::clear()
@@ -187,7 +188,7 @@ void Option::setValueSeparator(const char separator)
     this->valueSeparator = separator;
 }
 
-String Option::toString()
+String Option::toString() const
 {
     String result("[ option: ");
     result.append(option);
@@ -207,6 +208,10 @@ void Option::add(const core::String& value)
     {
         values.push_back(value);
     }
+    else
+    {
+        throw core::Exception("Cannot add value to a full list.");
+    }
 }
 
 void Option::processValue(core::String& value)
@@ -225,4 +230,5 @@ void Option::processValue(core::String& value)
     }
 
     // Store the last value of the actual value being parsed
+    add(value);
 }

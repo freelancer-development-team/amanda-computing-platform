@@ -148,3 +148,24 @@ void Options::helpOptions(std::list<const Option*>& list) const
         list.push_back(iter->second);
     }
 }
+
+String Options::toString() const
+{
+    std::map<String, const Option*>::const_iterator l_iter;
+    std::map<String, const Option*>::const_iterator s_iter;
+
+    String buf("[ Options: [ short: ");
+    for (s_iter = shortOptions.begin(); s_iter != shortOptions.end(); ++s_iter)
+    {
+        if (s_iter->second->hasShortOption())
+            buf.append("-").append(s_iter->first).append(" ");
+    }
+    buf.append(" ] [ long: ");
+    for (l_iter = longOptions.begin(); l_iter != longOptions.end(); ++l_iter)
+    {
+        buf.append("--").append(l_iter->first).append(" ");
+    }
+    buf.append("]");
+
+    return buf;
+}

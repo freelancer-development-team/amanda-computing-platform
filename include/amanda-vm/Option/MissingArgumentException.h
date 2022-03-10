@@ -16,24 +16,40 @@
  */
 
 /* 
- * File:   package..hxx
+ * File:   MissingArgumentException.h
  * Author: Javier Marrero
  *
- * Created on February 28, 2022, 12:07 AM
+ * Created on March 2, 2022, 9:04 PM
  */
 
-#ifndef PACKAGE_OPTION_HXX
-#define PACKAGE_OPTION_HXX
+#ifndef MISSINGARGUMENTEXCEPTION_H
+#define MISSINGARGUMENTEXCEPTION_H
 
-#include "CommandLine.h"
-#include "CommandLineParser.h"
-#include "DefaultParser.h"
-#include "HelpFormatter.h"
-#include "Option.h"
-#include "OptionBuilder.h"
-#include "Options.h"
-#include "ParseException.h"
-#include "UnrecognizedOptionException.h"
+#include <amanda-vm/Option/ParseException.h>
+#include <amanda-vm/Option/Option.h>
 
-#endif /* PACKAGE__HXX */
+namespace amanda
+{
+namespace cli
+{
+
+class MissingArgumentException : public ParseException
+{
+    AMANDA_OBJECT(MissingArgumentException, ParseException)
+
+public:
+
+    MissingArgumentException(const Option* option);
+    MissingArgumentException(const core::String& message);
+    virtual ~MissingArgumentException() throw();
+    
+private:
+
+    const Option* option;
+} ;
+
+}
+}
+
+#endif /* MISSINGARGUMENTEXCEPTION_H */
 
