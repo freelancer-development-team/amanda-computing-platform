@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,22 +16,34 @@
  */
 
 /* 
- * File:   Stream.cpp
+ * File:   MissingArgumentException.cpp
  * Author: Javier Marrero
  * 
- * Created on March 1, 2022, 1:37 AM
+ * Created on March 2, 2022, 9:04 PM
  */
 
-#include <amanda-vm/IO/OutputStream.h>
+#include <amanda-vm/Option/MissingArgumentException.h>
 
-using amanda::io::OutputStream;
+using namespace amanda::cli;
 
-OutputStream::OutputStream()
+using amanda::core::String;
+
+MissingArgumentException::MissingArgumentException(const Option* option)
+:
+ParseException(String("Missing argument for option: ").append(option->getKey()))
 {
-    
 }
 
-OutputStream::~OutputStream()
+MissingArgumentException::MissingArgumentException(const core::String& message)
+:
+ParseException(message)
 {
 }
+
+MissingArgumentException::~MissingArgumentException() throw()
+{
+}
+
+
+
 

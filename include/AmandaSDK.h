@@ -33,7 +33,9 @@
 #include <amanda-vm-c/sdk-version.h>
 
 /* AmandaSDK C++ interface (core library only) */
+#include <amanda-vm/Callable.h>
 #include <amanda-vm/Class.h>
+#include <amanda-vm/Exception.h>
 #include <amanda-vm/Interface.h>
 #include <amanda-vm/Object.h>
 #include <amanda-vm/Pointer.h>
@@ -41,8 +43,10 @@
 #include <amanda-vm/String.h>
 #include <amanda-vm/Types.h>
 
+#include <amanda-vm/ADT/Array.h>
 #include <amanda-vm/ADT/BinaryBuffer.h>
 #include <amanda-vm/ADT/Collections.h>
+#include <amanda-vm/ADT/Iterators.h>
 
 #include <amanda-vm/IO/Closeable.h>
 #include <amanda-vm/IO/Console.h>

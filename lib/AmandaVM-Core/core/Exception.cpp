@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,22 +16,32 @@
  */
 
 /* 
- * File:   Stream.cpp
+ * File:   Exception.cpp
  * Author: Javier Marrero
  * 
- * Created on March 1, 2022, 1:37 AM
+ * Created on March 2, 2022, 12:37 PM
  */
 
-#include <amanda-vm/IO/OutputStream.h>
+#include <amanda-vm/Exception.h>
 
-using amanda::io::OutputStream;
+using namespace amanda::core;
 
-OutputStream::OutputStream()
-{
-    
-}
-
-OutputStream::~OutputStream()
+Exception::Exception(const core::String& message)
+:
+message(message)
 {
 }
 
+Exception::~Exception() throw ()
+{
+}
+
+const String& Exception::getMessage() const
+{
+    return message;
+}
+
+String Exception::toString() const
+{
+    return String(this->getClassDynamically().getName()).append(": ").append(getMessage());
+}

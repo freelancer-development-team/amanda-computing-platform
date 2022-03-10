@@ -63,6 +63,14 @@ Options& Options::addOption(const Option* option)
         option->grab(); // Now the object has two strong references.
     }
 
+    if (option->isRequired())
+    {
+        if (!adt::contains(requiredOptions, option))
+        {
+            requiredOptions.push_back(option);
+        }
+    }
+
     shortOptions.insert(std::make_pair(key, option));
     return *this;
 }
@@ -109,6 +117,11 @@ void Options::getOptions(std::list<const Option*>& list) const
     helpOptions(list);
 }
 
+const std::list<const Option*>& Options::getRequiredOptions() const
+{
+    return requiredOptions;
+}
+
 bool Options::hasLongOption(const core::String& option)
 {
     String strippedOption = cli::stripLeadingHyphens(option);
@@ -134,4 +147,25 @@ void Options::helpOptions(std::list<const Option*>& list) const
     {
         list.push_back(iter->second);
     }
+}
+
+String Options::toString() const
+{
+    std::map<String, const Option*>::const_iterator l_iter;
+    std::map<String, const Option*>::const_iterator s_iter;
+
+    String buf("[ Options: [ short: ");
+    for (s_iter = shortOptions.begin(); s_iter != shortOptions.end(); ++s_iter)
+    {
+        if (s_iter->second->hasShortOption())
+            buf.append("-").append(s_iter->first).append(" ");
+    }
+    buf.append(" ] [ long: ");
+    for (l_iter = longOptions.begin(); l_iter != longOptions.end(); ++l_iter)
+    {
+        buf.append("--").append(l_iter->first).append(" ");
+    }
+    buf.append("]");
+
+    return buf;
 }

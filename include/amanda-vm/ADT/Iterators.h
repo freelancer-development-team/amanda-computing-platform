@@ -16,22 +16,37 @@
  */
 
 /* 
- * File:   Stream.cpp
+ * File:   Iterators.h
  * Author: Javier Marrero
- * 
- * Created on March 1, 2022, 1:37 AM
+ *
+ * Created on March 1, 2022, 1:11 PM
  */
 
-#include <amanda-vm/IO/OutputStream.h>
+#ifndef ITERATORS_H
+#define ITERATORS_H
 
-using amanda::io::OutputStream;
-
-OutputStream::OutputStream()
+namespace amanda
 {
-    
+namespace adt
+{
+
+template <class C>
+static inline typename C::iterator begin(C& collection)
+{
+    return collection.begin();
 }
 
-OutputStream::~OutputStream()
+template <class C>
+static inline typename C::iterator end(C& collection)
 {
+    return collection.end();
 }
+
+#define STL_ITERATOR(collection, type, identifier) \
+    std::collection<type>::iterator identifier
+
+}
+}
+
+#endif /* ITERATORS_H */
 

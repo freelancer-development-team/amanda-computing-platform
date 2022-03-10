@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,22 +16,40 @@
  */
 
 /* 
- * File:   Stream.cpp
+ * File:   MissingArgumentException.h
  * Author: Javier Marrero
- * 
- * Created on March 1, 2022, 1:37 AM
+ *
+ * Created on March 2, 2022, 9:04 PM
  */
 
-#include <amanda-vm/IO/OutputStream.h>
+#ifndef MISSINGARGUMENTEXCEPTION_H
+#define MISSINGARGUMENTEXCEPTION_H
 
-using amanda::io::OutputStream;
+#include <amanda-vm/Option/ParseException.h>
+#include <amanda-vm/Option/Option.h>
 
-OutputStream::OutputStream()
+namespace amanda
 {
+namespace cli
+{
+
+class MissingArgumentException : public ParseException
+{
+    AMANDA_OBJECT(MissingArgumentException, ParseException)
+
+public:
+
+    MissingArgumentException(const Option* option);
+    MissingArgumentException(const core::String& message);
+    virtual ~MissingArgumentException() throw();
     
+private:
+
+    const Option* option;
+} ;
+
+}
 }
 
-OutputStream::~OutputStream()
-{
-}
+#endif /* MISSINGARGUMENTEXCEPTION_H */
 

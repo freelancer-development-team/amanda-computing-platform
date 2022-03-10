@@ -46,20 +46,25 @@ public:
 
     ~Options();
 
-    Options&        addOption(const Option* option);
-    Options&        getMatchingOptions(const core::String& option,
-                                       std::vector<core::String>& matchingOptions);
-    const Option*   getOption(const core::String& option);
-    void            getOptions(std::list<const Option*>& list) const;
-    bool            hasLongOption(const core::String& option);
-    bool            hasOption(const core::String& option);
-    bool            hasShortOption(const core::String& option);
-    void            helpOptions(std::list<const Option*>& list) const;
+    Options&                        addOption(const Option* option);
+    Options&                        getMatchingOptions(const core::String& option,
+                                                       std::vector<core::String>& matchingOptions);
+    const Option*                   getOption(const core::String& option);
+    void                            getOptions(std::list<const Option*>& list) const;
+    const std::list<const Option*>& getRequiredOptions() const;
+    bool                            hasLongOption(const core::String& option);
+    bool                            hasOption(const core::String& option);
+    bool                            hasShortOption(const core::String& option);
+    void                            helpOptions(std::list<const Option*>& list) const;
+    
+    virtual core::String            toString() const;
 
 private:
 
-    std::map<core::String, const Option*> shortOptions;
-    std::map<core::String, const Option*> longOptions;
+    std::map<core::String, const Option*>   shortOptions;
+    std::map<core::String, const Option*>   longOptions;
+    std::list<const Option*>                requiredOptions;
+
 } ;
 
 }   // namespace 'cli'

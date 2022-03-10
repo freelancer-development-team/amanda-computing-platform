@@ -53,9 +53,7 @@ Path::~Path()
 
 String Path::getLastPathComponent()
 {
-    String result = toString();
-    
-    return result;
+    return toString().substring(toString().findLast(PATH_SEPARATOR) != String::NPOS ? toString().findLast(PATH_SEPARATOR) : toString().length());
 }
 
 Path Path::getParent()

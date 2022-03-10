@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,22 +16,32 @@
  */
 
 /* 
- * File:   Stream.cpp
+ * File:   Messages.h
  * Author: Javier Marrero
- * 
- * Created on March 1, 2022, 1:37 AM
+ *
+ * Created on March 10, 2022, 10:01 AM
  */
 
-#include <amanda-vm/IO/OutputStream.h>
+#ifndef AMANDA_C_MESSAGES_H
+#define AMANDA_C_MESSAGES_H
 
-using amanda::io::OutputStream;
+#include <amanda-vm/String.h>
 
-OutputStream::OutputStream()
+namespace amanda
 {
-    
+namespace compiler
+{
+namespace log
+{
+
+void info(const core::String& fmt, ...);
+void warning(const core::String& fmt, ...);
+void error(const core::String& fmt, ...);
+void fatal(const core::String& fmt, ...);
+
+}
+}
 }
 
-OutputStream::~OutputStream()
-{
-}
+#endif /* MESSAGES_H */
 

@@ -16,22 +16,37 @@
  */
 
 /* 
- * File:   Stream.cpp
+ * File:   Callable.h
  * Author: Javier Marrero
- * 
- * Created on March 1, 2022, 1:37 AM
+ *
+ * Created on March 1, 2022, 1:59 PM
  */
 
-#include <amanda-vm/IO/OutputStream.h>
+#ifndef CALLABLE_H
+#define CALLABLE_H
 
-using amanda::io::OutputStream;
+#include <amanda-vm/Interface.h>
+#include <amanda-vm/ADT/Array.h>
 
-OutputStream::OutputStream()
+namespace amanda
 {
-    
+namespace core
+{
+
+/**
+ * Callables are objects representing functions.
+ */
+class Callable : extends Interface
+{
+    AMANDA_OBJECT(Callable, Interface)
+
+public:
+
+    virtual void* call(adt::Array<void*>& arguments) = 0;
+};
+
+}
 }
 
-OutputStream::~OutputStream()
-{
-}
+#endif /* CALLABLE_H */
 

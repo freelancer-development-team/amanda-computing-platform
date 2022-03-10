@@ -86,6 +86,16 @@ String Object::toString() const
     return getClass().getName();
 }
 
+bool Object::is(const Class* type)
+{
+    bool result = false;
+    if (type)
+    {
+        result = getClassDynamically().is(*type);
+    }
+    return result;
+}
+
 bool Object::operator ==(const Object& rhs)
 {
     return equals(&rhs);
@@ -94,4 +104,9 @@ bool Object::operator ==(const Object& rhs)
 bool Object::operator ==(const Object* rhs)
 {
     return equals(rhs);
+}
+
+Class& Object::getClassDynamically() const
+{
+    return getClass();
 }

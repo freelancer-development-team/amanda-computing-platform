@@ -26,7 +26,7 @@ String amanda::cli::stripLeadingAndTrailingQuotes(const core::String& str)
     
     if ((length > 1) && (str.startsWith("\"") && (str.endsWith("\""))))
     {
-        result = str.substring(1, length - 1);
+        result = str.substringl(1, length - 1);
     }
     return result;
 }

@@ -139,23 +139,23 @@ String HelpFormatter::createPadding(const unsigned int length) const
 
 unsigned int HelpFormatter::findWrapPosition(const core::String& text, const unsigned int width, const unsigned int startPosition) const
 {
-    unsigned int result = -1;
+    unsigned int result = String::NPOS;
 
     unsigned int pos = text.find('\n', startPosition);
-    if (pos == String::NPOS && pos <= width)
+    if (pos != String::NPOS && pos <= width)
     {
         result = pos + 1;
     }
     else
     {
         pos = text.find('\t', startPosition);
-        if (pos == String::NPOS && pos <= width)
+        if (pos != String::NPOS && pos <= width)
         {
             result = pos + 1;
         }
         else if (startPosition + width >= text.length())
         {
-            result = -1;
+            result = String::NPOS;
         }
         else
         {
@@ -172,9 +172,9 @@ unsigned int HelpFormatter::findWrapPosition(const core::String& text, const uns
             else
             {
                 pos = startPosition + width;
+                
+                result = (pos == text.length()) ? String::NPOS : pos;
             }
-
-            result = (pos == text.length()) ? String::NPOS : pos;
         }
     }
     return result;
@@ -284,7 +284,7 @@ String& HelpFormatter::renderWrappedText(core::String& sb, const unsigned width,
         }
 
         String padding = createPadding(nextTabLineStop);
-        while (pos != String::NPOS)
+        do 
         {
             text = padding + text.substring(pos).trimmed();
             pos = findWrapPosition(text, width, 0);
@@ -301,7 +301,7 @@ String& HelpFormatter::renderWrappedText(core::String& sb, const unsigned width,
                 }
                 sb.append(rtrim(text.substring(0, pos))).append('\n');
             }
-        }
+        } while (pos != String::NPOS);
     }
     return sb;
 }
@@ -363,33 +363,28 @@ void HelpFormatter::appendOption(core::String& buffer, const Option& option, boo
 String& HelpFormatter::renderWrappedTextBlock(core::String& buffer, const unsigned width,
                                               const unsigned nextLineTabStop, const core::String& text) const
 {
-    unsigned start = 0;
-    unsigned end = text.find('\n') != String::NPOS ? text.find('\n') : text.length();
     bool firstLine = true;
-    String line(text.substring(start, end - start));
-
-    while (end != String::NPOS)
+    unsigned pos = String::NPOS;
+    unsigned start = 0;
+    
+    do
     {
+        pos = text.find('\n', start);
+        String line = text.substring(start, pos == String::NPOS ? text.length() : pos);
+
         if (!firstLine)
         {
-            buffer.append(line);
+            buffer.append('\n');
         }
         else
         {
             firstLine = false;
         }
-        renderWrappedText(buffer, width, nextLineTabStop, eliminateConstness(text));
+        renderWrappedText(buffer, width, nextLineTabStop, line);
 
-        // Update the markers. At this point we should be iterating over all
-        // the lines of text.
-        start = end + 1;
-        end = text.find('\n');
-
-        if (end != String::NPOS)
-        {
-            line = text.substring(start, end);
-        }
-    }
+        /* Update the position variables. */
+        start += pos + 1;
+    } while (pos != String::NPOS);
 
     return buffer;
 }

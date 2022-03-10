@@ -29,6 +29,8 @@
 #    include <windows.h>
 #endif
 
+#include <cstdio>
+
 using amanda::io::Console;
 
 using amanda::core::String;
@@ -67,6 +69,8 @@ ansiInitialized(true)
     }
 #endif
 
+    if (ansiInitialized)
+        printf("\033[0m");
 }
 
 Console::~Console()

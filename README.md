@@ -4,6 +4,9 @@ Welcome to the Amanda Computing Platform project: a free libre implementation of
 and a framework for developing programming languages infrastructures. Amanda's goals are extensibility, scalability, portability
 and high performance through a wide variety of architectures.
 
+Amanda is free software and it is entirely released (except some third party libraries) under the terms of the GNU General Public
+License on its third version.
+
 Note that the project is still on set-up phase and in rudimentary stage.
 
 ## Overview

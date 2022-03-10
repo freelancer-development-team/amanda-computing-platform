@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,22 +16,22 @@
  */
 
 /* 
- * File:   Stream.cpp
+ * File:   ParseException.cpp
  * Author: Javier Marrero
  * 
- * Created on March 1, 2022, 1:37 AM
+ * Created on March 2, 2022, 12:56 PM
  */
 
-#include <amanda-vm/IO/OutputStream.h>
+#include <amanda-vm/Option/ParseException.h>
 
-using amanda::io::OutputStream;
+using namespace amanda::cli;
 
-OutputStream::OutputStream()
-{
-    
-}
-
-OutputStream::~OutputStream()
+ParseException::ParseException(const core::String& message)
+:
+Exception(message)
 {
 }
 
+ParseException::~ParseException() throw()
+{
+}

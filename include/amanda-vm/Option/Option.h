@@ -79,7 +79,8 @@ public:
     void                setArgumentCount(const int count);
     void                setDescription(const core::String& description);
     void                setValueSeparator(const char separator);
-    virtual core::String toString();
+    
+    virtual core::String toString() const;
 
 private:
 

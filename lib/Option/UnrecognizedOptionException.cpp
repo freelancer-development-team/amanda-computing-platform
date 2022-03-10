@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,22 +16,32 @@
  */
 
 /* 
- * File:   Stream.cpp
+ * File:   UnrecognizedOptionException.cpp
  * Author: Javier Marrero
  * 
- * Created on March 1, 2022, 1:37 AM
+ * Created on March 2, 2022, 1:01 PM
  */
 
-#include <amanda-vm/IO/OutputStream.h>
+#include <amanda-vm/Option/UnrecognizedOptionException.h>
 
-using amanda::io::OutputStream;
+using namespace amanda::cli;
 
-OutputStream::OutputStream()
+using amanda::core::String;
+
+UnrecognizedOptionException::UnrecognizedOptionException(const core::String& message, const core::String& option)
+:
+ParseException(message),
+option(option)
 {
-    
 }
 
-OutputStream::~OutputStream()
+UnrecognizedOptionException::~UnrecognizedOptionException() throw ()
 {
 }
+
+const String& UnrecognizedOptionException::getOption() const
+{
+    return option;
+}
+
 

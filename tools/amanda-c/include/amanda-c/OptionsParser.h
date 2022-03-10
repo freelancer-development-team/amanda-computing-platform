@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,22 +16,29 @@
  */
 
 /* 
- * File:   Stream.cpp
+ * File:   Options.h
  * Author: Javier Marrero
- * 
- * Created on March 1, 2022, 1:37 AM
+ *
+ * Created on March 10, 2022, 9:15 AM
  */
 
-#include <amanda-vm/IO/OutputStream.h>
+#ifndef AMANDA_C_OPTIONS_H
+#define AMANDA_C_OPTIONS_H
 
-using amanda::io::OutputStream;
+#include <amanda-vm/ADT/Array.h>
+#include <amanda-vm/Option/package.hxx>
 
-OutputStream::OutputStream()
+namespace amanda
 {
-    
+namespace compiler
+{
+
+cli::CommandLine*   parseCommandLineArguments(adt::Array<core::String>& args, cli::Options* options);
+void                displayHelpMessage(cli::Options& options);
+void                displayVersionInformation();
+
+}
 }
 
-OutputStream::~OutputStream()
-{
-}
+#endif /* OPTIONS_H */
 

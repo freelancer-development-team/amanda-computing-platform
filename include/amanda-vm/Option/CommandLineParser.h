@@ -16,40 +16,43 @@
  */
 
 /* 
- * File:   Closeable.h
+ * File:   CommandLineParser.h
  * Author: Javier Marrero
  *
- * Created on March 1, 2022, 2:03 AM
+ * Created on March 1, 2022, 1:43 PM
  */
 
-#ifndef CLOSEABLE_H
-#define CLOSEABLE_H
+#ifndef COMMANDLINEPARSER_H
+#define COMMANDLINEPARSER_H
 
 #include <amanda-vm/Interface.h>
+#include <amanda-vm/ADT/Array.h>
+#include <amanda-vm/Option/CommandLine.h>
+#include <amanda-vm/Option/Options.h>
 
 namespace amanda
 {
-namespace io
+namespace cli
 {
 
+adt::Array<core::String> makeArgumentsArray(int argc, char* argv[]);
+
 /**
- * Inheritors of this interface automatically obtain the method 'close'. It is
- * used to implement streams, that need the method close for releasing it
- * resources.
- *
- * @autor J. Marrero
+ * Implementors of this interface obtain a method to parse a string array and
+ * return a command line object.
  */
-class Closeable : extends core::Interface
+class CommandLineParser : extends core::Interface
 {
-    AMANDA_OBJECT(Closeable, core::Interface)
+    AMANDA_OBJECT(CommandLineParser, core::Interface)
 
 public:
 
-    virtual void close() = 0;
-};
+    virtual CommandLine* parse(Options& options, const adt::Array<core::String>& arguments, bool stopAtNonOption) = 0;
+    
+} ;
 
 }
 }
 
-#endif /* CLOSEABLE_H */
+#endif /* COMMANDLINEPARSER_H */
 
