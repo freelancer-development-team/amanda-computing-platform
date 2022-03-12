@@ -16,25 +16,24 @@
  */
 
 /* 
- * File:   package.hxx
+ * File:   ILExporter.cpp
  * Author: Javier Marrero
- *
- * Created on February 28, 2022, 12:09 AM
+ * 
+ * Created on March 12, 2022, 5:11 PM
  */
 
-#ifndef PACKAGE_IL_HXX
-#define PACKAGE_IL_HXX
+#include <amanda-vm/IL/ILExporter.h>
 
-#include "AstNodeBase.h"
-#include "BasicBlock.h"
-#include "CodeGenContext.h"
-#include "ILExporter.h"
-#include "Module.h"
-#include "Symbol.h"
-#include "SymbolTable.h"
-#include "Type.h"
-#include "Value.h"
-#include "ValueReferrer.h"
+using namespace amanda;
+using namespace amanda::il;
 
-#endif /* PACKAGE_HXX */
+ILExporter::ILExporter(Module* module)
+:
+module(module)
+{
+}
+
+ILExporter::~ILExporter()
+{
+}
 

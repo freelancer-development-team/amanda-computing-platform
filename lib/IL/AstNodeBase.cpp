@@ -16,25 +16,38 @@
  */
 
 /* 
- * File:   package.hxx
+ * File:   AstNodeBase.cpp
  * Author: Javier Marrero
- *
- * Created on February 28, 2022, 12:09 AM
+ * 
+ * Created on March 12, 2022, 4:48 PM
  */
 
-#ifndef PACKAGE_IL_HXX
-#define PACKAGE_IL_HXX
+#include <amanda-vm/IL/AstNodeBase.h>
 
-#include "AstNodeBase.h"
-#include "BasicBlock.h"
-#include "CodeGenContext.h"
-#include "ILExporter.h"
-#include "Module.h"
-#include "Symbol.h"
-#include "SymbolTable.h"
-#include "Type.h"
-#include "Value.h"
-#include "ValueReferrer.h"
+using namespace amanda;
+using namespace amanda::il;
 
-#endif /* PACKAGE_HXX */
+AstNodeBase::AstNodeBase()
+{
+    children.reserve(2);    // Reserve enough space for a binary tree.
+}
 
+AstNodeBase::~AstNodeBase()
+{
+    for (Iterator it = children.begin(); it != children.end(); ++it)
+    {
+        assert(*it != NULL && "Null pointer exception.");
+        (*it)->release();
+    }
+}
+
+bool AstNodeBase::hasChildren() const
+{
+    return !children.empty();
+}
+
+void AstNodeBase::addChild(AstNodeBase* child)
+{
+    child->grab();
+    children.push_back(child);
+}

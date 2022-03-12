@@ -16,25 +16,42 @@
  */
 
 /* 
- * File:   package.hxx
+ * File:   CodeGenContext.h
  * Author: Javier Marrero
  *
- * Created on February 28, 2022, 12:09 AM
+ * Created on March 12, 2022, 5:59 PM
  */
 
-#ifndef PACKAGE_IL_HXX
-#define PACKAGE_IL_HXX
+#ifndef CODEGENCONTEXT_H
+#define CODEGENCONTEXT_H
 
-#include "AstNodeBase.h"
-#include "BasicBlock.h"
-#include "CodeGenContext.h"
-#include "ILExporter.h"
-#include "Module.h"
-#include "Symbol.h"
-#include "SymbolTable.h"
-#include "Type.h"
-#include "Value.h"
-#include "ValueReferrer.h"
+#include <amanda-vm/TypeSystem.h>
 
-#endif /* PACKAGE_HXX */
+namespace amanda
+{
+namespace il
+{
+
+class Module;
+
+class CodeGenContext : public core::Object
+{
+    AMANDA_OBJECT(CodeGenContext, core::Object)
+
+public:
+
+    CodeGenContext();
+    virtual ~CodeGenContext();
+
+    void setModule(Module* module);
+    
+protected:
+
+    core::StrongReference<Module> module;
+} ;
+
+}
+}
+
+#endif /* CODEGENCONTEXT_H */
 
