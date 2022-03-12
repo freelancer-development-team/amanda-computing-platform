@@ -42,6 +42,7 @@ namespace compiler
  */
 class Driver : public core::Object
 {
+
     AMANDA_OBJECT(Driver, core::Object)
 
 public:
@@ -64,6 +65,8 @@ public:
     bool                        hasOutputFiles() const;
     bool                        isShowStatistics() const;
     bool                        isVerbose() const;
+    void                        setCallAssembler(bool callAssembler);
+    void                        setCallLinker(bool callLinker);
     void                        setShowStatistics(bool show);
     void                        setVerbose(bool verbose);
     void                        setWarnLevel(WarningLevel level);
@@ -71,7 +74,9 @@ public:
 
 protected:
 
+    bool                        assemble;
     std::list<io::File*>        inputFiles;
+    bool                        link;
     std::list<io::File*>        outputFiles;
     bool                        statistics;
     bool                        verbose;
@@ -79,11 +84,11 @@ protected:
 
 private:
 
+    unsigned long               errorCount;
     clock_t                     initTicks;
     clock_t                     finiTicks;
-
     unsigned long               warningCount;
-    unsigned long               errorCount;
+
 } ;
 
 }

@@ -30,6 +30,7 @@
 #include <amanda-c/Driver.h>
 #include <amanda-c/Messages.h>
 #include <amanda-c/OptionsParser.h>
+#include <amanda-c/c/version.h>
 
 /* Standard C/C++ includes */
 #include <cstdio>
@@ -69,14 +70,30 @@ int main(int argc, char** argv)
     }
     else
     {
+        if (commandLine->hasOption('c'))
+        {
+            driver->setCallLinker(false);
+        }
+        if (commandLine->hasOption("dump-version"))
+        {
+            io::console().out.println("amanda-c (AmandaSDK %s) %s", SDK_FULLVERSION_STRING, AMANDA_C_FULLVERSION_STRING);
+        }
         if (commandLine->hasOption('o'))
         {
             /* Parse the comma separated values */
-            
+            adt::Array<core::String> values = commandLine->getOptionValues('o');
+            for (unsigned i = 0; i < values.length(); i++)
+            {
+                core::StrongReference<io::File> file = new io::File(values[0], io::File::WRITE | io::File::CREATE | io::File::BINARY);
+                assert(!file.isNull() && "Not enough memory.");
+
+                driver->addOutputFile(file.get());
+            }
         }
         if (commandLine->hasOption('S'))
         {
-
+            driver->setCallAssembler(false);
+            driver->setCallLinker(false);
         }
         if (commandLine->hasOption("statistics"))
         {
@@ -99,7 +116,8 @@ int main(int argc, char** argv)
 
             if (!f->open() || f->isError() || !(f->isFile()))
             {
-                compiler::log::error("unable to open file '%s' for reading.", f->getPath().toCharArray());
+                compiler::log::error("unable to open file '%s' for reading. %s.", f->getPath().toCharArray(),
+                                     f->getLastErrorString().toCharArray());
             }
             else
             {
@@ -134,7 +152,7 @@ int main(int argc, char** argv)
                     compiler::log::info("adding '%s' to the output stream.", outPath.toCharArray());
                 }
 
-                io::File* outFile = new io::File(outPath, io::File::WRITE | io::File::CREATE);
+                io::File* outFile = new io::File(outPath, io::File::WRITE | io::File::CREATE | io::File::BINARY);
                 assert(outFile != NULL && "Not enough memory.");
 
                 driver->addOutputFile(outFile);
@@ -142,6 +160,7 @@ int main(int argc, char** argv)
         }
 
         /* Perform the compiler pass. */
+
 
         /* If statistics must be shown, display... */
         driver->showStatistics();

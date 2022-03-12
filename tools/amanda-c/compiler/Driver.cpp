@@ -99,6 +99,16 @@ bool Driver::isVerbose() const
     return verbose;
 }
 
+void Driver::setCallAssembler(bool callAssembler)
+{
+    assemble = callAssembler;
+}
+
+void Driver::setCallLinker(bool callLinker)
+{
+    link = callLinker;
+}
+
 void Driver::setShowStatistics(bool show)
 {
     this->statistics = show;

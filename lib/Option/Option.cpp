@@ -111,6 +111,14 @@ const String& Option::getOption() const
     return option;
 }
 
+void Option::getValuesList(std::list<core::String>& list) const
+{
+    for (unsigned i = 0; i < values.size(); i++)
+    {
+        list.push_back(values[i]);
+    }
+}
+
 char Option::getValueSeparator() const
 {
     return valueSeparator;

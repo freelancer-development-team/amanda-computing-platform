@@ -26,9 +26,12 @@
 #include <amanda-vm/ADT/Iterators.h>
 #include <amanda-vm/ADT/Collections.h>
 
+using namespace amanda;
+
 using amanda::cli::CommandLine;
 using amanda::cli::Option;
 using amanda::core::String;
+using amanda::adt::Array;
 
 CommandLine::CommandLine()
 {
@@ -88,6 +91,47 @@ void CommandLine::getOptions(const Option* options[], size_t size)
     {
         options[i++] = *iter;
     }
+}
+
+String CommandLine::getOptionValue(const char opt)
+{
+    return getOptionValue(String(opt));
+}
+
+String CommandLine::getOptionValue(const core::String& opt)
+{
+    return getOptionValue(resolveOption(opt));
+}
+
+String CommandLine::getOptionValue(const Option* option)
+{
+    assert(option != NULL && "Null pointer dereference.");
+    return getOptionValues(option)[0];
+}
+
+Array<String> CommandLine::getOptionValues(const char opt)
+{
+    return getOptionValues(String(opt));
+}
+
+Array<String> CommandLine::getOptionValues(const core::String& opt)
+{
+    return getOptionValues(resolveOption(opt));
+}
+
+Array<String> CommandLine::getOptionValues(const Option* option)
+{
+    std::list<String> valueList;
+    option->getValuesList(valueList);
+
+    Array<String> array(valueList.size());
+    unsigned counter = 0;
+    for (std::list<String>::iterator it = valueList.begin(); it != valueList.end(); ++it)
+    {
+        array[counter++] = *it;
+    }
+    
+    return array;
 }
 
 bool CommandLine::hasOption(const char opt)

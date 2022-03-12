@@ -79,6 +79,7 @@ public:
     const char*         getAccessModeString(FileAccessMode accessMode) const;
     int                 getCharacter() const;
     FILE*               getHandle() const;
+    core::String        getLastErrorString() const;
     const core::String& getPath() const;
     bool                isDirectory() const;
     bool                isEndOfFile() const;

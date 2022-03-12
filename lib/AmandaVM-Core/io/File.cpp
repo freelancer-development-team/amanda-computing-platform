@@ -218,6 +218,11 @@ const char* File::getAccessModeString(FileAccessMode accessMode) const
     return (const char*) tmp;
 }
 
+String File::getLastErrorString() const
+{
+    return String(strerror(errno));
+}
+
 const String& File::getPath() const
 {
     return name;
