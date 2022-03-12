@@ -16,36 +16,30 @@
  */
 
 /* 
- * File:   Type.cpp
+ * File:   ValueReferrer.cpp
  * Author: Javier Marrero
  * 
- * Created on March 12, 2022, 2:51 PM
+ * Created on March 12, 2022, 3:57 PM
  */
 
-#include <amanda-vm/IL/Type.h>
+#include <amanda-vm/IL/ValueReferrer.h>
+#include <amanda-vm/IL/Value.h>
 
+using namespace amanda;
 using namespace amanda::il;
 
-Type::~Type()
+unsigned ValueReferrer::getNumberOfOperands() const
 {
+    return operands.size();
 }
 
-Type::TypeID Type::getTypeId() const
+Value* ValueReferrer::getOperand(unsigned index) const
 {
-    return id;
+    checkIndexInclusive(index);
+    return operands.at(index);
 }
 
-bool Type::isFloatingPointType() const
+void ValueReferrer::checkIndexInclusive(unsigned index) const
 {
-    return getTypeId() == ID_FloatingPointType;
-}
-
-bool Type::isIntegralType() const
-{
-    return getTypeId() == ID_IntegerType;
-}
-
-bool Type::isSized() const
-{
-    return getTypeId() != ID_VoidType;
+    assert(index >= 0 && index < operands.size() && "Index out of bounds.");
 }

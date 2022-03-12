@@ -16,36 +16,16 @@
  */
 
 /* 
- * File:   Type.cpp
+ * File:   BasicBlock.cpp
  * Author: Javier Marrero
  * 
- * Created on March 12, 2022, 2:51 PM
+ * Created on March 12, 2022, 3:22 PM
  */
 
-#include <amanda-vm/IL/Type.h>
+#include <amanda-vm/IL/BasicBlock.h>
 
+using namespace amanda;
 using namespace amanda::il;
 
-Type::~Type()
-{
-}
 
-Type::TypeID Type::getTypeId() const
-{
-    return id;
-}
 
-bool Type::isFloatingPointType() const
-{
-    return getTypeId() == ID_FloatingPointType;
-}
-
-bool Type::isIntegralType() const
-{
-    return getTypeId() == ID_IntegerType;
-}
-
-bool Type::isSized() const
-{
-    return getTypeId() != ID_VoidType;
-}

@@ -16,36 +16,28 @@
  */
 
 /* 
- * File:   Type.cpp
+ * File:   Module.cpp
  * Author: Javier Marrero
  * 
- * Created on March 12, 2022, 2:51 PM
+ * Created on March 12, 2022, 3:06 PM
  */
 
-#include <amanda-vm/IL/Type.h>
+#include <amanda-vm/IL/Module.h>
 
+using namespace amanda;
 using namespace amanda::il;
 
-Type::~Type()
+Module::Module(const core::String& id)
+:
+identifier(id)
 {
 }
 
-Type::TypeID Type::getTypeId() const
+Module::~Module()
 {
-    return id;
 }
 
-bool Type::isFloatingPointType() const
+const core::String& Module::getIdentifier() const
 {
-    return getTypeId() == ID_FloatingPointType;
-}
-
-bool Type::isIntegralType() const
-{
-    return getTypeId() == ID_IntegerType;
-}
-
-bool Type::isSized() const
-{
-    return getTypeId() != ID_VoidType;
+    return identifier;
 }

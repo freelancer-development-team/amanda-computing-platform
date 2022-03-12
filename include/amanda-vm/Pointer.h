@@ -51,6 +51,7 @@ public:
     bool    isNull() const { return pointer == NULL; }
 
     operator bool()                                             { return pointer != NULL; }
+    operator T()                                                { return pointer; }
     T&      operator*()                                         { return *pointer; }
     T*      operator->()                                        { return pointer; }
     bool    operator==(const AutomaticReferenceBase<T>& rhs)    { return pointer == rhs.pointer; }

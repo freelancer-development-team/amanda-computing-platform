@@ -16,36 +16,21 @@
  */
 
 /* 
- * File:   Type.cpp
+ * File:   Typesystem.h
  * Author: Javier Marrero
- * 
- * Created on March 12, 2022, 2:51 PM
+ *
+ * Created on March 12, 2022, 3:08 PM
  */
 
-#include <amanda-vm/IL/Type.h>
+#ifndef TYPESYSTEM_H
+#define TYPESYSTEM_H
 
-using namespace amanda::il;
+#include "Exception.h"
+#include "Interface.h"
+#include "Object.h"
+#include "Pointer.h"
+#include "String.h"
+#include "Types.h"
 
-Type::~Type()
-{
-}
+#endif /* TYPESYSTEM_H */
 
-Type::TypeID Type::getTypeId() const
-{
-    return id;
-}
-
-bool Type::isFloatingPointType() const
-{
-    return getTypeId() == ID_FloatingPointType;
-}
-
-bool Type::isIntegralType() const
-{
-    return getTypeId() == ID_IntegerType;
-}
-
-bool Type::isSized() const
-{
-    return getTypeId() != ID_VoidType;
-}

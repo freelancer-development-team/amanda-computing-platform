@@ -16,57 +16,41 @@
  */
 
 /* 
- * File:   Type.h
+ * File:   Value.h
  * Author: Javier Marrero
  *
- * Created on March 12, 2022, 2:51 PM
+ * Created on March 12, 2022, 3:36 PM
  */
 
-#ifndef TYPE_H
-#define TYPE_H
+#ifndef VALUE_H
+#define VALUE_H
 
 #include <amanda-vm/TypeSystem.h>
-#include <amanda-vm/IO/OutputStream.h>
+#include <amanda-vm/IL/Type.h>
 
 namespace amanda
 {
 namespace il
 {
 
-class Type : public core::Object
+class Value : public core::Object
 {
-
-    AMANDA_OBJECT(Type, core::Object)
+    AMANDA_OBJECT(Value, core::Object)
 
 public:
 
-    typedef enum
-    {
-        // Derived types
-        ID_VoidType = 0,
-        ID_IntegerType,
-        ID_FloatingPointType,
-        ID_FunctionType,
-        ID_PointerType,
-        ID_StructuredType,
-        ID_SequentialType
-    } TypeID;
-
-    virtual ~Type();
-
-    TypeID          getTypeId() const;
-    virtual bool    isIntegralType() const;
-    virtual bool    isFloatingPointType() const;
-    virtual bool    isSized() const;
-    virtual void    print(io::OutputStream& os, bool debug = false, bool detailed = false) const;
+    const core::String& getName() const;
+    const Type*         getType() const;
+    void                setName(const core::String& name);
 
 protected:
 
-    TypeID id;
+    core::String                name;
+    core::StrongReference<Type> type;
 } ;
 
 }
 }
 
-#endif /* TYPE_H */
+#endif /* VALUE_H */
 

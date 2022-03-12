@@ -16,57 +16,43 @@
  */
 
 /* 
- * File:   Type.h
+ * File:   ValueReferrer.h
  * Author: Javier Marrero
  *
- * Created on March 12, 2022, 2:51 PM
+ * Created on March 12, 2022, 3:57 PM
  */
 
-#ifndef TYPE_H
-#define TYPE_H
+#ifndef VALUEREFERRER_H
+#define VALUEREFERRER_H
 
 #include <amanda-vm/TypeSystem.h>
-#include <amanda-vm/IO/OutputStream.h>
+#include <amanda-vm/IL/Value.h>
+
+#include <vector>
 
 namespace amanda
 {
 namespace il
 {
 
-class Type : public core::Object
+class ValueReferrer : public Value
 {
-
-    AMANDA_OBJECT(Type, core::Object)
+    AMANDA_OBJECT(ValueReferrer, Value)
 
 public:
-
-    typedef enum
-    {
-        // Derived types
-        ID_VoidType = 0,
-        ID_IntegerType,
-        ID_FloatingPointType,
-        ID_FunctionType,
-        ID_PointerType,
-        ID_StructuredType,
-        ID_SequentialType
-    } TypeID;
-
-    virtual ~Type();
-
-    TypeID          getTypeId() const;
-    virtual bool    isIntegralType() const;
-    virtual bool    isFloatingPointType() const;
-    virtual bool    isSized() const;
-    virtual void    print(io::OutputStream& os, bool debug = false, bool detailed = false) const;
+    
+    unsigned    getNumberOfOperands() const;
+    Value*      getOperand(unsigned index) const;
 
 protected:
 
-    TypeID id;
+    std::vector<Value*> operands;
+
+    void checkIndexInclusive(unsigned index) const;
 } ;
 
 }
 }
 
-#endif /* TYPE_H */
+#endif /* VALUEREFERRER_H */
 

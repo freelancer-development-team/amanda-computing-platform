@@ -16,36 +16,28 @@
  */
 
 /* 
- * File:   Type.cpp
+ * File:   Value.cpp
  * Author: Javier Marrero
  * 
- * Created on March 12, 2022, 2:51 PM
+ * Created on March 12, 2022, 3:36 PM
  */
 
-#include <amanda-vm/IL/Type.h>
+#include <amanda-vm/IL/Value.h>
 
+using namespace amanda;
 using namespace amanda::il;
 
-Type::~Type()
+const core::String& Value::getName() const
 {
+    return name;
 }
 
-Type::TypeID Type::getTypeId() const
+const Type* Value::getType() const
 {
-    return id;
+    return type.get();
 }
 
-bool Type::isFloatingPointType() const
+void Value::setName(const core::String& name)
 {
-    return getTypeId() == ID_FloatingPointType;
-}
-
-bool Type::isIntegralType() const
-{
-    return getTypeId() == ID_IntegerType;
-}
-
-bool Type::isSized() const
-{
-    return getTypeId() != ID_VoidType;
+    this->name = name;
 }

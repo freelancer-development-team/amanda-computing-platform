@@ -25,8 +25,13 @@
 #ifndef PACKAGE_IL_HXX
 #define PACKAGE_IL_HXX
 
+#include "BasicBlock.h"
+#include "Module.h"
 #include "Symbol.h"
 #include "SymbolTable.h"
+#include "Type.h"
+#include "Value.h"
+#include "ValueReferrer.h"
 
 #endif /* PACKAGE_HXX */
 
