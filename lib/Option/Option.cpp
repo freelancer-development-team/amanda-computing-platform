@@ -48,6 +48,8 @@ argumentCount(UNINITIALIZED)
     {
         this->argumentCount = 1;
     }
+
+    this->optionalArgument = false;
 }
 
 Option::~Option()
@@ -204,14 +206,8 @@ String Option::toString() const
 
 void Option::add(const core::String& value)
 {
-    if (acceptsArguments())
-    {
-        values.push_back(value);
-    }
-    else
-    {
-        throw core::Exception("Cannot add value to a full list.");
-    }
+    assert(acceptsArguments() && "Cannot add value, list is full.");
+    values.push_back(value);
 }
 
 void Option::processValue(core::String& value)

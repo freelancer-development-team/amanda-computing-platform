@@ -71,7 +71,8 @@ int main(int argc, char** argv)
     {
         if (commandLine->hasOption('o'))
         {
-
+            /* Parse the comma separated values */
+            
         }
         if (commandLine->hasOption('S'))
         {
@@ -84,6 +85,10 @@ int main(int argc, char** argv)
         if (commandLine->hasOption("verbose"))
         {
             driver->setVerbose(true);
+        }
+        if (commandLine->hasOption('W'))
+        {
+            
         }
 
         for (std::list<core::String>::iterator iter = commandLine->getArgumentList().begin();

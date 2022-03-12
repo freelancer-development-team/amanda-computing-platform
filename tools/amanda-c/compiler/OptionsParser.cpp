@@ -38,7 +38,7 @@ cli::CommandLine* amanda::compiler::parseCommandLineArguments(adt::Array<core::S
      * 
      */
     options->addOption(cli::OptionBuilder::build().withShortOption("h").withLongOption("help").withDescription("Shows this message and exits.").get());
-    options->addOption(cli::OptionBuilder::build().withShortOption("o").withLongOption("output").withDescription("Redirects output to the specified file.").get());
+    options->addOption(cli::OptionBuilder::build().withShortOption("o").withLongOption("output").hasRequiredArgument(true).withDescription("Redirects output to the specified file.").get());
     options->addOption(cli::OptionBuilder::build().withShortOption("S").withDescription("Produce assembly code only.").get());
     options->addOption(cli::OptionBuilder::build().withLongOption("statistics").withDescription("Shows the final compilation statistics.").get());
     options->addOption(cli::OptionBuilder::build().withLongOption("verbose").withDescription("Produces a much more complete description of the compilation process.").get());

@@ -109,6 +109,11 @@ void Driver::setVerbose(bool verbose)
     this->verbose = verbose;
 }
 
+void Driver::setWarnLevel(WarningLevel level)
+{
+    this->warningLevel = level;
+}
+
 void Driver::showStatistics()
 {
     if (statistics && verbose)

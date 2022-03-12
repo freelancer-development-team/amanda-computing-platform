@@ -108,18 +108,15 @@ bool CommandLine::hasOption(const core::String& opt)
 const Option* CommandLine::resolveOption(const core::String& option)
 {
     const Option* result = NULL;
-
     String opt = cli::stripLeadingHyphens(option);
-    STL_ITERATOR(list, const Option*, iter);
-    for (iter = adt::begin(options);
-         iter != adt::end(options);
-         ++iter)
+
+    for (std::list<const Option*>::const_iterator iter = options.begin();
+         iter != options.end() && result == NULL; ++iter)
     {
         const Option* optionObject = *iter;
-        if (!optionObject) continue;
+        assert(optionObject != NULL && "Got a null option object.");
 
-        if (opt.equals(optionObject->getOption())
-                       || opt.equals(optionObject->getLongOption()))
+        if (opt.equals(optionObject->getOption()) || opt.equals(optionObject->getLongOption()))
         {
             result = optionObject;
         }

@@ -29,6 +29,7 @@
 #include <amanda-vm/Option/MissingArgumentException.h>
 #include <amanda-vm/Option/MissingOptionException.h>
 #include <amanda-vm/Option/UnrecognizedOptionException.h>
+#include <amanda-vm/Option/AmbiguousOptionException.h>
 
 #include <ctype.h>
 
@@ -213,15 +214,16 @@ void DefaultParser::handleLongOptionWithoutEqual(const core::String& token)
     {
         handleUnknownToken(token);
     }
+    else if (matchingOptions.size() > 1 && !options->hasLongOption(token))
+    {
+        throw AmbiguousOptionException(token, matchingOptions);
+    }
     else
     {
-        if (matchingOptions.size() < 1 || options->hasLongOption(token))
-        {
-            String key = options->hasLongOption(token) ? token : matchingOptions.front();
-            const Option* option = options->getOption(key);
+        String key = options->hasLongOption(token) ? token : matchingOptions.front();
+        const Option* option = options->getOption(key);
 
-            handleOption(option);
-        }
+        handleOption(option);
     }
 }
 
@@ -364,7 +366,7 @@ void DefaultParser::handleUnknownToken(const core::String& token)
 
 bool DefaultParser::isArgument(const core::String& token)
 {
-    return !isOption(token) || isNegativeNumber(token);
+    return !isOption(token);
 }
 
 bool DefaultParser::isJavaProperty(const core::String& token)
@@ -381,7 +383,7 @@ bool DefaultParser::isLongOption(const core::String& token)
     if (token.startsWith("-") && token.length() != 1)
     {
         unsigned pos = token.find('=');
-        String t = pos == String::NPOS ? token : token.substring(0, pos);
+        String t = (pos == String::NPOS) ? token : token.substring(0, pos);
 
         std::list<String> matchingLongOptions;
         if (!getMatchingLongOptions(t, matchingLongOptions).empty())
@@ -421,19 +423,19 @@ bool DefaultParser::isOption(const core::String& token)
 bool DefaultParser::isShortOption(const core::String& token)
 {
     bool result = false;
+    unsigned pos = token.find("=");
+    String optName = (pos == String::NPOS) ? token.substring(1) : token.substring(1, pos);
+
     if (token.startsWith("-") && token.length() != 1)
     {
-        unsigned pos = token.find("=");
-        String optName = (pos == String::NPOS ? token.substring(1) : token.substring(1, pos));
-        
         if (options->hasShortOption(optName))
         {
             result = true;
         }
-        else
-        {
-            result = !(optName.isEmpty()) && options->hasShortOption(String(optName.charAt(0)));
-        }
+    }
+    else
+    {
+        result = !(optName.isEmpty()) && options->hasShortOption(String(optName.charAt(0)));
     }
     return result;
 }

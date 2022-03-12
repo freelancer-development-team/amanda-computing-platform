@@ -46,6 +46,13 @@ class Driver : public core::Object
 
 public:
 
+    typedef enum
+    {
+        WL_ALL,
+        WL_SOME,
+        WL_NONE
+    } WarningLevel;
+
     Driver();
     virtual ~Driver();
 
@@ -59,6 +66,7 @@ public:
     bool                        isVerbose() const;
     void                        setShowStatistics(bool show);
     void                        setVerbose(bool verbose);
+    void                        setWarnLevel(WarningLevel level);
     void                        showStatistics();
 
 protected:
@@ -67,6 +75,7 @@ protected:
     std::list<io::File*>        outputFiles;
     bool                        statistics;
     bool                        verbose;
+    WarningLevel                warningLevel;
 
 private:
 

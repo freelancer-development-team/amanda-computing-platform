@@ -25,6 +25,7 @@
 #ifndef PACKAGE_OPTION_HXX
 #define PACKAGE_OPTION_HXX
 
+#include "AmbiguousOptionException.h"
 #include "CommandLine.h"
 #include "CommandLineParser.h"
 #include "DefaultParser.h"
