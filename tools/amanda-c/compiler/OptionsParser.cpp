@@ -37,12 +37,14 @@ cli::CommandLine* amanda::compiler::parseCommandLineArguments(adt::Array<core::S
      * organized.
      * 
      */
+    options->addOption(cli::OptionBuilder::build().withShortOption("c").withDescription("Compile and assemble, but do not link.").get());
+    options->addOption(cli::OptionBuilder::build().withLongOption("dump-version").withDescription("Dump the version string (does not exits the program).").get());
     options->addOption(cli::OptionBuilder::build().withShortOption("h").withLongOption("help").withDescription("Shows this message and exits.").get());
-    options->addOption(cli::OptionBuilder::build().withShortOption("o").withLongOption("output").withDescription("Redirects output to the specified file.").get());
-    options->addOption(cli::OptionBuilder::build().withShortOption("S").withDescription("Produce assembly code only.").get());
+    options->addOption(cli::OptionBuilder::build().withShortOption("o").withLongOption("output").hasRequiredArgument(true).withDescription("Redirects output to the specified file.").get());
+    options->addOption(cli::OptionBuilder::build().withShortOption("S").withDescription("Compile only, do not assemble or link.").get());
     options->addOption(cli::OptionBuilder::build().withLongOption("statistics").withDescription("Shows the final compilation statistics.").get());
     options->addOption(cli::OptionBuilder::build().withLongOption("verbose").withDescription("Produces a much more complete description of the compilation process.").get());
-    options->addOption(cli::OptionBuilder::build().withShortOption("v").withLongOption("version").withDescription("Outputs version information and exits.").get());
+    options->addOption(cli::OptionBuilder::build().withLongOption("version").withDescription("Outputs version information and exits.").get());
     options->addOption(cli::OptionBuilder::build().withShortOption("W").hasRequiredArgument(true).withDescription("Sets the default warning level (none, some, all).").get());
 
     /* Parse the command line arguments. */

@@ -67,7 +67,7 @@ protected:
     core::String    argumentName;
     core::String    description;
     bool            required;
-    bool            optionalArgument;
+    bool            requiresArguments;
     int             argumentCount;
     char            valueSeparator;
     

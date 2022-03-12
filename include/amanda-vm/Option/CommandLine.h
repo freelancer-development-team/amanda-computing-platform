@@ -29,6 +29,8 @@
 #include <amanda-vm/Interface.h>
 #include <amanda-vm/Option/Option.h>
 
+#include <amanda-vm/ADT/Array.h>
+
 // STL
 #include <list>
 #include <vector>
@@ -51,6 +53,12 @@ public:
     void                        getArguments(core::String arguments[], size_t size);
     std::list<const Option*>&   getOptionsList();
     void                        getOptions(const Option* options[], size_t size);
+    core::String                getOptionValue(const char opt);
+    core::String                getOptionValue(const core::String& opt);
+    core::String                getOptionValue(const Option* option);
+    adt::Array<core::String>    getOptionValues(const char opt);
+    adt::Array<core::String>    getOptionValues(const core::String& opt);
+    adt::Array<core::String>    getOptionValues(const Option* option);
     bool                        hasOption(const char opt);
     bool                        hasOption(const Option* opt);
     bool                        hasOption(const core::String& opt);

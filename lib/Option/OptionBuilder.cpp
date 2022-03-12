@@ -31,7 +31,7 @@ OptionBuilder::OptionBuilder()
 {
     description = "no description";
     longOption = Option::NO_OPTION;
-    optionalArgument = true;
+    requiresArguments = false;
     required = false;
     shortOption = Option::NO_OPTION;
 }
@@ -43,7 +43,7 @@ OptionBuilder OptionBuilder::build()
 
 Option* OptionBuilder::get() const
 {
-    Option* option = new Option(shortOption, longOption, description, required, !optionalArgument);
+    Option* option = new Option(shortOption, longOption, description, required, requiresArguments);
     assert(option != NULL && "could not create Option object. Possible future segmentation failure.");
 
     return option;
@@ -51,7 +51,7 @@ Option* OptionBuilder::get() const
 
 OptionBuilder& OptionBuilder::hasRequiredArgument(bool required)
 {
-    this->optionalArgument = !required;
+    this->requiresArguments = required;
     return *this;
 }
 

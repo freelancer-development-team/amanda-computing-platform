@@ -26,9 +26,12 @@
 #include <amanda-vm/ADT/Iterators.h>
 #include <amanda-vm/ADT/Collections.h>
 
+using namespace amanda;
+
 using amanda::cli::CommandLine;
 using amanda::cli::Option;
 using amanda::core::String;
+using amanda::adt::Array;
 
 CommandLine::CommandLine()
 {
@@ -90,6 +93,47 @@ void CommandLine::getOptions(const Option* options[], size_t size)
     }
 }
 
+String CommandLine::getOptionValue(const char opt)
+{
+    return getOptionValue(String(opt));
+}
+
+String CommandLine::getOptionValue(const core::String& opt)
+{
+    return getOptionValue(resolveOption(opt));
+}
+
+String CommandLine::getOptionValue(const Option* option)
+{
+    assert(option != NULL && "Null pointer dereference.");
+    return getOptionValues(option)[0];
+}
+
+Array<String> CommandLine::getOptionValues(const char opt)
+{
+    return getOptionValues(String(opt));
+}
+
+Array<String> CommandLine::getOptionValues(const core::String& opt)
+{
+    return getOptionValues(resolveOption(opt));
+}
+
+Array<String> CommandLine::getOptionValues(const Option* option)
+{
+    std::list<String> valueList;
+    option->getValuesList(valueList);
+
+    Array<String> array(valueList.size());
+    unsigned counter = 0;
+    for (std::list<String>::iterator it = valueList.begin(); it != valueList.end(); ++it)
+    {
+        array[counter++] = *it;
+    }
+    
+    return array;
+}
+
 bool CommandLine::hasOption(const char opt)
 {
     return hasOption(String(opt));
@@ -108,18 +152,15 @@ bool CommandLine::hasOption(const core::String& opt)
 const Option* CommandLine::resolveOption(const core::String& option)
 {
     const Option* result = NULL;
-
     String opt = cli::stripLeadingHyphens(option);
-    STL_ITERATOR(list, const Option*, iter);
-    for (iter = adt::begin(options);
-         iter != adt::end(options);
-         ++iter)
+
+    for (std::list<const Option*>::const_iterator iter = options.begin();
+         iter != options.end() && result == NULL; ++iter)
     {
         const Option* optionObject = *iter;
-        if (!optionObject) continue;
+        assert(optionObject != NULL && "Got a null option object.");
 
-        if (opt.equals(optionObject->getOption())
-                       || opt.equals(optionObject->getLongOption()))
+        if (opt.equals(optionObject->getOption()) || opt.equals(optionObject->getLongOption()))
         {
             result = optionObject;
         }

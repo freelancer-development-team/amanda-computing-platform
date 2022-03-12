@@ -48,6 +48,8 @@ argumentCount(UNINITIALIZED)
     {
         this->argumentCount = 1;
     }
+
+    this->optionalArgument = false;
 }
 
 Option::~Option()
@@ -107,6 +109,14 @@ const String& Option::getLongOption() const
 const String& Option::getOption() const
 {
     return option;
+}
+
+void Option::getValuesList(std::list<core::String>& list) const
+{
+    for (unsigned i = 0; i < values.size(); i++)
+    {
+        list.push_back(values[i]);
+    }
 }
 
 char Option::getValueSeparator() const
@@ -204,14 +214,8 @@ String Option::toString() const
 
 void Option::add(const core::String& value)
 {
-    if (acceptsArguments())
-    {
-        values.push_back(value);
-    }
-    else
-    {
-        throw core::Exception("Cannot add value to a full list.");
-    }
+    assert(acceptsArguments() && "Cannot add value, list is full.");
+    values.push_back(value);
 }
 
 void Option::processValue(core::String& value)

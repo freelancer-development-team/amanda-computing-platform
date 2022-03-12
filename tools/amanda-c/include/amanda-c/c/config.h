@@ -16,25 +16,23 @@
  */
 
 /* 
- * File:   package..hxx
+ * File:   config.h
  * Author: Javier Marrero
  *
- * Created on February 28, 2022, 12:07 AM
+ * Created on March 12, 2022, 12:33 PM
  */
 
-#ifndef PACKAGE_OPTION_HXX
-#define PACKAGE_OPTION_HXX
+#ifndef CONFIG_H
+#define CONFIG_H
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
-#include "AmbiguousOptionException.h"
-#include "CommandLine.h"
-#include "CommandLineParser.h"
-#include "DefaultParser.h"
-#include "HelpFormatter.h"
-#include "Option.h"
-#include "OptionBuilder.h"
-#include "Options.h"
-#include "ParseException.h"
-#include "UnrecognizedOptionException.h"
 
-#endif /* PACKAGE__HXX */
+
+#ifdef __cplusplus
+}
+#endif
+#endif /* CONFIG_H */
 

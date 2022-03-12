@@ -42,6 +42,5 @@ String amanda::cli::stripLeadingHyphens(const core::String& str)
     {
         result = str.substring(1);
     }
-
     return result;
 }
