@@ -16,22 +16,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// C Standard Library
+/// AMANDA-PL LANGUAGE SPECIFICATION
+///
+/// The following GNU Bison specification is the formal specification for the
+/// syntax of the Amanda Programming Language, a project belonging to the
+/// Amanda Computing Platform.
+/// This document is written in standard notation for Bison specifications,
+/// a modified form of the EBNF notation. The syntactic groupings are organized,
+/// please, do not get them out of order.
+///
+
+// C++ API
+#include <cstdio>
+#include <cstdlib>
 
 // Compiler APIs
-#include <amanda-c/Messages.h>
+#include <amanda-c/ast-packages.h>  // The Amanda AST
+#include <amanda-c/Messages.h>      // A simple logging API for this compiler.
 
 %}
 
- /* Options */
-%option unicode
-%option noyywrap
-
- /* ========================= LEXICAL CLASSES =============================== */
-Identifier  [A-Za-z_]+[0-9A-Za-z]*
-
+%entry compilation_unit
 %%
 
-.   { }
+compilation_unit    : %empty
+                    ;
 
 %%

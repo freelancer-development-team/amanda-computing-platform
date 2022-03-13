@@ -49,9 +49,14 @@ MKDIR=mkdir
 CP=cp
 CCADMIN=CCadmin
 
+# RE/Flex
 LEX_SRC_DIR := ../../third-party/reflex-3.2.1
 LEX	    := ${LEX_SRC_DIR}/bin/reflex
-LEX_OPTIONS := --flex --bison -B --fast -m reflex --namespace=amanda.compiler --lexer=Scanner 
+LEX_OPTIONS := --flex --bison -B --fast -m reflex --namespace=amanda.compiler --lexer=Scanner
+
+# GNU Bison
+YACC		:= bison
+YACC_OPTIONS	:=
 
 # build
 build: .build-post
