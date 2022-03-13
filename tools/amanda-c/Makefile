@@ -57,23 +57,23 @@ LEX_OPTIONS := --flex --bison -B --fast -m reflex --namespace=amanda.compiler --
 build: .build-post
 
 .build-pre:
+    	# Build RE-Flex
+	utils/build-reflex.sh
+	
 	${LEX} ${LEX_OPTIONS} -o "compiler/Scanner.cpp" --header-file="include/amanda-c/Scanner.h" "specs/scanner.l"
 
 .build-post: .build-impl
 # Add your post 'build' code here...
 
-
 # clean
 clean: .clean-post
 
 .clean-pre:
-# Add your pre 'clean' code here...
+	# Clean RE-Flex
+	utils/clean-reflex.sh
 
 .clean-post: .clean-impl
-	# Clean the build of RE-Flex
-	cd ${LEX_SRC_DIR}
-	clean.sh
-	cd ${CND_BASEDIR}
+	# Add your post 'clean' code here...
 
 # clobber
 clobber: .clobber-post

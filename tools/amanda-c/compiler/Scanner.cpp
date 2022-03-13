@@ -19,6 +19,7 @@
 #undef REFLEX_OPTION_noyywrap
 #undef REFLEX_OPTION_outfile
 #undef REFLEX_OPTION_prefix
+#undef REFLEX_OPTION_unicode
 
 #define REFLEX_OPTION_batch               true
 #define REFLEX_OPTION_bison               true
@@ -31,6 +32,7 @@
 #define REFLEX_OPTION_noyywrap            true
 #define REFLEX_OPTION_outfile             "compiler/Scanner.cpp"
 #define REFLEX_OPTION_prefix              yy
+#define REFLEX_OPTION_unicode             true
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
@@ -199,9 +201,9 @@ int amanda::compiler::Scanner::yylex(void)
               output(matcher().input());
             }
             YY_BREAK
-          case 1: // rule specs/scanner.l:28: . :
+          case 1: // rule specs/scanner.l:29: . :
             YY_USER_ACTION
-#line 28 "specs/scanner.l"
+#line 29 "specs/scanner.l"
 { }
 
             YY_BREAK
@@ -245,7 +247,9 @@ S0:
 
 S3:
   m.FSM_TAKE(1);
-  return m.FSM_HALT();
+  c1 = m.FSM_CHAR();
+  if (128 <= c1 && c1 <= 191) goto S3;
+  return m.FSM_HALT(c1);
 }
 
 } // namespace amanda

@@ -22,6 +22,7 @@
 #undef REFLEX_OPTION_noyywrap
 #undef REFLEX_OPTION_outfile
 #undef REFLEX_OPTION_prefix
+#undef REFLEX_OPTION_unicode
 
 #define REFLEX_OPTION_batch               true
 #define REFLEX_OPTION_bison               true
@@ -34,6 +35,7 @@
 #define REFLEX_OPTION_noyywrap            true
 #define REFLEX_OPTION_outfile             "compiler/Scanner.cpp"
 #define REFLEX_OPTION_prefix              yy
+#define REFLEX_OPTION_unicode             true
 
 #ifdef __cplusplus
 
