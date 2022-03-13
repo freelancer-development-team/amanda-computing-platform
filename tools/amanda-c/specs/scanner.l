@@ -21,6 +21,7 @@
 %}
 
  /* Options */
+%option unicode
 %option noyywrap
 
 %%

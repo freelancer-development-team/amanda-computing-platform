@@ -49,8 +49,9 @@ MKDIR=mkdir
 CP=cp
 CCADMIN=CCadmin
 
-LEX := ../../third-party/reflex-3.2.1/bin/reflex
-LEX_OPTIONS := --flex --bison
+LEX_SRC_DIR := ../../third-party/reflex-3.2.1
+LEX	    := ${LEX_SRC_DIR}/bin/reflex
+LEX_OPTIONS := --flex --bison -B --fast -m reflex --namespace=amanda.compiler --lexer=Scanner 
 
 # build
 build: .build-post
@@ -69,8 +70,10 @@ clean: .clean-post
 # Add your pre 'clean' code here...
 
 .clean-post: .clean-impl
-# Add your post 'clean' code here...
-
+	# Clean the build of RE-Flex
+	cd ${LEX_SRC_DIR}
+	clean.sh
+	cd ${CND_BASEDIR}
 
 # clobber
 clobber: .clobber-post

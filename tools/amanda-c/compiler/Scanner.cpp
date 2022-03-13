@@ -8,11 +8,26 @@
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
+#undef REFLEX_OPTION_batch
+#undef REFLEX_OPTION_bison
+#undef REFLEX_OPTION_fast
+#undef REFLEX_OPTION_flex
+#undef REFLEX_OPTION_header_file
+#undef REFLEX_OPTION_lex
+#undef REFLEX_OPTION_lexer
+#undef REFLEX_OPTION_namespace
+#undef REFLEX_OPTION_noyywrap
+#undef REFLEX_OPTION_outfile
+#undef REFLEX_OPTION_prefix
+
+#define REFLEX_OPTION_batch               true
 #define REFLEX_OPTION_bison               true
+#define REFLEX_OPTION_fast                true
 #define REFLEX_OPTION_flex                true
 #define REFLEX_OPTION_header_file         "include/amanda-c/Scanner.h"
 #define REFLEX_OPTION_lex                 yylex
-#define REFLEX_OPTION_lexer               yyFlexLexer
+#define REFLEX_OPTION_lexer               Scanner
+#define REFLEX_OPTION_namespace           amanda::compiler
 #define REFLEX_OPTION_noyywrap            true
 #define REFLEX_OPTION_outfile             "compiler/Scanner.cpp"
 #define REFLEX_OPTION_prefix              yy
@@ -41,7 +56,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <reflex/flexlexer.h>
+
+namespace amanda {
+namespace compiler {
+
 typedef reflex::FlexLexer<reflex::Matcher> FlexLexer;
+
+} // namespace amanda
+} // namespace compiler
 #undef yytext
 #undef yyleng
 #undef yylineno
@@ -52,9 +74,12 @@ typedef reflex::FlexLexer<reflex::Matcher> FlexLexer;
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-class yyFlexLexer : public FlexLexer {
+namespace amanda {
+namespace compiler {
+
+class Scanner : public FlexLexer {
  public:
-  yyFlexLexer(
+  Scanner(
       const reflex::Input& input = reflex::Input(),
       std::ostream        *os    = NULL)
     :
@@ -75,6 +100,9 @@ class yyFlexLexer : public FlexLexer {
     return yylex();
   }
 };
+
+} // namespace amanda
+} // namespace compiler
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
@@ -113,7 +141,7 @@ class yyFlexLexer : public FlexLexer {
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-yyFlexLexer YY_SCANNER;
+amanda::compiler::Scanner YY_SCANNER;
 
 #ifndef YY_EXTERN_C
 #define YY_EXTERN_C
@@ -142,13 +170,19 @@ YY_EXTERN_C int yylex(void)
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-int yyFlexLexer::yylex(void)
+namespace amanda {
+namespace compiler {
+extern void reflex_code_INITIAL(reflex::Matcher&);
+} // namespace amanda
+} // namespace compiler
+
+int amanda::compiler::Scanner::yylex(void)
 {
-  static const char *REGEX_INITIAL = "(?m)(.)";
-  static const reflex::Pattern PATTERN_INITIAL(REGEX_INITIAL);
+  static const reflex::Pattern PATTERN_INITIAL(reflex_code_INITIAL);
   if (!has_matcher())
   {
     matcher(new Matcher(PATTERN_INITIAL, stdinit(), this));
+    matcher().buffer();
     YY_USER_INIT
   }
   while (true)
@@ -174,3 +208,47 @@ int yyFlexLexer::yylex(void)
         }
   }
 }
+
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//  TABLES                                                                    //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+
+#include <reflex/matcher.h>
+
+#if defined(OS_WIN)
+#pragma warning(disable:4101 4102)
+#elif defined(__GNUC__)
+#pragma GCC diagnostic ignored "-Wunused-variable"
+#pragma GCC diagnostic ignored "-Wunused-label"
+#elif defined(__clang__)
+#pragma clang diagnostic ignored "-Wunused-variable"
+#pragma clang diagnostic ignored "-Wunused-label"
+#endif
+
+namespace amanda {
+namespace compiler {
+
+void reflex_code_INITIAL(reflex::Matcher& m)
+{
+  int c0 = 0, c1 = 0;
+  m.FSM_INIT(c1);
+
+S0:
+  m.FSM_FIND();
+  c1 = m.FSM_CHAR();
+  if ('\v' <= c1) goto S3;
+  if ('\n' <= c1) return m.FSM_HALT(c1);
+  if (0 <= c1 && c1 <= '\t') goto S3;
+  return m.FSM_HALT(c1);
+
+S3:
+  m.FSM_TAKE(1);
+  return m.FSM_HALT();
+}
+
+} // namespace amanda
+
+} // namespace compiler
+
