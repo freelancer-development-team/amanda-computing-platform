@@ -49,12 +49,14 @@ MKDIR=mkdir
 CP=cp
 CCADMIN=CCadmin
 
+LEX := ../../third-party/reflex-3.2.1/bin/reflex
+LEX_OPTIONS := --flex --bison
 
 # build
 build: .build-post
 
 .build-pre:
-# Add your pre 'build' code here...
+	${LEX} ${LEX_OPTIONS} -o "compiler/Scanner.cpp" --header-file="include/amanda-c/Scanner.h" "specs/scanner.l"
 
 .build-post: .build-impl
 # Add your post 'build' code here...
