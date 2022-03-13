@@ -1,0 +1,67 @@
+# Makefile to quickly build the projects and install reflex:
+# > make -f Make
+# Normally you should use configure and make to build and install:
+# > ./configure && make
+# > sudo make install
+
+INSTALL_LIB=/usr/local/lib
+INSTALL_INC=/usr/local/include/reflex
+CPP=c++
+AR=ar
+RANLIB=ranlib
+COFLAGS=-O2
+CWFLAGS=-Wall -Wunused -Wextra
+CIFLAGS=-I. -I../include
+CMFLAGS=
+# CMFLAGS=-DDEBUG
+CFLAGS=$(CWFLAGS) $(COFLAGS) $(CIFLAGS) $(CMFLAGS)
+
+.PHONY:			release install clean distclean
+
+release:		libreflex.a libreflex.so libreflexmin.a libreflexmin.so
+
+install:		release
+			@echo
+			@echo "Installing libreflex in $(INSTALL_LIB)"
+			-cp -f -p libreflex.a libreflexmin.a $(INSTALL_LIB)
+			-mkdir -p $(INSTALL_INC)
+			@echo
+			@echo "Installing reflex header files in $(INSTALL_INC)"
+			-cp -f ../include/reflex/*.h $(INSTALL_INC)
+
+libreflex.a:		convert.o debug.o error.o input.o block_scripts.o language_scripts.o letter_scripts.o matcher.o matcher_avx2.o matcher_avx512bw.o pattern.o posix.o simd_avx2.o simd_avx512bw.o unicode.o utf8.o
+			$(AR) -rsc $@ $^
+			$(RANLIB) $@
+
+libreflexmin.a:		debug.o error.o input.o matcher.o matcher_avx2.o matcher_avx512bw.o pattern.o simd_avx2.o simd_avx512bw.o utf8.o
+			$(AR) -rsc $@ $^
+			$(RANLIB) $@
+
+libreflex.so:		convert.cpp debug.cpp error.cpp input.cpp ../unicode/block_scripts.cpp ../unicode/language_scripts.cpp ../unicode/letter_scripts.cpp matcher.cpp matcher_avx2.o matcher_avx512bw.o pattern.cpp posix.cpp simd_avx2.o simd_avx512bw.o unicode.cpp utf8.cpp
+			$(CPP) $(CFLAGS) -shared -o $@ -fPIC $^
+
+libreflexmin.so:	debug.cpp error.cpp input.cpp matcher.cpp matcher_avx2.o matcher_avx512bw.o pattern.cpp simd_avx2.o simd_avx512bw.o utf8.cpp
+			$(CPP) $(CFLAGS) -shared -o $@ -fPIC $^
+
+block_scripts.o:	../unicode/block_scripts.cpp
+			$(CPP) $(CFLAGS) -c $^
+
+language_scripts.o:	../unicode/language_scripts.cpp
+			$(CPP) $(CFLAGS) -c $^
+
+letter_scripts.o:	../unicode/letter_scripts.cpp
+			$(CPP) $(CFLAGS) -c $^
+
+.cc.o:
+			$(CPP) $(CFLAGS) -c $<
+.cpp.o:
+			$(CPP) $(CFLAGS) -c $<
+
+clean:
+			-rm -rf *.dSYM
+			-rm -f *.o *.gch *.log
+
+distclean:
+			-rm -rf *.dSYM
+			-rm -f *.o *.gch *.log
+			-rm -f *.a *.la *.so *.dylib

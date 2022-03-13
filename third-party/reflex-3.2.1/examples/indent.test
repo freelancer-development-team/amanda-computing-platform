@@ -1,0 +1,19 @@
+procedure main
+   if testing
+      print one
+
+/* a
+   comment
+*/
+      print two
+            /* another comment */
+      while true
+         print /* in
+                  loop */
+   print \
+     this is a \
+     long line that is \
+     spread over four lines
+
+procedure print stuff
+   show stuff

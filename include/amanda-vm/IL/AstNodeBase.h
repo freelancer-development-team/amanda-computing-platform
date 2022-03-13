@@ -49,8 +49,8 @@ public:
     AstNodeBase();
     virtual ~AstNodeBase();
 
-    virtual Value* generateCode(CodeGenContext& context) = 0;
-    bool hasChildren() const;
+    virtual Value*  generateCode(CodeGenContext& context) = 0;
+    bool            hasChildren() const;
 
 protected:
 

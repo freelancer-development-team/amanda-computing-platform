@@ -25,7 +25,10 @@
 #ifndef BASICBLOCK_H
 #define BASICBLOCK_H
 
+#include <amanda-vm/TypeSystem.h>
 #include <amanda-vm/IL/Value.h>
+
+#include <vector>
 
 namespace amanda
 {
@@ -34,8 +37,20 @@ namespace il
 
 class BasicBlock : public Value
 {
+    AMANDA_OBJECT(BasicBlock, Value)
+
 public:
-    
+
+    BasicBlock();
+    virtual ~BasicBlock();
+
+    const core::String& getLabel() const;
+    bool                hasLabel() const;
+    void                setLabel(const core::String& label);
+
+protected:
+
+    core::String label;
 } ;
 
 }

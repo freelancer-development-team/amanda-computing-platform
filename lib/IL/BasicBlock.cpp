@@ -27,5 +27,29 @@
 using namespace amanda;
 using namespace amanda::il;
 
+BasicBlock::BasicBlock()
+:
+label(core::String::EMPTY)
+{
+}
+
+BasicBlock::~BasicBlock()
+{
+}
+
+const core::String& BasicBlock::getLabel() const
+{
+    return label;
+}
+
+bool BasicBlock::hasLabel() const
+{
+    return !label.isEmpty();
+}
+
+void BasicBlock::setLabel(const core::String& label)
+{
+    this->label = label;
+}
 
 
