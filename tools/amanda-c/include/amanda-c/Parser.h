@@ -45,7 +45,10 @@
 #ifndef YY_YY_INCLUDE_AMANDA_C_PARSER_H_INCLUDED
 # define YY_YY_INCLUDE_AMANDA_C_PARSER_H_INCLUDED
 // "%code requires" blocks.
-#line 66 "specs/grammar.y"
+#line 73 "specs/grammar.y"
+
+
+    #include <amanda-vm/TypeSystem.h>
 
     namespace amanda {
     namespace compiler 
@@ -54,7 +57,7 @@
     }
     }
 
-#line 58 "include/amanda-c/Parser.h"
+#line 61 "include/amanda-c/Parser.h"
 
 
 # include <cstdlib> // std::abort
@@ -182,9 +185,9 @@
 # define YYDEBUG 0
 #endif
 
-#line 43 "specs/grammar.y"
+#line 48 "specs/grammar.y"
 namespace amanda { namespace compiler {
-#line 188 "include/amanda-c/Parser.h"
+#line 191 "include/amanda-c/Parser.h"
 
 
 
@@ -374,7 +377,10 @@ namespace amanda { namespace compiler {
 
     /// An auxiliary type to compute the largest semantic type.
     union union_type
-    {    };
+    {
+      // "identifier"
+      char dummy1[sizeof (amanda::core::String)];
+    };
 
     /// The size of the largest semantic type.
     enum { size = sizeof (union_type) };
@@ -421,7 +427,12 @@ namespace amanda { namespace compiler {
         TOKEN_YYEMPTY = -2,
     TOKEN_EOF = 0,                 // "end of file"
     TOKEN_YYerror = 256,           // error
-    TOKEN_YYUNDEF = 257            // "invalid token"
+    TOKEN_YYUNDEF = 257,           // "invalid token"
+    TOKEN_IDENTIFIER = 258,        // "identifier"
+    TOKEN_AND = 259,               // "and"
+    TOKEN_CLASS = 260,             // "class"
+    TOKEN_NAMESPACE = 261,         // "namespace"
+    TOKEN_WHILE = 262              // "while"
       };
       /// Backward compatibility alias (Bison 3.6).
       typedef token_kind_type yytokentype;
@@ -438,13 +449,18 @@ namespace amanda { namespace compiler {
     {
       enum symbol_kind_type
       {
-        YYNTOKENS = 3, ///< Number of tokens.
+        YYNTOKENS = 8, ///< Number of tokens.
         S_YYEMPTY = -2,
         S_YYEOF = 0,                             // "end of file"
         S_YYerror = 1,                           // error
         S_YYUNDEF = 2,                           // "invalid token"
-        S_YYACCEPT = 3,                          // $accept
-        S_program = 4                            // program
+        S_IDENTIFIER = 3,                        // "identifier"
+        S_AND = 4,                               // "and"
+        S_CLASS = 5,                             // "class"
+        S_NAMESPACE = 6,                         // "namespace"
+        S_WHILE = 7,                             // "while"
+        S_YYACCEPT = 8,                          // $accept
+        S_program = 9                            // program
       };
     };
 
@@ -481,6 +497,10 @@ namespace amanda { namespace compiler {
       {
         switch (this->kind ())
     {
+      case symbol_kind::S_IDENTIFIER: // "identifier"
+        value.move< amanda::core::String > (std::move (that.value));
+        break;
+
       default:
         break;
     }
@@ -500,6 +520,20 @@ namespace amanda { namespace compiler {
 #else
       basic_symbol (typename Base::kind_type t, const location_type& l)
         : Base (t)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, amanda::core::String&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const amanda::core::String& v, const location_type& l)
+        : Base (t)
+        , value (v)
         , location (l)
       {}
 #endif
@@ -526,6 +560,10 @@ namespace amanda { namespace compiler {
         // Value type destructor.
 switch (yykind)
     {
+      case symbol_kind::S_IDENTIFIER: // "identifier"
+        value.template destroy< amanda::core::String > ();
+        break;
+
       default:
         break;
     }
@@ -533,14 +571,11 @@ switch (yykind)
         Base::clear ();
       }
 
-#if YYDEBUG || 0
       /// The user-facing name of this symbol.
       const char *name () const YY_NOEXCEPT
       {
         return DefaultParser::symbol_name (this->kind ());
       }
-#endif // #if YYDEBUG || 0
-
 
       /// Backward compatibility (Bison 3.6).
       symbol_kind_type type_get () const YY_NOEXCEPT;
@@ -623,6 +658,14 @@ switch (yykind)
         : super_type(token_type (tok), l)
 #endif
       {}
+#if 201103L <= YY_CPLUSPLUS
+      symbol_type (int tok, amanda::core::String v, location_type l)
+        : super_type(token_type (tok), std::move (v), std::move (l))
+#else
+      symbol_type (int tok, const amanda::core::String& v, const location_type& l)
+        : super_type(token_type (tok), v, l)
+#endif
+      {}
     };
 
     /// Build a parser object.
@@ -666,12 +709,9 @@ switch (yykind)
     /// Report a syntax error.
     void error (const syntax_error& err);
 
-#if YYDEBUG || 0
     /// The user-facing name of the symbol whose (internal) number is
     /// YYSYMBOL.  No bounds checking.
     static const char *symbol_name (symbol_kind_type yysymbol);
-#endif // #if YYDEBUG || 0
-
 
     // Implementation of make_symbol for each symbol type.
 #if 201103L <= YY_CPLUSPLUS
@@ -719,7 +759,100 @@ switch (yykind)
         return symbol_type (token::TOKEN_YYUNDEF, l);
       }
 #endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_IDENTIFIER (amanda::core::String v, location_type l)
+      {
+        return symbol_type (token::TOKEN_IDENTIFIER, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_IDENTIFIER (const amanda::core::String& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_IDENTIFIER, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_AND (location_type l)
+      {
+        return symbol_type (token::TOKEN_AND, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_AND (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_AND, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_CLASS (location_type l)
+      {
+        return symbol_type (token::TOKEN_CLASS, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_CLASS (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_CLASS, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_NAMESPACE (location_type l)
+      {
+        return symbol_type (token::TOKEN_NAMESPACE, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_NAMESPACE (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_NAMESPACE, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_WHILE (location_type l)
+      {
+        return symbol_type (token::TOKEN_WHILE, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_WHILE (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_WHILE, l);
+      }
+#endif
 
+
+    class context
+    {
+    public:
+      context (const DefaultParser& yyparser, const symbol_type& yyla);
+      const symbol_type& lookahead () const YY_NOEXCEPT { return yyla_; }
+      symbol_kind_type token () const YY_NOEXCEPT { return yyla_.kind (); }
+      const location_type& location () const YY_NOEXCEPT { return yyla_.location; }
+
+      /// Put in YYARG at most YYARGN of the expected tokens, and return the
+      /// number of tokens stored in YYARG.  If YYARG is null, return the
+      /// number of expected tokens (guaranteed to be less than YYNTOKENS).
+      int expected_tokens (symbol_kind_type yyarg[], int yyargn) const;
+
+    private:
+      const DefaultParser& yyparser_;
+      const symbol_type& yyla_;
+    };
 
   private:
 #if YY_CPLUSPLUS < 201103L
@@ -729,10 +862,27 @@ switch (yykind)
     DefaultParser& operator= (const DefaultParser&);
 #endif
 
+    /// Check the lookahead yytoken.
+    /// \returns  true iff the token will be eventually shifted.
+    bool yy_lac_check_ (symbol_kind_type yytoken) const;
+    /// Establish the initial context if no initial context currently exists.
+    /// \returns  true iff the token will be eventually shifted.
+    bool yy_lac_establish_ (symbol_kind_type yytoken);
+    /// Discard any previous initial lookahead context because of event.
+    /// \param event  the event which caused the lookahead to be discarded.
+    ///               Only used for debbuging output.
+    void yy_lac_discard_ (const char* event);
 
     /// Stored state numbers (used for stacks).
     typedef signed char state_type;
 
+    /// The arguments of the error message.
+    int yy_syntax_error_arguments_ (const context& yyctx,
+                                    symbol_kind_type yyarg[], int yyargn) const;
+
+    /// Generate an error message.
+    /// \param yyctx     the context in which the error occurred.
+    virtual std::string yysyntax_error_ (const context& yyctx) const;
     /// Compute post-reduction state.
     /// \param yystate   the current state
     /// \param yysym     the nonterminal to push on the stack
@@ -754,10 +904,6 @@ switch (yykind)
     /// are valid, yet not members of the token_type enum.
     static symbol_kind_type yytranslate_ (int t);
 
-#if YYDEBUG || 0
-    /// For a symbol, its name in clear.
-    static const char* const yytname_[];
-#endif // #if YYDEBUG || 0
 
 
     // Tables.
@@ -1001,6 +1147,15 @@ switch (yykind)
 
     /// The stack.
     stack_type yystack_;
+    /// The stack for LAC.
+    /// Logically, the yy_lac_stack's lifetime is confined to the function
+    /// yy_lac_check_. We just store it as a member of this class to hold
+    /// on to the memory and to avoid frequent reallocations.
+    /// Since yy_lac_check_ is const, this member must be mutable.
+    mutable std::vector<state_type> yylac_stack_;
+    /// Whether an initial LAC context was established.
+    bool yy_lac_established_;
+
 
     /// Push a new state on the stack.
     /// \param m    a debug message to display
@@ -1069,10 +1224,11 @@ switch (yykind)
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     1,     2
+       2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
+       5,     6,     7
     };
     // Last valid token kind.
-    const int code_max = 257;
+    const int code_max = 262;
 
     if (t <= 0)
       return symbol_kind::S_YYEOF;
@@ -1091,6 +1247,10 @@ switch (yykind)
   {
     switch (this->kind ())
     {
+      case symbol_kind::S_IDENTIFIER: // "identifier"
+        value.copy< amanda::core::String > (YY_MOVE (that.value));
+        break;
+
       default:
         break;
     }
@@ -1120,6 +1280,10 @@ switch (yykind)
     super_type::move (s);
     switch (this->kind ())
     {
+      case symbol_kind::S_IDENTIFIER: // "identifier"
+        value.move< amanda::core::String > (YY_MOVE (s.value));
+        break;
+
       default:
         break;
     }
@@ -1181,9 +1345,9 @@ switch (yykind)
     return this->kind ();
   }
 
-#line 43 "specs/grammar.y"
+#line 48 "specs/grammar.y"
 } } // amanda::compiler
-#line 1187 "include/amanda-c/Parser.h"
+#line 1351 "include/amanda-c/Parser.h"
 
 
 

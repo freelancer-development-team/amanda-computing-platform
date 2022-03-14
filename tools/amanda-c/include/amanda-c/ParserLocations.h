@@ -53,7 +53,7 @@
 #  endif
 # endif
 
-#line 43 "specs/grammar.y"
+#line 48 "specs/grammar.y"
 namespace amanda { namespace compiler {
 #line 59 "compiler/../include/amanda-c/ParserLocations.h"
 
@@ -299,7 +299,7 @@ namespace amanda { namespace compiler {
     return ostr;
   }
 
-#line 43 "specs/grammar.y"
+#line 48 "specs/grammar.y"
 } } // amanda::compiler
 #line 305 "compiler/../include/amanda-c/ParserLocations.h"
 

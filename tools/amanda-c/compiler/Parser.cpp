@@ -71,19 +71,25 @@
 #include <cstdlib>
 
 // Compiler APIs
+#include <amanda-c/Messages.h>
+
+// Amanda APIs
+#include <amanda-vm/TypeSystem.h>
+#include <amanda-vm/IO/Console.h>
 
 
-#line 77 "compiler/Parser.cpp"
+#line 82 "compiler/Parser.cpp"
 
 
 #include "Parser.h"
 
 
 // Unqualified %code blocks.
-#line 76 "specs/grammar.y"
+#line 86 "specs/grammar.y"
 
 
     // Amanda Compiler API
+    #include <amanda-vm/TypeSystem.h>
     #include <amanda-c/Scanner.h>
 
     // C++ standard API
@@ -92,7 +98,7 @@
     #undef yylex
     #define yylex lexer.lex
 
-#line 96 "compiler/Parser.cpp"
+#line 102 "compiler/Parser.cpp"
 
 
 #ifndef YY_
@@ -183,9 +189,9 @@
 #define YYERROR         goto yyerrorlab
 #define YYRECOVERING()  (!!yyerrstatus_)
 
-#line 43 "specs/grammar.y"
+#line 48 "specs/grammar.y"
 namespace amanda { namespace compiler {
-#line 189 "compiler/Parser.cpp"
+#line 195 "compiler/Parser.cpp"
 
   /// Build a parser object.
   DefaultParser::DefaultParser (amanda::compiler::Scanner& lexer_yyarg)
@@ -195,6 +201,7 @@ namespace amanda { namespace compiler {
 #else
     :
 #endif
+      yy_lac_established_ (false),
       lexer (lexer_yyarg)
   {}
 
@@ -253,6 +260,10 @@ namespace amanda { namespace compiler {
   {
     switch (that.kind ())
     {
+      case symbol_kind::S_IDENTIFIER: // "identifier"
+        value.YY_MOVE_OR_COPY< amanda::core::String > (YY_MOVE (that.value));
+        break;
+
       default:
         break;
     }
@@ -268,6 +279,10 @@ namespace amanda { namespace compiler {
   {
     switch (that.kind ())
     {
+      case symbol_kind::S_IDENTIFIER: // "identifier"
+        value.move< amanda::core::String > (YY_MOVE (that.value));
+        break;
+
       default:
         break;
     }
@@ -283,6 +298,10 @@ namespace amanda { namespace compiler {
     state = that.state;
     switch (that.kind ())
     {
+      case symbol_kind::S_IDENTIFIER: // "identifier"
+        value.copy< amanda::core::String > (that.value);
+        break;
+
       default:
         break;
     }
@@ -297,6 +316,10 @@ namespace amanda { namespace compiler {
     state = that.state;
     switch (that.kind ())
     {
+      case symbol_kind::S_IDENTIFIER: // "identifier"
+        value.move< amanda::core::String > (that.value);
+        break;
+
       default:
         break;
     }
@@ -437,6 +460,10 @@ namespace amanda { namespace compiler {
     /// The return value of parse ().
     int yyresult;
 
+    /// Discard the LAC context in case there still is one left from a
+    /// previous invocation.
+    yy_lac_discard_ ("init");
+
 #if YY_EXCEPTIONS
     try
 #endif // YY_EXCEPTIONS
@@ -511,6 +538,8 @@ namespace amanda { namespace compiler {
     yyn += yyla.kind ();
     if (yyn < 0 || yylast_ < yyn || yycheck_[yyn] != yyla.kind ())
       {
+        if (!yy_lac_establish_ (yyla.kind ()))
+           goto yyerrlab;
         goto yydefault;
       }
 
@@ -520,6 +549,9 @@ namespace amanda { namespace compiler {
       {
         if (yy_table_value_is_error_ (yyn))
           goto yyerrlab;
+        if (!yy_lac_establish_ (yyla.kind ()))
+           goto yyerrlab;
+
         yyn = -yyn;
         goto yyreduce;
       }
@@ -530,6 +562,7 @@ namespace amanda { namespace compiler {
 
     // Shift the lookahead token.
     yypush_ ("Shifting", state_type (yyn), YY_MOVE (yyla));
+    yy_lac_discard_ ("shift");
     goto yynewstate;
 
 
@@ -556,6 +589,10 @@ namespace amanda { namespace compiler {
          when using variants.  */
       switch (yyr1_[yyn])
     {
+      case symbol_kind::S_IDENTIFIER: // "identifier"
+        yylhs.value.emplace< amanda::core::String > ();
+        break;
+
       default:
         break;
     }
@@ -577,7 +614,7 @@ namespace amanda { namespace compiler {
           switch (yyn)
             {
 
-#line 581 "compiler/Parser.cpp"
+#line 618 "compiler/Parser.cpp"
 
             default:
               break;
@@ -609,7 +646,8 @@ namespace amanda { namespace compiler {
     if (!yyerrstatus_)
       {
         ++yynerrs_;
-        std::string msg = YY_("syntax error");
+        context yyctx (*this, yyla);
+        std::string msg = yysyntax_error_ (yyctx);
         error (yyla.location, YY_MOVE (msg));
       }
 
@@ -688,6 +726,7 @@ namespace amanda { namespace compiler {
       YYLLOC_DEFAULT (error_token.location, yyerror_range, 2);
 
       // Shift the error token.
+      yy_lac_discard_ ("error recovery");
       error_token.state = state_type (yyn);
       yypush_ ("Shifting", YY_MOVE (error_token));
     }
@@ -754,16 +793,275 @@ namespace amanda { namespace compiler {
     error (yyexc.location, yyexc.what ());
   }
 
-#if YYDEBUG || 0
   const char *
   DefaultParser::symbol_name (symbol_kind_type yysymbol)
   {
-    return yytname_[yysymbol];
+    static const char *const yy_sname[] =
+    {
+    "end of file", "error", "invalid token", "identifier", "and", "class",
+  "namespace", "while", "$accept", "program", YY_NULLPTR
+    };
+    return yy_sname[yysymbol];
   }
-#endif // #if YYDEBUG || 0
 
 
 
+  // DefaultParser::context.
+  DefaultParser::context::context (const DefaultParser& yyparser, const symbol_type& yyla)
+    : yyparser_ (yyparser)
+    , yyla_ (yyla)
+  {}
+
+  int
+  DefaultParser::context::expected_tokens (symbol_kind_type yyarg[], int yyargn) const
+  {
+    // Actual number of expected tokens
+    int yycount = 0;
+
+#if YYDEBUG
+    // Execute LAC once. We don't care if it is successful, we
+    // only do it for the sake of debugging output.
+    if (!yyparser_.yy_lac_established_)
+      yyparser_.yy_lac_check_ (yyla_.kind ());
+#endif
+
+    for (int yyx = 0; yyx < YYNTOKENS; ++yyx)
+      {
+        symbol_kind_type yysym = YY_CAST (symbol_kind_type, yyx);
+        if (yysym != symbol_kind::S_YYerror
+            && yysym != symbol_kind::S_YYUNDEF
+            && yyparser_.yy_lac_check_ (yysym))
+          {
+            if (!yyarg)
+              ++yycount;
+            else if (yycount == yyargn)
+              return 0;
+            else
+              yyarg[yycount++] = yysym;
+          }
+      }
+    if (yyarg && yycount == 0 && 0 < yyargn)
+      yyarg[0] = symbol_kind::S_YYEMPTY;
+    return yycount;
+  }
+
+
+  bool
+  DefaultParser::yy_lac_check_ (symbol_kind_type yytoken) const
+  {
+    // Logically, the yylac_stack's lifetime is confined to this function.
+    // Clear it, to get rid of potential left-overs from previous call.
+    yylac_stack_.clear ();
+    // Reduce until we encounter a shift and thereby accept the token.
+#if YYDEBUG
+    YYCDEBUG << "LAC: checking lookahead " << symbol_name (yytoken) << ':';
+#endif
+    std::ptrdiff_t lac_top = 0;
+    while (true)
+      {
+        state_type top_state = (yylac_stack_.empty ()
+                                ? yystack_[lac_top].state
+                                : yylac_stack_.back ());
+        int yyrule = yypact_[+top_state];
+        if (yy_pact_value_is_default_ (yyrule)
+            || (yyrule += yytoken) < 0 || yylast_ < yyrule
+            || yycheck_[yyrule] != yytoken)
+          {
+            // Use the default action.
+            yyrule = yydefact_[+top_state];
+            if (yyrule == 0)
+              {
+                YYCDEBUG << " Err\n";
+                return false;
+              }
+          }
+        else
+          {
+            // Use the action from yytable.
+            yyrule = yytable_[yyrule];
+            if (yy_table_value_is_error_ (yyrule))
+              {
+                YYCDEBUG << " Err\n";
+                return false;
+              }
+            if (0 < yyrule)
+              {
+                YYCDEBUG << " S" << yyrule << '\n';
+                return true;
+              }
+            yyrule = -yyrule;
+          }
+        // By now we know we have to simulate a reduce.
+        YYCDEBUG << " R" << yyrule - 1;
+        // Pop the corresponding number of values from the stack.
+        {
+          std::ptrdiff_t yylen = yyr2_[yyrule];
+          // First pop from the LAC stack as many tokens as possible.
+          std::ptrdiff_t lac_size = std::ptrdiff_t (yylac_stack_.size ());
+          if (yylen < lac_size)
+            {
+              yylac_stack_.resize (std::size_t (lac_size - yylen));
+              yylen = 0;
+            }
+          else if (lac_size)
+            {
+              yylac_stack_.clear ();
+              yylen -= lac_size;
+            }
+          // Only afterwards look at the main stack.
+          // We simulate popping elements by incrementing lac_top.
+          lac_top += yylen;
+        }
+        // Keep top_state in sync with the updated stack.
+        top_state = (yylac_stack_.empty ()
+                     ? yystack_[lac_top].state
+                     : yylac_stack_.back ());
+        // Push the resulting state of the reduction.
+        state_type state = yy_lr_goto_state_ (top_state, yyr1_[yyrule]);
+        YYCDEBUG << " G" << int (state);
+        yylac_stack_.push_back (state);
+      }
+  }
+
+  // Establish the initial context if no initial context currently exists.
+  bool
+  DefaultParser::yy_lac_establish_ (symbol_kind_type yytoken)
+  {
+    /* Establish the initial context for the current lookahead if no initial
+       context is currently established.
+
+       We define a context as a snapshot of the parser stacks.  We define
+       the initial context for a lookahead as the context in which the
+       parser initially examines that lookahead in order to select a
+       syntactic action.  Thus, if the lookahead eventually proves
+       syntactically unacceptable (possibly in a later context reached via a
+       series of reductions), the initial context can be used to determine
+       the exact set of tokens that would be syntactically acceptable in the
+       lookahead's place.  Moreover, it is the context after which any
+       further semantic actions would be erroneous because they would be
+       determined by a syntactically unacceptable token.
+
+       yy_lac_establish_ should be invoked when a reduction is about to be
+       performed in an inconsistent state (which, for the purposes of LAC,
+       includes consistent states that don't know they're consistent because
+       their default reductions have been disabled).
+
+       For parse.lac=full, the implementation of yy_lac_establish_ is as
+       follows.  If no initial context is currently established for the
+       current lookahead, then check if that lookahead can eventually be
+       shifted if syntactic actions continue from the current context.  */
+    if (!yy_lac_established_)
+      {
+#if YYDEBUG
+        YYCDEBUG << "LAC: initial context established for "
+                 << symbol_name (yytoken) << '\n';
+#endif
+        yy_lac_established_ = true;
+        return yy_lac_check_ (yytoken);
+      }
+    return true;
+  }
+
+  // Discard any previous initial lookahead context.
+  void
+  DefaultParser::yy_lac_discard_ (const char* evt)
+  {
+   /* Discard any previous initial lookahead context because of Event,
+      which may be a lookahead change or an invalidation of the currently
+      established initial context for the current lookahead.
+
+      The most common example of a lookahead change is a shift.  An example
+      of both cases is syntax error recovery.  That is, a syntax error
+      occurs when the lookahead is syntactically erroneous for the
+      currently established initial context, so error recovery manipulates
+      the parser stacks to try to find a new initial context in which the
+      current lookahead is syntactically acceptable.  If it fails to find
+      such a context, it discards the lookahead.  */
+    if (yy_lac_established_)
+      {
+        YYCDEBUG << "LAC: initial context discarded due to "
+                 << evt << '\n';
+        yy_lac_established_ = false;
+      }
+  }
+
+  int
+  DefaultParser::yy_syntax_error_arguments_ (const context& yyctx,
+                                                 symbol_kind_type yyarg[], int yyargn) const
+  {
+    /* There are many possibilities here to consider:
+       - If this state is a consistent state with a default action, then
+         the only way this function was invoked is if the default action
+         is an error action.  In that case, don't check for expected
+         tokens because there are none.
+       - The only way there can be no lookahead present (in yyla) is
+         if this state is a consistent state with a default action.
+         Thus, detecting the absence of a lookahead is sufficient to
+         determine that there is no unexpected or expected token to
+         report.  In that case, just report a simple "syntax error".
+       - Don't assume there isn't a lookahead just because this state is
+         a consistent state with a default action.  There might have
+         been a previous inconsistent state, consistent state with a
+         non-default action, or user semantic action that manipulated
+         yyla.  (However, yyla is currently not documented for users.)
+         In the first two cases, it might appear that the current syntax
+         error should have been detected in the previous state when
+         yy_lac_check was invoked.  However, at that time, there might
+         have been a different syntax error that discarded a different
+         initial context during error recovery, leaving behind the
+         current lookahead.
+    */
+
+    if (!yyctx.lookahead ().empty ())
+      {
+        if (yyarg)
+          yyarg[0] = yyctx.token ();
+        int yyn = yyctx.expected_tokens (yyarg ? yyarg + 1 : yyarg, yyargn - 1);
+        return yyn + 1;
+      }
+    return 0;
+  }
+
+  // Generate an error message.
+  std::string
+  DefaultParser::yysyntax_error_ (const context& yyctx) const
+  {
+    // Its maximum.
+    enum { YYARGS_MAX = 5 };
+    // Arguments of yyformat.
+    symbol_kind_type yyarg[YYARGS_MAX];
+    int yycount = yy_syntax_error_arguments_ (yyctx, yyarg, YYARGS_MAX);
+
+    char const* yyformat = YY_NULLPTR;
+    switch (yycount)
+      {
+#define YYCASE_(N, S)                         \
+        case N:                               \
+          yyformat = S;                       \
+        break
+      default: // Avoid compiler warnings.
+        YYCASE_ (0, YY_("syntax error"));
+        YYCASE_ (1, YY_("syntax error, unexpected %s"));
+        YYCASE_ (2, YY_("syntax error, unexpected %s, expecting %s"));
+        YYCASE_ (3, YY_("syntax error, unexpected %s, expecting %s or %s"));
+        YYCASE_ (4, YY_("syntax error, unexpected %s, expecting %s or %s or %s"));
+        YYCASE_ (5, YY_("syntax error, unexpected %s, expecting %s or %s or %s or %s"));
+#undef YYCASE_
+      }
+
+    std::string yyres;
+    // Argument number.
+    std::ptrdiff_t yyi = 0;
+    for (char const* yyp = yyformat; *yyp; ++yyp)
+      if (yyp[0] == '%' && yyp[1] == 's' && yyi < yycount)
+        {
+          yyres += symbol_name (yyarg[yyi++]);
+          ++yyp;
+        }
+      else
+        yyres += *yyp;
+    return yyres;
+  }
 
 
   const signed char DefaultParser::yypact_ninf_ = -1;
@@ -809,13 +1107,13 @@ namespace amanda { namespace compiler {
   const signed char
   DefaultParser::yystos_[] =
   {
-       0,     4,     0
+       0,     9,     0
   };
 
   const signed char
   DefaultParser::yyr1_[] =
   {
-       0,     3,     4
+       0,     8,     9
   };
 
   const signed char
@@ -825,22 +1123,13 @@ namespace amanda { namespace compiler {
   };
 
 
-#if YYDEBUG
-  // YYTNAME[SYMBOL-NUM] -- String name of the symbol SYMBOL-NUM.
-  // First, the terminals, then, starting at \a YYNTOKENS, nonterminals.
-  const char*
-  const DefaultParser::yytname_[] =
-  {
-  "\"end of file\"", "error", "\"invalid token\"", "$accept", "program", YY_NULLPTR
-  };
-#endif
 
 
 #if YYDEBUG
   const signed char
   DefaultParser::yyrline_[] =
   {
-       0,    92,    92
+       0,   117,   117
   };
 
   void
@@ -871,13 +1160,51 @@ namespace amanda { namespace compiler {
 #endif // YYDEBUG
 
 
-#line 43 "specs/grammar.y"
+#line 48 "specs/grammar.y"
 } } // amanda::compiler
-#line 877 "compiler/Parser.cpp"
+#line 1166 "compiler/Parser.cpp"
 
-#line 95 "specs/grammar.y"
+#line 120 "specs/grammar.y"
 
+
+static amanda::core::String makePadding(unsigned size)
+{
+    char buffer[size + 1] = {0};
+    memset(buffer, ' ', size);
+
+    return amanda::core::String(buffer);
+}
 
 void amanda::compiler::DefaultParser::error(const location& loc, const std::string& msg)
 {
+    log::error("%s:%d:%d: %s.",
+                loc.begin.filename->c_str(),
+                loc.begin.line, loc.begin.column,
+                msg.c_str());
+
+    // Print the line & error
+    core::String lineAndError(makePadding(10));
+    lineAndError.append(lexer.text()).append('\n');
+    lineAndError.appendWithFormat(" %d:%d-%d:%d ",
+                                    loc.begin.line, loc.begin.column,
+                                    loc.end.line, loc.end.column);
+
+    unsigned dt = (loc.end.column - loc.begin.column);
+    for (unsigned i = 0; i <= dt; i++)
+    {
+        if (i == 0)
+        {
+            lineAndError.append('^');
+        }
+        else if (i == dt)
+        {
+            lineAndError.append('^');
+        }
+        else
+        {
+            lineAndError.append('~');
+        }
+    }
+
+    io::console().err.println(lineAndError);
 }

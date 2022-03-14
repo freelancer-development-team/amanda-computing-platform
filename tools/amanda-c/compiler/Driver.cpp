@@ -23,6 +23,8 @@
  */
 
 #include <amanda-c/Driver.h>
+#include <amanda-c/Messages.h>
+#include <amanda-c/CompilationContext.h>
 #include <AmandaSDK.h>
 
 using namespace amanda;
@@ -66,6 +68,50 @@ void Driver::addOutputFile(io::File* file)
     {
         file->grab();
         outputFiles.push_back(file);
+    }
+}
+
+void Driver::compileFile(io::File* input, io::File* output)
+{
+    assert(input != NULL && "Passed NULL input file.");
+    assert(output != NULL && "Passed NULL output file.");
+
+    if (verbose)
+    {
+        log::info("Compiling file '%s' into '%s'.", input->getPath().toCharArray(),
+                  output->getPath().toCharArray());
+    }
+
+    core::StrongReference<CompilationContext> context = new CompilationContext(input, output);
+    if (context->performSSATransformation() != 0)
+    {
+        log::error("%s: compilation failed.", input->getPath().toCharArray());
+    }
+}
+
+void Driver::compileFiles()
+{
+    // For the maximum number of threads, initialize one compilation process in
+    // each of them.
+    if (verbose)
+    {
+        log::info("Beginning compilation process... (%lu input file%s)",
+                  inputFiles.size(),
+                  inputFiles.size() > 1 ? "s" : "");
+    }
+
+    /// TODO: Handle this properly
+    STL_ITERATOR(list, io::File*, o_it);
+    STL_ITERATOR(list, io::File*, i_it);
+    for (i_it = inputFiles.begin(),
+         o_it = outputFiles.begin(); i_it != inputFiles.end(); ++i_it)
+    {
+        compileFile(*i_it, *o_it);
+
+        if (o_it != outputFiles.end())
+        {
+            ++o_it;
+        }
     }
 }
 

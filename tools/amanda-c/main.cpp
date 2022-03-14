@@ -160,7 +160,7 @@ int main(int argc, char** argv)
         }
 
         /* Perform the compiler pass. */
-
+        driver->compileFiles();
 
         /* If statistics must be shown, display... */
         driver->showStatistics();

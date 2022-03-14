@@ -61,9 +61,22 @@
 
 // Scanner class
 
+// Character classes
+digit                           [0-9]
+alpha                           [A-Za-z_]
+identifier                      {alpha} ( {alpha} | {digit} )*
+
 %%
 
-.
-<<EOF>> { return DefaultParser::make_EOF(location()); }
+[[:space:]]+                    // skip white space
+"#".*                           // ignore inline comment
+"/*"(.|\n)*?"*/"                // ignore multi-line comment using a lazy regex pattern
+
+"and"                           { return DefaultParser::symbol_type(DefaultParser::token::TOKEN_AND, location()); }
+"namespace"                     { return DefaultParser::symbol_type(DefaultParser::token::TOKEN_NAMESPACE, location()); }
+
+{identifier}                    { return DefaultParser::make_IDENTIFIER(amanda::core::String(text()), location()); }
+
+<<EOF>>                         { return DefaultParser::make_EOF(location()); }
 
 %%

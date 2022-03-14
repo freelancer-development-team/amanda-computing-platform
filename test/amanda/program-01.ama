@@ -6,7 +6,7 @@
  * The Amanda Programming Language project is FREE SOFTWARE. Permission is}
  * hereby granted to copy, redistribute, modify 
  */
- 
+  
 namespace tests;
 
 using std::io::console;

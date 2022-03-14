@@ -168,6 +168,8 @@ class Scanner : public reflex::AbstractLexer<reflex::Matcher> {
 #line 62 "specs/scanner.l"
 // Scanner class
 
+#line 64 "specs/scanner.l"
+// Character classes
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
@@ -203,7 +205,7 @@ amanda::compiler::DefaultParser::symbol_type amanda::compiler::Scanner::lex(void
           case 0:
             if (matcher().at_end())
             {
-#line 67 "specs/scanner.l"
+#line 80 "specs/scanner.l"
 { return DefaultParser::make_EOF(location()); }
 
             }
@@ -212,8 +214,32 @@ amanda::compiler::DefaultParser::symbol_type amanda::compiler::Scanner::lex(void
               out().put(matcher().input());
             }
             break;
-          case 1: // rule specs/scanner.l:66: . :
-#line 66 "specs/scanner.l"
+          case 1: // rule specs/scanner.l:71: [[:space:]]+ :
+#line 71 "specs/scanner.l"
+// skip white space
+            break;
+          case 2: // rule specs/scanner.l:72: "#".* :
+#line 72 "specs/scanner.l"
+// ignore inline comment
+            break;
+          case 3: // rule specs/scanner.l:73: "/*"(.|\n)*?"*/" :
+#line 73 "specs/scanner.l"
+// ignore multi-line comment using a lazy regex pattern
+
+            break;
+          case 4: // rule specs/scanner.l:75: "and" :
+#line 75 "specs/scanner.l"
+{ return DefaultParser::symbol_type(DefaultParser::token::TOKEN_AND, location()); }
+            break;
+          case 5: // rule specs/scanner.l:76: "namespace" :
+#line 76 "specs/scanner.l"
+{ return DefaultParser::symbol_type(DefaultParser::token::TOKEN_NAMESPACE, location()); }
+
+            break;
+          case 6: // rule specs/scanner.l:78: {identifier} :
+#line 78 "specs/scanner.l"
+{ return DefaultParser::make_IDENTIFIER(amanda::core::String(text()), location()); }
+
             break;
         }
   }
@@ -248,14 +274,197 @@ void reflex_code_INITIAL(reflex::Matcher& m)
 S0:
   m.FSM_FIND();
   c1 = m.FSM_CHAR();
-  if ('\v' <= c1) goto S3;
-  if ('\n' <= c1) return m.FSM_HALT(c1);
-  if (0 <= c1 && c1 <= '\t') goto S3;
+  if (c1 == 'n') goto S23;
+  if ('b' <= c1 && c1 <= 'z') goto S30;
+  if (c1 == 'a') goto S16;
+  if (c1 == '_') goto S30;
+  if ('A' <= c1 && c1 <= 'Z') goto S30;
+  if (c1 == '/') goto S14;
+  if (c1 == '#') goto S10;
+  if (c1 == ' ') goto S36;
+  if ('\t' <= c1 && c1 <= '\r') goto S36;
   return m.FSM_HALT(c1);
 
-S3:
+S10:
+  m.FSM_TAKE(2);
+  c1 = m.FSM_CHAR();
+  if ('\v' <= c1) goto S10;
+  if ('\n' <= c1) return m.FSM_HALT(c1);
+  if (0 <= c1 && c1 <= '\t') goto S10;
+  return m.FSM_HALT(c1);
+
+S14:
+  c1 = m.FSM_CHAR();
+  if (c1 == '*') goto S40;
+  return m.FSM_HALT(c1);
+
+S16:
+  m.FSM_TAKE(6);
+  c1 = m.FSM_CHAR();
+  if (c1 == 'n') goto S42;
+  if ('a' <= c1 && c1 <= 'z') goto S30;
+  if (c1 == '_') goto S30;
+  if ('A' <= c1 && c1 <= 'Z') goto S30;
+  if ('0' <= c1 && c1 <= '9') goto S30;
+  return m.FSM_HALT(c1);
+
+S23:
+  m.FSM_TAKE(6);
+  c1 = m.FSM_CHAR();
+  if ('b' <= c1 && c1 <= 'z') goto S30;
+  if (c1 == 'a') goto S49;
+  if (c1 == '_') goto S30;
+  if ('A' <= c1 && c1 <= 'Z') goto S30;
+  if ('0' <= c1 && c1 <= '9') goto S30;
+  return m.FSM_HALT(c1);
+
+S30:
+  m.FSM_TAKE(6);
+  c1 = m.FSM_CHAR();
+  if ('a' <= c1 && c1 <= 'z') goto S30;
+  if (c1 == '_') goto S30;
+  if ('A' <= c1 && c1 <= 'Z') goto S30;
+  if ('0' <= c1 && c1 <= '9') goto S30;
+  return m.FSM_HALT(c1);
+
+S36:
   m.FSM_TAKE(1);
+  c1 = m.FSM_CHAR();
+  if (c1 == ' ') goto S36;
+  if ('\t' <= c1 && c1 <= '\r') goto S36;
+  return m.FSM_HALT(c1);
+
+S40:
+  c1 = m.FSM_CHAR();
+  if (c1 == '*') goto S56;
+  if (0 <= c1) goto S59;
+  return m.FSM_HALT(c1);
+
+S42:
+  m.FSM_TAKE(6);
+  c1 = m.FSM_CHAR();
+  if (c1 == 'd') goto S61;
+  if ('a' <= c1 && c1 <= 'z') goto S30;
+  if (c1 == '_') goto S30;
+  if ('A' <= c1 && c1 <= 'Z') goto S30;
+  if ('0' <= c1 && c1 <= '9') goto S30;
+  return m.FSM_HALT(c1);
+
+S49:
+  m.FSM_TAKE(6);
+  c1 = m.FSM_CHAR();
+  if (c1 == 'm') goto S67;
+  if ('a' <= c1 && c1 <= 'z') goto S30;
+  if (c1 == '_') goto S30;
+  if ('A' <= c1 && c1 <= 'Z') goto S30;
+  if ('0' <= c1 && c1 <= '9') goto S30;
+  return m.FSM_HALT(c1);
+
+S56:
+  c1 = m.FSM_CHAR();
+  if (c1 == '/') goto S74;
+  if (c1 == '*') goto S76;
+  if (0 <= c1) goto S59;
+  return m.FSM_HALT(c1);
+
+S59:
+  c1 = m.FSM_CHAR();
+  if (c1 == '*') goto S76;
+  if (0 <= c1) goto S59;
+  return m.FSM_HALT(c1);
+
+S61:
+  m.FSM_TAKE(4);
+  c1 = m.FSM_CHAR();
+  if ('a' <= c1 && c1 <= 'z') goto S30;
+  if (c1 == '_') goto S30;
+  if ('A' <= c1 && c1 <= 'Z') goto S30;
+  if ('0' <= c1 && c1 <= '9') goto S30;
+  return m.FSM_HALT(c1);
+
+S67:
+  m.FSM_TAKE(6);
+  c1 = m.FSM_CHAR();
+  if (c1 == 'e') goto S79;
+  if ('a' <= c1 && c1 <= 'z') goto S30;
+  if (c1 == '_') goto S30;
+  if ('A' <= c1 && c1 <= 'Z') goto S30;
+  if ('0' <= c1 && c1 <= '9') goto S30;
+  return m.FSM_HALT(c1);
+
+S74:
+  m.FSM_TAKE(3);
   return m.FSM_HALT();
+
+S76:
+  c1 = m.FSM_CHAR();
+  if (c1 == '/') goto S86;
+  if (c1 == '*') goto S76;
+  if (0 <= c1) goto S59;
+  return m.FSM_HALT(c1);
+
+S79:
+  m.FSM_TAKE(6);
+  c1 = m.FSM_CHAR();
+  if (c1 == 's') goto S88;
+  if ('a' <= c1 && c1 <= 'z') goto S30;
+  if (c1 == '_') goto S30;
+  if ('A' <= c1 && c1 <= 'Z') goto S30;
+  if ('0' <= c1 && c1 <= '9') goto S30;
+  return m.FSM_HALT(c1);
+
+S86:
+  m.FSM_TAKE(3);
+  return m.FSM_HALT();
+
+S88:
+  m.FSM_TAKE(6);
+  c1 = m.FSM_CHAR();
+  if (c1 == 'p') goto S95;
+  if ('a' <= c1 && c1 <= 'z') goto S30;
+  if (c1 == '_') goto S30;
+  if ('A' <= c1 && c1 <= 'Z') goto S30;
+  if ('0' <= c1 && c1 <= '9') goto S30;
+  return m.FSM_HALT(c1);
+
+S95:
+  m.FSM_TAKE(6);
+  c1 = m.FSM_CHAR();
+  if ('b' <= c1 && c1 <= 'z') goto S30;
+  if (c1 == 'a') goto S102;
+  if (c1 == '_') goto S30;
+  if ('A' <= c1 && c1 <= 'Z') goto S30;
+  if ('0' <= c1 && c1 <= '9') goto S30;
+  return m.FSM_HALT(c1);
+
+S102:
+  m.FSM_TAKE(6);
+  c1 = m.FSM_CHAR();
+  if (c1 == 'c') goto S109;
+  if ('a' <= c1 && c1 <= 'z') goto S30;
+  if (c1 == '_') goto S30;
+  if ('A' <= c1 && c1 <= 'Z') goto S30;
+  if ('0' <= c1 && c1 <= '9') goto S30;
+  return m.FSM_HALT(c1);
+
+S109:
+  m.FSM_TAKE(6);
+  c1 = m.FSM_CHAR();
+  if (c1 == 'e') goto S116;
+  if ('a' <= c1 && c1 <= 'z') goto S30;
+  if (c1 == '_') goto S30;
+  if ('A' <= c1 && c1 <= 'Z') goto S30;
+  if ('0' <= c1 && c1 <= '9') goto S30;
+  return m.FSM_HALT(c1);
+
+S116:
+  m.FSM_TAKE(5);
+  c1 = m.FSM_CHAR();
+  if ('a' <= c1 && c1 <= 'z') goto S30;
+  if (c1 == '_') goto S30;
+  if ('A' <= c1 && c1 <= 'Z') goto S30;
+  if ('0' <= c1 && c1 <= '9') goto S30;
+  return m.FSM_HALT(c1);
 }
 
 } // namespace amanda

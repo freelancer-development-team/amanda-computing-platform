@@ -31,6 +31,11 @@
 #include <cstdlib>
 
 // Compiler APIs
+#include <amanda-c/Messages.h>
+
+// Amanda APIs
+#include <amanda-vm/TypeSystem.h>
+#include <amanda-vm/IO/Console.h>
 
 %}
 
@@ -52,18 +57,23 @@
 %define api.location.file       "../include/amanda-c/ParserLocations.h"
 %define api.location.include    {<amanda-c/ParserLocations.h>}
 
+// Bison error reporting
+%define parse.error detailed
+%define parse.lac   full
+
 // Pass scanner object to the parse function
 %parse-param {amanda::compiler::Scanner& lexer}
 
 // Generate prefix for token types
 %define api.token.prefix {TOKEN_}
 
-/* =================== TOKENS WITH SEMANTIC VALUES ========================== */
-
-%token EOF 0 "end of file"
+/* ========================================================================== */
 
 // The code to include with Parser.h
 %code requires {
+
+    #include <amanda-vm/TypeSystem.h>
+
     namespace amanda {
     namespace compiler 
     {
@@ -76,6 +86,7 @@
 %code {
 
     // Amanda Compiler API
+    #include <amanda-vm/TypeSystem.h>
     #include <amanda-c/Scanner.h>
 
     // C++ standard API
@@ -85,7 +96,21 @@
     #define yylex lexer.lex
 }
 
+/* =================== TOKENS WITH SEMANTIC VALUES ========================== */
+
+%token<amanda::core::String>    IDENTIFIER  "identifier"
+%token EOF                      0           "end of file"
+
 /* ================== NONTERMINALS WITH SEMANTIC VALUES ===================== */
+
+/* ============================ KEYWORDS ==================================== */
+
+%token
+    AND         "and"
+    CLASS       "class"
+    NAMESPACE   "namespace"
+    WHILE       "while"
+;
 
 %%
 
@@ -94,6 +119,44 @@ program : %empty
 
 %%
 
+static amanda::core::String makePadding(unsigned size)
+{
+    char buffer[size + 1] = {0};
+    memset(buffer, ' ', size);
+
+    return amanda::core::String(buffer);
+}
+
 void amanda::compiler::DefaultParser::error(const location& loc, const std::string& msg)
 {
+    log::error("%s:%d:%d: %s.",
+                loc.begin.filename->c_str(),
+                loc.begin.line, loc.begin.column,
+                msg.c_str());
+
+    // Print the line & error
+    core::String lineAndError(makePadding(10));
+    lineAndError.append(lexer.text()).append('\n');
+    lineAndError.appendWithFormat(" %d:%d-%d:%d ",
+                                    loc.begin.line, loc.begin.column,
+                                    loc.end.line, loc.end.column);
+
+    unsigned dt = (loc.end.column - loc.begin.column);
+    for (unsigned i = 0; i <= dt; i++)
+    {
+        if (i == 0)
+        {
+            lineAndError.append('^');
+        }
+        else if (i == dt)
+        {
+            lineAndError.append('^');
+        }
+        else
+        {
+            lineAndError.append('~');
+        }
+    }
+
+    io::console().err.println(lineAndError);
 }
