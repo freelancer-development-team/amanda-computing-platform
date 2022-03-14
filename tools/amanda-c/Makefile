@@ -50,13 +50,13 @@ CP=cp
 CCADMIN=CCadmin
 
 # RE/Flex
-LEX_SRC_DIR := ../../third-party/reflex-3.2.1
-LEX	    := ${LEX_SRC_DIR}/bin/reflex
-LEX_OPTIONS := --flex --bison -B --fast -m reflex --namespace=amanda.compiler --lexer=Scanner
+LEX_SRC_DIR	:= ../../third-party/reflex-3.2.1
+LEX		:= ${LEX_SRC_DIR}/bin/reflex
+LEX_OPTIONS	:= -B --fast -m reflex
 
 # GNU Bison
 YACC		:= bison
-YACC_OPTIONS	:=
+YACC_OPTIONS	:= -Wall --color=always
 
 # build
 build: .build-post
@@ -66,6 +66,7 @@ build: .build-post
 	utils/build-reflex.sh
 	
 	${LEX} ${LEX_OPTIONS} -o "compiler/Scanner.cpp" --header-file="include/amanda-c/Scanner.h" "specs/scanner.l"
+	${YACC} ${YACC_OPTIONS} -o "compiler/Parser.cpp" --defines="include/amanda-c/Parser.h" "specs/grammar.y"
 
 .build-post: .build-impl
 # Add your post 'build' code here...

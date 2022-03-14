@@ -31,15 +31,69 @@
 #include <cstdlib>
 
 // Compiler APIs
-#include <amanda-c/ast-packages.h>  // The Amanda AST
-#include <amanda-c/Messages.h>      // A simple logging API for this compiler.
 
 %}
 
-%entry compilation_unit
+// Bison generator language & version options
+%require "3.2"
+%skeleton "lalr1.cc"
+%language "c++"
+
+// Parser class: amanda::compiler::DefaultParser
+%define api.namespace       {amanda::compiler}
+%define api.parser.class    {DefaultParser}
+
+// Use C++ variants and generate make<TOKEN> constructors
+%define api.value.type          variant
+%define api.token.constructor
+
+// Enable Bison locations
+%locations
+%define api.location.file       "../include/amanda-c/ParserLocations.h"
+%define api.location.include    {<amanda-c/ParserLocations.h>}
+
+// Pass scanner object to the parse function
+%parse-param {amanda::compiler::Scanner& lexer}
+
+// Generate prefix for token types
+%define api.token.prefix {TOKEN_}
+
+/* =================== TOKENS WITH SEMANTIC VALUES ========================== */
+
+%token EOF 0 "end of file"
+
+// The code to include with Parser.h
+%code requires {
+    namespace amanda {
+    namespace compiler 
+    {
+        class Scanner;
+    }
+    }
+}
+
+// The code to include with Parser.cpp
+%code {
+
+    // Amanda Compiler API
+    #include <amanda-c/Scanner.h>
+
+    // C++ standard API
+    #include <iostream>
+
+    #undef yylex
+    #define yylex lexer.lex
+}
+
+/* ================== NONTERMINALS WITH SEMANTIC VALUES ===================== */
+
 %%
 
-compilation_unit    : %empty
-                    ;
+program : %empty
+        ;
 
 %%
+
+void amanda::compiler::DefaultParser::error(const location& loc, const std::string& msg)
+{
+}

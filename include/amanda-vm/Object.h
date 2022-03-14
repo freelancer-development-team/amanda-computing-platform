@@ -74,6 +74,12 @@ public:
         return getClassDynamically().is(T::getClass());
     }
 
+    template <class T>
+    T* clone()
+    {
+        return new T(this);
+    }
+
     virtual bool operator==(const Object& rhs);
     virtual bool operator==(const Object* rhs);
 
