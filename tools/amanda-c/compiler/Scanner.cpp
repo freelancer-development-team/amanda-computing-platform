@@ -203,7 +203,9 @@ amanda::compiler::DefaultParser::symbol_type amanda::compiler::Scanner::lex(void
           case 0:
             if (matcher().at_end())
             {
-              return amanda::compiler::DefaultParser::symbol_type(0, location());
+#line 67 "specs/scanner.l"
+{ return DefaultParser::make_EOF(location()); }
+
             }
             else
             {
@@ -212,8 +214,6 @@ amanda::compiler::DefaultParser::symbol_type amanda::compiler::Scanner::lex(void
             break;
           case 1: // rule specs/scanner.l:66: . :
 #line 66 "specs/scanner.l"
-
-
             break;
         }
   }

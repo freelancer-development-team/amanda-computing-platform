@@ -63,6 +63,7 @@
 
 %%
 
-.   
+.
+<<EOF>> { return DefaultParser::make_EOF(location()); }
 
 %%
