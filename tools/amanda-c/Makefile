@@ -56,7 +56,7 @@ LEX_OPTIONS	:= -B --fast -m reflex
 
 # GNU Bison
 YACC		:= bison
-YACC_OPTIONS	:= -Wall --color=always
+YACC_OPTIONS	:= -Wall --report=cex --color=always
 
 # build
 build: .build-post
@@ -66,7 +66,7 @@ build: .build-post
 	utils/build-reflex.sh
 	
 	${LEX} ${LEX_OPTIONS} -o "compiler/Scanner.cpp" --header-file="include/amanda-c/Scanner.h" "specs/scanner.l"
-	${YACC} ${YACC_OPTIONS} -o "compiler/Parser.cpp" --defines="include/amanda-c/Parser.h" "specs/grammar.y"
+	${YACC} ${YACC_OPTIONS} --report-file="specs/parser-report.txt" -o "compiler/Parser.cpp" --defines="include/amanda-c/Parser.h" "specs/grammar.y"
 
 .build-post: .build-impl
 # Add your post 'build' code here...

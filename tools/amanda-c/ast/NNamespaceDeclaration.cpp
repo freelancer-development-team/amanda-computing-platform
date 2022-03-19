@@ -16,42 +16,31 @@
  */
 
 /* 
- * File:   NBlock.cpp
+ * File:   NNamespaceDeclaration.cpp
  * Author: Javier Marrero
  * 
- * Created on March 13, 2022, 12:43 AM
+ * Created on March 19, 2022, 10:05 AM
  */
 
-#include <amanda-c/ast/NBlock.h>
+#include <amanda-c/ast/NNamespaceDeclaration.h>
 
 using namespace amanda;
 using namespace amanda::compiler::ast;
 
-using amanda::il::Value;
-using amanda::il::CodeGenContext;
-
-NBlock::NBlock()
+NNamespaceDeclaration::NNamespaceDeclaration(const core::String& name)
+:
+name(name)
 {
-    statements.reserve(5);
 }
 
-NBlock::~NBlock()
+NNamespaceDeclaration::~NNamespaceDeclaration()
 {
-    for (StatementList::iterator it = statements.begin(); it != statements.end(); ++it)
-    {
-        (*it)->release();
-    }
 }
 
-void NBlock::addStatement(NStatement* statement)
+core::String NNamespaceDeclaration::toString() const
 {
-    assert(statement != NULL && "Null pointer exception.");
-    statement->grab();
+    core::String buffer(buildHeaderString());
+    buffer.append("Namespace name: ").append(name);
 
-    statements.push_back(statement);
-}
-
-Value* NBlock::generateCode(amanda::il::CodeGenContext& context)
-{
-    return NULL;
+    return buffer;
 }

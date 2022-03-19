@@ -76,29 +76,39 @@
 // Amanda APIs
 #include <amanda-vm/TypeSystem.h>
 #include <amanda-vm/IO/Console.h>
+#include <amanda-vm/Frontend/SyntaxException.h>
 
 
-#line 82 "compiler/Parser.cpp"
+#line 83 "compiler/Parser.cpp"
 
 
 #include "Parser.h"
 
 
 // Unqualified %code blocks.
-#line 86 "specs/grammar.y"
+#line 94 "specs/grammar.y"
 
 
     // Amanda Compiler API
     #include <amanda-vm/TypeSystem.h>
     #include <amanda-c/Scanner.h>
+    #include <amanda-c/CompilationContext.h>
+    #include <amanda-c/ast-package.h>
 
     // C++ standard API
-    #include <iostream>
+    #include <vector>
+    #include <list>
+    #include <map>
 
     #undef yylex
     #define yylex lexer.lex
 
-#line 102 "compiler/Parser.cpp"
+    using namespace amanda;
+    using namespace amanda::compiler::ast;
+
+    using amanda::core::StrongReference;
+
+#line 112 "compiler/Parser.cpp"
 
 
 #ifndef YY_
@@ -189,12 +199,12 @@
 #define YYERROR         goto yyerrorlab
 #define YYRECOVERING()  (!!yyerrstatus_)
 
-#line 48 "specs/grammar.y"
+#line 53 "specs/grammar.y"
 namespace amanda { namespace compiler {
-#line 195 "compiler/Parser.cpp"
+#line 205 "compiler/Parser.cpp"
 
   /// Build a parser object.
-  DefaultParser::DefaultParser (amanda::compiler::Scanner& lexer_yyarg)
+  DefaultParser::DefaultParser (amanda::compiler::CompilationContext& compiler_yyarg, amanda::compiler::Scanner& lexer_yyarg)
 #if YYDEBUG
     : yydebug_ (false),
       yycdebug_ (&std::cerr),
@@ -202,6 +212,7 @@ namespace amanda { namespace compiler {
     :
 #endif
       yy_lac_established_ (false),
+      compiler (compiler_yyarg),
       lexer (lexer_yyarg)
   {}
 
@@ -260,6 +271,23 @@ namespace amanda { namespace compiler {
   {
     switch (that.kind ())
     {
+      case symbol_kind::S_compilation_unit: // compilation_unit
+        value.YY_MOVE_OR_COPY< amanda::compiler::ast::NCompilationUnit* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_declaration: // declaration
+        value.YY_MOVE_OR_COPY< amanda::compiler::ast::NDeclaration* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_declarations: // declarations
+        value.YY_MOVE_OR_COPY< amanda::compiler::ast::NDeclarationBlock* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_namespace_declaration: // namespace_declaration
+        value.YY_MOVE_OR_COPY< amanda::compiler::ast::NNamespaceDeclaration* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_INTEGER: // "integer literal"
       case symbol_kind::S_IDENTIFIER: // "identifier"
         value.YY_MOVE_OR_COPY< amanda::core::String > (YY_MOVE (that.value));
         break;
@@ -279,6 +307,23 @@ namespace amanda { namespace compiler {
   {
     switch (that.kind ())
     {
+      case symbol_kind::S_compilation_unit: // compilation_unit
+        value.move< amanda::compiler::ast::NCompilationUnit* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_declaration: // declaration
+        value.move< amanda::compiler::ast::NDeclaration* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_declarations: // declarations
+        value.move< amanda::compiler::ast::NDeclarationBlock* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_namespace_declaration: // namespace_declaration
+        value.move< amanda::compiler::ast::NNamespaceDeclaration* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_INTEGER: // "integer literal"
       case symbol_kind::S_IDENTIFIER: // "identifier"
         value.move< amanda::core::String > (YY_MOVE (that.value));
         break;
@@ -298,6 +343,23 @@ namespace amanda { namespace compiler {
     state = that.state;
     switch (that.kind ())
     {
+      case symbol_kind::S_compilation_unit: // compilation_unit
+        value.copy< amanda::compiler::ast::NCompilationUnit* > (that.value);
+        break;
+
+      case symbol_kind::S_declaration: // declaration
+        value.copy< amanda::compiler::ast::NDeclaration* > (that.value);
+        break;
+
+      case symbol_kind::S_declarations: // declarations
+        value.copy< amanda::compiler::ast::NDeclarationBlock* > (that.value);
+        break;
+
+      case symbol_kind::S_namespace_declaration: // namespace_declaration
+        value.copy< amanda::compiler::ast::NNamespaceDeclaration* > (that.value);
+        break;
+
+      case symbol_kind::S_INTEGER: // "integer literal"
       case symbol_kind::S_IDENTIFIER: // "identifier"
         value.copy< amanda::core::String > (that.value);
         break;
@@ -316,6 +378,23 @@ namespace amanda { namespace compiler {
     state = that.state;
     switch (that.kind ())
     {
+      case symbol_kind::S_compilation_unit: // compilation_unit
+        value.move< amanda::compiler::ast::NCompilationUnit* > (that.value);
+        break;
+
+      case symbol_kind::S_declaration: // declaration
+        value.move< amanda::compiler::ast::NDeclaration* > (that.value);
+        break;
+
+      case symbol_kind::S_declarations: // declarations
+        value.move< amanda::compiler::ast::NDeclarationBlock* > (that.value);
+        break;
+
+      case symbol_kind::S_namespace_declaration: // namespace_declaration
+        value.move< amanda::compiler::ast::NNamespaceDeclaration* > (that.value);
+        break;
+
+      case symbol_kind::S_INTEGER: // "integer literal"
       case symbol_kind::S_IDENTIFIER: // "identifier"
         value.move< amanda::core::String > (that.value);
         break;
@@ -589,6 +668,23 @@ namespace amanda { namespace compiler {
          when using variants.  */
       switch (yyr1_[yyn])
     {
+      case symbol_kind::S_compilation_unit: // compilation_unit
+        yylhs.value.emplace< amanda::compiler::ast::NCompilationUnit* > ();
+        break;
+
+      case symbol_kind::S_declaration: // declaration
+        yylhs.value.emplace< amanda::compiler::ast::NDeclaration* > ();
+        break;
+
+      case symbol_kind::S_declarations: // declarations
+        yylhs.value.emplace< amanda::compiler::ast::NDeclarationBlock* > ();
+        break;
+
+      case symbol_kind::S_namespace_declaration: // namespace_declaration
+        yylhs.value.emplace< amanda::compiler::ast::NNamespaceDeclaration* > ();
+        break;
+
+      case symbol_kind::S_INTEGER: // "integer literal"
       case symbol_kind::S_IDENTIFIER: // "identifier"
         yylhs.value.emplace< amanda::core::String > ();
         break;
@@ -613,8 +709,50 @@ namespace amanda { namespace compiler {
         {
           switch (yyn)
             {
+  case 2: // compilation_unit: declarations
+#line 200 "specs/grammar.y"
+                                        { 
+                                            NCompilationUnit* unit = new NCompilationUnit(amanda::core::String(lexer.filename.c_str()));
+                                            unit->addDeclarations(yystack_[0].value.as < amanda::compiler::ast::NDeclarationBlock* > ());    // Add all the previously declared data
 
-#line 618 "compiler/Parser.cpp"
+                                            // Add the syntax tree to the compiler interface for further processing
+                                            compiler.setAbstractSyntaxTree(unit);
+                                        }
+#line 722 "compiler/Parser.cpp"
+    break;
+
+  case 3: // declarations: %empty
+#line 209 "specs/grammar.y"
+                                            { yylhs.value.as < amanda::compiler::ast::NDeclarationBlock* > () = new NDeclarationBlock(); }
+#line 728 "compiler/Parser.cpp"
+    break;
+
+  case 4: // declarations: declaration
+#line 210 "specs/grammar.y"
+                                            { yylhs.value.as < amanda::compiler::ast::NDeclarationBlock* > () = new NDeclarationBlock(); yylhs.value.as < amanda::compiler::ast::NDeclarationBlock* > ()->addDeclaration(yystack_[0].value.as < amanda::compiler::ast::NDeclaration* > ()); }
+#line 734 "compiler/Parser.cpp"
+    break;
+
+  case 5: // declarations: declarations declaration
+#line 211 "specs/grammar.y"
+                                            { yystack_[1].value.as < amanda::compiler::ast::NDeclarationBlock* > ()->addDeclaration(yystack_[0].value.as < amanda::compiler::ast::NDeclaration* > ()); }
+#line 740 "compiler/Parser.cpp"
+    break;
+
+  case 6: // declaration: namespace_declaration
+#line 215 "specs/grammar.y"
+                                            { yylhs.value.as < amanda::compiler::ast::NDeclaration* > () = yystack_[0].value.as < amanda::compiler::ast::NNamespaceDeclaration* > (); }
+#line 746 "compiler/Parser.cpp"
+    break;
+
+  case 7: // namespace_declaration: "namespace" "identifier" '{' declarations '}'
+#line 218 "specs/grammar.y"
+                                                                    { yylhs.value.as < amanda::compiler::ast::NNamespaceDeclaration* > () = new NNamespaceDeclaration(yystack_[3].value.as < amanda::core::String > ()); yylhs.value.as < amanda::compiler::ast::NNamespaceDeclaration* > ()->addDeclarations(yystack_[1].value.as < amanda::compiler::ast::NDeclarationBlock* > ()); }
+#line 752 "compiler/Parser.cpp"
+    break;
+
+
+#line 756 "compiler/Parser.cpp"
 
             default:
               break;
@@ -798,8 +936,17 @@ namespace amanda { namespace compiler {
   {
     static const char *const yy_sname[] =
     {
-    "end of file", "error", "invalid token", "identifier", "and", "class",
-  "namespace", "while", "$accept", "program", YY_NULLPTR
+    "end of file", "error", "invalid token", "integer literal",
+  "identifier", "and", "as", "break", "case", "class", "delete", "do",
+  "else", "for", "if", "is", "interface", "namespace", "new", "not", "or",
+  "private", "protected", "public", "return", "switch", "using", "while",
+  "bool", "byte", "short", "int", "long", "ushort", "uint", "ulong",
+  "string", "char", "void", "'::'", "'<='", "'>='", "'=='", "'!='", "'++'",
+  "'--'", "'!'", "'#'", "'$'", "'%'", "'&'", "'('", "')'", "'*'", "'+'",
+  "','", "'-'", "'.'", "'/'", "':'", "';'", "'<'", "'='", "'>'", "'?'",
+  "'['", "']'", "'^'", "'{'", "'|'", "'}'", "'~'", "$accept",
+  "compilation_unit", "declarations", "declaration",
+  "namespace_declaration", YY_NULLPTR
     };
     return yy_sname[yysymbol];
   }
@@ -1064,72 +1211,85 @@ namespace amanda { namespace compiler {
   }
 
 
-  const signed char DefaultParser::yypact_ninf_ = -1;
+  const signed char DefaultParser::yypact_ninf_ = -64;
 
   const signed char DefaultParser::yytable_ninf_ = -1;
 
   const signed char
   DefaultParser::yypact_[] =
   {
-      -1,     0,    -1
+     -15,    -1,     4,   -15,   -64,   -64,   -63,   -64,   -64,   -15,
+     -17,   -64
   };
 
   const signed char
   DefaultParser::yydefact_[] =
   {
-       2,     0,     1
+       3,     0,     0,     2,     4,     6,     0,     1,     5,     3,
+       0,     7
   };
 
   const signed char
   DefaultParser::yypgoto_[] =
   {
-      -1,    -1
+     -64,   -64,    -3,    -2,   -64
   };
 
   const signed char
   DefaultParser::yydefgoto_[] =
   {
-       0,     1
+       0,     2,     3,     4,     5
   };
 
   const signed char
   DefaultParser::yytable_[] =
   {
-       2
+       1,     8,     1,     6,     7,     9,    10,     0,     8,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,    11
   };
 
   const signed char
   DefaultParser::yycheck_[] =
   {
-       0
+      17,     3,    17,     4,     0,    68,     9,    -1,    10,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    70
   };
 
   const signed char
   DefaultParser::yystos_[] =
   {
-       0,     9,     0
+       0,    17,    73,    74,    75,    76,     4,     0,    75,    68,
+      74,    70
   };
 
   const signed char
   DefaultParser::yyr1_[] =
   {
-       0,     8,     9
+       0,    72,    73,    74,    74,    74,    75,    76
   };
 
   const signed char
   DefaultParser::yyr2_[] =
   {
-       0,     2,     0
+       0,     2,     1,     0,     1,     2,     1,     5
   };
 
 
 
 
 #if YYDEBUG
-  const signed char
+  const unsigned char
   DefaultParser::yyrline_[] =
   {
-       0,   117,   117
+       0,   200,   200,   209,   210,   211,   215,   218
   };
 
   void
@@ -1160,12 +1320,26 @@ namespace amanda { namespace compiler {
 #endif // YYDEBUG
 
 
-#line 48 "specs/grammar.y"
+#line 53 "specs/grammar.y"
 } } // amanda::compiler
-#line 1166 "compiler/Parser.cpp"
+#line 1326 "compiler/Parser.cpp"
 
-#line 120 "specs/grammar.y"
+#line 221 "specs/grammar.y"
 
+
+static unsigned getDigitCount(int number)
+{
+    unsigned digitCount = 1;
+    int tmp = number;
+
+    while (tmp / 10 > 0)
+    {
+        digitCount++;
+        tmp /= 10;
+    }
+
+    return digitCount;
+}
 
 static amanda::core::String makePadding(unsigned size)
 {
@@ -1183,12 +1357,27 @@ void amanda::compiler::DefaultParser::error(const location& loc, const std::stri
                 msg.c_str());
 
     // Print the line & error
-    core::String lineAndError(makePadding(10));
-    lineAndError.append(lexer.text()).append('\n');
-    lineAndError.appendWithFormat(" %d:%d-%d:%d ",
-                                    loc.begin.line, loc.begin.column,
-                                    loc.end.line, loc.end.column);
+    int l_start = loc.begin.line;
+    int l_end = loc.end.line;
+    int c_start = loc.begin.column;
+    int c_end = loc.end.column;
 
+    core::String line(lexer.matcher().line().c_str());
+    line.replace("\t", makePadding(8));
+
+    core::String lineAndError(
+                    makePadding(
+                        getDigitCount(l_start)
+                        + getDigitCount(l_end)
+                        + getDigitCount(c_start)
+                        + getDigitCount(c_end)
+                        + 5));
+    lineAndError.append(line).append('\n');
+    lineAndError.appendWithFormat(" %d:%d-%d:%d ",
+                                    l_start, c_start,
+                                    l_end, c_end);
+
+    lineAndError.append(makePadding(c_start)).append("\033[35m");
     unsigned dt = (loc.end.column - loc.begin.column);
     for (unsigned i = 0; i <= dt; i++)
     {
@@ -1205,6 +1394,8 @@ void amanda::compiler::DefaultParser::error(const location& loc, const std::stri
             lineAndError.append('~');
         }
     }
+    lineAndError.append("\033[0m");
 
     io::console().err.println(lineAndError);
+    throw amanda::frontend::SyntaxException("syntax error.");
 }

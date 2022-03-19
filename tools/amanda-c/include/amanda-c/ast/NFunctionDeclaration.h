@@ -16,42 +16,45 @@
  */
 
 /* 
- * File:   NBlock.cpp
+ * File:   NFunctionDeclaration.h
  * Author: Javier Marrero
- * 
- * Created on March 13, 2022, 12:43 AM
+ *
+ * Created on March 18, 2022, 2:02 AM
  */
 
-#include <amanda-c/ast/NBlock.h>
+#ifndef NFUNCTIONDECLARATION_H
+#define NFUNCTIONDECLARATION_H
 
-using namespace amanda;
-using namespace amanda::compiler::ast;
+#include <amanda-c/ast/NDeclaration.h>
 
-using amanda::il::Value;
-using amanda::il::CodeGenContext;
+#include <vector>
 
-NBlock::NBlock()
+namespace amanda
 {
-    statements.reserve(5);
+namespace compiler
+{
+namespace ast
+{
+
+class NFunctionDeclaration : public NDeclaration
+{
+    AMANDA_OBJECT(NFunctionDeclaration, NDeclaration)
+
+public:
+
+    NFunctionDeclaration(const core::String& identifier);
+    virtual ~NFunctionDeclaration();
+    
+    virtual core::String toString() const;
+
+protected:
+
+    core::String identifier;
+} ;
+
+}
+}
 }
 
-NBlock::~NBlock()
-{
-    for (StatementList::iterator it = statements.begin(); it != statements.end(); ++it)
-    {
-        (*it)->release();
-    }
-}
+#endif /* NFUNCTIONDECLARATION_H */
 
-void NBlock::addStatement(NStatement* statement)
-{
-    assert(statement != NULL && "Null pointer exception.");
-    statement->grab();
-
-    statements.push_back(statement);
-}
-
-Value* NBlock::generateCode(amanda::il::CodeGenContext& context)
-{
-    return NULL;
-}

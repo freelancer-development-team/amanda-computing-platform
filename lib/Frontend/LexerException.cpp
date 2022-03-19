@@ -16,42 +16,32 @@
  */
 
 /* 
- * File:   NBlock.cpp
+ * File:   LexerException.cpp
  * Author: Javier Marrero
  * 
- * Created on March 13, 2022, 12:43 AM
+ * Created on March 18, 2022, 1:01 AM
  */
 
-#include <amanda-c/ast/NBlock.h>
+#include <amanda-vm/Frontend/LexerException.h>
 
 using namespace amanda;
-using namespace amanda::compiler::ast;
+using namespace amanda::frontend;
 
-using amanda::il::Value;
-using amanda::il::CodeGenContext;
-
-NBlock::NBlock()
+LexerException::LexerException()
+:
+core::Exception("unrecognized input (may be incompatible encoding?)")
 {
-    statements.reserve(5);
 }
 
-NBlock::~NBlock()
+LexerException::~LexerException() throw()
 {
-    for (StatementList::iterator it = statements.begin(); it != statements.end(); ++it)
-    {
-        (*it)->release();
-    }
 }
 
-void NBlock::addStatement(NStatement* statement)
+core::String LexerException::toString() const
 {
-    assert(statement != NULL && "Null pointer exception.");
-    statement->grab();
-
-    statements.push_back(statement);
+    return getMessage();
 }
 
-Value* NBlock::generateCode(amanda::il::CodeGenContext& context)
-{
-    return NULL;
-}
+
+
+

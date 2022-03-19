@@ -3,18 +3,20 @@
  * All right's reserved...
  *
  * This file belongs to the Amanda Programming Language project.
- * The Amanda Programming Language project is FREE SOFTWARE. Permission is}
- * hereby granted to copy, redistribute, modify 
+ * The Amanda Programming Language project is FREE SOFTWARE. Permission is
+ * hereby granted to copy, redistribute and modify this source code; which is
+ * provided under the terms of the GNU GPL v3+
+ *
  */
   
-namespace tests;
+namespace test;
 
 using std::io::console;
 
 int main(string[] args)
 {
-	console::println("Hello, world!");
+    console::println("Hello, world!");
 
-	/* Successfull execution */
-	return 0;
+    /* Successfull execution */
+    return 0;
 }

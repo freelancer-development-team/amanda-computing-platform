@@ -36,6 +36,7 @@
 // Amanda APIs
 #include <amanda-vm/TypeSystem.h>
 #include <amanda-vm/IO/Console.h>
+#include <amanda-vm/Frontend/SyntaxException.h>
 
 %}
 
@@ -43,6 +44,10 @@
 %require "3.2"
 %skeleton "lalr1.cc"
 %language "c++"
+
+// Instrument the parser for debugging
+///TODO: Keep an eye on this
+%define parse.trace
 
 // Parser class: amanda::compiler::DefaultParser
 %define api.namespace       {amanda::compiler}
@@ -62,6 +67,7 @@
 %define parse.lac   full
 
 // Pass scanner object to the parse function
+%parse-param {amanda::compiler::CompilationContext& compiler}
 %parse-param {amanda::compiler::Scanner& lexer}
 
 // Generate prefix for token types
@@ -73,12 +79,14 @@
 %code requires {
 
     #include <amanda-vm/TypeSystem.h>
+    #include <amanda-c/ast-package.h>
 
     namespace amanda {
-    namespace compiler 
-    {
-        class Scanner;
-    }
+        namespace compiler
+        {
+            class Scanner;
+            class CompilationContext;
+        }
     }
 }
 
@@ -88,36 +96,142 @@
     // Amanda Compiler API
     #include <amanda-vm/TypeSystem.h>
     #include <amanda-c/Scanner.h>
+    #include <amanda-c/CompilationContext.h>
+    #include <amanda-c/ast-package.h>
 
     // C++ standard API
-    #include <iostream>
+    #include <vector>
+    #include <list>
+    #include <map>
 
     #undef yylex
     #define yylex lexer.lex
+
+    using namespace amanda;
+    using namespace amanda::compiler::ast;
+
+    using amanda::core::StrongReference;
 }
 
 /* =================== TOKENS WITH SEMANTIC VALUES ========================== */
 
+%token<amanda::core::String>    INTEGER     "integer literal"
 %token<amanda::core::String>    IDENTIFIER  "identifier"
 %token EOF                      0           "end of file"
 
 /* ================== NONTERMINALS WITH SEMANTIC VALUES ===================== */
 
+%type<amanda::compiler::ast::NCompilationUnit*>         compilation_unit
+%type<amanda::compiler::ast::NDeclaration*>             declaration
+%type<amanda::compiler::ast::NDeclarationBlock*>        declarations
+%type<amanda::compiler::ast::NNamespaceDeclaration*>    namespace_declaration
+
 /* ============================ KEYWORDS ==================================== */
 
 %token
     AND         "and"
+    AS          "as"
+    BREAK       "break"
+    CASE        "case"
     CLASS       "class"
+    DELETE      "delete"
+    DO          "do"
+    ELSE        "else"
+    FOR         "for"
+    IF          "if"
+    IS          "is"
+    INTERFACE   "interface"
     NAMESPACE   "namespace"
+    NEW         "new"
+    NOT         "not"
+    OR          "or"
+    PRIVATE     "private"
+    PROTECTED   "protected"
+    PUBLIC      "public"
+    RETURN      "return"
+    SWITCH      "switch"
+    USING       "using"
     WHILE       "while"
 ;
 
+%token
+    BOOL        "bool"
+    BYTE        "byte"
+    SHORT       "short"
+    INT         "int"
+    LONG        "long"
+    USHORT      "ushort"
+    UINT        "uint"
+    ULONG       "ulong"
+    STRING      "string"
+    CHAR        "char"
+    VOID        "void"
+;
+
+/* ============================ OPERATORS =================================== */
+
+// Multibyte operator
+%token
+    SCOPE_OP "'::'"
+;
+
+// Single byte operator
+%token
+    LE  "'<='"
+    GE  "'>='"
+    EQ  "'=='"
+    NEQ "'!='"
+;
+
+%token
+    PLUSPLUS    "'++'"
+    MINUSMINUS  "'--'"
+;
+
+// Single byte operators
+%token '!' '#' '$' '%' '&' '(' ')' '*' '+' ',' '-' '.' '/' ':' ';' '<' '=' '>' '?' '[' ']' '^' '{' '|' '}' '~'
+
+// Operator precedence & associativity
+// Includes ')' for casts and '[' for array indexing
+
+%start compilation_unit
 %%
 
-program : %empty
-        ;
+compilation_unit    :   declarations    { 
+                                            NCompilationUnit* unit = new NCompilationUnit(amanda::core::String(lexer.filename.c_str()));
+                                            unit->addDeclarations($1);    // Add all the previously declared data
+
+                                            // Add the syntax tree to the compiler interface for further processing
+                                            compiler.setAbstractSyntaxTree(unit);
+                                        }
+                    ;
+
+declarations    : declaration               { $$ = new NDeclarationBlock(); $$->addDeclaration($1); }
+                | declarations declaration  { $1->addDeclaration($2); }
+                ;
+
+/* Declarations */
+declaration : namespace_declaration         { $$ = $1; }
+            ;
+
+namespace_declaration   : NAMESPACE IDENTIFIER '{' declarations '}' { $$ = new NNamespaceDeclaration($2); $$->addDeclarations($4); }
+                        ;
 
 %%
+
+static unsigned getDigitCount(int number)
+{
+    unsigned digitCount = 1;
+    int tmp = number;
+
+    while (tmp / 10 > 0)
+    {
+        digitCount++;
+        tmp /= 10;
+    }
+
+    return digitCount;
+}
 
 static amanda::core::String makePadding(unsigned size)
 {
@@ -135,12 +249,27 @@ void amanda::compiler::DefaultParser::error(const location& loc, const std::stri
                 msg.c_str());
 
     // Print the line & error
-    core::String lineAndError(makePadding(10));
-    lineAndError.append(lexer.text()).append('\n');
-    lineAndError.appendWithFormat(" %d:%d-%d:%d ",
-                                    loc.begin.line, loc.begin.column,
-                                    loc.end.line, loc.end.column);
+    int l_start = loc.begin.line;
+    int l_end = loc.end.line;
+    int c_start = loc.begin.column;
+    int c_end = loc.end.column;
 
+    core::String line(lexer.matcher().line().c_str());
+    line.replace("\t", makePadding(8));
+
+    core::String lineAndError(
+                    makePadding(
+                        getDigitCount(l_start)
+                        + getDigitCount(l_end)
+                        + getDigitCount(c_start)
+                        + getDigitCount(c_end)
+                        + 5));
+    lineAndError.append(line).append('\n');
+    lineAndError.appendWithFormat(" %d:%d-%d:%d ",
+                                    l_start, c_start,
+                                    l_end, c_end);
+
+    lineAndError.append(makePadding(c_start)).append("\033[35m");
     unsigned dt = (loc.end.column - loc.begin.column);
     for (unsigned i = 0; i <= dt; i++)
     {
@@ -157,6 +286,8 @@ void amanda::compiler::DefaultParser::error(const location& loc, const std::stri
             lineAndError.append('~');
         }
     }
+    lineAndError.append("\033[0m");
 
     io::console().err.println(lineAndError);
+    throw amanda::frontend::SyntaxException("syntax error.");
 }

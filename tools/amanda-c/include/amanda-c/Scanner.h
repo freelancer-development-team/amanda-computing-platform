@@ -85,6 +85,72 @@ namespace amanda {
 namespace compiler {
 
 class Scanner : public reflex::AbstractLexer<reflex::Matcher> {
+#line 63 "specs/scanner.l"
+
+    public:
+
+        typedef DefaultParser::token    Tokens;
+
+    protected:
+
+        typedef struct Keyword
+        {
+            const char* name;
+            int token;
+        } Keyword;
+
+    int getKeyWordToken(const char* str)
+    {
+        #define TOKEN(x)    DefaultParser::token::TOKEN_ ## x
+
+        int result = 0;
+
+        static const Keyword kwds[] =
+        {
+            { "do",         TOKEN(DO) },
+            { "else",       TOKEN(ELSE) },
+            { "class",      TOKEN(CLASS) },
+            { "interface",  TOKEN(INTERFACE) },
+            { "namespace",  TOKEN(NAMESPACE) },
+            { "return",     TOKEN(RETURN) },
+            { "using",      TOKEN(USING) },
+            { "while",      TOKEN(WHILE) },
+            // Types
+            { "void",       TOKEN(VOID) },
+            { "bool",       TOKEN(BOOL) },
+            { "int",        TOKEN(INT) },
+            { "long",       TOKEN(LONG) },
+            { "string",     TOKEN(STRING) },
+            { "char",       TOKEN(CHAR) },
+            { NULL, 0 }
+        };
+
+        for (const Keyword* kwd = &kwds[0]; kwd->name != NULL; ++kwd)
+        {
+            if (::strcmp(kwd->name, str) == 0)
+            {
+                result = kwd->token;
+                break;
+            }
+        }
+
+        #undef TOKEN
+
+        return result;
+    }
+
+    DefaultParser::symbol_type token(int id)
+    {
+        return DefaultParser::symbol_type(id, location());
+    }
+
+    DefaultParser::symbol_type integerLiteral()
+    {
+        return DefaultParser::make_INTEGER(text(), location());
+    }
+
+    void scannerException();
+
  public:
   typedef reflex::AbstractLexer<reflex::Matcher> AbstractBaseLexer;
   Scanner(

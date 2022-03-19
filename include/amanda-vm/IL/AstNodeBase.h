@@ -26,6 +26,8 @@
 #define ASTNODEBASE_H
 
 #include <amanda-vm/TypeSystem.h>
+#include <amanda-vm/IO/Console.h>
+#include <amanda-vm/IO/PrintStream.h>
 #include <amanda-vm/IL/CodeGenContext.h>
 
 #include <vector>
@@ -40,7 +42,7 @@ class Value;
 class AstNodeBase : public core::Object
 {
     AMANDA_OBJECT(AstNodeBase, core::Object)
-    
+
 public:
 
     typedef std::vector<AstNodeBase*>::iterator         Iterator;
@@ -49,16 +51,27 @@ public:
     AstNodeBase();
     virtual ~AstNodeBase();
 
-    virtual Value*  generateCode(CodeGenContext& context) = 0;
-    bool            hasChildren() const;
+    virtual Value*          generateCode(CodeGenContext& context);
+    unsigned                countChildren() const;
+    AstNodeBase&            getRootNode();
+    bool                    hasChildren() const;
+    virtual void            printNode(unsigned indent = 0, const io::PrintStream& stream = io::console().err);
+    virtual void            printNodeAndChildren(unsigned indent = 0, const io::PrintStream& stream = io::console().err);
+    virtual core::String    toString() const;
 
 protected:
 
-    void addChild(AstNodeBase* child);
+    void                    addChild(AstNodeBase* child);
+    core::String            buildHeaderString() const;
+    AstNodeBase*            getParent();
+    bool                    hasParent();
 
 private:
 
-    std::vector<AstNodeBase*> children;
+    core::String            makePadding(unsigned size);
+
+    AstNodeBase*                parent;
+    std::vector<AstNodeBase*>   children;
 } ;
 
 }

@@ -46,7 +46,8 @@ public:
     virtual ~NBlock();
 
     void addStatement(NStatement* statement);
-    
+    virtual amanda::il::Value* generateCode(amanda::il::CodeGenContext& context);
+
 protected:
 
     StatementList statements;

@@ -33,6 +33,7 @@
 #include <amanda-c/Scanner.h>
 #include <amanda-c/Parser.h>
 #include <amanda-c/ParserLocations.h>
+#include <amanda-c/ast-package.h>
 
 namespace amanda
 {
@@ -48,14 +49,19 @@ public:
     CompilationContext(io::File* input, io::File* output);
     virtual ~CompilationContext();
 
-    virtual int performSSATransformation();
+    virtual int         performSSATransformation();
+    void                printAbstractSyntaxTree();
+    void                setAbstractSyntaxTree(ast::NCompilationUnit* tree);
 
 protected:
 
-    core::StrongReference<io::File> inputFile;
-    core::StrongReference<io::File> outputFile;
-    DefaultParser*                  parserObject;
-    Scanner*                        scannerObject;
+    virtual void        performSemmanticAnnalysis();
+
+    ast::NCompilationUnit*                          abstractSyntaxTree;
+    core::StrongReference<io::File>                 inputFile;
+    core::StrongReference<io::File>                 outputFile;
+    DefaultParser*                                  parserObject;
+    Scanner*                                        scannerObject;
     
 } ;
 

@@ -36,9 +36,11 @@ namespace ast
 
 class NStatement;
 class NExpression;
+class NDeclaration;
 
 typedef std::vector<NStatement*>    StatementList;
 typedef std::vector<NExpression*>   ExpressionList;
+typedef std::vector<NDeclaration*>  DeclarationList;
 
 }
 }

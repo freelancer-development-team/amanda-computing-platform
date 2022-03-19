@@ -45,19 +45,21 @@
 #ifndef YY_YY_INCLUDE_AMANDA_C_PARSER_H_INCLUDED
 # define YY_YY_INCLUDE_AMANDA_C_PARSER_H_INCLUDED
 // "%code requires" blocks.
-#line 73 "specs/grammar.y"
+#line 79 "specs/grammar.y"
 
 
     #include <amanda-vm/TypeSystem.h>
+    #include <amanda-c/ast-package.h>
 
     namespace amanda {
-    namespace compiler 
-    {
-        class Scanner;
-    }
+        namespace compiler
+        {
+            class Scanner;
+            class CompilationContext;
+        }
     }
 
-#line 61 "include/amanda-c/Parser.h"
+#line 63 "include/amanda-c/Parser.h"
 
 
 # include <cstdlib> // std::abort
@@ -182,12 +184,12 @@
 
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 0
+# define YYDEBUG 1
 #endif
 
-#line 48 "specs/grammar.y"
+#line 53 "specs/grammar.y"
 namespace amanda { namespace compiler {
-#line 191 "include/amanda-c/Parser.h"
+#line 193 "include/amanda-c/Parser.h"
 
 
 
@@ -378,8 +380,21 @@ namespace amanda { namespace compiler {
     /// An auxiliary type to compute the largest semantic type.
     union union_type
     {
+      // compilation_unit
+      char dummy1[sizeof (amanda::compiler::ast::NCompilationUnit*)];
+
+      // declaration
+      char dummy2[sizeof (amanda::compiler::ast::NDeclaration*)];
+
+      // declarations
+      char dummy3[sizeof (amanda::compiler::ast::NDeclarationBlock*)];
+
+      // namespace_declaration
+      char dummy4[sizeof (amanda::compiler::ast::NNamespaceDeclaration*)];
+
+      // "integer literal"
       // "identifier"
-      char dummy1[sizeof (amanda::core::String)];
+      char dummy5[sizeof (amanda::core::String)];
     };
 
     /// The size of the largest semantic type.
@@ -428,11 +443,49 @@ namespace amanda { namespace compiler {
     TOKEN_EOF = 0,                 // "end of file"
     TOKEN_YYerror = 256,           // error
     TOKEN_YYUNDEF = 257,           // "invalid token"
-    TOKEN_IDENTIFIER = 258,        // "identifier"
-    TOKEN_AND = 259,               // "and"
-    TOKEN_CLASS = 260,             // "class"
-    TOKEN_NAMESPACE = 261,         // "namespace"
-    TOKEN_WHILE = 262              // "while"
+    TOKEN_INTEGER = 258,           // "integer literal"
+    TOKEN_IDENTIFIER = 259,        // "identifier"
+    TOKEN_AND = 260,               // "and"
+    TOKEN_AS = 261,                // "as"
+    TOKEN_BREAK = 262,             // "break"
+    TOKEN_CASE = 263,              // "case"
+    TOKEN_CLASS = 264,             // "class"
+    TOKEN_DELETE = 265,            // "delete"
+    TOKEN_DO = 266,                // "do"
+    TOKEN_ELSE = 267,              // "else"
+    TOKEN_FOR = 268,               // "for"
+    TOKEN_IF = 269,                // "if"
+    TOKEN_IS = 270,                // "is"
+    TOKEN_INTERFACE = 271,         // "interface"
+    TOKEN_NAMESPACE = 272,         // "namespace"
+    TOKEN_NEW = 273,               // "new"
+    TOKEN_NOT = 274,               // "not"
+    TOKEN_OR = 275,                // "or"
+    TOKEN_PRIVATE = 276,           // "private"
+    TOKEN_PROTECTED = 277,         // "protected"
+    TOKEN_PUBLIC = 278,            // "public"
+    TOKEN_RETURN = 279,            // "return"
+    TOKEN_SWITCH = 280,            // "switch"
+    TOKEN_USING = 281,             // "using"
+    TOKEN_WHILE = 282,             // "while"
+    TOKEN_BOOL = 283,              // "bool"
+    TOKEN_BYTE = 284,              // "byte"
+    TOKEN_SHORT = 285,             // "short"
+    TOKEN_INT = 286,               // "int"
+    TOKEN_LONG = 287,              // "long"
+    TOKEN_USHORT = 288,            // "ushort"
+    TOKEN_UINT = 289,              // "uint"
+    TOKEN_ULONG = 290,             // "ulong"
+    TOKEN_STRING = 291,            // "string"
+    TOKEN_CHAR = 292,              // "char"
+    TOKEN_VOID = 293,              // "void"
+    TOKEN_SCOPE_OP = 294,          // "'::'"
+    TOKEN_LE = 295,                // "'<='"
+    TOKEN_GE = 296,                // "'>='"
+    TOKEN_EQ = 297,                // "'=='"
+    TOKEN_NEQ = 298,               // "'!='"
+    TOKEN_PLUSPLUS = 299,          // "'++'"
+    TOKEN_MINUSMINUS = 300         // "'--'"
       };
       /// Backward compatibility alias (Bison 3.6).
       typedef token_kind_type yytokentype;
@@ -449,18 +502,85 @@ namespace amanda { namespace compiler {
     {
       enum symbol_kind_type
       {
-        YYNTOKENS = 8, ///< Number of tokens.
+        YYNTOKENS = 72, ///< Number of tokens.
         S_YYEMPTY = -2,
         S_YYEOF = 0,                             // "end of file"
         S_YYerror = 1,                           // error
         S_YYUNDEF = 2,                           // "invalid token"
-        S_IDENTIFIER = 3,                        // "identifier"
-        S_AND = 4,                               // "and"
-        S_CLASS = 5,                             // "class"
-        S_NAMESPACE = 6,                         // "namespace"
-        S_WHILE = 7,                             // "while"
-        S_YYACCEPT = 8,                          // $accept
-        S_program = 9                            // program
+        S_INTEGER = 3,                           // "integer literal"
+        S_IDENTIFIER = 4,                        // "identifier"
+        S_AND = 5,                               // "and"
+        S_AS = 6,                                // "as"
+        S_BREAK = 7,                             // "break"
+        S_CASE = 8,                              // "case"
+        S_CLASS = 9,                             // "class"
+        S_DELETE = 10,                           // "delete"
+        S_DO = 11,                               // "do"
+        S_ELSE = 12,                             // "else"
+        S_FOR = 13,                              // "for"
+        S_IF = 14,                               // "if"
+        S_IS = 15,                               // "is"
+        S_INTERFACE = 16,                        // "interface"
+        S_NAMESPACE = 17,                        // "namespace"
+        S_NEW = 18,                              // "new"
+        S_NOT = 19,                              // "not"
+        S_OR = 20,                               // "or"
+        S_PRIVATE = 21,                          // "private"
+        S_PROTECTED = 22,                        // "protected"
+        S_PUBLIC = 23,                           // "public"
+        S_RETURN = 24,                           // "return"
+        S_SWITCH = 25,                           // "switch"
+        S_USING = 26,                            // "using"
+        S_WHILE = 27,                            // "while"
+        S_BOOL = 28,                             // "bool"
+        S_BYTE = 29,                             // "byte"
+        S_SHORT = 30,                            // "short"
+        S_INT = 31,                              // "int"
+        S_LONG = 32,                             // "long"
+        S_USHORT = 33,                           // "ushort"
+        S_UINT = 34,                             // "uint"
+        S_ULONG = 35,                            // "ulong"
+        S_STRING = 36,                           // "string"
+        S_CHAR = 37,                             // "char"
+        S_VOID = 38,                             // "void"
+        S_SCOPE_OP = 39,                         // "'::'"
+        S_LE = 40,                               // "'<='"
+        S_GE = 41,                               // "'>='"
+        S_EQ = 42,                               // "'=='"
+        S_NEQ = 43,                              // "'!='"
+        S_PLUSPLUS = 44,                         // "'++'"
+        S_MINUSMINUS = 45,                       // "'--'"
+        S_46_ = 46,                              // '!'
+        S_47_ = 47,                              // '#'
+        S_48_ = 48,                              // '$'
+        S_49_ = 49,                              // '%'
+        S_50_ = 50,                              // '&'
+        S_51_ = 51,                              // '('
+        S_52_ = 52,                              // ')'
+        S_53_ = 53,                              // '*'
+        S_54_ = 54,                              // '+'
+        S_55_ = 55,                              // ','
+        S_56_ = 56,                              // '-'
+        S_57_ = 57,                              // '.'
+        S_58_ = 58,                              // '/'
+        S_59_ = 59,                              // ':'
+        S_60_ = 60,                              // ';'
+        S_61_ = 61,                              // '<'
+        S_62_ = 62,                              // '='
+        S_63_ = 63,                              // '>'
+        S_64_ = 64,                              // '?'
+        S_65_ = 65,                              // '['
+        S_66_ = 66,                              // ']'
+        S_67_ = 67,                              // '^'
+        S_68_ = 68,                              // '{'
+        S_69_ = 69,                              // '|'
+        S_70_ = 70,                              // '}'
+        S_71_ = 71,                              // '~'
+        S_YYACCEPT = 72,                         // $accept
+        S_compilation_unit = 73,                 // compilation_unit
+        S_declarations = 74,                     // declarations
+        S_declaration = 75,                      // declaration
+        S_namespace_declaration = 76             // namespace_declaration
       };
     };
 
@@ -497,6 +617,23 @@ namespace amanda { namespace compiler {
       {
         switch (this->kind ())
     {
+      case symbol_kind::S_compilation_unit: // compilation_unit
+        value.move< amanda::compiler::ast::NCompilationUnit* > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_declaration: // declaration
+        value.move< amanda::compiler::ast::NDeclaration* > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_declarations: // declarations
+        value.move< amanda::compiler::ast::NDeclarationBlock* > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_namespace_declaration: // namespace_declaration
+        value.move< amanda::compiler::ast::NNamespaceDeclaration* > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_INTEGER: // "integer literal"
       case symbol_kind::S_IDENTIFIER: // "identifier"
         value.move< amanda::core::String > (std::move (that.value));
         break;
@@ -520,6 +657,62 @@ namespace amanda { namespace compiler {
 #else
       basic_symbol (typename Base::kind_type t, const location_type& l)
         : Base (t)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, amanda::compiler::ast::NCompilationUnit*&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const amanda::compiler::ast::NCompilationUnit*& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, amanda::compiler::ast::NDeclaration*&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const amanda::compiler::ast::NDeclaration*& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, amanda::compiler::ast::NDeclarationBlock*&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const amanda::compiler::ast::NDeclarationBlock*& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, amanda::compiler::ast::NNamespaceDeclaration*&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const amanda::compiler::ast::NNamespaceDeclaration*& v, const location_type& l)
+        : Base (t)
+        , value (v)
         , location (l)
       {}
 #endif
@@ -560,6 +753,23 @@ namespace amanda { namespace compiler {
         // Value type destructor.
 switch (yykind)
     {
+      case symbol_kind::S_compilation_unit: // compilation_unit
+        value.template destroy< amanda::compiler::ast::NCompilationUnit* > ();
+        break;
+
+      case symbol_kind::S_declaration: // declaration
+        value.template destroy< amanda::compiler::ast::NDeclaration* > ();
+        break;
+
+      case symbol_kind::S_declarations: // declarations
+        value.template destroy< amanda::compiler::ast::NDeclarationBlock* > ();
+        break;
+
+      case symbol_kind::S_namespace_declaration: // namespace_declaration
+        value.template destroy< amanda::compiler::ast::NNamespaceDeclaration* > ();
+        break;
+
+      case symbol_kind::S_INTEGER: // "integer literal"
       case symbol_kind::S_IDENTIFIER: // "identifier"
         value.template destroy< amanda::core::String > ();
         break;
@@ -669,7 +879,7 @@ switch (yykind)
     };
 
     /// Build a parser object.
-    DefaultParser (amanda::compiler::Scanner& lexer_yyarg);
+    DefaultParser (amanda::compiler::CompilationContext& compiler_yyarg, amanda::compiler::Scanner& lexer_yyarg);
     virtual ~DefaultParser ();
 
 #if 201103L <= YY_CPLUSPLUS
@@ -762,6 +972,21 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
+      make_INTEGER (amanda::core::String v, location_type l)
+      {
+        return symbol_type (token::TOKEN_INTEGER, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_INTEGER (const amanda::core::String& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_INTEGER, v, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
       make_IDENTIFIER (amanda::core::String v, location_type l)
       {
         return symbol_type (token::TOKEN_IDENTIFIER, std::move (v), std::move (l));
@@ -792,6 +1017,51 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
+      make_AS (location_type l)
+      {
+        return symbol_type (token::TOKEN_AS, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_AS (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_AS, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_BREAK (location_type l)
+      {
+        return symbol_type (token::TOKEN_BREAK, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_BREAK (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_BREAK, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_CASE (location_type l)
+      {
+        return symbol_type (token::TOKEN_CASE, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_CASE (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_CASE, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
       make_CLASS (location_type l)
       {
         return symbol_type (token::TOKEN_CLASS, std::move (l));
@@ -802,6 +1072,111 @@ switch (yykind)
       make_CLASS (const location_type& l)
       {
         return symbol_type (token::TOKEN_CLASS, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_DELETE (location_type l)
+      {
+        return symbol_type (token::TOKEN_DELETE, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_DELETE (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_DELETE, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_DO (location_type l)
+      {
+        return symbol_type (token::TOKEN_DO, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_DO (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_DO, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_ELSE (location_type l)
+      {
+        return symbol_type (token::TOKEN_ELSE, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_ELSE (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_ELSE, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_FOR (location_type l)
+      {
+        return symbol_type (token::TOKEN_FOR, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_FOR (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_FOR, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_IF (location_type l)
+      {
+        return symbol_type (token::TOKEN_IF, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_IF (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_IF, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_IS (location_type l)
+      {
+        return symbol_type (token::TOKEN_IS, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_IS (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_IS, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_INTERFACE (location_type l)
+      {
+        return symbol_type (token::TOKEN_INTERFACE, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_INTERFACE (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_INTERFACE, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
@@ -822,6 +1197,141 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
+      make_NEW (location_type l)
+      {
+        return symbol_type (token::TOKEN_NEW, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_NEW (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_NEW, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_NOT (location_type l)
+      {
+        return symbol_type (token::TOKEN_NOT, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_NOT (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_NOT, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_OR (location_type l)
+      {
+        return symbol_type (token::TOKEN_OR, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_OR (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_OR, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_PRIVATE (location_type l)
+      {
+        return symbol_type (token::TOKEN_PRIVATE, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_PRIVATE (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_PRIVATE, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_PROTECTED (location_type l)
+      {
+        return symbol_type (token::TOKEN_PROTECTED, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_PROTECTED (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_PROTECTED, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_PUBLIC (location_type l)
+      {
+        return symbol_type (token::TOKEN_PUBLIC, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_PUBLIC (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_PUBLIC, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_RETURN (location_type l)
+      {
+        return symbol_type (token::TOKEN_RETURN, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_RETURN (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_RETURN, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_SWITCH (location_type l)
+      {
+        return symbol_type (token::TOKEN_SWITCH, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_SWITCH (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_SWITCH, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_USING (location_type l)
+      {
+        return symbol_type (token::TOKEN_USING, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_USING (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_USING, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
       make_WHILE (location_type l)
       {
         return symbol_type (token::TOKEN_WHILE, std::move (l));
@@ -832,6 +1342,276 @@ switch (yykind)
       make_WHILE (const location_type& l)
       {
         return symbol_type (token::TOKEN_WHILE, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_BOOL (location_type l)
+      {
+        return symbol_type (token::TOKEN_BOOL, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_BOOL (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_BOOL, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_BYTE (location_type l)
+      {
+        return symbol_type (token::TOKEN_BYTE, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_BYTE (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_BYTE, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_SHORT (location_type l)
+      {
+        return symbol_type (token::TOKEN_SHORT, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_SHORT (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_SHORT, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_INT (location_type l)
+      {
+        return symbol_type (token::TOKEN_INT, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_INT (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_INT, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_LONG (location_type l)
+      {
+        return symbol_type (token::TOKEN_LONG, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_LONG (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_LONG, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_USHORT (location_type l)
+      {
+        return symbol_type (token::TOKEN_USHORT, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_USHORT (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_USHORT, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_UINT (location_type l)
+      {
+        return symbol_type (token::TOKEN_UINT, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_UINT (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_UINT, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_ULONG (location_type l)
+      {
+        return symbol_type (token::TOKEN_ULONG, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_ULONG (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_ULONG, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_STRING (location_type l)
+      {
+        return symbol_type (token::TOKEN_STRING, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_STRING (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_STRING, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_CHAR (location_type l)
+      {
+        return symbol_type (token::TOKEN_CHAR, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_CHAR (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_CHAR, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_VOID (location_type l)
+      {
+        return symbol_type (token::TOKEN_VOID, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_VOID (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_VOID, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_SCOPE_OP (location_type l)
+      {
+        return symbol_type (token::TOKEN_SCOPE_OP, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_SCOPE_OP (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_SCOPE_OP, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_LE (location_type l)
+      {
+        return symbol_type (token::TOKEN_LE, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_LE (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_LE, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_GE (location_type l)
+      {
+        return symbol_type (token::TOKEN_GE, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_GE (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_GE, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_EQ (location_type l)
+      {
+        return symbol_type (token::TOKEN_EQ, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_EQ (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_EQ, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_NEQ (location_type l)
+      {
+        return symbol_type (token::TOKEN_NEQ, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_NEQ (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_NEQ, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_PLUSPLUS (location_type l)
+      {
+        return symbol_type (token::TOKEN_PLUSPLUS, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_PLUSPLUS (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_PLUSPLUS, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_MINUSMINUS (location_type l)
+      {
+        return symbol_type (token::TOKEN_MINUSMINUS, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_MINUSMINUS (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_MINUSMINUS, l);
       }
 #endif
 
@@ -942,7 +1722,7 @@ switch (yykind)
 
 #if YYDEBUG
     // YYRLINE[YYN] -- Source line where rule number YYN was defined.
-    static const signed char yyrline_[];
+    static const unsigned char yyrline_[];
     /// Report on the debug stream that the rule \a r is going to be reduced.
     virtual void yy_reduce_print_ (int r) const;
     /// Print the state stack on the debug stream.
@@ -1178,13 +1958,14 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 0,     ///< Last index in yytable_.
-      yynnts_ = 2,  ///< Number of nonterminal symbols.
-      yyfinal_ = 2 ///< Termination state number.
+      yylast_ = 53,     ///< Last index in yytable_.
+      yynnts_ = 5,  ///< Number of nonterminal symbols.
+      yyfinal_ = 7 ///< Termination state number.
     };
 
 
     // User arguments.
+    amanda::compiler::CompilationContext& compiler;
     amanda::compiler::Scanner& lexer;
 
   };
@@ -1202,16 +1983,16 @@ switch (yykind)
        0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,    46,     2,    47,    48,    49,    50,     2,
+      51,    52,    53,    54,    55,    56,    57,    58,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,    59,    60,
+      61,    62,    63,    64,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,    65,     2,    66,    67,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,    68,    69,    70,    71,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -1225,10 +2006,14 @@ switch (yykind)
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7
+       5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
+      15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
+      25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
+      35,    36,    37,    38,    39,    40,    41,    42,    43,    44,
+      45
     };
     // Last valid token kind.
-    const int code_max = 262;
+    const int code_max = 300;
 
     if (t <= 0)
       return symbol_kind::S_YYEOF;
@@ -1247,6 +2032,23 @@ switch (yykind)
   {
     switch (this->kind ())
     {
+      case symbol_kind::S_compilation_unit: // compilation_unit
+        value.copy< amanda::compiler::ast::NCompilationUnit* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_declaration: // declaration
+        value.copy< amanda::compiler::ast::NDeclaration* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_declarations: // declarations
+        value.copy< amanda::compiler::ast::NDeclarationBlock* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_namespace_declaration: // namespace_declaration
+        value.copy< amanda::compiler::ast::NNamespaceDeclaration* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_INTEGER: // "integer literal"
       case symbol_kind::S_IDENTIFIER: // "identifier"
         value.copy< amanda::core::String > (YY_MOVE (that.value));
         break;
@@ -1280,6 +2082,23 @@ switch (yykind)
     super_type::move (s);
     switch (this->kind ())
     {
+      case symbol_kind::S_compilation_unit: // compilation_unit
+        value.move< amanda::compiler::ast::NCompilationUnit* > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_declaration: // declaration
+        value.move< amanda::compiler::ast::NDeclaration* > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_declarations: // declarations
+        value.move< amanda::compiler::ast::NDeclarationBlock* > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_namespace_declaration: // namespace_declaration
+        value.move< amanda::compiler::ast::NNamespaceDeclaration* > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_INTEGER: // "integer literal"
       case symbol_kind::S_IDENTIFIER: // "identifier"
         value.move< amanda::core::String > (YY_MOVE (s.value));
         break;
@@ -1345,9 +2164,9 @@ switch (yykind)
     return this->kind ();
   }
 
-#line 48 "specs/grammar.y"
+#line 53 "specs/grammar.y"
 } } // amanda::compiler
-#line 1351 "include/amanda-c/Parser.h"
+#line 2170 "include/amanda-c/Parser.h"
 
 
 

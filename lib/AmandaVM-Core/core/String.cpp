@@ -954,7 +954,7 @@ String& String::appendWithFormat(const char* formatString, ...)
 String& String::appendWithFormatArguments(const char* formatString, va_list args)
 {
     int pos = 0, lastPos = 0;
-    int length = (int)strlen(formatString);
+    int length = (int) strlen(formatString);
 
     while (true)
     {
@@ -1049,6 +1049,20 @@ String& String::appendWithFormatArguments(const char* formatString, va_list args
             break;
         }
     }
+}
+
+String& String::format(const String& fmt, ...)
+{
+    char *buffer = new char[0x1000];   // 4096B should be enough
+
+    va_list va;
+    va_start(va, fmt);
+    ::vsnprintf(buffer, 0x1000, fmt.toCharArray(), va);
+    append(buffer);
+    va_end(va);
+
+    delete[] buffer;
+    return *this;
 }
 
 int String::compare(const char* lhs, const char* rhs, bool caseSensitive)

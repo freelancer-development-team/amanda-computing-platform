@@ -60,11 +60,80 @@
 %option bison-cc-parser=DefaultParser
 
 // Scanner class
+%class{
+    public:
+
+        typedef DefaultParser::token    Tokens;
+
+    protected:
+
+        typedef struct Keyword
+        {
+            const char* name;
+            int token;
+        } Keyword;
+
+    int getKeyWordToken(const char* str)
+    {
+        #define TOKEN(x)    DefaultParser::token::TOKEN_ ## x
+
+        int result = 0;
+
+        static const Keyword kwds[] =
+        {
+            { "do",         TOKEN(DO) },
+            { "else",       TOKEN(ELSE) },
+            { "class",      TOKEN(CLASS) },
+            { "interface",  TOKEN(INTERFACE) },
+            { "namespace",  TOKEN(NAMESPACE) },
+            { "return",     TOKEN(RETURN) },
+            { "using",      TOKEN(USING) },
+            { "while",      TOKEN(WHILE) },
+            // Types
+            { "void",       TOKEN(VOID) },
+            { "bool",       TOKEN(BOOL) },
+            { "int",        TOKEN(INT) },
+            { "long",       TOKEN(LONG) },
+            { "string",     TOKEN(STRING) },
+            { "char",       TOKEN(CHAR) },
+            { NULL, 0 }
+        };
+
+        for (const Keyword* kwd = &kwds[0]; kwd->name != NULL; ++kwd)
+        {
+            if (::strcmp(kwd->name, str) == 0)
+            {
+                result = kwd->token;
+                break;
+            }
+        }
+
+        #undef TOKEN
+
+        return result;
+    }
+
+    DefaultParser::symbol_type token(int id)
+    {
+        return DefaultParser::symbol_type(id, location());
+    }
+
+    DefaultParser::symbol_type integerLiteral()
+    {
+        return DefaultParser::make_INTEGER(text(), location());
+    }
+
+    void scannerException();
+}
 
 // Character classes
 digit                           [0-9]
 alpha                           [A-Za-z_]
 identifier                      {alpha} ( {alpha} | {digit} )*
+
+decimal_integer                 [+-]? {digit}+
+
+integer_literal                 {decimal_integer}
 
 %%
 
@@ -72,11 +141,76 @@ identifier                      {alpha} ( {alpha} | {digit} )*
 "#".*                           // ignore inline comment
 "/*"(.|\n)*?"*/"                // ignore multi-line comment using a lazy regex pattern
 
-"and"                           { return DefaultParser::symbol_type(DefaultParser::token::TOKEN_AND, location()); }
-"namespace"                     { return DefaultParser::symbol_type(DefaultParser::token::TOKEN_NAMESPACE, location()); }
+{identifier}                    {   int token = getKeyWordToken(text());
+                                    return token ?
+                                            DefaultParser::symbol_type(token, location())
+                                        :   DefaultParser::make_IDENTIFIER(amanda::core::String(text()), location());
+                                }
+{integer_literal}               { return integerLiteral(); }
 
-{identifier}                    { return DefaultParser::make_IDENTIFIER(amanda::core::String(text()), location()); }
+"{"                             { return token('{'); }
+"}"                             { return token('}'); }
+"("                             { return token('('); }
+")"                             { return token(')'); }
+"["                             { return token('['); }
+"]"                             { return token(']'); }
+
+":"                             { return token(':'); }
+","                             { return token(','); }
+";"                             { return token(';'); }
+"."                             { return token('.'); }
+"::"                            { return token(Tokens::TOKEN_SCOPE_OP); }
+
+"<="                            { return token(Tokens::TOKEN_LE); }
+">="                            { return token(Tokens::TOKEN_GE); }
+">"                             { return token('>'); }
+"<"                             { return token('<'); }
+"=="                            { return token(Tokens::TOKEN_EQ); }
+"!="                            { return token(Tokens::TOKEN_NEQ); }
+
+"="                             { return token('='); }
+"++"                            { return token(Tokens::TOKEN_PLUSPLUS); }
+"--"                            { return token(Tokens::TOKEN_MINUSMINUS); }
+
+"+"                             { return token('+'); }
+"-"                             { return token('-'); }
+"/"                             { return token('/'); }
+"*"                             { return token('*'); }
+"%"                             { return token('%'); }
+"&"                             { return token('&'); }
+"|"                             { return token('|'); }
+"~"                             { return token('~'); }
+"^"                             { return token('^'); }
 
 <<EOF>>                         { return DefaultParser::make_EOF(location()); }
+.                               { scannerException(); }
 
 %%
+
+#include <amanda-c/ParserLocations.h>
+#include <amanda-vm/Frontend/LexerException.h>
+
+namespace amanda
+{
+namespace compiler
+{
+
+void Scanner::scannerException()
+{
+    const amanda::compiler::location& loc = location();
+
+    int l_begin = loc.begin.line;
+    int l_end = loc.end.line;
+    int c_begin = loc.begin.column;
+    int c_end = loc.end.column;
+
+    log::error("%s:%d:%d: unrecognized token: '%s'. (from %d:%d to %d:%d)",
+                loc.begin.filename->c_str(),
+                l_begin, c_begin,
+                text(), l_begin, c_begin, l_end, c_end);
+
+    throw amanda::frontend::LexerException();
+}
+
+}
+}

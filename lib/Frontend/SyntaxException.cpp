@@ -16,42 +16,28 @@
  */
 
 /* 
- * File:   NBlock.cpp
+ * File:   SyntaxException.cpp
  * Author: Javier Marrero
  * 
- * Created on March 13, 2022, 12:43 AM
+ * Created on March 18, 2022, 12:42 AM
  */
 
-#include <amanda-c/ast/NBlock.h>
+#include <amanda-vm/Frontend/SyntaxException.h>
 
 using namespace amanda;
-using namespace amanda::compiler::ast;
+using namespace amanda::frontend;
 
-using amanda::il::Value;
-using amanda::il::CodeGenContext;
-
-NBlock::NBlock()
+SyntaxException::SyntaxException(const core::String& msg)
+:
+core::Exception(msg)
 {
-    statements.reserve(5);
 }
 
-NBlock::~NBlock()
+SyntaxException::~SyntaxException() throw()
 {
-    for (StatementList::iterator it = statements.begin(); it != statements.end(); ++it)
-    {
-        (*it)->release();
-    }
 }
 
-void NBlock::addStatement(NStatement* statement)
+core::String SyntaxException::toString() const
 {
-    assert(statement != NULL && "Null pointer exception.");
-    statement->grab();
-
-    statements.push_back(statement);
-}
-
-Value* NBlock::generateCode(amanda::il::CodeGenContext& context)
-{
-    return NULL;
+    return getMessage();
 }

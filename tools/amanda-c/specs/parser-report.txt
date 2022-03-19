@@ -1,0 +1,325 @@
+Terminals unused in grammar
+
+    "integer literal"
+    "and"
+    "as"
+    "break"
+    "case"
+    "class"
+    "delete"
+    "do"
+    "else"
+    "for"
+    "if"
+    "is"
+    "interface"
+    "new"
+    "not"
+    "or"
+    "private"
+    "protected"
+    "public"
+    "return"
+    "switch"
+    "using"
+    "while"
+    "bool"
+    "byte"
+    "short"
+    "int"
+    "long"
+    "ushort"
+    "uint"
+    "ulong"
+    "string"
+    "char"
+    "void"
+    "'::'"
+    "'<='"
+    "'>='"
+    "'=='"
+    "'!='"
+    "'++'"
+    "'--'"
+    '!'
+    '#'
+    '$'
+    '%'
+    '&'
+    '('
+    ')'
+    '*'
+    '+'
+    ','
+    '-'
+    '.'
+    '/'
+    ':'
+    ';'
+    '<'
+    '='
+    '>'
+    '?'
+    '['
+    ']'
+    '^'
+    '|'
+    '~'
+
+
+State 0 conflicts: 1 shift/reduce
+State 9 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: compilation_unit "end of file"
+
+    1 compilation_unit: declarations
+
+    2 declarations: %empty
+    3             | declaration
+    4             | declarations declaration
+
+    5 declaration: namespace_declaration
+
+    6 namespace_declaration: "namespace" "identifier" '{' declarations '}'
+
+
+Terminals, with rules where they appear
+
+    "end of file" (0) 0
+    '!' (33)
+    '#' (35)
+    '$' (36)
+    '%' (37)
+    '&' (38)
+    '(' (40)
+    ')' (41)
+    '*' (42)
+    '+' (43)
+    ',' (44)
+    '-' (45)
+    '.' (46)
+    '/' (47)
+    ':' (58)
+    ';' (59)
+    '<' (60)
+    '=' (61)
+    '>' (62)
+    '?' (63)
+    '[' (91)
+    ']' (93)
+    '^' (94)
+    '{' (123) 6
+    '|' (124)
+    '}' (125) 6
+    '~' (126)
+    error (256)
+    "integer literal" <amanda::core::String> (258)
+    "identifier" <amanda::core::String> (259) 6
+    "and" (260)
+    "as" (261)
+    "break" (262)
+    "case" (263)
+    "class" (264)
+    "delete" (265)
+    "do" (266)
+    "else" (267)
+    "for" (268)
+    "if" (269)
+    "is" (270)
+    "interface" (271)
+    "namespace" (272) 6
+    "new" (273)
+    "not" (274)
+    "or" (275)
+    "private" (276)
+    "protected" (277)
+    "public" (278)
+    "return" (279)
+    "switch" (280)
+    "using" (281)
+    "while" (282)
+    "bool" (283)
+    "byte" (284)
+    "short" (285)
+    "int" (286)
+    "long" (287)
+    "ushort" (288)
+    "uint" (289)
+    "ulong" (290)
+    "string" (291)
+    "char" (292)
+    "void" (293)
+    "'::'" (294)
+    "'<='" (295)
+    "'>='" (296)
+    "'=='" (297)
+    "'!='" (298)
+    "'++'" (299)
+    "'--'" (300)
+
+
+Nonterminals, with rules where they appear
+
+    $accept (72)
+        on left: 0
+    compilation_unit <amanda::compiler::ast::NCompilationUnit*> (73)
+        on left: 1
+        on right: 0
+    declarations <amanda::compiler::ast::NDeclarationBlock*> (74)
+        on left: 2 3 4
+        on right: 1 4 6
+    declaration <amanda::compiler::ast::NDeclaration*> (75)
+        on left: 5
+        on right: 3 4
+    namespace_declaration <amanda::compiler::ast::NNamespaceDeclaration*> (76)
+        on left: 6
+        on right: 5
+
+
+State 0
+
+    0 $accept: . compilation_unit "end of file"
+
+    "namespace"  shift, and go to state 1
+
+    "namespace"  [reduce using rule 2 (declarations)]
+    $default     reduce using rule 2 (declarations)
+
+    compilation_unit       go to state 2
+    declarations           go to state 3
+    declaration            go to state 4
+    namespace_declaration  go to state 5
+
+    shift/reduce conflict on token "namespace":
+        2 declarations: . %empty
+        6 namespace_declaration: . "namespace" "identifier" '{' declarations '}'
+      Example: . "namespace" "identifier" '{' '}'
+      Shift derivation
+        declarations
+        `-> declaration
+            `-> namespace_declaration
+                `-> . "namespace" "identifier" '{' declarations '}'
+                                                   `-> %empty
+      Reduce derivation
+        declarations
+        `-> declarations declaration
+            `-> .        `-> namespace_declaration
+                             `-> "namespace" "identifier" '{' declarations '}'
+                                                              `-> %empty
+
+
+
+State 1
+
+    6 namespace_declaration: "namespace" . "identifier" '{' declarations '}'
+
+    "identifier"  shift, and go to state 6
+
+
+State 2
+
+    0 $accept: compilation_unit . "end of file"
+
+    "end of file"  shift, and go to state 7
+
+
+State 3
+
+    1 compilation_unit: declarations .
+    4 declarations: declarations . declaration
+
+    "namespace"  shift, and go to state 1
+
+    $default  reduce using rule 1 (compilation_unit)
+
+    declaration            go to state 8
+    namespace_declaration  go to state 5
+
+
+State 4
+
+    3 declarations: declaration .
+
+    $default  reduce using rule 3 (declarations)
+
+
+State 5
+
+    5 declaration: namespace_declaration .
+
+    $default  reduce using rule 5 (declaration)
+
+
+State 6
+
+    6 namespace_declaration: "namespace" "identifier" . '{' declarations '}'
+
+    '{'  shift, and go to state 9
+
+
+State 7
+
+    0 $accept: compilation_unit "end of file" .
+
+    $default  accept
+
+
+State 8
+
+    4 declarations: declarations declaration .
+
+    $default  reduce using rule 4 (declarations)
+
+
+State 9
+
+    6 namespace_declaration: "namespace" "identifier" '{' . declarations '}'
+
+    "namespace"  shift, and go to state 1
+
+    "namespace"  [reduce using rule 2 (declarations)]
+    $default     reduce using rule 2 (declarations)
+
+    declarations           go to state 10
+    declaration            go to state 4
+    namespace_declaration  go to state 5
+
+    shift/reduce conflict on token "namespace":
+        2 declarations: . %empty
+        6 namespace_declaration: . "namespace" "identifier" '{' declarations '}'
+      Example: . "namespace" "identifier" '{' '}'
+      Shift derivation
+        declarations
+        `-> declaration
+            `-> namespace_declaration
+                `-> . "namespace" "identifier" '{' declarations '}'
+                                                   `-> %empty
+      Reduce derivation
+        declarations
+        `-> declarations declaration
+            `-> .        `-> namespace_declaration
+                             `-> "namespace" "identifier" '{' declarations '}'
+                                                              `-> %empty
+
+
+
+State 10
+
+    4 declarations: declarations . declaration
+    6 namespace_declaration: "namespace" "identifier" '{' declarations . '}'
+
+    "namespace"  shift, and go to state 1
+    '}'          shift, and go to state 11
+
+    declaration            go to state 8
+    namespace_declaration  go to state 5
+
+
+State 11
+
+    6 namespace_declaration: "namespace" "identifier" '{' declarations '}' .
+
+    $default  reduce using rule 6 (namespace_declaration)

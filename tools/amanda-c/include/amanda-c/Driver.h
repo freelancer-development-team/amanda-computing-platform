@@ -59,7 +59,7 @@ public:
 
     void                        addInputFile(io::File* file);
     void                        addOutputFile(io::File* file);
-    void                        compileFile(io::File* input, io::File* output);
+    int                         compileFile(io::File* input, io::File* output);
     void                        compileFiles();
     const std::list<io::File*>& getInputFiles();
     const std::list<io::File*>& getOutputFiles();

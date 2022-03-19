@@ -16,42 +16,47 @@
  */
 
 /* 
- * File:   NBlock.cpp
+ * File:   NNamespaceDeclaration.h
  * Author: Javier Marrero
- * 
- * Created on March 13, 2022, 12:43 AM
+ *
+ * Created on March 19, 2022, 10:05 AM
  */
 
-#include <amanda-c/ast/NBlock.h>
+#ifndef NNAMESPACEDECLARATION_H
+#define NNAMESPACEDECLARATION_H
 
-using namespace amanda;
-using namespace amanda::compiler::ast;
+#include <amanda-vm/TypeSystem.h>
+#include <amanda-vm/ADT/Array.h>
+#include <amanda-c/ast/NDeclaration.h>
 
-using amanda::il::Value;
-using amanda::il::CodeGenContext;
-
-NBlock::NBlock()
+namespace amanda
 {
-    statements.reserve(5);
+namespace compiler
+{
+namespace ast
+{
+
+class NNamespaceDeclaration : public NDeclaration
+{
+    AMANDA_OBJECT(NNamespaceDeclaration, NDeclaration)
+
+public:
+
+    NNamespaceDeclaration(const core::String& name);
+    virtual ~NNamespaceDeclaration();
+
+    virtual core::String toString() const;
+
+private:
+
+    const core::String name;
+} ;
+
+
+
+}
+}
 }
 
-NBlock::~NBlock()
-{
-    for (StatementList::iterator it = statements.begin(); it != statements.end(); ++it)
-    {
-        (*it)->release();
-    }
-}
+#endif /* NNAMESPACEDECLARATION_H */
 
-void NBlock::addStatement(NStatement* statement)
-{
-    assert(statement != NULL && "Null pointer exception.");
-    statement->grab();
-
-    statements.push_back(statement);
-}
-
-Value* NBlock::generateCode(amanda::il::CodeGenContext& context)
-{
-    return NULL;
-}

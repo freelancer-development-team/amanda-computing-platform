@@ -450,6 +450,8 @@ public:
     String& appendWithFormat(const char* formatString, ...);
     /// Append to string using variable arguments.
     String& appendWithFormatArguments(const char* formatString, va_list args);
+    /// Format a string and appends
+    String& format(const String& fmt, ...);
 
     /// Compare two C strings.
     static int compare(const char* str1, const char* str2, bool caseSensitive);

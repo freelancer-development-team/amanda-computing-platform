@@ -23,30 +23,78 @@
  */
 
 #include <amanda-c/CompilationContext.h>
+#include <amanda-c/Messages.h>
 
 using namespace amanda;
 using namespace amanda::compiler;
 
 CompilationContext::CompilationContext(io::File* input, io::File* output)
 :
+abstractSyntaxTree(NULL),
 inputFile(input),
-outputFile(output)
+outputFile(output),
+parserObject(NULL),
+scannerObject(NULL)
 {
+    // Create the long lived scanner object
+    reflex::Input inputObject(inputFile->getHandle());
+    scannerObject = new Scanner(inputObject);
+    scannerObject->filename = inputFile->getPath().toCharArray();
 }
 
 CompilationContext::~CompilationContext()
 {
+    // Delete all the acquired resources.
+    // Scanner, parser and abstract syntax tree instance for this compilation
+    // unit.
     delete scannerObject;
     delete parserObject;
+
+    // Release a reference to the AST object (it may be owned by other classes)
+    if (abstractSyntaxTree != NULL)
+        abstractSyntaxTree->release();
+}
+
+void CompilationContext::setAbstractSyntaxTree(ast::NCompilationUnit* tree)
+{
+    assert(tree != NULL && "Null pointer exception");
+    abstractSyntaxTree = tree;
+
+    // We are owning now a reference to the tree.
+    abstractSyntaxTree->grab();
 }
 
 int CompilationContext::performSSATransformation()
 {
-    reflex::Input inputObject(inputFile->getHandle());
-    scannerObject = new Scanner(inputObject);
-    scannerObject->filename = inputFile->getPath().toCharArray();
+    // RAII pattern
+    parserObject = new DefaultParser(*this, *scannerObject);
+    int parserResult = 1;
 
-    parserObject = new DefaultParser(*scannerObject);
+    try
+    {
+        parserResult = parserObject->parse();
+        if (parserResult == 0)
+        {
+            performSemmanticAnnalysis();
+        }
+    }
+    catch (std::exception& ex)
+    {
+        log::fatal("internal compiler fault (%s).", ex.what());
+    }
+    return parserResult;
+}
 
-    return parserObject->parse();
+void CompilationContext::printAbstractSyntaxTree()
+{
+    assert(abstractSyntaxTree != NULL && "Null pointer exception.");
+    abstractSyntaxTree->printNodeAndChildren();
+}
+
+void CompilationContext::performSemmanticAnnalysis()
+{
+    assert(abstractSyntaxTree != NULL && "Null pointer exception.");
+
+    /* Debug print the entire tree. */
+    printAbstractSyntaxTree();
 }

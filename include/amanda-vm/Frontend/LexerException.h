@@ -16,42 +16,37 @@
  */
 
 /* 
- * File:   NBlock.cpp
+ * File:   LexerException.h
  * Author: Javier Marrero
- * 
- * Created on March 13, 2022, 12:43 AM
+ *
+ * Created on March 18, 2022, 1:01 AM
  */
 
-#include <amanda-c/ast/NBlock.h>
+#ifndef LEXEREXCEPTION_H
+#define LEXEREXCEPTION_H
 
-using namespace amanda;
-using namespace amanda::compiler::ast;
+#include <amanda-vm/TypeSystem.h>
 
-using amanda::il::Value;
-using amanda::il::CodeGenContext;
-
-NBlock::NBlock()
+namespace amanda
 {
-    statements.reserve(5);
+namespace frontend
+{
+
+class LexerException : public core::Exception
+{
+    AMANDA_OBJECT(LexerException, core::Exception)
+
+public:
+
+    LexerException();
+    virtual ~LexerException() throw();
+
+    virtual core::String toString() const;
+
+} ;
+
+}
 }
 
-NBlock::~NBlock()
-{
-    for (StatementList::iterator it = statements.begin(); it != statements.end(); ++it)
-    {
-        (*it)->release();
-    }
-}
+#endif /* LEXEREXCEPTION_H */
 
-void NBlock::addStatement(NStatement* statement)
-{
-    assert(statement != NULL && "Null pointer exception.");
-    statement->grab();
-
-    statements.push_back(statement);
-}
-
-Value* NBlock::generateCode(amanda::il::CodeGenContext& context)
-{
-    return NULL;
-}

@@ -16,42 +16,39 @@
  */
 
 /* 
- * File:   NBlock.cpp
+ * File:   SyntaxException.h
  * Author: Javier Marrero
- * 
- * Created on March 13, 2022, 12:43 AM
+ *
+ * Created on March 18, 2022, 12:42 AM
  */
 
-#include <amanda-c/ast/NBlock.h>
+#ifndef SYNTAXEXCEPTION_H
+#define SYNTAXEXCEPTION_H
 
-using namespace amanda;
-using namespace amanda::compiler::ast;
+#include <amanda-vm/TypeSystem.h>
 
-using amanda::il::Value;
-using amanda::il::CodeGenContext;
-
-NBlock::NBlock()
+namespace amanda
 {
-    statements.reserve(5);
+namespace frontend
+{
+
+/**
+ * This class represents parser errors raised as a result of a syntax error.
+ */
+class SyntaxException : public core::Exception
+{
+    AMANDA_OBJECT(SyntaxException, core::Exception)
+
+public:
+
+    SyntaxException(const core::String& msg);
+    virtual ~SyntaxException() throw();
+
+    virtual core::String toString() const;
+} ;
+
+}
 }
 
-NBlock::~NBlock()
-{
-    for (StatementList::iterator it = statements.begin(); it != statements.end(); ++it)
-    {
-        (*it)->release();
-    }
-}
+#endif /* SYNTAXEXCEPTION_H */
 
-void NBlock::addStatement(NStatement* statement)
-{
-    assert(statement != NULL && "Null pointer exception.");
-    statement->grab();
-
-    statements.push_back(statement);
-}
-
-Value* NBlock::generateCode(amanda::il::CodeGenContext& context)
-{
-    return NULL;
-}

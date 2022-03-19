@@ -71,22 +71,33 @@ void Driver::addOutputFile(io::File* file)
     }
 }
 
-void Driver::compileFile(io::File* input, io::File* output)
+int Driver::compileFile(io::File* input, io::File* output)
 {
     assert(input != NULL && "Passed NULL input file.");
     assert(output != NULL && "Passed NULL output file.");
 
+    int result = 0;
     if (verbose)
     {
         log::info("Compiling file '%s' into '%s'.", input->getPath().toCharArray(),
                   output->getPath().toCharArray());
     }
 
-    core::StrongReference<CompilationContext> context = new CompilationContext(input, output);
-    if (context->performSSATransformation() != 0)
+    try
     {
-        log::error("%s: compilation failed.", input->getPath().toCharArray());
+        core::StrongReference<CompilationContext> context = new CompilationContext(input, output);
+        if (context->performSSATransformation() != 0)
+        {
+            log::error("%s: compilation failed.", input->getPath().toCharArray());
+        }
     }
+    catch (core::Exception& ex)
+    {
+        log::error("%s: %s", input->getPath().toCharArray(), ex.toString().toCharArray());
+        result = 1;
+    }
+
+    return result;
 }
 
 void Driver::compileFiles()
@@ -100,18 +111,30 @@ void Driver::compileFiles()
                   inputFiles.size() > 1 ? "s" : "");
     }
 
+    // Exit with the highest exit code
+    int result = 0;
+
     /// TODO: Handle this properly
     STL_ITERATOR(list, io::File*, o_it);
     STL_ITERATOR(list, io::File*, i_it);
     for (i_it = inputFiles.begin(),
          o_it = outputFiles.begin(); i_it != inputFiles.end(); ++i_it)
     {
-        compileFile(*i_it, *o_it);
+        int compileStatus = compileFile(*i_it, *o_it);
+        if (compileStatus > result)
+        {
+            result = compileStatus;
+        }
 
         if (o_it != outputFiles.end())
         {
             ++o_it;
         }
+    }
+
+    if (result != 0)
+    {
+        throw core::Exception("compilation failed...");
     }
 }
 
