@@ -194,7 +194,6 @@
 // Operator precedence & associativity
 // Includes ')' for casts and '[' for array indexing
 
-%start compilation_unit
 %%
 
 compilation_unit    :   declarations    { 
@@ -203,11 +202,13 @@ compilation_unit    :   declarations    {
 
                                             // Add the syntax tree to the compiler interface for further processing
                                             compiler.setAbstractSyntaxTree(unit);
+
+                                            // Set the parse tree action.
+                                            $$ = unit;
                                         }
                     ;
 
 declarations    : declaration               { $$ = new NDeclarationBlock(); $$->addDeclaration($1); }
-                | declarations declaration  { $1->addDeclaration($2); }
                 ;
 
 /* Declarations */
