@@ -52,7 +52,14 @@ private:
     const core::String name;
 } ;
 
-
+/**
+ * Builds a series of namespace objects from a single fully qualified name,
+ * and then links them. Returns the parent namespace, and a reference to the
+ * last created namespace (it is allocated on-the-fly, therefore the pointer).
+ * 
+ * @return
+ */
+NNamespaceDeclaration* buildNamespacesByQualifiedName(const core::String& name, NNamespaceDeclaration*& last);
 
 }
 }

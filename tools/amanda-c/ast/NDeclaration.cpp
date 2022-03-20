@@ -38,13 +38,19 @@ NDeclaration::~NDeclaration()
 void NDeclaration::addDeclarations(NDeclarationBlock* declarations)
 {
     assert(declarations != NULL && "Null pointer exception");
-    
+
+    //TODO: Should make this a weak reference?
+    declarations->grab();           // Now we own a reference
+
     for (DeclarationList::const_iterator it = declarations->getDeclarations().begin();
          it != declarations->getDeclarations().end(); ++it)
     {
         assert(*it != NULL && "Attempted to append NULL pointer to declaration object.");
-        addChild(static_cast<il::AstNodeBase*>(*it));
+        addChild(static_cast<il::AstNodeBase*> (*it));
     }
+
+    // Prevent a memory leak by releasing the declarations object (we shall no longer need it)
+    declarations->release();
 }
 
 // ================== NDECLARATIONBLOCK CLASS =============================== //
@@ -56,11 +62,19 @@ NDeclarationBlock::NDeclarationBlock()
 
 NDeclarationBlock::~NDeclarationBlock()
 {
+    // Destructors: preventing memory leaks since 1985
+    for (DeclarationList::iterator it = declarations.begin();
+         it != declarations.end(); ++it)
+    {
+        static_cast<NDeclaration*>(*it)->release();
+    }
 }
 
 void NDeclarationBlock::addDeclaration(NDeclaration* declaration)
 {
     assert(declaration != NULL && "Null pointer exception.");
+
+    declaration->grab();
     declarations.push_back(declaration);
 }
 

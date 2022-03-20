@@ -116,7 +116,7 @@ void AstNodeBase::printNodeAndChildren(unsigned indent, const io::PrintStream& s
     {
         for (std::vector<AstNodeBase*>::iterator it = children.begin(); it != children.end(); ++it)
         {
-            (*it)->printNodeAndChildren(++indent, stream);
+            (*it)->printNodeAndChildren(indent + 1, stream);
         }
     }
     else

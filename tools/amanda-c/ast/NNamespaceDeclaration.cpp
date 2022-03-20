@@ -23,9 +23,43 @@
  */
 
 #include <amanda-c/ast/NNamespaceDeclaration.h>
+#include <amanda-vm/ADT/Array.h>
 
 using namespace amanda;
 using namespace amanda::compiler::ast;
+
+NNamespaceDeclaration* amanda::compiler::ast::buildNamespacesByQualifiedName(const core::String& name, NNamespaceDeclaration*& last)
+{
+    // The return value
+    NNamespaceDeclaration* parent = NULL;
+
+    // We need to split the qualified name into discrete subcomponents.
+    std::vector<core::String> tokens = name.split("::");
+
+    // Create the parent node
+    parent = new NNamespaceDeclaration(tokens.front());
+    NNamespaceDeclaration* previous = parent;
+    
+    for (std::vector<core::String>::iterator it = ++(tokens.begin());
+         it != tokens.end(); ++it)
+    {
+        // Create a new namespace
+        NNamespaceDeclaration* current = new NNamespaceDeclaration(*it);
+        NDeclarationBlock* block = new NDeclarationBlock();
+
+        block->addDeclaration(current);
+        previous->addDeclarations(block);
+        previous = current;
+
+        last = current;
+    }
+
+    if (last == NULL)
+    {
+        last = parent;
+    }
+    return parent;
+}
 
 NNamespaceDeclaration::NNamespaceDeclaration(const core::String& name)
 :

@@ -23,18 +23,13 @@ Terminals unused in grammar
     "switch"
     "using"
     "while"
-    "bool"
     "byte"
     "short"
-    "int"
     "long"
     "ushort"
     "uint"
     "ulong"
-    "string"
     "char"
-    "void"
-    "'::'"
     "'<='"
     "'>='"
     "'=='"
@@ -46,29 +41,25 @@ Terminals unused in grammar
     '$'
     '%'
     '&'
-    '('
-    ')'
     '*'
     '+'
-    ','
     '-'
     '.'
     '/'
     ':'
-    ';'
     '<'
     '='
     '>'
     '?'
-    '['
-    ']'
     '^'
     '|'
     '~'
 
 
-State 0 conflicts: 1 shift/reduce
-State 9 conflicts: 1 shift/reduce
+State 0 conflicts: 6 shift/reduce
+State 27 conflicts: 6 shift/reduce
+State 28 conflicts: 6 shift/reduce
+State 33 conflicts: 6 shift/reduce
 
 
 Grammar
@@ -82,8 +73,35 @@ Grammar
     4             | declarations declaration
 
     5 declaration: namespace_declaration
+    6            | function_declaration
 
-    6 namespace_declaration: "namespace" "identifier" '{' declarations '}'
+    7 namespace_declaration: "namespace" "identifier" '{' declarations '}'
+    8                      | "namespace" name ';' declarations
+
+    9 function_declaration: type "identifier" '(' argument_list ')' '{' '}'
+
+   10 type: simple_type
+   11     | reference_type
+   12     | type '[' ']'
+
+   13 simple_type: "void"
+   14            | "bool"
+   15            | "int"
+   16            | "string"
+
+   17 reference_type: name
+
+   18 name: simple_name
+   19     | qualified_name
+
+   20 simple_name: "identifier"
+
+   21 qualified_name: "identifier" "'::'" "identifier"
+   22               | qualified_name "'::'" "identifier"
+
+   23 argument_list: %empty
+   24              | type "identifier"
+   25              | argument_list ',' type "identifier"
 
 
 Terminals, with rules where they appear
@@ -94,30 +112,30 @@ Terminals, with rules where they appear
     '$' (36)
     '%' (37)
     '&' (38)
-    '(' (40)
-    ')' (41)
+    '(' (40) 9
+    ')' (41) 9
     '*' (42)
     '+' (43)
-    ',' (44)
+    ',' (44) 25
     '-' (45)
     '.' (46)
     '/' (47)
     ':' (58)
-    ';' (59)
+    ';' (59) 8
     '<' (60)
     '=' (61)
     '>' (62)
     '?' (63)
-    '[' (91)
-    ']' (93)
+    '[' (91) 12
+    ']' (93) 12
     '^' (94)
-    '{' (123) 6
+    '{' (123) 7 9
     '|' (124)
-    '}' (125) 6
+    '}' (125) 7 9
     '~' (126)
     error (256)
     "integer literal" <amanda::core::String> (258)
-    "identifier" <amanda::core::String> (259) 6
+    "identifier" <amanda::core::String> (259) 7 9 20 21 22 24 25
     "and" (260)
     "as" (261)
     "break" (262)
@@ -130,7 +148,7 @@ Terminals, with rules where they appear
     "if" (269)
     "is" (270)
     "interface" (271)
-    "namespace" (272) 6
+    "namespace" (272) 7 8
     "new" (273)
     "not" (274)
     "or" (275)
@@ -141,18 +159,18 @@ Terminals, with rules where they appear
     "switch" (280)
     "using" (281)
     "while" (282)
-    "bool" (283)
+    "bool" (283) 14
     "byte" (284)
     "short" (285)
-    "int" (286)
+    "int" (286) 15
     "long" (287)
     "ushort" (288)
     "uint" (289)
     "ulong" (290)
-    "string" (291)
+    "string" (291) 16
     "char" (292)
-    "void" (293)
-    "'::'" (294)
+    "void" (293) 13
+    "'::'" (294) 21 22
     "'<='" (295)
     "'>='" (296)
     "'=='" (297)
@@ -170,32 +188,73 @@ Nonterminals, with rules where they appear
         on right: 0
     declarations <amanda::compiler::ast::NDeclarationBlock*> (74)
         on left: 2 3 4
-        on right: 1 4 6
+        on right: 1 4 7 8
     declaration <amanda::compiler::ast::NDeclaration*> (75)
-        on left: 5
+        on left: 5 6
         on right: 3 4
     namespace_declaration <amanda::compiler::ast::NNamespaceDeclaration*> (76)
-        on left: 6
+        on left: 7 8
         on right: 5
+    function_declaration <amanda::compiler::ast::NFunctionDeclaration*> (77)
+        on left: 9
+        on right: 6
+    type (78)
+        on left: 10 11 12
+        on right: 9 12 24 25
+    simple_type (79)
+        on left: 13 14 15 16
+        on right: 10
+    reference_type (80)
+        on left: 17
+        on right: 11
+    name <amanda::core::String> (81)
+        on left: 18 19
+        on right: 8 17
+    simple_name <amanda::core::String> (82)
+        on left: 20
+        on right: 18
+    qualified_name <amanda::core::String> (83)
+        on left: 21 22
+        on right: 19 22
+    argument_list (84)
+        on left: 23 24 25
+        on right: 9 25
 
 
 State 0
 
     0 $accept: . compilation_unit "end of file"
 
-    "namespace"  shift, and go to state 1
+    "identifier"  shift, and go to state 1
+    "namespace"   shift, and go to state 2
+    "bool"        shift, and go to state 3
+    "int"         shift, and go to state 4
+    "string"      shift, and go to state 5
+    "void"        shift, and go to state 6
 
-    "namespace"  [reduce using rule 2 (declarations)]
-    $default     reduce using rule 2 (declarations)
+    "identifier"  [reduce using rule 2 (declarations)]
+    "namespace"   [reduce using rule 2 (declarations)]
+    "bool"        [reduce using rule 2 (declarations)]
+    "int"         [reduce using rule 2 (declarations)]
+    "string"      [reduce using rule 2 (declarations)]
+    "void"        [reduce using rule 2 (declarations)]
+    $default      reduce using rule 2 (declarations)
 
-    compilation_unit       go to state 2
-    declarations           go to state 3
-    declaration            go to state 4
-    namespace_declaration  go to state 5
+    compilation_unit       go to state 7
+    declarations           go to state 8
+    declaration            go to state 9
+    namespace_declaration  go to state 10
+    function_declaration   go to state 11
+    type                   go to state 12
+    simple_type            go to state 13
+    reference_type         go to state 14
+    name                   go to state 15
+    simple_name            go to state 16
+    qualified_name         go to state 17
 
     shift/reduce conflict on token "namespace":
         2 declarations: . %empty
-        6 namespace_declaration: . "namespace" "identifier" '{' declarations '}'
+        7 namespace_declaration: . "namespace" "identifier" '{' declarations '}'
       Example: . "namespace" "identifier" '{' '}'
       Shift derivation
         declarations
@@ -210,86 +269,398 @@ State 0
                              `-> "namespace" "identifier" '{' declarations '}'
                                                               `-> %empty
 
+    shift/reduce conflict on token "namespace":
+        2 declarations: . %empty
+        8 namespace_declaration: . "namespace" name ';' declarations
+      Example: . "namespace" name ';'
+      Shift derivation
+        declarations
+        `-> declaration
+            `-> namespace_declaration
+                `-> . "namespace" name ';' declarations
+                                           `-> %empty
+      Reduce derivation
+        declarations
+        `-> declarations declaration
+            `-> .        `-> namespace_declaration
+                             `-> "namespace" name ';' declarations
+                                                      `-> %empty
+
+    shift/reduce conflict on token "void":
+        2 declarations: . %empty
+       13 simple_type: . "void"
+      Example: . "void" "identifier" '(' ')' '{' '}'
+      Shift derivation
+        declarations
+        `-> declaration
+            `-> function_declaration
+                `-> type             "identifier" '(' argument_list ')' '{' '}'
+                    `-> simple_type                   `-> %empty
+                        `-> . "void"
+      Reduce derivation
+        declarations
+        `-> declarations declaration
+            `-> .        `-> function_declaration
+                             `-> type            "identifier" '(' argument_list ')' '{' '}'
+                                 `-> simple_type                  `-> %empty
+                                     `-> "void"
+
+    shift/reduce conflict on token "bool":
+        2 declarations: . %empty
+       14 simple_type: . "bool"
+      Example: . "bool" "identifier" '(' ')' '{' '}'
+      Shift derivation
+        declarations
+        `-> declaration
+            `-> function_declaration
+                `-> type             "identifier" '(' argument_list ')' '{' '}'
+                    `-> simple_type                   `-> %empty
+                        `-> . "bool"
+      Reduce derivation
+        declarations
+        `-> declarations declaration
+            `-> .        `-> function_declaration
+                             `-> type            "identifier" '(' argument_list ')' '{' '}'
+                                 `-> simple_type                  `-> %empty
+                                     `-> "bool"
+
+    shift/reduce conflict on token "int":
+        2 declarations: . %empty
+       15 simple_type: . "int"
+      Example: . "int" "identifier" '(' ')' '{' '}'
+      Shift derivation
+        declarations
+        `-> declaration
+            `-> function_declaration
+                `-> type            "identifier" '(' argument_list ')' '{' '}'
+                    `-> simple_type                  `-> %empty
+                        `-> . "int"
+      Reduce derivation
+        declarations
+        `-> declarations declaration
+            `-> .        `-> function_declaration
+                             `-> type            "identifier" '(' argument_list ')' '{' '}'
+                                 `-> simple_type                  `-> %empty
+                                     `-> "int"
+
+    shift/reduce conflict on token "string":
+        2 declarations: . %empty
+       16 simple_type: . "string"
+      Example: . "string" "identifier" '(' ')' '{' '}'
+      Shift derivation
+        declarations
+        `-> declaration
+            `-> function_declaration
+                `-> type               "identifier" '(' argument_list ')' '{' '}'
+                    `-> simple_type                     `-> %empty
+                        `-> . "string"
+      Reduce derivation
+        declarations
+        `-> declarations declaration
+            `-> .        `-> function_declaration
+                             `-> type             "identifier" '(' argument_list ')' '{' '}'
+                                 `-> simple_type                   `-> %empty
+                                     `-> "string"
+
+    shift/reduce conflict on token "identifier":
+        2 declarations: . %empty
+       20 simple_name: . "identifier"
+      Example: . "identifier" "identifier" '(' ')' '{' '}'
+      Shift derivation
+        declarations
+        `-> declaration
+            `-> function_declaration
+                `-> type                           "identifier" '(' argument_list ')' '{' '}'
+                    `-> reference_type                              `-> %empty
+                        `-> name
+                            `-> simple_name
+                                `-> . "identifier"
+      Reduce derivation
+        declarations
+        `-> declarations declaration
+            `-> .        `-> function_declaration
+                             `-> type                         "identifier" '(' argument_list ')' '{' '}'
+                                 `-> reference_type                            `-> %empty
+                                     `-> name
+                                         `-> simple_name
+                                             `-> "identifier"
+
+    shift/reduce conflict on token "identifier":
+        2 declarations: . %empty
+       21 qualified_name: . "identifier" "'::'" "identifier"
+      Example: . "identifier" "'::'" "identifier" "identifier" '(' ')' '{' '}'
+      Shift derivation
+        declarations
+        `-> declaration
+            `-> function_declaration
+                `-> type                                               "identifier" '(' argument_list ')' '{' '}'
+                    `-> reference_type                                                  `-> %empty
+                        `-> name
+                            `-> qualified_name
+                                `-> . "identifier" "'::'" "identifier"
+      Reduce derivation
+        declarations
+        `-> declarations declaration
+            `-> .        `-> function_declaration
+                             `-> type                                             "identifier" '(' argument_list ')' '{' '}'
+                                 `-> reference_type                                                `-> %empty
+                                     `-> name
+                                         `-> qualified_name
+                                             `-> "identifier" "'::'" "identifier"
+
 
 
 State 1
 
-    6 namespace_declaration: "namespace" . "identifier" '{' declarations '}'
+   20 simple_name: "identifier" .
+   21 qualified_name: "identifier" . "'::'" "identifier"
 
-    "identifier"  shift, and go to state 6
+    "'::'"  shift, and go to state 18
+
+    $default  reduce using rule 20 (simple_name)
 
 
 State 2
 
-    0 $accept: compilation_unit . "end of file"
+    7 namespace_declaration: "namespace" . "identifier" '{' declarations '}'
+    8                      | "namespace" . name ';' declarations
 
-    "end of file"  shift, and go to state 7
+    "identifier"  shift, and go to state 19
+
+    name            go to state 20
+    simple_name     go to state 16
+    qualified_name  go to state 17
 
 
 State 3
 
-    1 compilation_unit: declarations .
-    4 declarations: declarations . declaration
+   14 simple_type: "bool" .
 
-    "namespace"  shift, and go to state 1
-
-    $default  reduce using rule 1 (compilation_unit)
-
-    declaration            go to state 8
-    namespace_declaration  go to state 5
+    $default  reduce using rule 14 (simple_type)
 
 
 State 4
+
+   15 simple_type: "int" .
+
+    $default  reduce using rule 15 (simple_type)
+
+
+State 5
+
+   16 simple_type: "string" .
+
+    $default  reduce using rule 16 (simple_type)
+
+
+State 6
+
+   13 simple_type: "void" .
+
+    $default  reduce using rule 13 (simple_type)
+
+
+State 7
+
+    0 $accept: compilation_unit . "end of file"
+
+    "end of file"  shift, and go to state 21
+
+
+State 8
+
+    1 compilation_unit: declarations .
+    4 declarations: declarations . declaration
+
+    "identifier"  shift, and go to state 1
+    "namespace"   shift, and go to state 2
+    "bool"        shift, and go to state 3
+    "int"         shift, and go to state 4
+    "string"      shift, and go to state 5
+    "void"        shift, and go to state 6
+
+    $default  reduce using rule 1 (compilation_unit)
+
+    declaration            go to state 22
+    namespace_declaration  go to state 10
+    function_declaration   go to state 11
+    type                   go to state 12
+    simple_type            go to state 13
+    reference_type         go to state 14
+    name                   go to state 15
+    simple_name            go to state 16
+    qualified_name         go to state 17
+
+
+State 9
 
     3 declarations: declaration .
 
     $default  reduce using rule 3 (declarations)
 
 
-State 5
+State 10
 
     5 declaration: namespace_declaration .
 
     $default  reduce using rule 5 (declaration)
 
 
-State 6
+State 11
 
-    6 namespace_declaration: "namespace" "identifier" . '{' declarations '}'
+    6 declaration: function_declaration .
 
-    '{'  shift, and go to state 9
+    $default  reduce using rule 6 (declaration)
 
 
-State 7
+State 12
+
+    9 function_declaration: type . "identifier" '(' argument_list ')' '{' '}'
+   12 type: type . '[' ']'
+
+    "identifier"  shift, and go to state 23
+    '['           shift, and go to state 24
+
+
+State 13
+
+   10 type: simple_type .
+
+    $default  reduce using rule 10 (type)
+
+
+State 14
+
+   11 type: reference_type .
+
+    $default  reduce using rule 11 (type)
+
+
+State 15
+
+   17 reference_type: name .
+
+    $default  reduce using rule 17 (reference_type)
+
+
+State 16
+
+   18 name: simple_name .
+
+    $default  reduce using rule 18 (name)
+
+
+State 17
+
+   19 name: qualified_name .
+   22 qualified_name: qualified_name . "'::'" "identifier"
+
+    "'::'"  shift, and go to state 25
+
+    $default  reduce using rule 19 (name)
+
+
+State 18
+
+   21 qualified_name: "identifier" "'::'" . "identifier"
+
+    "identifier"  shift, and go to state 26
+
+
+State 19
+
+    7 namespace_declaration: "namespace" "identifier" . '{' declarations '}'
+   20 simple_name: "identifier" .
+   21 qualified_name: "identifier" . "'::'" "identifier"
+
+    "'::'"  shift, and go to state 18
+    '{'     shift, and go to state 27
+
+    $default  reduce using rule 20 (simple_name)
+
+
+State 20
+
+    8 namespace_declaration: "namespace" name . ';' declarations
+
+    ';'  shift, and go to state 28
+
+
+State 21
 
     0 $accept: compilation_unit "end of file" .
 
     $default  accept
 
 
-State 8
+State 22
 
     4 declarations: declarations declaration .
 
     $default  reduce using rule 4 (declarations)
 
 
-State 9
+State 23
 
-    6 namespace_declaration: "namespace" "identifier" '{' . declarations '}'
+    9 function_declaration: type "identifier" . '(' argument_list ')' '{' '}'
 
-    "namespace"  shift, and go to state 1
+    '('  shift, and go to state 29
 
-    "namespace"  [reduce using rule 2 (declarations)]
-    $default     reduce using rule 2 (declarations)
 
-    declarations           go to state 10
-    declaration            go to state 4
-    namespace_declaration  go to state 5
+State 24
+
+   12 type: type '[' . ']'
+
+    ']'  shift, and go to state 30
+
+
+State 25
+
+   22 qualified_name: qualified_name "'::'" . "identifier"
+
+    "identifier"  shift, and go to state 31
+
+
+State 26
+
+   21 qualified_name: "identifier" "'::'" "identifier" .
+
+    $default  reduce using rule 21 (qualified_name)
+
+
+State 27
+
+    7 namespace_declaration: "namespace" "identifier" '{' . declarations '}'
+
+    "identifier"  shift, and go to state 1
+    "namespace"   shift, and go to state 2
+    "bool"        shift, and go to state 3
+    "int"         shift, and go to state 4
+    "string"      shift, and go to state 5
+    "void"        shift, and go to state 6
+
+    "identifier"  [reduce using rule 2 (declarations)]
+    "namespace"   [reduce using rule 2 (declarations)]
+    "bool"        [reduce using rule 2 (declarations)]
+    "int"         [reduce using rule 2 (declarations)]
+    "string"      [reduce using rule 2 (declarations)]
+    "void"        [reduce using rule 2 (declarations)]
+    $default      reduce using rule 2 (declarations)
+
+    declarations           go to state 32
+    declaration            go to state 9
+    namespace_declaration  go to state 10
+    function_declaration   go to state 11
+    type                   go to state 12
+    simple_type            go to state 13
+    reference_type         go to state 14
+    name                   go to state 15
+    simple_name            go to state 16
+    qualified_name         go to state 17
 
     shift/reduce conflict on token "namespace":
         2 declarations: . %empty
-        6 namespace_declaration: . "namespace" "identifier" '{' declarations '}'
+        7 namespace_declaration: . "namespace" "identifier" '{' declarations '}'
       Example: . "namespace" "identifier" '{' '}'
       Shift derivation
         declarations
@@ -304,22 +675,764 @@ State 9
                              `-> "namespace" "identifier" '{' declarations '}'
                                                               `-> %empty
 
+    shift/reduce conflict on token "namespace":
+        2 declarations: . %empty
+        8 namespace_declaration: . "namespace" name ';' declarations
+      Example: . "namespace" name ';'
+      Shift derivation
+        declarations
+        `-> declaration
+            `-> namespace_declaration
+                `-> . "namespace" name ';' declarations
+                                           `-> %empty
+      Reduce derivation
+        declarations
+        `-> declarations declaration
+            `-> .        `-> namespace_declaration
+                             `-> "namespace" name ';' declarations
+                                                      `-> %empty
+
+    shift/reduce conflict on token "void":
+        2 declarations: . %empty
+       13 simple_type: . "void"
+      Example: . "void" "identifier" '(' ')' '{' '}'
+      Shift derivation
+        declarations
+        `-> declaration
+            `-> function_declaration
+                `-> type             "identifier" '(' argument_list ')' '{' '}'
+                    `-> simple_type                   `-> %empty
+                        `-> . "void"
+      Reduce derivation
+        declarations
+        `-> declarations declaration
+            `-> .        `-> function_declaration
+                             `-> type            "identifier" '(' argument_list ')' '{' '}'
+                                 `-> simple_type                  `-> %empty
+                                     `-> "void"
+
+    shift/reduce conflict on token "bool":
+        2 declarations: . %empty
+       14 simple_type: . "bool"
+      Example: . "bool" "identifier" '(' ')' '{' '}'
+      Shift derivation
+        declarations
+        `-> declaration
+            `-> function_declaration
+                `-> type             "identifier" '(' argument_list ')' '{' '}'
+                    `-> simple_type                   `-> %empty
+                        `-> . "bool"
+      Reduce derivation
+        declarations
+        `-> declarations declaration
+            `-> .        `-> function_declaration
+                             `-> type            "identifier" '(' argument_list ')' '{' '}'
+                                 `-> simple_type                  `-> %empty
+                                     `-> "bool"
+
+    shift/reduce conflict on token "int":
+        2 declarations: . %empty
+       15 simple_type: . "int"
+      Example: . "int" "identifier" '(' ')' '{' '}'
+      Shift derivation
+        declarations
+        `-> declaration
+            `-> function_declaration
+                `-> type            "identifier" '(' argument_list ')' '{' '}'
+                    `-> simple_type                  `-> %empty
+                        `-> . "int"
+      Reduce derivation
+        declarations
+        `-> declarations declaration
+            `-> .        `-> function_declaration
+                             `-> type            "identifier" '(' argument_list ')' '{' '}'
+                                 `-> simple_type                  `-> %empty
+                                     `-> "int"
+
+    shift/reduce conflict on token "string":
+        2 declarations: . %empty
+       16 simple_type: . "string"
+      Example: . "string" "identifier" '(' ')' '{' '}'
+      Shift derivation
+        declarations
+        `-> declaration
+            `-> function_declaration
+                `-> type               "identifier" '(' argument_list ')' '{' '}'
+                    `-> simple_type                     `-> %empty
+                        `-> . "string"
+      Reduce derivation
+        declarations
+        `-> declarations declaration
+            `-> .        `-> function_declaration
+                             `-> type             "identifier" '(' argument_list ')' '{' '}'
+                                 `-> simple_type                   `-> %empty
+                                     `-> "string"
+
+    shift/reduce conflict on token "identifier":
+        2 declarations: . %empty
+       20 simple_name: . "identifier"
+      Example: . "identifier" "identifier" '(' ')' '{' '}'
+      Shift derivation
+        declarations
+        `-> declaration
+            `-> function_declaration
+                `-> type                           "identifier" '(' argument_list ')' '{' '}'
+                    `-> reference_type                              `-> %empty
+                        `-> name
+                            `-> simple_name
+                                `-> . "identifier"
+      Reduce derivation
+        declarations
+        `-> declarations declaration
+            `-> .        `-> function_declaration
+                             `-> type                         "identifier" '(' argument_list ')' '{' '}'
+                                 `-> reference_type                            `-> %empty
+                                     `-> name
+                                         `-> simple_name
+                                             `-> "identifier"
+
+    shift/reduce conflict on token "identifier":
+        2 declarations: . %empty
+       21 qualified_name: . "identifier" "'::'" "identifier"
+      Example: . "identifier" "'::'" "identifier" "identifier" '(' ')' '{' '}'
+      Shift derivation
+        declarations
+        `-> declaration
+            `-> function_declaration
+                `-> type                                               "identifier" '(' argument_list ')' '{' '}'
+                    `-> reference_type                                                  `-> %empty
+                        `-> name
+                            `-> qualified_name
+                                `-> . "identifier" "'::'" "identifier"
+      Reduce derivation
+        declarations
+        `-> declarations declaration
+            `-> .        `-> function_declaration
+                             `-> type                                             "identifier" '(' argument_list ')' '{' '}'
+                                 `-> reference_type                                                `-> %empty
+                                     `-> name
+                                         `-> qualified_name
+                                             `-> "identifier" "'::'" "identifier"
 
 
-State 10
+
+State 28
+
+    8 namespace_declaration: "namespace" name ';' . declarations
+
+    "identifier"  shift, and go to state 1
+    "namespace"   shift, and go to state 2
+    "bool"        shift, and go to state 3
+    "int"         shift, and go to state 4
+    "string"      shift, and go to state 5
+    "void"        shift, and go to state 6
+
+    "identifier"  [reduce using rule 2 (declarations)]
+    "namespace"   [reduce using rule 2 (declarations)]
+    "bool"        [reduce using rule 2 (declarations)]
+    "int"         [reduce using rule 2 (declarations)]
+    "string"      [reduce using rule 2 (declarations)]
+    "void"        [reduce using rule 2 (declarations)]
+    $default      reduce using rule 2 (declarations)
+
+    declarations           go to state 33
+    declaration            go to state 9
+    namespace_declaration  go to state 10
+    function_declaration   go to state 11
+    type                   go to state 12
+    simple_type            go to state 13
+    reference_type         go to state 14
+    name                   go to state 15
+    simple_name            go to state 16
+    qualified_name         go to state 17
+
+    shift/reduce conflict on token "namespace":
+        2 declarations: . %empty
+        7 namespace_declaration: . "namespace" "identifier" '{' declarations '}'
+      First example: "namespace" name ';' . "namespace" "identifier" '{' declarations '}' "end of file"
+      Shift derivation
+        $accept
+        `-> compilation_unit                                                                             "end of file"
+            `-> declarations
+                `-> namespace_declaration
+                    `-> "namespace" name ';' declarations
+                                             `-> declaration
+                                                 `-> namespace_declaration
+                                                     `-> . "namespace" "identifier" '{' declarations '}'
+      Second example: "namespace" name ';' . "namespace" "identifier" '{' declarations '}' "end of file"
+      Reduce derivation
+        $accept
+        `-> compilation_unit                                                                                            "end of file"
+            `-> declarations
+                `-> declaration
+                    `-> namespace_declaration
+                        `-> "namespace" name ';' declarations
+                                                 `-> declarations declaration
+                                                     `-> .        `-> namespace_declaration
+                                                                      `-> "namespace" "identifier" '{' declarations '}'
+
+    shift/reduce conflict on token "namespace":
+        2 declarations: . %empty
+        8 namespace_declaration: . "namespace" name ';' declarations
+      First example: "namespace" name ';' . "namespace" name ';' declarations "end of file"
+      Shift derivation
+        $accept
+        `-> compilation_unit                                                                 "end of file"
+            `-> declarations
+                `-> namespace_declaration
+                    `-> "namespace" name ';' declarations
+                                             `-> declaration
+                                                 `-> namespace_declaration
+                                                     `-> . "namespace" name ';' declarations
+      Second example: "namespace" name ';' . "namespace" "identifier" '{' declarations '}' "end of file"
+      Reduce derivation
+        $accept
+        `-> compilation_unit                                                                                            "end of file"
+            `-> declarations
+                `-> declaration
+                    `-> namespace_declaration
+                        `-> "namespace" name ';' declarations
+                                                 `-> declarations declaration
+                                                     `-> .        `-> namespace_declaration
+                                                                      `-> "namespace" "identifier" '{' declarations '}'
+
+    shift/reduce conflict on token "void":
+        2 declarations: . %empty
+       13 simple_type: . "void"
+      First example: "namespace" name ';' . "void" "identifier" '(' argument_list ')' '{' '}' "end of file"
+      Shift derivation
+        $accept
+        `-> compilation_unit                                                                                         "end of file"
+            `-> declarations
+                `-> namespace_declaration
+                    `-> "namespace" name ';' declarations
+                                             `-> declaration
+                                                 `-> function_declaration
+                                                     `-> type             "identifier" '(' argument_list ')' '{' '}'
+                                                         `-> simple_type
+                                                             `-> . "void"
+      Second example: "namespace" name ';' . "void" "identifier" '(' argument_list ')' '{' '}' "end of file"
+      Reduce derivation
+        $accept
+        `-> compilation_unit                                                                                                         "end of file"
+            `-> declarations
+                `-> declaration
+                    `-> namespace_declaration
+                        `-> "namespace" name ';' declarations
+                                                 `-> declarations declaration
+                                                     `-> .        `-> function_declaration
+                                                                      `-> type            "identifier" '(' argument_list ')' '{' '}'
+                                                                          `-> simple_type
+                                                                              `-> "void"
+
+    shift/reduce conflict on token "bool":
+        2 declarations: . %empty
+       14 simple_type: . "bool"
+      First example: "namespace" name ';' . "bool" "identifier" '(' argument_list ')' '{' '}' "end of file"
+      Shift derivation
+        $accept
+        `-> compilation_unit                                                                                         "end of file"
+            `-> declarations
+                `-> namespace_declaration
+                    `-> "namespace" name ';' declarations
+                                             `-> declaration
+                                                 `-> function_declaration
+                                                     `-> type             "identifier" '(' argument_list ')' '{' '}'
+                                                         `-> simple_type
+                                                             `-> . "bool"
+      Second example: "namespace" name ';' . "bool" "identifier" '(' argument_list ')' '{' '}' "end of file"
+      Reduce derivation
+        $accept
+        `-> compilation_unit                                                                                                         "end of file"
+            `-> declarations
+                `-> declaration
+                    `-> namespace_declaration
+                        `-> "namespace" name ';' declarations
+                                                 `-> declarations declaration
+                                                     `-> .        `-> function_declaration
+                                                                      `-> type            "identifier" '(' argument_list ')' '{' '}'
+                                                                          `-> simple_type
+                                                                              `-> "bool"
+
+    shift/reduce conflict on token "int":
+        2 declarations: . %empty
+       15 simple_type: . "int"
+      First example: "namespace" name ';' . "int" "identifier" '(' argument_list ')' '{' '}' "end of file"
+      Shift derivation
+        $accept
+        `-> compilation_unit                                                                                        "end of file"
+            `-> declarations
+                `-> namespace_declaration
+                    `-> "namespace" name ';' declarations
+                                             `-> declaration
+                                                 `-> function_declaration
+                                                     `-> type            "identifier" '(' argument_list ')' '{' '}'
+                                                         `-> simple_type
+                                                             `-> . "int"
+      Second example: "namespace" name ';' . "int" "identifier" '(' argument_list ')' '{' '}' "end of file"
+      Reduce derivation
+        $accept
+        `-> compilation_unit                                                                                                         "end of file"
+            `-> declarations
+                `-> declaration
+                    `-> namespace_declaration
+                        `-> "namespace" name ';' declarations
+                                                 `-> declarations declaration
+                                                     `-> .        `-> function_declaration
+                                                                      `-> type            "identifier" '(' argument_list ')' '{' '}'
+                                                                          `-> simple_type
+                                                                              `-> "int"
+
+    shift/reduce conflict on token "string":
+        2 declarations: . %empty
+       16 simple_type: . "string"
+      First example: "namespace" name ';' . "string" "identifier" '(' argument_list ')' '{' '}' "end of file"
+      Shift derivation
+        $accept
+        `-> compilation_unit                                                                                           "end of file"
+            `-> declarations
+                `-> namespace_declaration
+                    `-> "namespace" name ';' declarations
+                                             `-> declaration
+                                                 `-> function_declaration
+                                                     `-> type               "identifier" '(' argument_list ')' '{' '}'
+                                                         `-> simple_type
+                                                             `-> . "string"
+      Second example: "namespace" name ';' . "string" "identifier" '(' argument_list ')' '{' '}' "end of file"
+      Reduce derivation
+        $accept
+        `-> compilation_unit                                                                                                          "end of file"
+            `-> declarations
+                `-> declaration
+                    `-> namespace_declaration
+                        `-> "namespace" name ';' declarations
+                                                 `-> declarations declaration
+                                                     `-> .        `-> function_declaration
+                                                                      `-> type             "identifier" '(' argument_list ')' '{' '}'
+                                                                          `-> simple_type
+                                                                              `-> "string"
+
+    shift/reduce conflict on token "identifier":
+        2 declarations: . %empty
+       20 simple_name: . "identifier"
+      First example: "namespace" name ';' . "identifier" "identifier" '(' argument_list ')' '{' '}' "end of file"
+      Shift derivation
+        $accept
+        `-> compilation_unit                                                                                                       "end of file"
+            `-> declarations
+                `-> namespace_declaration
+                    `-> "namespace" name ';' declarations
+                                             `-> declaration
+                                                 `-> function_declaration
+                                                     `-> type                           "identifier" '(' argument_list ')' '{' '}'
+                                                         `-> reference_type
+                                                             `-> name
+                                                                 `-> simple_name
+                                                                     `-> . "identifier"
+      Second example: "namespace" name ';' . "identifier" "identifier" '(' argument_list ')' '{' '}' "end of file"
+      Reduce derivation
+        $accept
+        `-> compilation_unit                                                                                                                      "end of file"
+            `-> declarations
+                `-> declaration
+                    `-> namespace_declaration
+                        `-> "namespace" name ';' declarations
+                                                 `-> declarations declaration
+                                                     `-> .        `-> function_declaration
+                                                                      `-> type                         "identifier" '(' argument_list ')' '{' '}'
+                                                                          `-> reference_type
+                                                                              `-> name
+                                                                                  `-> simple_name
+                                                                                      `-> "identifier"
+
+    shift/reduce conflict on token "identifier":
+        2 declarations: . %empty
+       21 qualified_name: . "identifier" "'::'" "identifier"
+      First example: "namespace" name ';' . "identifier" "'::'" "identifier" "identifier" '(' argument_list ')' '{' '}' "end of file"
+      Shift derivation
+        $accept
+        `-> compilation_unit                                                                                                                           "end of file"
+            `-> declarations
+                `-> namespace_declaration
+                    `-> "namespace" name ';' declarations
+                                             `-> declaration
+                                                 `-> function_declaration
+                                                     `-> type                                               "identifier" '(' argument_list ')' '{' '}'
+                                                         `-> reference_type
+                                                             `-> name
+                                                                 `-> qualified_name
+                                                                     `-> . "identifier" "'::'" "identifier"
+      Second example: "namespace" name ';' . "identifier" "identifier" '(' argument_list ')' '{' '}' "end of file"
+      Reduce derivation
+        $accept
+        `-> compilation_unit                                                                                                                      "end of file"
+            `-> declarations
+                `-> declaration
+                    `-> namespace_declaration
+                        `-> "namespace" name ';' declarations
+                                                 `-> declarations declaration
+                                                     `-> .        `-> function_declaration
+                                                                      `-> type                         "identifier" '(' argument_list ')' '{' '}'
+                                                                          `-> reference_type
+                                                                              `-> name
+                                                                                  `-> simple_name
+                                                                                      `-> "identifier"
+
+
+
+State 29
+
+    9 function_declaration: type "identifier" '(' . argument_list ')' '{' '}'
+
+    "identifier"  shift, and go to state 1
+    "bool"        shift, and go to state 3
+    "int"         shift, and go to state 4
+    "string"      shift, and go to state 5
+    "void"        shift, and go to state 6
+
+    $default  reduce using rule 23 (argument_list)
+
+    type            go to state 34
+    simple_type     go to state 13
+    reference_type  go to state 14
+    name            go to state 15
+    simple_name     go to state 16
+    qualified_name  go to state 17
+    argument_list   go to state 35
+
+
+State 30
+
+   12 type: type '[' ']' .
+
+    $default  reduce using rule 12 (type)
+
+
+State 31
+
+   22 qualified_name: qualified_name "'::'" "identifier" .
+
+    $default  reduce using rule 22 (qualified_name)
+
+
+State 32
 
     4 declarations: declarations . declaration
-    6 namespace_declaration: "namespace" "identifier" '{' declarations . '}'
+    7 namespace_declaration: "namespace" "identifier" '{' declarations . '}'
 
-    "namespace"  shift, and go to state 1
-    '}'          shift, and go to state 11
+    "identifier"  shift, and go to state 1
+    "namespace"   shift, and go to state 2
+    "bool"        shift, and go to state 3
+    "int"         shift, and go to state 4
+    "string"      shift, and go to state 5
+    "void"        shift, and go to state 6
+    '}'           shift, and go to state 36
 
-    declaration            go to state 8
-    namespace_declaration  go to state 5
+    declaration            go to state 22
+    namespace_declaration  go to state 10
+    function_declaration   go to state 11
+    type                   go to state 12
+    simple_type            go to state 13
+    reference_type         go to state 14
+    name                   go to state 15
+    simple_name            go to state 16
+    qualified_name         go to state 17
 
 
-State 11
+State 33
 
-    6 namespace_declaration: "namespace" "identifier" '{' declarations '}' .
+    4 declarations: declarations . declaration
+    8 namespace_declaration: "namespace" name ';' declarations .
 
-    $default  reduce using rule 6 (namespace_declaration)
+    "identifier"  shift, and go to state 1
+    "namespace"   shift, and go to state 2
+    "bool"        shift, and go to state 3
+    "int"         shift, and go to state 4
+    "string"      shift, and go to state 5
+    "void"        shift, and go to state 6
+
+    "identifier"  [reduce using rule 8 (namespace_declaration)]
+    "namespace"   [reduce using rule 8 (namespace_declaration)]
+    "bool"        [reduce using rule 8 (namespace_declaration)]
+    "int"         [reduce using rule 8 (namespace_declaration)]
+    "string"      [reduce using rule 8 (namespace_declaration)]
+    "void"        [reduce using rule 8 (namespace_declaration)]
+    $default      reduce using rule 8 (namespace_declaration)
+
+    declaration            go to state 22
+    namespace_declaration  go to state 10
+    function_declaration   go to state 11
+    type                   go to state 12
+    simple_type            go to state 13
+    reference_type         go to state 14
+    name                   go to state 15
+    simple_name            go to state 16
+    qualified_name         go to state 17
+
+    shift/reduce conflict on token "namespace":
+        8 namespace_declaration: "namespace" name ';' declarations .
+        7 namespace_declaration: . "namespace" "identifier" '{' declarations '}'
+      Example: "namespace" name ';' declarations . "namespace" "identifier" '{' '}'
+      Shift derivation
+        declarations
+        `-> declaration
+            `-> namespace_declaration
+                `-> "namespace" name ';' declarations
+                                         `-> declarations declaration
+                                                          `-> namespace_declaration
+                                                              `-> . "namespace" "identifier" '{' declarations '}'
+                                                                                                 `-> %empty
+      Reduce derivation
+        declarations
+        `-> declarations                                    declaration
+            `-> declaration                                 `-> namespace_declaration
+                `-> namespace_declaration                       `-> "namespace" "identifier" '{' declarations '}'
+                    `-> "namespace" name ';' declarations .                                      `-> %empty
+
+    shift/reduce conflict on token "namespace":
+        8 namespace_declaration: "namespace" name ';' declarations .
+        8 namespace_declaration: . "namespace" name ';' declarations
+      Example: "namespace" name ';' declarations . "namespace" name ';'
+      Shift derivation
+        declarations
+        `-> declaration
+            `-> namespace_declaration
+                `-> "namespace" name ';' declarations
+                                         `-> declarations declaration
+                                                          `-> namespace_declaration
+                                                              `-> . "namespace" name ';' declarations
+                                                                                         `-> %empty
+      Reduce derivation
+        declarations
+        `-> declarations                                    declaration
+            `-> declaration                                 `-> namespace_declaration
+                `-> namespace_declaration                       `-> "namespace" name ';' declarations
+                    `-> "namespace" name ';' declarations .                              `-> %empty
+
+    shift/reduce conflict on token "void":
+        8 namespace_declaration: "namespace" name ';' declarations .
+       13 simple_type: . "void"
+      Example: "namespace" name ';' declarations . "void" "identifier" '(' ')' '{' '}'
+      Shift derivation
+        declarations
+        `-> declaration
+            `-> namespace_declaration
+                `-> "namespace" name ';' declarations
+                                         `-> declarations declaration
+                                                          `-> function_declaration
+                                                              `-> type             "identifier" '(' argument_list ')' '{' '}'
+                                                                  `-> simple_type                   `-> %empty
+                                                                      `-> . "void"
+      Reduce derivation
+        declarations
+        `-> declarations                                    declaration
+            `-> declaration                                 `-> function_declaration
+                `-> namespace_declaration                       `-> type            "identifier" '(' argument_list ')' '{' '}'
+                    `-> "namespace" name ';' declarations .         `-> simple_type                  `-> %empty
+                                                                        `-> "void"
+
+    shift/reduce conflict on token "bool":
+        8 namespace_declaration: "namespace" name ';' declarations .
+       14 simple_type: . "bool"
+      Example: "namespace" name ';' declarations . "bool" "identifier" '(' ')' '{' '}'
+      Shift derivation
+        declarations
+        `-> declaration
+            `-> namespace_declaration
+                `-> "namespace" name ';' declarations
+                                         `-> declarations declaration
+                                                          `-> function_declaration
+                                                              `-> type             "identifier" '(' argument_list ')' '{' '}'
+                                                                  `-> simple_type                   `-> %empty
+                                                                      `-> . "bool"
+      Reduce derivation
+        declarations
+        `-> declarations                                    declaration
+            `-> declaration                                 `-> function_declaration
+                `-> namespace_declaration                       `-> type            "identifier" '(' argument_list ')' '{' '}'
+                    `-> "namespace" name ';' declarations .         `-> simple_type                  `-> %empty
+                                                                        `-> "bool"
+
+    shift/reduce conflict on token "int":
+        8 namespace_declaration: "namespace" name ';' declarations .
+       15 simple_type: . "int"
+      Example: "namespace" name ';' declarations . "int" "identifier" '(' ')' '{' '}'
+      Shift derivation
+        declarations
+        `-> declaration
+            `-> namespace_declaration
+                `-> "namespace" name ';' declarations
+                                         `-> declarations declaration
+                                                          `-> function_declaration
+                                                              `-> type            "identifier" '(' argument_list ')' '{' '}'
+                                                                  `-> simple_type                  `-> %empty
+                                                                      `-> . "int"
+      Reduce derivation
+        declarations
+        `-> declarations                                    declaration
+            `-> declaration                                 `-> function_declaration
+                `-> namespace_declaration                       `-> type            "identifier" '(' argument_list ')' '{' '}'
+                    `-> "namespace" name ';' declarations .         `-> simple_type                  `-> %empty
+                                                                        `-> "int"
+
+    shift/reduce conflict on token "string":
+        8 namespace_declaration: "namespace" name ';' declarations .
+       16 simple_type: . "string"
+      Example: "namespace" name ';' declarations . "string" "identifier" '(' ')' '{' '}'
+      Shift derivation
+        declarations
+        `-> declaration
+            `-> namespace_declaration
+                `-> "namespace" name ';' declarations
+                                         `-> declarations declaration
+                                                          `-> function_declaration
+                                                              `-> type               "identifier" '(' argument_list ')' '{' '}'
+                                                                  `-> simple_type                     `-> %empty
+                                                                      `-> . "string"
+      Reduce derivation
+        declarations
+        `-> declarations                                    declaration
+            `-> declaration                                 `-> function_declaration
+                `-> namespace_declaration                       `-> type             "identifier" '(' argument_list ')' '{' '}'
+                    `-> "namespace" name ';' declarations .         `-> simple_type                   `-> %empty
+                                                                        `-> "string"
+
+    shift/reduce conflict on token "identifier":
+        8 namespace_declaration: "namespace" name ';' declarations .
+       20 simple_name: . "identifier"
+      Example: "namespace" name ';' declarations . "identifier" "identifier" '(' ')' '{' '}'
+      Shift derivation
+        declarations
+        `-> declaration
+            `-> namespace_declaration
+                `-> "namespace" name ';' declarations
+                                         `-> declarations declaration
+                                                          `-> function_declaration
+                                                              `-> type                           "identifier" '(' argument_list ')' '{' '}'
+                                                                  `-> reference_type                              `-> %empty
+                                                                      `-> name
+                                                                          `-> simple_name
+                                                                              `-> . "identifier"
+      Reduce derivation
+        declarations
+        `-> declarations                                    declaration
+            `-> declaration                                 `-> function_declaration
+                `-> namespace_declaration                       `-> type                         "identifier" '(' argument_list ')' '{' '}'
+                    `-> "namespace" name ';' declarations .         `-> reference_type                            `-> %empty
+                                                                        `-> name
+                                                                            `-> simple_name
+                                                                                `-> "identifier"
+
+    shift/reduce conflict on token "identifier":
+        8 namespace_declaration: "namespace" name ';' declarations .
+       21 qualified_name: . "identifier" "'::'" "identifier"
+      Example: "namespace" name ';' declarations . "identifier" "'::'" "identifier" "identifier" '(' ')' '{' '}'
+      Shift derivation
+        declarations
+        `-> declaration
+            `-> namespace_declaration
+                `-> "namespace" name ';' declarations
+                                         `-> declarations declaration
+                                                          `-> function_declaration
+                                                              `-> type                                               "identifier" '(' argument_list ')' '{' '}'
+                                                                  `-> reference_type                                                  `-> %empty
+                                                                      `-> name
+                                                                          `-> qualified_name
+                                                                              `-> . "identifier" "'::'" "identifier"
+      Reduce derivation
+        declarations
+        `-> declarations                                    declaration
+            `-> declaration                                 `-> function_declaration
+                `-> namespace_declaration                       `-> type                                             "identifier" '(' argument_list ')' '{' '}'
+                    `-> "namespace" name ';' declarations .         `-> reference_type                                                `-> %empty
+                                                                        `-> name
+                                                                            `-> qualified_name
+                                                                                `-> "identifier" "'::'" "identifier"
+
+
+
+State 34
+
+   12 type: type . '[' ']'
+   24 argument_list: type . "identifier"
+
+    "identifier"  shift, and go to state 37
+    '['           shift, and go to state 24
+
+
+State 35
+
+    9 function_declaration: type "identifier" '(' argument_list . ')' '{' '}'
+   25 argument_list: argument_list . ',' type "identifier"
+
+    ')'  shift, and go to state 38
+    ','  shift, and go to state 39
+
+
+State 36
+
+    7 namespace_declaration: "namespace" "identifier" '{' declarations '}' .
+
+    $default  reduce using rule 7 (namespace_declaration)
+
+
+State 37
+
+   24 argument_list: type "identifier" .
+
+    $default  reduce using rule 24 (argument_list)
+
+
+State 38
+
+    9 function_declaration: type "identifier" '(' argument_list ')' . '{' '}'
+
+    '{'  shift, and go to state 40
+
+
+State 39
+
+   25 argument_list: argument_list ',' . type "identifier"
+
+    "identifier"  shift, and go to state 1
+    "bool"        shift, and go to state 3
+    "int"         shift, and go to state 4
+    "string"      shift, and go to state 5
+    "void"        shift, and go to state 6
+
+    type            go to state 41
+    simple_type     go to state 13
+    reference_type  go to state 14
+    name            go to state 15
+    simple_name     go to state 16
+    qualified_name  go to state 17
+
+
+State 40
+
+    9 function_declaration: type "identifier" '(' argument_list ')' '{' . '}'
+
+    '}'  shift, and go to state 42
+
+
+State 41
+
+   12 type: type . '[' ']'
+   25 argument_list: argument_list ',' type . "identifier"
+
+    "identifier"  shift, and go to state 43
+    '['           shift, and go to state 24
+
+
+State 42
+
+    9 function_declaration: type "identifier" '(' argument_list ')' '{' '}' .
+
+    $default  reduce using rule 9 (function_declaration)
+
+
+State 43
+
+   25 argument_list: argument_list ',' type "identifier" .
+
+    $default  reduce using rule 25 (argument_list)

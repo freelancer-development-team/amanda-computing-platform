@@ -15,10 +15,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
+namespace amanda::battery::utility;
+  
 namespace test
 {
+	namespace embedded
+	{
+		void embedded_function()
+		{
+		}
+	}
+	
+	bool another_function()
+	{
+	}
+	
+	int main(string[] args)
+	{
+	}
 }
 
-namespace another
-{
-}

@@ -389,12 +389,18 @@ namespace amanda { namespace compiler {
       // declarations
       char dummy3[sizeof (amanda::compiler::ast::NDeclarationBlock*)];
 
+      // function_declaration
+      char dummy4[sizeof (amanda::compiler::ast::NFunctionDeclaration*)];
+
       // namespace_declaration
-      char dummy4[sizeof (amanda::compiler::ast::NNamespaceDeclaration*)];
+      char dummy5[sizeof (amanda::compiler::ast::NNamespaceDeclaration*)];
 
       // "integer literal"
       // "identifier"
-      char dummy5[sizeof (amanda::core::String)];
+      // name
+      // simple_name
+      // qualified_name
+      char dummy6[sizeof (amanda::core::String)];
     };
 
     /// The size of the largest semantic type.
@@ -580,7 +586,15 @@ namespace amanda { namespace compiler {
         S_compilation_unit = 73,                 // compilation_unit
         S_declarations = 74,                     // declarations
         S_declaration = 75,                      // declaration
-        S_namespace_declaration = 76             // namespace_declaration
+        S_namespace_declaration = 76,            // namespace_declaration
+        S_function_declaration = 77,             // function_declaration
+        S_type = 78,                             // type
+        S_simple_type = 79,                      // simple_type
+        S_reference_type = 80,                   // reference_type
+        S_name = 81,                             // name
+        S_simple_name = 82,                      // simple_name
+        S_qualified_name = 83,                   // qualified_name
+        S_argument_list = 84                     // argument_list
       };
     };
 
@@ -629,12 +643,19 @@ namespace amanda { namespace compiler {
         value.move< amanda::compiler::ast::NDeclarationBlock* > (std::move (that.value));
         break;
 
+      case symbol_kind::S_function_declaration: // function_declaration
+        value.move< amanda::compiler::ast::NFunctionDeclaration* > (std::move (that.value));
+        break;
+
       case symbol_kind::S_namespace_declaration: // namespace_declaration
         value.move< amanda::compiler::ast::NNamespaceDeclaration* > (std::move (that.value));
         break;
 
       case symbol_kind::S_INTEGER: // "integer literal"
       case symbol_kind::S_IDENTIFIER: // "identifier"
+      case symbol_kind::S_name: // name
+      case symbol_kind::S_simple_name: // simple_name
+      case symbol_kind::S_qualified_name: // qualified_name
         value.move< amanda::core::String > (std::move (that.value));
         break;
 
@@ -704,6 +725,20 @@ namespace amanda { namespace compiler {
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, amanda::compiler::ast::NFunctionDeclaration*&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const amanda::compiler::ast::NFunctionDeclaration*& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
       basic_symbol (typename Base::kind_type t, amanda::compiler::ast::NNamespaceDeclaration*&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
@@ -765,12 +800,19 @@ switch (yykind)
         value.template destroy< amanda::compiler::ast::NDeclarationBlock* > ();
         break;
 
+      case symbol_kind::S_function_declaration: // function_declaration
+        value.template destroy< amanda::compiler::ast::NFunctionDeclaration* > ();
+        break;
+
       case symbol_kind::S_namespace_declaration: // namespace_declaration
         value.template destroy< amanda::compiler::ast::NNamespaceDeclaration* > ();
         break;
 
       case symbol_kind::S_INTEGER: // "integer literal"
       case symbol_kind::S_IDENTIFIER: // "identifier"
+      case symbol_kind::S_name: // name
+      case symbol_kind::S_simple_name: // simple_name
+      case symbol_kind::S_qualified_name: // qualified_name
         value.template destroy< amanda::core::String > ();
         break;
 
@@ -1722,7 +1764,7 @@ switch (yykind)
 
 #if YYDEBUG
     // YYRLINE[YYN] -- Source line where rule number YYN was defined.
-    static const unsigned char yyrline_[];
+    static const short yyrline_[];
     /// Report on the debug stream that the rule \a r is going to be reduced.
     virtual void yy_reduce_print_ (int r) const;
     /// Print the state stack on the debug stream.
@@ -1958,9 +2000,9 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 53,     ///< Last index in yytable_.
-      yynnts_ = 5,  ///< Number of nonterminal symbols.
-      yyfinal_ = 7 ///< Termination state number.
+      yylast_ = 66,     ///< Last index in yytable_.
+      yynnts_ = 13,  ///< Number of nonterminal symbols.
+      yyfinal_ = 21 ///< Termination state number.
     };
 
 
@@ -2044,12 +2086,19 @@ switch (yykind)
         value.copy< amanda::compiler::ast::NDeclarationBlock* > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_function_declaration: // function_declaration
+        value.copy< amanda::compiler::ast::NFunctionDeclaration* > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_namespace_declaration: // namespace_declaration
         value.copy< amanda::compiler::ast::NNamespaceDeclaration* > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_INTEGER: // "integer literal"
       case symbol_kind::S_IDENTIFIER: // "identifier"
+      case symbol_kind::S_name: // name
+      case symbol_kind::S_simple_name: // simple_name
+      case symbol_kind::S_qualified_name: // qualified_name
         value.copy< amanda::core::String > (YY_MOVE (that.value));
         break;
 
@@ -2094,12 +2143,19 @@ switch (yykind)
         value.move< amanda::compiler::ast::NDeclarationBlock* > (YY_MOVE (s.value));
         break;
 
+      case symbol_kind::S_function_declaration: // function_declaration
+        value.move< amanda::compiler::ast::NFunctionDeclaration* > (YY_MOVE (s.value));
+        break;
+
       case symbol_kind::S_namespace_declaration: // namespace_declaration
         value.move< amanda::compiler::ast::NNamespaceDeclaration* > (YY_MOVE (s.value));
         break;
 
       case symbol_kind::S_INTEGER: // "integer literal"
       case symbol_kind::S_IDENTIFIER: // "identifier"
+      case symbol_kind::S_name: // name
+      case symbol_kind::S_simple_name: // simple_name
+      case symbol_kind::S_qualified_name: // qualified_name
         value.move< amanda::core::String > (YY_MOVE (s.value));
         break;
 
@@ -2166,7 +2222,7 @@ switch (yykind)
 
 #line 53 "specs/grammar.y"
 } } // amanda::compiler
-#line 2170 "include/amanda-c/Parser.h"
+#line 2226 "include/amanda-c/Parser.h"
 
 
 

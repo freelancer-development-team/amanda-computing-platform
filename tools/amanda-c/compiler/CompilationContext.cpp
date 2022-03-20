@@ -70,6 +70,9 @@ int CompilationContext::performSSATransformation()
     parserObject = new DefaultParser(*this, *scannerObject);
     int parserResult = 1;
 
+    //TODO: Debug only when necessary
+    // parserObject->set_debug_level(1);
+
     try
     {
         parserResult = parserObject->parse();

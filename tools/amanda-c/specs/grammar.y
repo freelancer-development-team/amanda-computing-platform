@@ -124,7 +124,11 @@
 %type<amanda::compiler::ast::NCompilationUnit*>         compilation_unit
 %type<amanda::compiler::ast::NDeclaration*>             declaration
 %type<amanda::compiler::ast::NDeclarationBlock*>        declarations
+%type<amanda::compiler::ast::NFunctionDeclaration*>     function_declaration
+%type<amanda::core::String>                             name
 %type<amanda::compiler::ast::NNamespaceDeclaration*>    namespace_declaration
+%type<amanda::core::String>                             qualified_name
+%type<amanda::core::String>                             simple_name
 
 /* ============================ KEYWORDS ==================================== */
 
@@ -194,29 +198,103 @@
 // Operator precedence & associativity
 // Includes ')' for casts and '[' for array indexing
 
+
+// Parser algorithm
+%define lr.type ielr
+
+// Expects a given number of SR-Conflicts & set the start symbol
+%expect 24
+%start compilation_unit
+
 %%
 
-compilation_unit    :   declarations    { 
-                                            NCompilationUnit* unit = new NCompilationUnit(amanda::core::String(lexer.filename.c_str()));
-                                            unit->addDeclarations($1);    // Add all the previously declared data
+/* Start symbol & top-level grammar */
+compilation_unit
+    : declarations  {
+                        NCompilationUnit* unit = new NCompilationUnit(lexer.filename.c_str());
+                        assert($1 != NULL && "Null pointer exception.");
 
-                                            // Add the syntax tree to the compiler interface for further processing
-                                            compiler.setAbstractSyntaxTree(unit);
+                        unit->addDeclarations($1);
 
-                                            // Set the parse tree action.
-                                            $$ = unit;
-                                        }
-                    ;
+                        // Set the parse tree to the compiler.
+                        compiler.setAbstractSyntaxTree(unit);
 
-declarations    : declaration               { $$ = new NDeclarationBlock(); $$->addDeclaration($1); }
-                ;
+                        // Assign the semmantic value to the accept rule
+                        $$ = unit;
+                    }
+    ;
 
 /* Declarations */
-declaration : namespace_declaration         { $$ = $1; }
-            ;
+declarations
+    : %empty                    { $$ = new NDeclarationBlock(); }
+    | declaration               { $$ = new NDeclarationBlock(); $$->addDeclaration($1); }
+    | declarations declaration  { $$ = $1; $$->addDeclaration($2); }
+    ;
 
-namespace_declaration   : NAMESPACE IDENTIFIER '{' declarations '}' { $$ = new NNamespaceDeclaration($2); $$->addDeclarations($4); }
-                        ;
+declaration
+    : namespace_declaration { $$ = $1; }
+    | function_declaration  { $$ = $1; }
+    ;
+
+namespace_declaration
+    : NAMESPACE IDENTIFIER '{' declarations '}' { $$ = new NNamespaceDeclaration($2); $$->addDeclarations($4); }
+    | NAMESPACE name ';' declarations           {
+                                                    // This is gonna be the last generated namespace when
+                                                    // we call the function
+                                                    NNamespaceDeclaration* last = NULL;
+                                                    NNamespaceDeclaration* parent = buildNamespacesByQualifiedName($2, last);
+
+                                                    assert(last != NULL && "Null pointer exception");
+                                                    assert(parent != NULL && "Null pointer exception");
+
+                                                    $$ = parent; last->addDeclarations($4);
+                                                }
+    ;
+
+function_declaration
+    : type IDENTIFIER '(' argument_list ')' '{' '}' { $$ = new NFunctionDeclaration($2); }
+    ;
+
+/* Auxiliary declarations */
+/* Types */
+type
+    : simple_type
+    | reference_type
+    | type '[' ']'
+    ;
+
+simple_type
+    : VOID
+    | BOOL
+    | INT
+    | STRING
+    ;
+
+reference_type
+    : name
+    ;
+
+/* Names */
+name
+    : simple_name
+    | qualified_name
+    ;
+
+simple_name
+    : IDENTIFIER
+    ;
+
+qualified_name
+    : IDENTIFIER SCOPE_OP IDENTIFIER        { $$.append($1).append("::").append($3); }
+    | qualified_name SCOPE_OP IDENTIFIER    { $$ = $1; $$.append("::").append($3); }
+    ;
+
+/* Lists */
+argument_list
+    : %empty
+    | type IDENTIFIER
+    | argument_list ',' type IDENTIFIER
+    ;
 
 %%
 

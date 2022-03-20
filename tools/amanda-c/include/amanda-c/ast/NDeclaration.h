@@ -28,6 +28,8 @@
 #include <amanda-vm/IL/AstNodeBase.h>
 #include <amanda-c/ast/Lists.h>
 
+#include <vector>
+
 namespace amanda
 {
 namespace compiler
@@ -47,6 +49,7 @@ public:
     virtual ~NDeclaration();
 
     void addDeclarations(NDeclarationBlock* declarations);
+
 } ;
 
 /**
