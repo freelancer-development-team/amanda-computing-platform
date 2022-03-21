@@ -25,8 +25,16 @@
 #ifndef PACKAGE_IL_HXX
 #define PACKAGE_IL_HXX
 
+#include "AstNodeBase.h"
+#include "BasicBlock.h"
+#include "CodeGenContext.h"
+#include "ILExporter.h"
+#include "Module.h"
 #include "Symbol.h"
 #include "SymbolTable.h"
+#include "Type.h"
+#include "Value.h"
+#include "ValueReferrer.h"
 
 #endif /* PACKAGE_HXX */
 
