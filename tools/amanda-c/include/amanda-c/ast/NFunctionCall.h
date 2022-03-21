@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,24 +16,41 @@
  */
 
 /* 
- * File:   NStatement.cpp
+ * File:   NFunctionCall.h
  * Author: Javier Marrero
- * 
- * Created on March 13, 2022, 12:48 AM
+ *
+ * Created on March 20, 2022, 10:41 PM
  */
 
-#include <amanda-c/ast/NStatement.h>
+#ifndef NFUNCTIONCALL_H
+#define NFUNCTIONCALL_H
 
-using namespace amanda;
-using namespace amanda::compiler::ast;
+#include <amanda-c/ast/NExpression.h>
 
-NStatement::NStatement()
+namespace amanda
 {
+namespace compiler
+{
+namespace ast
+{
+
+class NFunctionCall : public NExpression
+{
+    AMANDA_OBJECT(NFunctionCall, NExpression)
+
+public:
+
+    NFunctionCall(const core::String& target);
+    virtual ~NFunctionCall();
+
+protected:
+
+    core::String callTargetIdentifier;
+} ;
+
+}
+}
 }
 
-NStatement::~NStatement()
-{
-}
-
-
+#endif /* NFUNCTIONCALL_H */
 

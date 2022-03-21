@@ -98,6 +98,10 @@ void CompilationContext::performSemmanticAnnalysis()
 {
     assert(abstractSyntaxTree != NULL && "Null pointer exception.");
 
+#if 1
     /* Debug print the entire tree. */
     printAbstractSyntaxTree();
+#endif
+
+    
 }

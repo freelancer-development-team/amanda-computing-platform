@@ -25,15 +25,28 @@
 #ifndef AMANDA_AST_H
 #define AMANDA_AST_H
 
+/*
+ * The following includes constitutes the Amanda programming language abstract
+ * syntax tree representation. Please, when adding nodes to this tree, include
+ * them here and sort the includes alphabetically.
+ * 
+ */
+
 #include <amanda-c/ast/Lists.h>
 #include <amanda-c/ast/NBinaryOperator.h>
 #include <amanda-c/ast/NBlock.h>
 #include <amanda-c/ast/NCompilationUnit.h>
+#include <amanda-c/ast/NCompoundStatement.h>
 #include <amanda-c/ast/NDeclaration.h>
 #include <amanda-c/ast/NExpression.h>
+#include <amanda-c/ast/NExpressionStatement.h>
+#include <amanda-c/ast/NFunctionCall.h>
 #include <amanda-c/ast/NFunctionDeclaration.h>
 #include <amanda-c/ast/NNamespaceDeclaration.h>
+#include <amanda-c/ast/NReturnStatement.h>
 #include <amanda-c/ast/NStatement.h>
+#include <amanda-c/ast/NUsingDeclaration.h>
+#include <amanda-c/ast/NWhileStatement.h>
 
 #endif /* AST_H */
 

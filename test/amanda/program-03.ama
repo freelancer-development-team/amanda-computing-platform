@@ -15,23 +15,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-namespace amanda::battery::utility;
-  
-namespace test
+namespace amanda::test;
+
+using std::io::console;
+using std::core::math;
+using std::core::file;
+
+void busy_wait()
 {
-	namespace embedded
-	{
-		void embedded_function()
-		{
-		}
-	}
-	
-	bool another_function()
+	while ()
 	{
 	}
-	
-	int main(string[] args)
-	{
-	}
+	return;
 }
 
+void print_help()
+{
+	return;
+}
+
+int main(string[] args)
+{
+	print_help();
+}

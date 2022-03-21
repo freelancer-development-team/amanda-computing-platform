@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,24 +16,41 @@
  */
 
 /* 
- * File:   NStatement.cpp
+ * File:   NReturnStatement.h
  * Author: Javier Marrero
- * 
- * Created on March 13, 2022, 12:48 AM
+ *
+ * Created on March 20, 2022, 10:59 AM
  */
 
+#ifndef NRETURNSTATEMENT_H
+#define NRETURNSTATEMENT_H
+
 #include <amanda-c/ast/NStatement.h>
+#include <amanda-c/ast/NExpression.h>
 
-using namespace amanda;
-using namespace amanda::compiler::ast;
-
-NStatement::NStatement()
+namespace amanda
 {
+namespace compiler
+{
+namespace ast
+{
+
+class NReturnStatement : public NStatement
+{
+    AMANDA_OBJECT(NReturnStatement, NStatement)
+
+public:
+
+    
+
+protected:
+
+    core::StrongReference<NExpression> expression;
+} ;
+
+}
+}
 }
 
-NStatement::~NStatement()
-{
-}
-
-
+#endif /* NRETURNSTATEMENT_H */
 

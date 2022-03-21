@@ -49,6 +49,7 @@ void NBlock::addStatement(NStatement* statement)
     statement->grab();
 
     statements.push_back(statement);
+    addChild(statement);
 }
 
 Value* NBlock::generateCode(amanda::il::CodeGenContext& context)

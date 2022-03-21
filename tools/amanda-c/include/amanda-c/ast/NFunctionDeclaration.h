@@ -26,6 +26,7 @@
 #define NFUNCTIONDECLARATION_H
 
 #include <amanda-c/ast/NDeclaration.h>
+#include <amanda-c/ast/NBlock.h>
 
 #include <vector>
 
@@ -42,14 +43,15 @@ class NFunctionDeclaration : public NDeclaration
 
 public:
 
-    NFunctionDeclaration(const core::String& identifier);
+    NFunctionDeclaration(const core::String& identifier, NBlock* statements);
     virtual ~NFunctionDeclaration();
     
     virtual core::String toString() const;
 
 protected:
 
-    core::String identifier;
+    core::String                    identifier;
+    core::StrongReference<NBlock>   statements;
 } ;
 
 }

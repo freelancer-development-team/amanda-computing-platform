@@ -271,6 +271,10 @@ namespace amanda { namespace compiler {
   {
     switch (that.kind ())
     {
+      case symbol_kind::S_statement_sequence: // statement_sequence
+        value.YY_MOVE_OR_COPY< amanda::compiler::ast::NBlock* > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_compilation_unit: // compilation_unit
         value.YY_MOVE_OR_COPY< amanda::compiler::ast::NCompilationUnit* > (YY_MOVE (that.value));
         break;
@@ -283,12 +287,42 @@ namespace amanda { namespace compiler {
         value.YY_MOVE_OR_COPY< amanda::compiler::ast::NDeclarationBlock* > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_expression: // expression
+        value.YY_MOVE_OR_COPY< amanda::compiler::ast::NExpression* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_expression_statement: // expression_statement
+        value.YY_MOVE_OR_COPY< amanda::compiler::ast::NExpressionStatement* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_function_call: // function_call
+        value.YY_MOVE_OR_COPY< amanda::compiler::ast::NFunctionCall* > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_function_declaration: // function_declaration
         value.YY_MOVE_OR_COPY< amanda::compiler::ast::NFunctionDeclaration* > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_namespace_declaration: // namespace_declaration
         value.YY_MOVE_OR_COPY< amanda::compiler::ast::NNamespaceDeclaration* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_return_statement: // return_statement
+        value.YY_MOVE_OR_COPY< amanda::compiler::ast::NReturnStatement* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_statement: // statement
+      case symbol_kind::S_simple_statement: // simple_statement
+      case symbol_kind::S_compound_statement: // compound_statement
+        value.YY_MOVE_OR_COPY< amanda::compiler::ast::NStatement* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_using_declaration: // using_declaration
+        value.YY_MOVE_OR_COPY< amanda::compiler::ast::NUsingDeclaration* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_while_statement: // while_statement
+        value.YY_MOVE_OR_COPY< amanda::compiler::ast::NWhileStatement* > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_INTEGER: // "integer literal"
@@ -314,6 +348,10 @@ namespace amanda { namespace compiler {
   {
     switch (that.kind ())
     {
+      case symbol_kind::S_statement_sequence: // statement_sequence
+        value.move< amanda::compiler::ast::NBlock* > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_compilation_unit: // compilation_unit
         value.move< amanda::compiler::ast::NCompilationUnit* > (YY_MOVE (that.value));
         break;
@@ -326,12 +364,42 @@ namespace amanda { namespace compiler {
         value.move< amanda::compiler::ast::NDeclarationBlock* > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_expression: // expression
+        value.move< amanda::compiler::ast::NExpression* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_expression_statement: // expression_statement
+        value.move< amanda::compiler::ast::NExpressionStatement* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_function_call: // function_call
+        value.move< amanda::compiler::ast::NFunctionCall* > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_function_declaration: // function_declaration
         value.move< amanda::compiler::ast::NFunctionDeclaration* > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_namespace_declaration: // namespace_declaration
         value.move< amanda::compiler::ast::NNamespaceDeclaration* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_return_statement: // return_statement
+        value.move< amanda::compiler::ast::NReturnStatement* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_statement: // statement
+      case symbol_kind::S_simple_statement: // simple_statement
+      case symbol_kind::S_compound_statement: // compound_statement
+        value.move< amanda::compiler::ast::NStatement* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_using_declaration: // using_declaration
+        value.move< amanda::compiler::ast::NUsingDeclaration* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_while_statement: // while_statement
+        value.move< amanda::compiler::ast::NWhileStatement* > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_INTEGER: // "integer literal"
@@ -357,6 +425,10 @@ namespace amanda { namespace compiler {
     state = that.state;
     switch (that.kind ())
     {
+      case symbol_kind::S_statement_sequence: // statement_sequence
+        value.copy< amanda::compiler::ast::NBlock* > (that.value);
+        break;
+
       case symbol_kind::S_compilation_unit: // compilation_unit
         value.copy< amanda::compiler::ast::NCompilationUnit* > (that.value);
         break;
@@ -369,12 +441,42 @@ namespace amanda { namespace compiler {
         value.copy< amanda::compiler::ast::NDeclarationBlock* > (that.value);
         break;
 
+      case symbol_kind::S_expression: // expression
+        value.copy< amanda::compiler::ast::NExpression* > (that.value);
+        break;
+
+      case symbol_kind::S_expression_statement: // expression_statement
+        value.copy< amanda::compiler::ast::NExpressionStatement* > (that.value);
+        break;
+
+      case symbol_kind::S_function_call: // function_call
+        value.copy< amanda::compiler::ast::NFunctionCall* > (that.value);
+        break;
+
       case symbol_kind::S_function_declaration: // function_declaration
         value.copy< amanda::compiler::ast::NFunctionDeclaration* > (that.value);
         break;
 
       case symbol_kind::S_namespace_declaration: // namespace_declaration
         value.copy< amanda::compiler::ast::NNamespaceDeclaration* > (that.value);
+        break;
+
+      case symbol_kind::S_return_statement: // return_statement
+        value.copy< amanda::compiler::ast::NReturnStatement* > (that.value);
+        break;
+
+      case symbol_kind::S_statement: // statement
+      case symbol_kind::S_simple_statement: // simple_statement
+      case symbol_kind::S_compound_statement: // compound_statement
+        value.copy< amanda::compiler::ast::NStatement* > (that.value);
+        break;
+
+      case symbol_kind::S_using_declaration: // using_declaration
+        value.copy< amanda::compiler::ast::NUsingDeclaration* > (that.value);
+        break;
+
+      case symbol_kind::S_while_statement: // while_statement
+        value.copy< amanda::compiler::ast::NWhileStatement* > (that.value);
         break;
 
       case symbol_kind::S_INTEGER: // "integer literal"
@@ -399,6 +501,10 @@ namespace amanda { namespace compiler {
     state = that.state;
     switch (that.kind ())
     {
+      case symbol_kind::S_statement_sequence: // statement_sequence
+        value.move< amanda::compiler::ast::NBlock* > (that.value);
+        break;
+
       case symbol_kind::S_compilation_unit: // compilation_unit
         value.move< amanda::compiler::ast::NCompilationUnit* > (that.value);
         break;
@@ -411,12 +517,42 @@ namespace amanda { namespace compiler {
         value.move< amanda::compiler::ast::NDeclarationBlock* > (that.value);
         break;
 
+      case symbol_kind::S_expression: // expression
+        value.move< amanda::compiler::ast::NExpression* > (that.value);
+        break;
+
+      case symbol_kind::S_expression_statement: // expression_statement
+        value.move< amanda::compiler::ast::NExpressionStatement* > (that.value);
+        break;
+
+      case symbol_kind::S_function_call: // function_call
+        value.move< amanda::compiler::ast::NFunctionCall* > (that.value);
+        break;
+
       case symbol_kind::S_function_declaration: // function_declaration
         value.move< amanda::compiler::ast::NFunctionDeclaration* > (that.value);
         break;
 
       case symbol_kind::S_namespace_declaration: // namespace_declaration
         value.move< amanda::compiler::ast::NNamespaceDeclaration* > (that.value);
+        break;
+
+      case symbol_kind::S_return_statement: // return_statement
+        value.move< amanda::compiler::ast::NReturnStatement* > (that.value);
+        break;
+
+      case symbol_kind::S_statement: // statement
+      case symbol_kind::S_simple_statement: // simple_statement
+      case symbol_kind::S_compound_statement: // compound_statement
+        value.move< amanda::compiler::ast::NStatement* > (that.value);
+        break;
+
+      case symbol_kind::S_using_declaration: // using_declaration
+        value.move< amanda::compiler::ast::NUsingDeclaration* > (that.value);
+        break;
+
+      case symbol_kind::S_while_statement: // while_statement
+        value.move< amanda::compiler::ast::NWhileStatement* > (that.value);
         break;
 
       case symbol_kind::S_INTEGER: // "integer literal"
@@ -696,6 +832,10 @@ namespace amanda { namespace compiler {
          when using variants.  */
       switch (yyr1_[yyn])
     {
+      case symbol_kind::S_statement_sequence: // statement_sequence
+        yylhs.value.emplace< amanda::compiler::ast::NBlock* > ();
+        break;
+
       case symbol_kind::S_compilation_unit: // compilation_unit
         yylhs.value.emplace< amanda::compiler::ast::NCompilationUnit* > ();
         break;
@@ -708,12 +848,42 @@ namespace amanda { namespace compiler {
         yylhs.value.emplace< amanda::compiler::ast::NDeclarationBlock* > ();
         break;
 
+      case symbol_kind::S_expression: // expression
+        yylhs.value.emplace< amanda::compiler::ast::NExpression* > ();
+        break;
+
+      case symbol_kind::S_expression_statement: // expression_statement
+        yylhs.value.emplace< amanda::compiler::ast::NExpressionStatement* > ();
+        break;
+
+      case symbol_kind::S_function_call: // function_call
+        yylhs.value.emplace< amanda::compiler::ast::NFunctionCall* > ();
+        break;
+
       case symbol_kind::S_function_declaration: // function_declaration
         yylhs.value.emplace< amanda::compiler::ast::NFunctionDeclaration* > ();
         break;
 
       case symbol_kind::S_namespace_declaration: // namespace_declaration
         yylhs.value.emplace< amanda::compiler::ast::NNamespaceDeclaration* > ();
+        break;
+
+      case symbol_kind::S_return_statement: // return_statement
+        yylhs.value.emplace< amanda::compiler::ast::NReturnStatement* > ();
+        break;
+
+      case symbol_kind::S_statement: // statement
+      case symbol_kind::S_simple_statement: // simple_statement
+      case symbol_kind::S_compound_statement: // compound_statement
+        yylhs.value.emplace< amanda::compiler::ast::NStatement* > ();
+        break;
+
+      case symbol_kind::S_using_declaration: // using_declaration
+        yylhs.value.emplace< amanda::compiler::ast::NUsingDeclaration* > ();
+        break;
+
+      case symbol_kind::S_while_statement: // while_statement
+        yylhs.value.emplace< amanda::compiler::ast::NWhileStatement* > ();
         break;
 
       case symbol_kind::S_INTEGER: // "integer literal"
@@ -745,7 +915,7 @@ namespace amanda { namespace compiler {
           switch (yyn)
             {
   case 2: // compilation_unit: declarations
-#line 213 "specs/grammar.y"
+#line 228 "specs/grammar.y"
                     {
                         NCompilationUnit* unit = new NCompilationUnit(lexer.filename.c_str());
                         assert(yystack_[0].value.as < amanda::compiler::ast::NDeclarationBlock* > () != NULL && "Null pointer exception.");
@@ -758,47 +928,53 @@ namespace amanda { namespace compiler {
                         // Assign the semmantic value to the accept rule
                         yylhs.value.as < amanda::compiler::ast::NCompilationUnit* > () = unit;
                     }
-#line 762 "compiler/Parser.cpp"
+#line 932 "compiler/Parser.cpp"
     break;
 
   case 3: // declarations: %empty
-#line 229 "specs/grammar.y"
+#line 244 "specs/grammar.y"
                                 { yylhs.value.as < amanda::compiler::ast::NDeclarationBlock* > () = new NDeclarationBlock(); }
-#line 768 "compiler/Parser.cpp"
+#line 938 "compiler/Parser.cpp"
     break;
 
   case 4: // declarations: declaration
-#line 230 "specs/grammar.y"
+#line 245 "specs/grammar.y"
                                 { yylhs.value.as < amanda::compiler::ast::NDeclarationBlock* > () = new NDeclarationBlock(); yylhs.value.as < amanda::compiler::ast::NDeclarationBlock* > ()->addDeclaration(yystack_[0].value.as < amanda::compiler::ast::NDeclaration* > ()); }
-#line 774 "compiler/Parser.cpp"
+#line 944 "compiler/Parser.cpp"
     break;
 
   case 5: // declarations: declarations declaration
-#line 231 "specs/grammar.y"
+#line 246 "specs/grammar.y"
                                 { yylhs.value.as < amanda::compiler::ast::NDeclarationBlock* > () = yystack_[1].value.as < amanda::compiler::ast::NDeclarationBlock* > (); yylhs.value.as < amanda::compiler::ast::NDeclarationBlock* > ()->addDeclaration(yystack_[0].value.as < amanda::compiler::ast::NDeclaration* > ()); }
-#line 780 "compiler/Parser.cpp"
+#line 950 "compiler/Parser.cpp"
     break;
 
   case 6: // declaration: namespace_declaration
-#line 235 "specs/grammar.y"
+#line 250 "specs/grammar.y"
                             { yylhs.value.as < amanda::compiler::ast::NDeclaration* > () = yystack_[0].value.as < amanda::compiler::ast::NNamespaceDeclaration* > (); }
-#line 786 "compiler/Parser.cpp"
+#line 956 "compiler/Parser.cpp"
     break;
 
-  case 7: // declaration: function_declaration
-#line 236 "specs/grammar.y"
+  case 7: // declaration: using_declaration
+#line 251 "specs/grammar.y"
+                            { yylhs.value.as < amanda::compiler::ast::NDeclaration* > () = yystack_[0].value.as < amanda::compiler::ast::NUsingDeclaration* > (); }
+#line 962 "compiler/Parser.cpp"
+    break;
+
+  case 8: // declaration: function_declaration
+#line 252 "specs/grammar.y"
                             { yylhs.value.as < amanda::compiler::ast::NDeclaration* > () = yystack_[0].value.as < amanda::compiler::ast::NFunctionDeclaration* > (); }
-#line 792 "compiler/Parser.cpp"
+#line 968 "compiler/Parser.cpp"
     break;
 
-  case 8: // namespace_declaration: "namespace" "identifier" '{' declarations '}'
-#line 240 "specs/grammar.y"
+  case 9: // namespace_declaration: "namespace" "identifier" '{' declarations '}'
+#line 256 "specs/grammar.y"
                                                 { yylhs.value.as < amanda::compiler::ast::NNamespaceDeclaration* > () = new NNamespaceDeclaration(yystack_[3].value.as < amanda::core::String > ()); yylhs.value.as < amanda::compiler::ast::NNamespaceDeclaration* > ()->addDeclarations(yystack_[1].value.as < amanda::compiler::ast::NDeclarationBlock* > ()); }
-#line 798 "compiler/Parser.cpp"
+#line 974 "compiler/Parser.cpp"
     break;
 
-  case 9: // namespace_declaration: "namespace" name ';' declarations
-#line 241 "specs/grammar.y"
+  case 10: // namespace_declaration: "namespace" name ';' declarations
+#line 257 "specs/grammar.y"
                                                 {
                                                     // This is gonna be the last generated namespace when
                                                     // we call the function
@@ -810,47 +986,139 @@ namespace amanda { namespace compiler {
 
                                                     yylhs.value.as < amanda::compiler::ast::NNamespaceDeclaration* > () = parent; last->addDeclarations(yystack_[0].value.as < amanda::compiler::ast::NDeclarationBlock* > ());
                                                 }
-#line 814 "compiler/Parser.cpp"
+#line 990 "compiler/Parser.cpp"
     break;
 
-  case 10: // function_declaration: type "identifier" '(' argument_list ')' '{' '}'
-#line 255 "specs/grammar.y"
-                                                    { yylhs.value.as < amanda::compiler::ast::NFunctionDeclaration* > () = new NFunctionDeclaration(yystack_[5].value.as < amanda::core::String > ()); }
-#line 820 "compiler/Parser.cpp"
+  case 11: // using_declaration: "using" name ';'
+#line 271 "specs/grammar.y"
+                            { yylhs.value.as < amanda::compiler::ast::NUsingDeclaration* > () = new NUsingDeclaration(yystack_[1].value.as < amanda::core::String > ()); }
+#line 996 "compiler/Parser.cpp"
     break;
 
-  case 19: // name: simple_name
-#line 279 "specs/grammar.y"
-      { yylhs.value.as < amanda::core::String > () = yystack_[0].value.as < amanda::core::String > (); }
-#line 826 "compiler/Parser.cpp"
+  case 12: // function_declaration: type "identifier" '(' argument_list ')' '{' statement_sequence '}'
+#line 275 "specs/grammar.y"
+                                                                       { yylhs.value.as < amanda::compiler::ast::NFunctionDeclaration* > () = new NFunctionDeclaration(yystack_[6].value.as < amanda::core::String > (), yystack_[1].value.as < amanda::compiler::ast::NBlock* > ()); }
+#line 1002 "compiler/Parser.cpp"
     break;
 
-  case 20: // name: qualified_name
+  case 13: // statement: simple_statement ';'
 #line 280 "specs/grammar.y"
-      { yylhs.value.as < amanda::core::String > () = yystack_[0].value.as < amanda::core::String > (); }
-#line 832 "compiler/Parser.cpp"
+      { yylhs.value.as < amanda::compiler::ast::NStatement* > () = yystack_[1].value.as < amanda::compiler::ast::NStatement* > (); }
+#line 1008 "compiler/Parser.cpp"
     break;
 
-  case 21: // simple_name: "identifier"
-#line 284 "specs/grammar.y"
-      { yylhs.value.as < amanda::core::String > () = yystack_[0].value.as < amanda::core::String > (); }
-#line 838 "compiler/Parser.cpp"
+  case 14: // statement: compound_statement
+#line 281 "specs/grammar.y"
+      { yylhs.value.as < amanda::compiler::ast::NStatement* > () = yystack_[0].value.as < amanda::compiler::ast::NStatement* > (); }
+#line 1014 "compiler/Parser.cpp"
     break;
 
-  case 22: // qualified_name: "identifier" "'::'" "identifier"
-#line 288 "specs/grammar.y"
+  case 15: // simple_statement: return_statement
+#line 285 "specs/grammar.y"
+                                    { yylhs.value.as < amanda::compiler::ast::NStatement* > () = yystack_[0].value.as < amanda::compiler::ast::NReturnStatement* > (); }
+#line 1020 "compiler/Parser.cpp"
+    break;
+
+  case 16: // simple_statement: expression_statement
+#line 286 "specs/grammar.y"
+                                    { yylhs.value.as < amanda::compiler::ast::NStatement* > () = yystack_[0].value.as < amanda::compiler::ast::NExpressionStatement* > (); }
+#line 1026 "compiler/Parser.cpp"
+    break;
+
+  case 17: // compound_statement: while_statement
+#line 290 "specs/grammar.y"
+                                    { yylhs.value.as < amanda::compiler::ast::NStatement* > () = yystack_[0].value.as < amanda::compiler::ast::NWhileStatement* > (); }
+#line 1032 "compiler/Parser.cpp"
+    break;
+
+  case 18: // expression_statement: function_call
+#line 296 "specs/grammar.y"
+                                    { yylhs.value.as < amanda::compiler::ast::NExpressionStatement* > () = new NExpressionStatement(yystack_[0].value.as < amanda::compiler::ast::NFunctionCall* > ()); }
+#line 1038 "compiler/Parser.cpp"
+    break;
+
+  case 19: // return_statement: "return" expression
+#line 301 "specs/grammar.y"
+                                    { yylhs.value.as < amanda::compiler::ast::NReturnStatement* > () = new NReturnStatement(); }
+#line 1044 "compiler/Parser.cpp"
+    break;
+
+  case 20: // return_statement: "return"
+#line 302 "specs/grammar.y"
+                                    { yylhs.value.as < amanda::compiler::ast::NReturnStatement* > () = new NReturnStatement(); }
+#line 1050 "compiler/Parser.cpp"
+    break;
+
+  case 21: // while_statement: "while" '(' ')' '{' statement_sequence '}'
+#line 307 "specs/grammar.y"
+                                                {
+                                                    yylhs.value.as < amanda::compiler::ast::NWhileStatement* > () = new NWhileStatement(yystack_[1].value.as < amanda::compiler::ast::NBlock* > ()); 
+                                                }
+#line 1058 "compiler/Parser.cpp"
+    break;
+
+  case 22: // expression: function_call
+#line 314 "specs/grammar.y"
+                        { yylhs.value.as < amanda::compiler::ast::NExpression* > () = yystack_[0].value.as < amanda::compiler::ast::NFunctionCall* > (); }
+#line 1064 "compiler/Parser.cpp"
+    break;
+
+  case 23: // function_call: name '(' expression_list ')'
+#line 318 "specs/grammar.y"
+                                    { yylhs.value.as < amanda::compiler::ast::NFunctionCall* > () = new NFunctionCall(yystack_[3].value.as < amanda::core::String > ()); }
+#line 1070 "compiler/Parser.cpp"
+    break;
+
+  case 27: // statement_sequence: %empty
+#line 331 "specs/grammar.y"
+                                    { yylhs.value.as < amanda::compiler::ast::NBlock* > () = new NBlock(); }
+#line 1076 "compiler/Parser.cpp"
+    break;
+
+  case 28: // statement_sequence: statement
+#line 332 "specs/grammar.y"
+                                    { yylhs.value.as < amanda::compiler::ast::NBlock* > () = new NBlock(); yylhs.value.as < amanda::compiler::ast::NBlock* > ()->addStatement(yystack_[0].value.as < amanda::compiler::ast::NStatement* > ()); }
+#line 1082 "compiler/Parser.cpp"
+    break;
+
+  case 29: // statement_sequence: statement_sequence statement
+#line 333 "specs/grammar.y"
+                                    { yylhs.value.as < amanda::compiler::ast::NBlock* > () = yystack_[1].value.as < amanda::compiler::ast::NBlock* > (); yylhs.value.as < amanda::compiler::ast::NBlock* > ()->addStatement(yystack_[0].value.as < amanda::compiler::ast::NStatement* > ()); }
+#line 1088 "compiler/Parser.cpp"
+    break;
+
+  case 43: // name: simple_name
+#line 361 "specs/grammar.y"
+      { yylhs.value.as < amanda::core::String > () = yystack_[0].value.as < amanda::core::String > (); }
+#line 1094 "compiler/Parser.cpp"
+    break;
+
+  case 44: // name: qualified_name
+#line 362 "specs/grammar.y"
+      { yylhs.value.as < amanda::core::String > () = yystack_[0].value.as < amanda::core::String > (); }
+#line 1100 "compiler/Parser.cpp"
+    break;
+
+  case 45: // simple_name: "identifier"
+#line 366 "specs/grammar.y"
+      { yylhs.value.as < amanda::core::String > () = yystack_[0].value.as < amanda::core::String > (); }
+#line 1106 "compiler/Parser.cpp"
+    break;
+
+  case 46: // qualified_name: "identifier" "'::'" "identifier"
+#line 370 "specs/grammar.y"
                                             { yylhs.value.as < amanda::core::String > ().append(yystack_[2].value.as < amanda::core::String > ()).append("::").append(yystack_[0].value.as < amanda::core::String > ()); }
-#line 844 "compiler/Parser.cpp"
+#line 1112 "compiler/Parser.cpp"
     break;
 
-  case 23: // qualified_name: qualified_name "'::'" "identifier"
-#line 289 "specs/grammar.y"
+  case 47: // qualified_name: qualified_name "'::'" "identifier"
+#line 371 "specs/grammar.y"
                                             { yylhs.value.as < amanda::core::String > () = yystack_[2].value.as < amanda::core::String > (); yylhs.value.as < amanda::core::String > ().append("::").append(yystack_[0].value.as < amanda::core::String > ()); }
-#line 850 "compiler/Parser.cpp"
+#line 1118 "compiler/Parser.cpp"
     break;
 
 
-#line 854 "compiler/Parser.cpp"
+#line 1122 "compiler/Parser.cpp"
 
             default:
               break;
@@ -1039,14 +1307,17 @@ namespace amanda { namespace compiler {
   "else", "for", "if", "is", "interface", "namespace", "new", "not", "or",
   "private", "protected", "public", "return", "switch", "using", "while",
   "bool", "byte", "short", "int", "long", "ushort", "uint", "ulong",
-  "string", "char", "void", "'::'", "'<='", "'>='", "'=='", "'!='", "'++'",
-  "'--'", "'!'", "'#'", "'$'", "'%'", "'&'", "'('", "')'", "'*'", "'+'",
-  "','", "'-'", "'.'", "'/'", "':'", "';'", "'<'", "'='", "'>'", "'?'",
-  "'['", "']'", "'^'", "'{'", "'|'", "'}'", "'~'", "$accept",
-  "compilation_unit", "declarations", "declaration",
-  "namespace_declaration", "function_declaration", "type", "simple_type",
-  "reference_type", "name", "simple_name", "qualified_name",
-  "argument_list", YY_NULLPTR
+  "string", "char", "void", "float", "double", "'::'", "'<='", "'>='",
+  "'=='", "'!='", "'++'", "'--'", "'!'", "'#'", "'$'", "'%'", "'&'", "'('",
+  "')'", "'*'", "'+'", "','", "'-'", "'.'", "'/'", "':'", "';'", "'<'",
+  "'='", "'>'", "'?'", "'['", "']'", "'^'", "'{'", "'|'", "'}'", "'~'",
+  "$accept", "compilation_unit", "declarations", "declaration",
+  "namespace_declaration", "using_declaration", "function_declaration",
+  "statement", "simple_statement", "compound_statement",
+  "expression_statement", "return_statement", "while_statement",
+  "expression", "function_call", "expression_list", "statement_sequence",
+  "type", "simple_type", "reference_type", "name", "simple_name",
+  "qualified_name", "argument_list", YY_NULLPTR
     };
     return yy_sname[yysymbol];
   }
@@ -1311,92 +1582,117 @@ namespace amanda { namespace compiler {
   }
 
 
-  const signed char DefaultParser::yypact_ninf_ = -46;
+  const signed char DefaultParser::yypact_ninf_ = -61;
 
   const signed char DefaultParser::yytable_ninf_ = -1;
 
   const signed char
   DefaultParser::yypact_[] =
   {
-       0,   -34,     5,   -46,   -46,   -46,   -46,    14,     0,   -46,
-     -46,   -46,    -3,   -46,   -46,   -46,   -46,   -20,    16,   -33,
-     -39,   -46,   -46,   -29,   -43,    21,   -46,     0,     0,    11,
-     -46,   -46,    -4,     0,    -2,   -45,   -46,   -46,   -42,    11,
-     -41,    -1,   -46,   -46
+      66,   -31,    16,    18,   -61,   -61,   -61,   -61,   -61,   -61,
+     -61,   -61,   -61,    33,    66,   -61,   -61,   -61,   -61,    -1,
+     -61,   -61,   -61,   -61,    -6,    39,   -28,   -14,   -12,   -61,
+     -61,     7,    -4,    61,   -61,    66,    66,   -61,    23,   -61,
+     -61,     0,    66,     1,   -46,   -61,   -61,     8,    23,    52,
+       2,    18,    24,   -61,    22,   -61,   -61,   -61,   -61,   -61,
+      10,    27,   -61,   -61,   -61,    31,   -61,   -61,   -61,    18,
+      20,   -61,   -38,    52,   -61,    18,    17,   -61,   -61
   };
 
   const signed char
   DefaultParser::yydefact_[] =
   {
-       3,    21,     0,    15,    16,    17,    14,     0,     2,     4,
-       6,     7,     0,    11,    12,    18,    19,    20,     0,    21,
-       0,     1,     5,     0,     0,     0,    22,     3,     3,    24,
-      13,    23,     0,     9,     0,     0,     8,    25,     0,     0,
-       0,     0,    10,    26
+       3,    45,     0,     0,    34,    35,    36,    37,    38,    42,
+      33,    39,    40,     0,     2,     4,     6,     7,     8,     0,
+      30,    31,    41,    43,    44,     0,    45,     0,     0,     1,
+       5,     0,     0,     0,    46,     3,     3,    11,    48,    32,
+      47,     0,    10,     0,     0,     9,    49,     0,     0,    27,
+       0,    20,     0,    28,     0,    14,    16,    15,    17,    18,
+       0,     0,    50,    19,    22,     0,    13,    12,    29,    24,
+       0,    25,     0,    27,    23,     0,     0,    26,    21
   };
 
   const signed char
   DefaultParser::yypgoto_[] =
   {
-     -46,   -46,   -16,     8,   -46,   -46,   -21,   -46,   -46,    28,
-     -46,   -46,   -46
+     -61,   -61,   -11,     4,   -61,   -61,   -61,   -53,   -61,   -61,
+     -61,   -61,   -61,   -60,     6,   -61,    13,   -36,   -61,   -61,
+      -2,   -61,   -61,   -61
   };
 
   const signed char
   DefaultParser::yydefgoto_[] =
   {
-       0,     7,     8,     9,    10,    11,    12,    13,    14,    15,
-      16,    17,    35
+       0,    13,    14,    15,    16,    17,    18,    53,    54,    55,
+      56,    57,    58,    63,    59,    72,    60,    19,    20,    21,
+      22,    23,    24,    44
   };
 
   const signed char
   DefaultParser::yytable_[] =
   {
-       1,    23,    37,    43,     1,    18,    18,    38,    34,    19,
-      39,    32,    33,     2,    21,     1,    22,     2,    41,    25,
-      26,    28,    29,    30,     3,    31,    40,     4,     3,    42,
-      20,     4,     5,     0,     6,    27,     5,     0,     6,     3,
-      22,    22,     4,     0,     0,     0,     0,     5,     0,     6,
-       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,    24,    24,    24,     0,    36
+      27,    28,    43,    31,     1,    46,    62,    68,    47,    71,
+      25,    48,    50,    25,     1,    77,    74,     2,    30,    75,
+      26,     1,     1,    68,    41,    42,     3,     1,     4,     5,
+       6,     7,     8,    29,    51,    33,     9,    52,    10,    11,
+      12,    51,    35,    34,    52,    30,    30,    61,    36,    61,
+      37,     4,     5,     6,     7,     8,     1,    64,    61,     9,
+      38,    10,    11,    12,    39,    40,    32,    61,    32,    32,
+       1,    61,    45,    61,    61,    64,    51,    65,    49,    52,
+      69,    64,    67,     2,    66,    70,    76,     0,     0,    78,
+      73,     0,     3,     0,     4,     5,     6,     7,     8,     0,
+       0,     0,     9,     0,    10,    11,    12
   };
 
   const signed char
   DefaultParser::yycheck_[] =
   {
-       4,     4,     4,     4,     4,    39,    39,    52,    29,     4,
-      55,    27,    28,    17,     0,     4,     8,    17,    39,    39,
-       4,    60,    51,    66,    28,     4,    68,    31,    28,    70,
-       2,    31,    36,    -1,    38,    68,    36,    -1,    38,    28,
-      32,    33,    31,    -1,    -1,    -1,    -1,    36,    -1,    38,
-      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,    65,    65,    65,    -1,    70
+       2,     3,    38,     4,     4,     4,     4,    60,    54,    69,
+      41,    57,    48,    41,     4,    75,    54,    17,    14,    57,
+       4,     4,     4,    76,    35,    36,    26,     4,    28,    29,
+      30,    31,    32,     0,    24,    41,    36,    27,    38,    39,
+      40,    24,    70,     4,    27,    41,    42,    49,    62,    51,
+      62,    28,    29,    30,    31,    32,     4,    51,    60,    36,
+      53,    38,    39,    40,    68,     4,    67,    69,    67,    67,
+       4,    73,    72,    75,    76,    69,    24,    53,    70,    27,
+      53,    75,    72,    17,    62,    54,    73,    -1,    -1,    72,
+      70,    -1,    26,    -1,    28,    29,    30,    31,    32,    -1,
+      -1,    -1,    36,    -1,    38,    39,    40
   };
 
   const signed char
   DefaultParser::yystos_[] =
   {
-       0,     4,    17,    28,    31,    36,    38,    73,    74,    75,
-      76,    77,    78,    79,    80,    81,    82,    83,    39,     4,
-      81,     0,    75,     4,    65,    39,     4,    68,    60,    51,
-      66,     4,    74,    74,    78,    84,    70,     4,    52,    55,
-      68,    78,    70,     4
+       0,     4,    17,    26,    28,    29,    30,    31,    32,    36,
+      38,    39,    40,    75,    76,    77,    78,    79,    80,    91,
+      92,    93,    94,    95,    96,    41,     4,    94,    94,     0,
+      77,     4,    67,    41,     4,    70,    62,    62,    53,    68,
+       4,    76,    76,    91,    97,    72,     4,    54,    57,    70,
+      91,    24,    27,    81,    82,    83,    84,    85,    86,    88,
+      90,    94,     4,    87,    88,    53,    62,    72,    81,    53,
+      54,    87,    89,    70,    54,    57,    90,    87,    72
   };
 
   const signed char
   DefaultParser::yyr1_[] =
   {
-       0,    72,    73,    74,    74,    74,    75,    75,    76,    76,
-      77,    78,    78,    78,    79,    79,    79,    79,    80,    81,
-      81,    82,    83,    83,    84,    84,    84
+       0,    74,    75,    76,    76,    76,    77,    77,    77,    78,
+      78,    79,    80,    81,    81,    82,    82,    83,    84,    85,
+      85,    86,    87,    88,    89,    89,    89,    90,    90,    90,
+      91,    91,    91,    92,    92,    92,    92,    92,    92,    92,
+      92,    93,    93,    94,    94,    95,    96,    96,    97,    97,
+      97
   };
 
   const signed char
   DefaultParser::yyr2_[] =
   {
-       0,     2,     1,     0,     1,     2,     1,     1,     5,     4,
-       7,     1,     1,     3,     1,     1,     1,     1,     1,     1,
-       1,     1,     3,     3,     0,     2,     4
+       0,     2,     1,     0,     1,     2,     1,     1,     1,     5,
+       4,     3,     8,     2,     1,     1,     1,     1,     1,     2,
+       1,     6,     1,     4,     0,     1,     3,     0,     1,     2,
+       1,     1,     3,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     3,     3,     0,     2,
+       4
   };
 
 
@@ -1406,9 +1702,12 @@ namespace amanda { namespace compiler {
   const short
   DefaultParser::yyrline_[] =
   {
-       0,   213,   213,   229,   230,   231,   235,   236,   240,   241,
-     255,   261,   262,   263,   267,   268,   269,   270,   274,   279,
-     280,   284,   288,   289,   294,   295,   296
+       0,   228,   228,   244,   245,   246,   250,   251,   252,   256,
+     257,   271,   275,   280,   281,   285,   286,   290,   296,   301,
+     302,   307,   314,   318,   324,   325,   326,   331,   332,   333,
+     338,   339,   340,   344,   345,   346,   347,   348,   349,   350,
+     351,   355,   356,   361,   362,   366,   370,   371,   376,   377,
+     378
   };
 
   void
@@ -1441,9 +1740,9 @@ namespace amanda { namespace compiler {
 
 #line 53 "specs/grammar.y"
 } } // amanda::compiler
-#line 1445 "compiler/Parser.cpp"
+#line 1744 "compiler/Parser.cpp"
 
-#line 299 "specs/grammar.y"
+#line 381 "specs/grammar.y"
 
 
 static unsigned getDigitCount(int number)

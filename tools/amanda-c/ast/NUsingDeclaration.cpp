@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,23 +16,32 @@
  */
 
 /* 
- * File:   NStatement.cpp
+ * File:   NUsingDeclaration.cpp
  * Author: Javier Marrero
  * 
- * Created on March 13, 2022, 12:48 AM
+ * Created on March 20, 2022, 10:32 AM
  */
 
-#include <amanda-c/ast/NStatement.h>
+#include <amanda-c/ast/NUsingDeclaration.h>
 
 using namespace amanda;
 using namespace amanda::compiler::ast;
 
-NStatement::NStatement()
+NUsingDeclaration::NUsingDeclaration(const core::String& package)
+:
+package(package)
 {
 }
 
-NStatement::~NStatement()
+NUsingDeclaration::~NUsingDeclaration()
 {
+}
+
+core::String NUsingDeclaration::toString() const
+{
+    core::String buffer(buildHeaderString());
+    buffer.append("Importing: ").append(package);
+    return buffer;
 }
 
 

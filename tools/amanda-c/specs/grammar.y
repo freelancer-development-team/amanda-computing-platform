@@ -122,13 +122,23 @@
 /* ================== NONTERMINALS WITH SEMANTIC VALUES ===================== */
 
 %type<amanda::compiler::ast::NCompilationUnit*>         compilation_unit
+%type<amanda::compiler::ast::NStatement*>               compound_statement
 %type<amanda::compiler::ast::NDeclaration*>             declaration
 %type<amanda::compiler::ast::NDeclarationBlock*>        declarations
+%type<amanda::compiler::ast::NExpression*>              expression
+%type<amanda::compiler::ast::NExpressionStatement*>     expression_statement
+%type<amanda::compiler::ast::NFunctionCall*>            function_call
 %type<amanda::compiler::ast::NFunctionDeclaration*>     function_declaration
 %type<amanda::core::String>                             name
 %type<amanda::compiler::ast::NNamespaceDeclaration*>    namespace_declaration
 %type<amanda::core::String>                             qualified_name
+%type<amanda::compiler::ast::NReturnStatement*>         return_statement
 %type<amanda::core::String>                             simple_name
+%type<amanda::compiler::ast::NStatement*>               simple_statement
+%type<amanda::compiler::ast::NStatement*>               statement
+%type<amanda::compiler::ast::NBlock*>                   statement_sequence
+%type<amanda::compiler::ast::NUsingDeclaration*>        using_declaration
+%type<amanda::compiler::ast::NWhileStatement*>          while_statement
 
 /* ============================ KEYWORDS ==================================== */
 
@@ -170,6 +180,8 @@
     STRING      "string"
     CHAR        "char"
     VOID        "void"
+    FLOAT       "float"
+    DOUBLE      "double"
 ;
 
 /* ============================ OPERATORS =================================== */
@@ -198,12 +210,15 @@
 // Operator precedence & associativity
 // Includes ')' for casts and '[' for array indexing
 
+/* ==================== PRECEDENCE OF NONTERMINALS ========================== */
 
-// Parser algorithm
+
+
+/* ==================== PARSER ALGORITHM & TUNING =========================== */
+// Parser LR algorithm
 %define lr.type ielr
 
 // Expects a given number of SR-Conflicts & set the start symbol
-%expect 24
 %start compilation_unit
 
 %%
@@ -233,6 +248,7 @@ declarations
 
 declaration
     : namespace_declaration { $$ = $1; }
+    | using_declaration     { $$ = $1; }
     | function_declaration  { $$ = $1; }
     ;
 
@@ -251,11 +267,72 @@ namespace_declaration
                                                 }
     ;
 
+using_declaration
+    : USING name ';'        { $$ = new NUsingDeclaration($2); }
+    ;
+
 function_declaration
-    : type IDENTIFIER '(' argument_list ')' '{' '}' { $$ = new NFunctionDeclaration($2); }
+    : type IDENTIFIER '(' argument_list ')' '{' statement_sequence '}' { $$ = new NFunctionDeclaration($2, $7); }
+    ;
+
+/* Statements */
+statement
+    : simple_statement ';'
+    | compound_statement
+    ;
+
+simple_statement
+    : return_statement              { $$ = $1; }
+    | expression_statement          { $$ = $1; }
+    ;
+
+compound_statement
+    : while_statement               { $$ = $1; }
+    ;
+
+// These are the expressions allowed as
+// statements
+expression_statement
+    : function_call                 { $$ = new NExpressionStatement($1); }
+    ;
+
+/* Simple statements */
+return_statement
+    : RETURN expression             { $$ = new NReturnStatement(); }
+    | RETURN                        { $$ = new NReturnStatement(); }
+    ;
+
+/* Compound statements */
+while_statement
+    : WHILE '(' ')' '{' statement_sequence '}'  {
+                                                    $$ = new NWhileStatement($5); 
+                                                }
+    ;
+
+/* Expressions */
+expression
+    : function_call     { $$ = $1; }
+    ;
+
+function_call
+    : name '(' expression_list ')'  { $$ = new NFunctionCall($1); }
     ;
 
 /* Auxiliary declarations */
+/* Expression list */
+expression_list
+    : %empty
+    | expression
+    | expression_list ',' expression
+    ;
+
+/* Blocks */
+statement_sequence
+    : %empty                        { $$ = new NBlock(); }
+    | statement                     { $$ = new NBlock(); $$->addStatement($1); }
+    | statement_sequence statement  { $$ = $1; $$->addStatement($2); }
+    ;
+
 /* Types */
 type
     : simple_type
@@ -266,12 +343,17 @@ type
 simple_type
     : VOID
     | BOOL
+    | BYTE
+    | SHORT
     | INT
-    | STRING
+    | LONG
+    | FLOAT
+    | DOUBLE
     ;
 
 reference_type
     : name
+    | STRING
     ;
 
 /* Names */

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,24 +16,25 @@
  */
 
 /* 
- * File:   NStatement.cpp
+ * File:   NFunctionCall.cpp
  * Author: Javier Marrero
  * 
- * Created on March 13, 2022, 12:48 AM
+ * Created on March 20, 2022, 10:41 PM
  */
 
-#include <amanda-c/ast/NStatement.h>
+#include <amanda-c/ast/NFunctionCall.h>
 
 using namespace amanda;
 using namespace amanda::compiler::ast;
 
-NStatement::NStatement()
+NFunctionCall::NFunctionCall(const core::String& target)
+:
+callTargetIdentifier(target)
 {
 }
 
-NStatement::~NStatement()
+NFunctionCall::~NFunctionCall()
 {
 }
-
 
 

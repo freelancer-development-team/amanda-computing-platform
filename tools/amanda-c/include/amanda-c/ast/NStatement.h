@@ -39,6 +39,9 @@ class NStatement : public il::AstNodeBase
     AMANDA_OBJECT(NStatement, il::AstNodeBase)
 
 public:
+
+    NStatement();
+    virtual ~NStatement();
     
 } ;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,22 +16,24 @@
  */
 
 /* 
- * File:   NStatement.cpp
+ * File:   NWhileStatement.cpp
  * Author: Javier Marrero
  * 
- * Created on March 13, 2022, 12:48 AM
+ * Created on March 20, 2022, 11:07 AM
  */
 
-#include <amanda-c/ast/NStatement.h>
+#include <amanda-c/ast/NWhileStatement.h>
 
 using namespace amanda;
 using namespace amanda::compiler::ast;
 
-NStatement::NStatement()
+NWhileStatement::NWhileStatement(NBlock* block)
+:
+NCompoundStatement(block)
 {
 }
 
-NStatement::~NStatement()
+NWhileStatement::~NWhileStatement()
 {
 }
 

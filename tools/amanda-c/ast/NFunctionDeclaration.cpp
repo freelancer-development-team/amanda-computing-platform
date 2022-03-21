@@ -27,10 +27,12 @@
 using namespace amanda;
 using namespace amanda::compiler::ast;
 
-NFunctionDeclaration::NFunctionDeclaration(const core::String& identifier)
+NFunctionDeclaration::NFunctionDeclaration(const core::String& identifier, NBlock* statements)
 :
-identifier(identifier)
+identifier(identifier),
+statements(statements)
 {
+    addChild(statements);
 }
 
 NFunctionDeclaration::~NFunctionDeclaration()

@@ -56,7 +56,7 @@ LEX_OPTIONS	:= -B --fast -m reflex
 
 # GNU Bison
 YACC		:= bison
-YACC_OPTIONS	:= -Wall --report=cex --color=always
+YACC_OPTIONS	:= -Wall --color=always
 
 # build
 build: .build-post
