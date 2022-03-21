@@ -35,6 +35,7 @@
 /* Standard C/C++ includes */
 #include <cstdio>
 #include <cstdlib>
+#include <csignal>
 
 using namespace amanda;
 
@@ -45,6 +46,9 @@ using namespace amanda;
  */
 int main(int argc, char** argv)
 {
+    /* Set-up signal handler */
+
+
     /* Create the compiler driver object. */
     core::StrongReference<compiler::Driver> driver = new compiler::Driver();
 
@@ -105,7 +109,7 @@ int main(int argc, char** argv)
         }
         if (commandLine->hasOption('W'))
         {
-            
+
         }
 
         for (std::list<core::String>::iterator iter = commandLine->getArgumentList().begin();
@@ -159,11 +163,18 @@ int main(int argc, char** argv)
             }
         }
 
-        /* Perform the compiler pass. */
+        try
+        {
+            /* Perform the compiler pass. */
+            driver->compileFiles();
 
-
-        /* If statistics must be shown, display... */
-        driver->showStatistics();
+            /* If statistics must be shown, display... */
+            driver->showStatistics();
+        }
+        catch (core::Exception& ex)
+        {
+            amanda::compiler::log::fatal(ex.getMessage());
+        }
     }
     return EXIT_SUCCESS;
 }

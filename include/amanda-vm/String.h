@@ -28,6 +28,8 @@
 #include <amanda-vm/ReferenceCounted.h>
 #include <amanda-vm-c/sdk-definitions.h>
 
+#include <vector>
+
 #include <cassert>
 #include <cstdarg>
 #include <cstring>
@@ -301,6 +303,9 @@ public:
         return buffer[index];
     }
 
+    /// Counts how many occurrences of str are in the string
+    unsigned count(const String& str) const;
+
     /// Replace all occurrences of a character.
     void replace(char replaceThis, char replaceWith, bool caseSensitive = true);
     /// Replace all occurrences of a string.
@@ -450,6 +455,10 @@ public:
     String& appendWithFormat(const char* formatString, ...);
     /// Append to string using variable arguments.
     String& appendWithFormatArguments(const char* formatString, va_list args);
+    /// Format a string and appends
+    String& format(const String& fmt, ...);
+    /// Splits a string according to given delimiter
+    std::vector<String> split(const String& delimiter, unsigned maxCount = 0) const;
 
     /// Compare two C strings.
     static int compare(const char* str1, const char* str2, bool caseSensitive);

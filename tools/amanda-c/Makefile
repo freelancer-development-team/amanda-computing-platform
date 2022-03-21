@@ -49,26 +49,37 @@ MKDIR=mkdir
 CP=cp
 CCADMIN=CCadmin
 
+# RE/Flex
+LEX_SRC_DIR	:= ../../third-party/reflex-3.2.1
+LEX		:= ${LEX_SRC_DIR}/bin/reflex
+LEX_OPTIONS	:= -B --fast -m reflex
+
+# GNU Bison
+YACC		:= bison
+YACC_OPTIONS	:= -Wall --color=always
 
 # build
 build: .build-post
 
 .build-pre:
-# Add your pre 'build' code here...
+    	# Build RE-Flex
+	utils/build-reflex.sh
+	
+	${LEX} ${LEX_OPTIONS} -o "compiler/Scanner.cpp" --header-file="include/amanda-c/Scanner.h" "specs/scanner.l"
+	${YACC} ${YACC_OPTIONS} --report-file="specs/parser-report.txt" -o "compiler/Parser.cpp" --defines="include/amanda-c/Parser.h" "specs/grammar.y"
 
 .build-post: .build-impl
 # Add your post 'build' code here...
-
 
 # clean
 clean: .clean-post
 
 .clean-pre:
-# Add your pre 'clean' code here...
+	# Clean RE-Flex
+	utils/clean-reflex.sh
 
 .clean-post: .clean-impl
-# Add your post 'clean' code here...
-
+	# Add your post 'clean' code here...
 
 # clobber
 clobber: .clobber-post

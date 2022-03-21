@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,6 +59,8 @@ public:
 
     void                        addInputFile(io::File* file);
     void                        addOutputFile(io::File* file);
+    int                         compileFile(io::File* input, io::File* output);
+    void                        compileFiles();
     const std::list<io::File*>& getInputFiles();
     const std::list<io::File*>& getOutputFiles();
     bool                        hasInputFiles() const;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,8 @@
  */
 
 #include <amanda-c/Driver.h>
+#include <amanda-c/Messages.h>
+#include <amanda-c/CompilationContext.h>
 #include <AmandaSDK.h>
 
 using namespace amanda;
@@ -66,6 +68,73 @@ void Driver::addOutputFile(io::File* file)
     {
         file->grab();
         outputFiles.push_back(file);
+    }
+}
+
+int Driver::compileFile(io::File* input, io::File* output)
+{
+    assert(input != NULL && "Passed NULL input file.");
+    assert(output != NULL && "Passed NULL output file.");
+
+    int result = 0;
+    if (verbose)
+    {
+        log::info("Compiling file '%s' into '%s'.", input->getPath().toCharArray(),
+                  output->getPath().toCharArray());
+    }
+
+    try
+    {
+        core::StrongReference<CompilationContext> context = new CompilationContext(input, output);
+        if (context->performSSATransformation() != 0)
+        {
+            log::error("%s: compilation failed.", input->getPath().toCharArray());
+        }
+    }
+    catch (core::Exception& ex)
+    {
+        log::error("%s: %s", input->getPath().toCharArray(), ex.toString().toCharArray());
+        result = 1;
+    }
+
+    return result;
+}
+
+void Driver::compileFiles()
+{
+    // For the maximum number of threads, initialize one compilation process in
+    // each of them.
+    if (verbose)
+    {
+        log::info("Beginning compilation process... (%lu input file%s)",
+                  inputFiles.size(),
+                  inputFiles.size() > 1 ? "s" : "");
+    }
+
+    // Exit with the highest exit code
+    int result = 0;
+
+    /// TODO: Handle this properly
+    STL_ITERATOR(list, io::File*, o_it);
+    STL_ITERATOR(list, io::File*, i_it);
+    for (i_it = inputFiles.begin(),
+         o_it = outputFiles.begin(); i_it != inputFiles.end(); ++i_it)
+    {
+        int compileStatus = compileFile(*i_it, *o_it);
+        if (compileStatus > result)
+        {
+            result = compileStatus;
+        }
+
+        if (o_it != outputFiles.end())
+        {
+            ++o_it;
+        }
+    }
+
+    if (result != 0)
+    {
+        throw core::Exception("compilation failed...");
     }
 }
 
