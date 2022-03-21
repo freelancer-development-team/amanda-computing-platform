@@ -107,21 +107,28 @@ class Scanner : public reflex::AbstractLexer<reflex::Matcher> {
 
         static const Keyword kwds[] =
         {
-            { "do",         TOKEN(DO) },
-            { "else",       TOKEN(ELSE) },
-            { "class",      TOKEN(CLASS) },
-            { "interface",  TOKEN(INTERFACE) },
-            { "namespace",  TOKEN(NAMESPACE) },
-            { "return",     TOKEN(RETURN) },
-            { "using",      TOKEN(USING) },
-            { "while",      TOKEN(WHILE) },
-            // Types
+            { "break",      TOKEN(BREAK)        },
+            { "case",       TOKEN(CASE)         },
+            { "class",      TOKEN(CLASS)        },
+            { "do",         TOKEN(DO)           },
+            { "else",       TOKEN(ELSE)         },
+            { "for",        TOKEN(FOR)          },
+            { "if",         TOKEN(IF)           },
+            { "interface",  TOKEN(INTERFACE)    },
+            { "namespace",  TOKEN(NAMESPACE)    },
+            { "switch",     TOKEN(SWITCH)       },
+            { "return",     TOKEN(RETURN)       },
+            { "using",      TOKEN(USING)        },
+            { "while",      TOKEN(WHILE)        },
+            // Data types
             { "void",       TOKEN(VOID) },
             { "bool",       TOKEN(BOOL) },
             { "int",        TOKEN(INT) },
             { "long",       TOKEN(LONG) },
             { "string",     TOKEN(STRING) },
             { "char",       TOKEN(CHAR) },
+            { "float",      TOKEN(FLOAT) },
+            { "double",     TOKEN(DOUBLE) },
             { NULL, 0 }
         };
 

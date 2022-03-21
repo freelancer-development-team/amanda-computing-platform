@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,33 +16,31 @@
  */
 
 /* 
- * File:   NUsingDeclaration.cpp
+ * File:   NInteger.cpp
  * Author: Javier Marrero
  * 
- * Created on March 20, 2022, 10:32 AM
+ * Created on March 21, 2022, 1:55 AM
  */
 
-#include <amanda-c/ast/NUsingDeclaration.h>
+#include <amanda-c/ast/NInteger.h>
 
 using namespace amanda;
 using namespace amanda::compiler::ast;
 
-NUsingDeclaration::NUsingDeclaration(const core::String& package)
+NInteger::NInteger(const core::String& literal)
 :
-package(package)
+literal(literal),
+signedInteger(false)
+{
+    // Check if has sign
+}
+
+NInteger::~NInteger()
 {
 }
 
-NUsingDeclaration::~NUsingDeclaration()
+bool NInteger::isSigned() const
 {
+    return signedInteger;
 }
-
-core::String NUsingDeclaration::toString() const
-{
-    core::String buffer(buildHeaderString());
-    buffer.append("Importing: ").append(package);
-    return buffer;
-}
-
-
 

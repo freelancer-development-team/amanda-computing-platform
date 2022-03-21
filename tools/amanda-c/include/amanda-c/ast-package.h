@@ -37,16 +37,20 @@
 #include <amanda-c/ast/NBlock.h>
 #include <amanda-c/ast/NCompilationUnit.h>
 #include <amanda-c/ast/NCompoundStatement.h>
+#include <amanda-c/ast/NConditionalStatement.h>
 #include <amanda-c/ast/NDeclaration.h>
 #include <amanda-c/ast/NExpression.h>
 #include <amanda-c/ast/NExpressionStatement.h>
 #include <amanda-c/ast/NFunctionCall.h>
 #include <amanda-c/ast/NFunctionDeclaration.h>
+#include <amanda-c/ast/NIdentifier.h>
+#include <amanda-c/ast/NInteger.h>
 #include <amanda-c/ast/NNamespaceDeclaration.h>
 #include <amanda-c/ast/NReturnStatement.h>
 #include <amanda-c/ast/NStatement.h>
 #include <amanda-c/ast/NUsingDeclaration.h>
 #include <amanda-c/ast/NWhileStatement.h>
+#include <amanda-c/ast/OperatorKinds.h>
 
 #endif /* AST_H */
 

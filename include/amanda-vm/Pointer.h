@@ -50,12 +50,12 @@ public:
     T&      getReference() const { return *pointer; }
     bool    isNull() const { return pointer == NULL; }
 
-    operator bool()                                             { return pointer != NULL; }
-    operator T()                                                { return pointer; }
-    T&      operator*()                                         { return *pointer; }
-    T*      operator->()                                        { return pointer; }
-    bool    operator==(const AutomaticReferenceBase<T>& rhs)    { return pointer == rhs.pointer; }
-    bool    operator==(const T* rhs)                            { return pointer == rhs; }
+    operator bool() const                                           { return pointer != NULL; }
+    operator T*() const                                             { return pointer; }
+    T&      operator*() const                                       { return *pointer; }
+    T*      operator->() const                                      { return pointer; }
+    bool    operator==(const AutomaticReferenceBase<T>& rhs) const  { return pointer == rhs.pointer; }
+    bool    operator==(const T* rhs) const                          { return pointer == rhs; }
 
 protected:
 

@@ -104,21 +104,28 @@ class Scanner : public reflex::AbstractLexer<reflex::Matcher> {
 
         static const Keyword kwds[] =
         {
-            { "do",         TOKEN(DO) },
-            { "else",       TOKEN(ELSE) },
-            { "class",      TOKEN(CLASS) },
-            { "interface",  TOKEN(INTERFACE) },
-            { "namespace",  TOKEN(NAMESPACE) },
-            { "return",     TOKEN(RETURN) },
-            { "using",      TOKEN(USING) },
-            { "while",      TOKEN(WHILE) },
-            // Types
+            { "break",      TOKEN(BREAK)        },
+            { "case",       TOKEN(CASE)         },
+            { "class",      TOKEN(CLASS)        },
+            { "do",         TOKEN(DO)           },
+            { "else",       TOKEN(ELSE)         },
+            { "for",        TOKEN(FOR)          },
+            { "if",         TOKEN(IF)           },
+            { "interface",  TOKEN(INTERFACE)    },
+            { "namespace",  TOKEN(NAMESPACE)    },
+            { "switch",     TOKEN(SWITCH)       },
+            { "return",     TOKEN(RETURN)       },
+            { "using",      TOKEN(USING)        },
+            { "while",      TOKEN(WHILE)        },
+            // Data types
             { "void",       TOKEN(VOID) },
             { "bool",       TOKEN(BOOL) },
             { "int",        TOKEN(INT) },
             { "long",       TOKEN(LONG) },
             { "string",     TOKEN(STRING) },
             { "char",       TOKEN(CHAR) },
+            { "float",      TOKEN(FLOAT) },
+            { "double",     TOKEN(DOUBLE) },
             { NULL, 0 }
         };
 
@@ -233,7 +240,7 @@ class Scanner : public reflex::AbstractLexer<reflex::Matcher> {
 // Bison 3.2(+) parser integration:
 #line 62 "specs/scanner.l"
 // Scanner class
-#line 129 "specs/scanner.l"
+#line 136 "specs/scanner.l"
 // Character classes
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -270,7 +277,7 @@ amanda::compiler::DefaultParser::symbol_type amanda::compiler::Scanner::lex(void
           case 0:
             if (matcher().at_end())
             {
-#line 185 "specs/scanner.l"
+#line 192 "specs/scanner.l"
 { return DefaultParser::make_EOF(location()); }
             }
             else
@@ -278,155 +285,155 @@ amanda::compiler::DefaultParser::symbol_type amanda::compiler::Scanner::lex(void
               out().put(matcher().input());
             }
             break;
-          case 1: // rule specs/scanner.l:140: [[:space:]]+ :
-#line 140 "specs/scanner.l"
+          case 1: // rule specs/scanner.l:147: [[:space:]]+ :
+#line 147 "specs/scanner.l"
 // skip white space
             break;
-          case 2: // rule specs/scanner.l:141: "#".* :
-#line 141 "specs/scanner.l"
+          case 2: // rule specs/scanner.l:148: "#".* :
+#line 148 "specs/scanner.l"
 // ignore inline comment
             break;
-          case 3: // rule specs/scanner.l:142: "/*"(.|\n)*?"*/" :
-#line 142 "specs/scanner.l"
+          case 3: // rule specs/scanner.l:149: "/*"(.|\n)*?"*/" :
+#line 149 "specs/scanner.l"
 // ignore multi-line comment using a lazy regex pattern
 
             break;
-          case 4: // rule specs/scanner.l:144: {identifier} :
-#line 144 "specs/scanner.l"
+          case 4: // rule specs/scanner.l:151: {identifier} :
+#line 151 "specs/scanner.l"
 {   int token = getKeyWordToken(text());
                                     return token ?
                                             DefaultParser::symbol_type(token, location())
                                         :   DefaultParser::make_IDENTIFIER(amanda::core::String(text()), location());
                                 }
             break;
-          case 5: // rule specs/scanner.l:149: {integer_literal} :
-#line 149 "specs/scanner.l"
+          case 5: // rule specs/scanner.l:156: {integer_literal} :
+#line 156 "specs/scanner.l"
 { return integerLiteral(); }
 
             break;
-          case 6: // rule specs/scanner.l:151: "{" :
-#line 151 "specs/scanner.l"
+          case 6: // rule specs/scanner.l:158: "{" :
+#line 158 "specs/scanner.l"
 { return token('{'); }
             break;
-          case 7: // rule specs/scanner.l:152: "}" :
-#line 152 "specs/scanner.l"
+          case 7: // rule specs/scanner.l:159: "}" :
+#line 159 "specs/scanner.l"
 { return token('}'); }
             break;
-          case 8: // rule specs/scanner.l:153: "(" :
-#line 153 "specs/scanner.l"
+          case 8: // rule specs/scanner.l:160: "(" :
+#line 160 "specs/scanner.l"
 { return token('('); }
             break;
-          case 9: // rule specs/scanner.l:154: ")" :
-#line 154 "specs/scanner.l"
+          case 9: // rule specs/scanner.l:161: ")" :
+#line 161 "specs/scanner.l"
 { return token(')'); }
             break;
-          case 10: // rule specs/scanner.l:155: "[" :
-#line 155 "specs/scanner.l"
+          case 10: // rule specs/scanner.l:162: "[" :
+#line 162 "specs/scanner.l"
 { return token('['); }
             break;
-          case 11: // rule specs/scanner.l:156: "]" :
-#line 156 "specs/scanner.l"
+          case 11: // rule specs/scanner.l:163: "]" :
+#line 163 "specs/scanner.l"
 { return token(']'); }
 
             break;
-          case 12: // rule specs/scanner.l:158: ":" :
-#line 158 "specs/scanner.l"
+          case 12: // rule specs/scanner.l:165: ":" :
+#line 165 "specs/scanner.l"
 { return token(':'); }
             break;
-          case 13: // rule specs/scanner.l:159: "," :
-#line 159 "specs/scanner.l"
+          case 13: // rule specs/scanner.l:166: "," :
+#line 166 "specs/scanner.l"
 { return token(','); }
             break;
-          case 14: // rule specs/scanner.l:160: ";" :
-#line 160 "specs/scanner.l"
+          case 14: // rule specs/scanner.l:167: ";" :
+#line 167 "specs/scanner.l"
 { return token(';'); }
             break;
-          case 15: // rule specs/scanner.l:161: "." :
-#line 161 "specs/scanner.l"
+          case 15: // rule specs/scanner.l:168: "." :
+#line 168 "specs/scanner.l"
 { return token('.'); }
             break;
-          case 16: // rule specs/scanner.l:162: "::" :
-#line 162 "specs/scanner.l"
+          case 16: // rule specs/scanner.l:169: "::" :
+#line 169 "specs/scanner.l"
 { return token(Tokens::TOKEN_SCOPE_OP); }
 
             break;
-          case 17: // rule specs/scanner.l:164: "<=" :
-#line 164 "specs/scanner.l"
+          case 17: // rule specs/scanner.l:171: "<=" :
+#line 171 "specs/scanner.l"
 { return token(Tokens::TOKEN_LE); }
             break;
-          case 18: // rule specs/scanner.l:165: ">=" :
-#line 165 "specs/scanner.l"
+          case 18: // rule specs/scanner.l:172: ">=" :
+#line 172 "specs/scanner.l"
 { return token(Tokens::TOKEN_GE); }
             break;
-          case 19: // rule specs/scanner.l:166: ">" :
-#line 166 "specs/scanner.l"
+          case 19: // rule specs/scanner.l:173: ">" :
+#line 173 "specs/scanner.l"
 { return token('>'); }
             break;
-          case 20: // rule specs/scanner.l:167: "<" :
-#line 167 "specs/scanner.l"
+          case 20: // rule specs/scanner.l:174: "<" :
+#line 174 "specs/scanner.l"
 { return token('<'); }
             break;
-          case 21: // rule specs/scanner.l:168: "==" :
-#line 168 "specs/scanner.l"
+          case 21: // rule specs/scanner.l:175: "==" :
+#line 175 "specs/scanner.l"
 { return token(Tokens::TOKEN_EQ); }
             break;
-          case 22: // rule specs/scanner.l:169: "!=" :
-#line 169 "specs/scanner.l"
+          case 22: // rule specs/scanner.l:176: "!=" :
+#line 176 "specs/scanner.l"
 { return token(Tokens::TOKEN_NEQ); }
 
             break;
-          case 23: // rule specs/scanner.l:171: "=" :
-#line 171 "specs/scanner.l"
+          case 23: // rule specs/scanner.l:178: "=" :
+#line 178 "specs/scanner.l"
 { return token('='); }
             break;
-          case 24: // rule specs/scanner.l:172: "++" :
-#line 172 "specs/scanner.l"
+          case 24: // rule specs/scanner.l:179: "++" :
+#line 179 "specs/scanner.l"
 { return token(Tokens::TOKEN_PLUSPLUS); }
             break;
-          case 25: // rule specs/scanner.l:173: "--" :
-#line 173 "specs/scanner.l"
+          case 25: // rule specs/scanner.l:180: "--" :
+#line 180 "specs/scanner.l"
 { return token(Tokens::TOKEN_MINUSMINUS); }
 
             break;
-          case 26: // rule specs/scanner.l:175: "+" :
-#line 175 "specs/scanner.l"
+          case 26: // rule specs/scanner.l:182: "+" :
+#line 182 "specs/scanner.l"
 { return token('+'); }
             break;
-          case 27: // rule specs/scanner.l:176: "-" :
-#line 176 "specs/scanner.l"
+          case 27: // rule specs/scanner.l:183: "-" :
+#line 183 "specs/scanner.l"
 { return token('-'); }
             break;
-          case 28: // rule specs/scanner.l:177: "/" :
-#line 177 "specs/scanner.l"
+          case 28: // rule specs/scanner.l:184: "/" :
+#line 184 "specs/scanner.l"
 { return token('/'); }
             break;
-          case 29: // rule specs/scanner.l:178: "*" :
-#line 178 "specs/scanner.l"
+          case 29: // rule specs/scanner.l:185: "*" :
+#line 185 "specs/scanner.l"
 { return token('*'); }
             break;
-          case 30: // rule specs/scanner.l:179: "%" :
-#line 179 "specs/scanner.l"
+          case 30: // rule specs/scanner.l:186: "%" :
+#line 186 "specs/scanner.l"
 { return token('%'); }
             break;
-          case 31: // rule specs/scanner.l:180: "&" :
-#line 180 "specs/scanner.l"
+          case 31: // rule specs/scanner.l:187: "&" :
+#line 187 "specs/scanner.l"
 { return token('&'); }
             break;
-          case 32: // rule specs/scanner.l:181: "|" :
-#line 181 "specs/scanner.l"
+          case 32: // rule specs/scanner.l:188: "|" :
+#line 188 "specs/scanner.l"
 { return token('|'); }
             break;
-          case 33: // rule specs/scanner.l:182: "~" :
-#line 182 "specs/scanner.l"
+          case 33: // rule specs/scanner.l:189: "~" :
+#line 189 "specs/scanner.l"
 { return token('~'); }
             break;
-          case 34: // rule specs/scanner.l:183: "^" :
-#line 183 "specs/scanner.l"
+          case 34: // rule specs/scanner.l:190: "^" :
+#line 190 "specs/scanner.l"
 { return token('^'); }
 
             break;
-          case 35: // rule specs/scanner.l:186: . :
-#line 186 "specs/scanner.l"
+          case 35: // rule specs/scanner.l:193: . :
+#line 193 "specs/scanner.l"
 { scannerException(); }
 
             break;
@@ -440,7 +447,7 @@ amanda::compiler::DefaultParser::symbol_type amanda::compiler::Scanner::lex(void
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-#line 189 "specs/scanner.l"
+#line 196 "specs/scanner.l"
 
 #include <amanda-c/ParserLocations.h>
 #include <amanda-vm/Frontend/LexerException.h>

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,33 +16,41 @@
  */
 
 /* 
- * File:   NUsingDeclaration.cpp
+ * File:   NIdentifier.h
  * Author: Javier Marrero
- * 
- * Created on March 20, 2022, 10:32 AM
+ *
+ * Created on March 21, 2022, 1:05 AM
  */
 
-#include <amanda-c/ast/NUsingDeclaration.h>
+#ifndef NIDENTIFIER_H
+#define NIDENTIFIER_H
 
-using namespace amanda;
-using namespace amanda::compiler::ast;
+#include <amanda-c/ast/NExpression.h>
 
-NUsingDeclaration::NUsingDeclaration(const core::String& package)
-:
-package(package)
+namespace amanda
 {
+namespace compiler
+{
+namespace ast
+{
+
+class NIdentifier : public NExpression
+{
+    AMANDA_OBJECT(NIdentifier, NExpression)
+
+public:
+
+    NIdentifier(const core::String& name);
+    virtual ~NIdentifier();
+
+private:
+
+    core::String name;
+} ;
+
+}
+}
 }
 
-NUsingDeclaration::~NUsingDeclaration()
-{
-}
-
-core::String NUsingDeclaration::toString() const
-{
-    core::String buffer(buildHeaderString());
-    buffer.append("Importing: ").append(package);
-    return buffer;
-}
-
-
+#endif /* NIDENTIFIER_H */
 

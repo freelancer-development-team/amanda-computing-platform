@@ -27,5 +27,12 @@
 using namespace amanda;
 using namespace amanda::compiler::ast;
 
+NExpression::NExpression()
+{
+}
+
+NExpression::~NExpression()
+{
+}
 
 

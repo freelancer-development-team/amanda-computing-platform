@@ -91,7 +91,10 @@ int CompilationContext::performSSATransformation()
 void CompilationContext::printAbstractSyntaxTree()
 {
     assert(abstractSyntaxTree != NULL && "Null pointer exception.");
+
+    io::console().err.println("\n ===== ABSTRACT SYNTAX TREE ===== ");
     abstractSyntaxTree->printNodeAndChildren();
+    io::console().err.println(" ===== DONE ===== ");
 }
 
 void CompilationContext::performSemmanticAnnalysis()

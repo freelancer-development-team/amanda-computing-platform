@@ -121,16 +121,21 @@
 
 /* ================== NONTERMINALS WITH SEMANTIC VALUES ===================== */
 
+%type<amanda::compiler::ast::NBinaryOperator*>          binary_operator
 %type<amanda::compiler::ast::NCompilationUnit*>         compilation_unit
 %type<amanda::compiler::ast::NStatement*>               compound_statement
 %type<amanda::compiler::ast::NDeclaration*>             declaration
 %type<amanda::compiler::ast::NDeclarationBlock*>        declarations
 %type<amanda::compiler::ast::NExpression*>              expression
+%type<amanda::compiler::ast::ExpressionList*>           expression_list
 %type<amanda::compiler::ast::NExpressionStatement*>     expression_statement
 %type<amanda::compiler::ast::NFunctionCall*>            function_call
 %type<amanda::compiler::ast::NFunctionDeclaration*>     function_declaration
+%type<amanda::compiler::ast::NIdentifier*>              id
+%type<amanda::compiler::ast::NConditionalStatement*>    if_statement
 %type<amanda::core::String>                             name
 %type<amanda::compiler::ast::NNamespaceDeclaration*>    namespace_declaration
+%type<amanda::compiler::ast::NExpression*>              numeric_literal
 %type<amanda::core::String>                             qualified_name
 %type<amanda::compiler::ast::NReturnStatement*>         return_statement
 %type<amanda::core::String>                             simple_name
@@ -207,6 +212,7 @@
 // Single byte operators
 %token '!' '#' '$' '%' '&' '(' ')' '*' '+' ',' '-' '.' '/' ':' ';' '<' '=' '>' '?' '[' ']' '^' '{' '|' '}' '~'
 
+/* ==================== PRECEDENCE OF TERMINAL SYMBOLS ====================== */
 // Operator precedence & associativity
 // Includes ')' for casts and '[' for array indexing
 
@@ -287,7 +293,8 @@ simple_statement
     ;
 
 compound_statement
-    : while_statement               { $$ = $1; }
+    : if_statement                  { $$ = $1; }
+    | while_statement               { $$ = $1; }
     ;
 
 // These are the expressions allowed as
@@ -303,27 +310,53 @@ return_statement
     ;
 
 /* Compound statements */
+if_statement
+    : IF '(' expression ')' '{' statement_sequence '}'
+                                                        {
+                                                            $$ = new NConditionalStatement($3, $6);
+                                                        }
+
+    | IF '(' expression ')' '{' statement_sequence '}' ELSE '{' statement_sequence '}'
+                                                        {
+                                                            $$ = new NConditionalStatement($3, $6); $$->addElseClause($10); 
+                                                        }
+    ;
+
 while_statement
-    : WHILE '(' ')' '{' statement_sequence '}'  {
-                                                    $$ = new NWhileStatement($5); 
+    : WHILE '(' expression ')' '{' statement_sequence '}'
+                                                {
+                                                    $$ = new NWhileStatement($6);
                                                 }
     ;
 
 /* Expressions */
 expression
-    : function_call     { $$ = $1; }
+    : id                                        { $$ = $1; }
+    | numeric_literal                           { $$ = $1; }
+    | function_call                             { $$ = $1; }
+    | binary_operator                           { $$ = $1; }
+    | '(' expression ')'                        { $$ = $2; }
     ;
 
 function_call
-    : name '(' expression_list ')'  { $$ = new NFunctionCall($1); }
+    : name '(' expression_list ')'  { $$ = new NFunctionCall($1); $$->addPassedArguments(*$3); delete $3; }
     ;
 
 /* Auxiliary declarations */
+/* Identifier node */
+id  : name                      { $$ = new NIdentifier($1); }
+    ;
+
+/* Numeric */
+numeric_literal
+    : INTEGER                   { $$ = new NInteger($1); }
+    ;
+
 /* Expression list */
 expression_list
-    : %empty
-    | expression
-    | expression_list ',' expression
+    : %empty                            { $$ = new ExpressionList();                    }
+    | expression                        { $$ = new ExpressionList(); $$->push_back($1); }
+    | expression_list ',' expression    { $$ = $1; $$->push_back($3);                   }
     ;
 
 /* Blocks */
@@ -378,7 +411,14 @@ argument_list
     | argument_list ',' type IDENTIFIER
     ;
 
+/* Operators */
+binary_operator
+    : expression '<' expression             { $$ = new NBinaryOperator(BO_Lesser, $1, $3); }
+    | expression '>' expression             { $$ = new NBinaryOperator(BO_Greater, $1, $3); }
+    ;
+
 %%
+// ========================== EPILOGUE ====================================== //
 
 static unsigned getDigitCount(int number)
 {

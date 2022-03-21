@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #define NFUNCTIONCALL_H
 
 #include <amanda-c/ast/NExpression.h>
+#include <amanda-c/ast/Lists.h>
 
 namespace amanda
 {
@@ -43,9 +44,14 @@ public:
     NFunctionCall(const core::String& target);
     virtual ~NFunctionCall();
 
+    void                    addPassedArguments(ExpressionList& list);
+    virtual core::String    toString() const;
+
 protected:
 
-    core::String callTargetIdentifier;
+    core::String    callTargetIdentifier;
+    ExpressionList  passedArguments;
+    
 } ;
 
 }

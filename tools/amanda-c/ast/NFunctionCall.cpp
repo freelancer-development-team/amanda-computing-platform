@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,10 +31,47 @@ NFunctionCall::NFunctionCall(const core::String& target)
 :
 callTargetIdentifier(target)
 {
+    passedArguments.reserve(1);
 }
 
 NFunctionCall::~NFunctionCall()
 {
+    for (ExpressionList::iterator it = passedArguments.begin(); it != passedArguments.end(); ++it)
+    {
+        static_cast<NExpression*> (*it)->release();
+    }
 }
+
+void NFunctionCall::addPassedArguments(ExpressionList& list)
+{
+    for (ExpressionList::iterator it = list.begin();
+         it != list.end(); ++it)
+    {
+        NExpression* expression = static_cast<NExpression*> (*it);
+        assert(expression != NULL && "Null pointer exception.");
+
+        expression->grab(); // Borrow a reference to this object
+        passedArguments.push_back(expression); // And push the references
+    }
+}
+
+core::String NFunctionCall::toString() const
+{
+    core::String buffer(buildHeaderString());
+    if (!passedArguments.empty())
+    {
+        buffer.format("Target invoked with following arguments (%lu):", passedArguments.size());
+        for (ExpressionList::const_iterator it = passedArguments.begin(); it != passedArguments.end(); ++it)
+        {
+            buffer.append("\n  <").append((*it)->toString()).append(">");
+        }
+    }
+    else
+    {
+        buffer.append("Target invoked with zero arguments!");
+    }
+    return buffer;
+}
+
 
 

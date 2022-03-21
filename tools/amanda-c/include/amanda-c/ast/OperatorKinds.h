@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,33 +16,51 @@
  */
 
 /* 
- * File:   NUsingDeclaration.cpp
+ * File:   OperatorKinds.h
  * Author: Javier Marrero
- * 
- * Created on March 20, 2022, 10:32 AM
+ *
+ * Created on March 21, 2022, 1:22 AM
  */
 
-#include <amanda-c/ast/NUsingDeclaration.h>
+#ifndef OPERATORKINDS_H
+#define OPERATORKINDS_H
 
-using namespace amanda;
-using namespace amanda::compiler::ast;
-
-NUsingDeclaration::NUsingDeclaration(const core::String& package)
-:
-package(package)
+namespace amanda
 {
+namespace compiler
+{
+namespace ast
+{
+
+typedef enum BinaryOperator
+{
+    // Comparison
+    BO_Equals,
+    BO_NotEquals,
+    BO_Greater,
+    BO_Lesser,
+    BO_GreaterEquals,
+    BO_LesserEquals,
+    // Arithmetics
+    BO_Sum,
+    BO_Sub,
+    BO_Mult,
+    BO_Div,
+    BO_Mod,
+    // Logic
+    BO_LogicAnd,
+    BO_LogicOr,
+    BO_LogicNot
+} BinaryOperator;
+
+typedef enum UnaryOperator
+{
+    UO_Negate
+} UnaryOperator;
+
+}
+}
 }
 
-NUsingDeclaration::~NUsingDeclaration()
-{
-}
-
-core::String NUsingDeclaration::toString() const
-{
-    core::String buffer(buildHeaderString());
-    buffer.append("Importing: ").append(package);
-    return buffer;
-}
-
-
+#endif /* OPERATORKINDS_H */
 

@@ -27,12 +27,14 @@
 using namespace amanda;
 using namespace amanda::compiler::ast;
 
-NBinaryOperator::NBinaryOperator(BinaryOperatorKind kind, NExpression* lhs, NExpression* rhs)
+NBinaryOperator::NBinaryOperator(BinaryOperator kind, NExpression* lhs, NExpression* rhs)
 :
 kind(kind),
 lhs(lhs),
 rhs(rhs)
 {
+    addChild(lhs);
+    addChild(rhs);
 }
 
 NBinaryOperator::~NBinaryOperator()
@@ -44,6 +46,17 @@ il::Value* NBinaryOperator::generateCode(il::CodeGenContext& context)
     il::Value* result = NULL;
 
     return result;
+}
+
+core::String NBinaryOperator::toString() const
+{
+    core::String buffer(buildHeaderString());
+    buffer.format("Expression: %s %lu %s",
+                  lhs->getClassDynamically().getName(),
+                  kind,
+                  rhs->getClassDynamically().getName());
+
+    return buffer;
 }
 
 

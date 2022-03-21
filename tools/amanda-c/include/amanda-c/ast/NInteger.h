@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,17 +16,19 @@
  */
 
 /* 
- * File:   NBinaryOperator.h
+ * File:   NInteger.h
  * Author: Javier Marrero
  *
- * Created on March 13, 2022, 12:01 AM
+ * Created on March 21, 2022, 1:55 AM
  */
 
-#ifndef NBINARYOPERATOR_H
-#define NBINARYOPERATOR_H
+#ifndef NINTEGER_H
+#define NINTEGER_H
 
 #include <amanda-c/ast/NExpression.h>
-#include <amanda-c/ast/OperatorKinds.h>
+
+/* Use the maximum size integer available on the platform. */
+#include <stdint.h>
 
 namespace amanda
 {
@@ -35,28 +37,33 @@ namespace compiler
 namespace ast
 {
 
-class NBinaryOperator : public NExpression
+class NInteger : public NExpression
 {
-    AMANDA_OBJECT(NBinaryOperator, NExpression)
+    AMANDA_OBJECT(NInteger, NExpression)
 
 public:
 
-    NBinaryOperator(BinaryOperator kind, NExpression* lhs, NExpression* rhs);
-    virtual ~NBinaryOperator();
+    NInteger(const core::String& literal);
+    virtual ~NInteger();
 
-    virtual il::Value*      generateCode(il::CodeGenContext& context);
-    virtual core::String    toString() const;
+    bool isSigned() const;
 
 protected:
 
-    BinaryOperator                      kind;
-    core::StrongReference<NExpression>  lhs;
-    core::StrongReference<NExpression>  rhs;
+    core::String    literal;
+    bool            signedInteger;
+
+    union
+    {
+        uintmax_t   unsignedVariant;
+        intmax_t    signedVariant;
+    } data;
+
 } ;
 
 }
 }
 }
 
-#endif /* NBINARYOPERATOR_H */
+#endif /* NINTEGER_H */
 

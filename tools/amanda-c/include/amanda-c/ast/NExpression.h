@@ -41,6 +41,8 @@ class NExpression : public il::AstNodeBase
     
 public:
 
+    NExpression();
+    virtual ~NExpression();
     
 } ;
 

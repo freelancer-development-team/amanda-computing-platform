@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,17 +16,19 @@
  */
 
 /* 
- * File:   NBinaryOperator.h
+ * File:   NConditionalStatement.h
  * Author: Javier Marrero
  *
- * Created on March 13, 2022, 12:01 AM
+ * Created on March 20, 2022, 11:17 PM
  */
 
-#ifndef NBINARYOPERATOR_H
-#define NBINARYOPERATOR_H
+#ifndef NCONDITIONALSTATEMENT_H
+#define NCONDITIONALSTATEMENT_H
 
+#include <amanda-c/ast/NCompoundStatement.h>
 #include <amanda-c/ast/NExpression.h>
-#include <amanda-c/ast/OperatorKinds.h>
+
+#include <vector>
 
 namespace amanda
 {
@@ -35,28 +37,31 @@ namespace compiler
 namespace ast
 {
 
-class NBinaryOperator : public NExpression
+class NConditionalStatement : public NCompoundStatement
 {
-    AMANDA_OBJECT(NBinaryOperator, NExpression)
+    AMANDA_OBJECT(NConditionalStatement, NCompoundStatement)
 
 public:
 
-    NBinaryOperator(BinaryOperator kind, NExpression* lhs, NExpression* rhs);
-    virtual ~NBinaryOperator();
+    NConditionalStatement(NExpression* condition, NBlock* block);
+    virtual ~NConditionalStatement();
 
-    virtual il::Value*      generateCode(il::CodeGenContext& context);
+    void                    addElseClause(NBlock* block);
+    void                    addElseIfClause(NExpression* condition, NBlock* block);
+    
     virtual core::String    toString() const;
 
 protected:
 
-    BinaryOperator                      kind;
-    core::StrongReference<NExpression>  lhs;
-    core::StrongReference<NExpression>  rhs;
+    core::StrongReference<NExpression>  condition;
+    core::StrongReference<NBlock>       elseClause;
+    std::vector<NConditionalStatement*> elseIfClauses;
+    
 } ;
 
 }
 }
 }
 
-#endif /* NBINARYOPERATOR_H */
+#endif /* NCONDITIONALSTATEMENT_H */
 

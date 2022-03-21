@@ -21,20 +21,22 @@ using std::io::console;
 using std::core::math;
 using std::core::file;
 
-void busy_wait()
+void do_maths(int x, int y)
 {
-	while ()
+	if (x > y)
 	{
+		while (y > 25)
+		{
+			math::decrementByAmount(y, 5);
+		}
 	}
-	return;
-}
-
-void print_help()
-{
-	return;
+	else
+	{
+		console::println(x);
+	}
 }
 
 int main(string[] args)
 {
-	print_help();
+	do_maths(pow(2, 31), math::pow(6, 10));
 }
