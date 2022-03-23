@@ -23,7 +23,10 @@
  */
 
 #include <amanda-c/CompilationContext.h>
+#include <amanda-c/SemanticAnalizer.h>
 #include <amanda-c/Messages.h>
+
+#include <amanda-vm/Frontend/SemanticException.h>
 
 using namespace amanda;
 using namespace amanda::compiler;
@@ -78,12 +81,16 @@ int CompilationContext::performSSATransformation()
         parserResult = parserObject->parse();
         if (parserResult == 0)
         {
-            performSemmanticAnnalysis();
+            performSemanticAnalysis();
         }
     }
     catch (std::exception& ex)
     {
         log::fatal("internal compiler fault (%s).", ex.what());
+    }
+    catch (...)
+    {
+        log::fatal("internal fault. (reason unknown)");
     }
     return parserResult;
 }
@@ -98,7 +105,7 @@ void CompilationContext::printAbstractSyntaxTree()
     
 }
 
-void CompilationContext::performSemmanticAnnalysis()
+void CompilationContext::performSemanticAnalysis()
 {
     assert(abstractSyntaxTree != NULL && "Null pointer exception.");
 
@@ -107,5 +114,15 @@ void CompilationContext::performSemmanticAnnalysis()
     printAbstractSyntaxTree();
 #endif
 
-    
+    try
+    {
+        core::StrongReference<SemanticAnalizer> semanticAnalizer = new SemanticAnalizer();
+        assert(!semanticAnalizer.isNull() && "Null pointer exception");
+
+        abstractSyntaxTree->doSemanticAnalysis(*semanticAnalizer);
+    }
+    catch (frontend::SemanticException& ex)
+    {
+        log::error(ex.getMessage());
+    }
 }

@@ -33,6 +33,7 @@
  */
 
 #include <amanda-c/ast/Lists.h>
+#include <amanda-c/ast/Modifiers.h>
 #include <amanda-c/ast/NAssignmentExpression.h>
 #include <amanda-c/ast/NBinaryOperator.h>
 #include <amanda-c/ast/NBlock.h>

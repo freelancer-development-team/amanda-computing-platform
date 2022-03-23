@@ -21,7 +21,12 @@ public class Person
 {
 public:
 
+	bool	public_field1;
+
 protected:
+
+	int		skill_1;
+	int		skill_2;
 	
 private:
 

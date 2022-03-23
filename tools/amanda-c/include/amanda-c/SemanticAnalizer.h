@@ -16,27 +16,35 @@
  */
 
 /* 
- * File:   package.hxx
+ * File:   SemanticAnalizer.h
  * Author: Javier Marrero
  *
- * Created on February 28, 2022, 12:09 AM
+ * Created on March 23, 2022, 1:50 AM
  */
 
-#ifndef PACKAGE_IL_HXX
-#define PACKAGE_IL_HXX
+#ifndef SEMANTICANALIZER_H
+#define SEMANTICANALIZER_H
 
-#include "AstNodeBase.h"
-#include "BasicBlock.h"
-#include "CodeGenContext.h"
-#include "ILExporter.h"
-#include "Location.h"
-#include "Module.h"
-#include "SemanticAnalysisContext.h"
-#include "Symbol.h"
-#include "SymbolTable.h"
-#include "Type.h"
-#include "Value.h"
-#include "ValueReferrer.h"
+#include <amanda-vm/IL/SemanticAnalysisContext.h>
 
-#endif /* PACKAGE_HXX */
+namespace amanda
+{
+namespace compiler
+{
+
+class SemanticAnalizer : public il::SemanticAnalysisContext
+{
+    AMANDA_OBJECT(SemanticAnalizer, SemanticAnalysisContext)
+
+public:
+    
+private:
+
+    
+} ;
+
+}
+}
+
+#endif /* SEMANTICANALIZER_H */
 

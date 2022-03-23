@@ -28,6 +28,7 @@
 #include <amanda-c/ast/NStatement.h>
 #include <amanda-c/ast/NClassDeclaration.h>
 #include <amanda-c/ast/NIdentifier.h>
+#include <amanda-c/ast/Modifiers.h>
 
 namespace amanda
 {
@@ -49,6 +50,8 @@ protected:
     NClassDeclaration::AccessModifier   accessModifier;
     core::String                        type;
     core::StrongReference<NIdentifier>  identifier;
+    VariableModifier                    modifiers;
+    
 } ;
 
 }

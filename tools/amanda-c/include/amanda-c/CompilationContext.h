@@ -55,7 +55,7 @@ public:
 
 protected:
 
-    virtual void        performSemmanticAnnalysis();
+    virtual void        performSemanticAnalysis();
 
     ast::NCompilationUnit*                          abstractSyntaxTree;
     core::StrongReference<io::File>                 inputFile;

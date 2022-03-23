@@ -29,6 +29,8 @@
 #include <amanda-vm/IO/Console.h>
 #include <amanda-vm/IO/PrintStream.h>
 #include <amanda-vm/IL/CodeGenContext.h>
+#include <amanda-vm/IL/SemanticAnalysisContext.h>
+#include <amanda-vm/IL/Location.h>
 
 #include <vector>
 
@@ -51,14 +53,17 @@ public:
     AstNodeBase();
     virtual ~AstNodeBase();
 
-    virtual void            doSemanticAnalysis();
+    virtual void            doSemanticAnalysis(SemanticAnalysisContext& context);
     virtual Value*          generateCode(CodeGenContext& context);
     unsigned                countChildren() const;
+    Location                getLocation() const ;
     AstNodeBase&            getRootNode();
     bool                    hasChildren() const;
+    void                    setLocation(Location location);
+    void                    setParent(AstNodeBase* parent);
     virtual void            printNode(unsigned indent = 0, const io::PrintStream& stream = io::console().err);
     virtual void            printNodeAndChildren(unsigned indent = 0, const io::PrintStream& stream = io::console().err);
-    virtual core::String    toString() const;
+    virtual core::String    toString() const;    
 
 protected:
 
@@ -73,6 +78,7 @@ private:
 
     AstNodeBase*                parent;
     std::vector<AstNodeBase*>   children;
+    Location                    location;
 } ;
 
 }
