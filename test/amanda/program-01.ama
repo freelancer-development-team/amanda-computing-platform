@@ -13,6 +13,10 @@ namespace test;
 
 using std::io::console;
 
+class Program
+{
+}
+
 int main(string[] args)
 {
     console::println("Hello, world!");

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,28 +16,25 @@
  */
 
 /* 
- * File:   NIdentifier.cpp
+ * File:   SemanticException.cpp
  * Author: Javier Marrero
  * 
- * Created on March 21, 2022, 1:05 AM
+ * Created on March 23, 2022, 1:14 AM
  */
 
-#include <amanda-c/ast/NIdentifier.h>
+#include <amanda-vm/Frontend/SemanticException.h>
 
 using namespace amanda;
-using namespace amanda::compiler::ast;
+using namespace amanda::frontend;
 
-NIdentifier::NIdentifier(const core::String& name)
+SemanticException::SemanticException(const core::String& msg)
 :
-name(name)
+Exception(msg)
 {
 }
 
-NIdentifier::~NIdentifier()
+SemanticException::~SemanticException() throw()
 {
 }
 
-const core::String& NIdentifier::getName() const
-{
-    return name;
-}
+

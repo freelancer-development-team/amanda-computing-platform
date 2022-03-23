@@ -55,20 +55,31 @@ void NFunctionCall::addPassedArguments(ExpressionList& list)
     }
 }
 
+const core::String& NFunctionCall::getCallTarget() const
+{
+    return callTargetIdentifier;
+}
+
+bool NFunctionCall::hasPassedArguments() const
+{
+    return !passedArguments.empty();
+}
+
 core::String NFunctionCall::toString() const
 {
     core::String buffer(buildHeaderString());
-    if (!passedArguments.empty())
+    buffer.appendWithFormat("called <%S>", callTargetIdentifier);
+    if (hasPassedArguments())
     {
-        buffer.format("Target invoked with following arguments (%lu):", passedArguments.size());
+        buffer.appendWithFormat("\n  Target invoked with following arguments (%u):", (unsigned) passedArguments.size());
         for (ExpressionList::const_iterator it = passedArguments.begin(); it != passedArguments.end(); ++it)
         {
-            buffer.append("\n  <").append((*it)->toString()).append(">");
+            buffer.append("\n    <").append((*it)->toString()).append(">");
         }
     }
     else
     {
-        buffer.append("Target invoked with zero arguments!");
+        buffer.append("\n  Target invoked with zero arguments!");
     }
     return buffer;
 }

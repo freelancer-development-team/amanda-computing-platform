@@ -49,6 +49,10 @@ unsigned AstNodeBase::countChildren() const
     return children.size();
 }
 
+void AstNodeBase::doSemanticAnalysis()
+{
+}
+
 bool AstNodeBase::hasChildren() const
 {
     return !children.empty();
@@ -116,7 +120,8 @@ void AstNodeBase::printNodeAndChildren(unsigned indent, const io::PrintStream& s
     {
         for (std::vector<AstNodeBase*>::iterator it = children.begin(); it != children.end(); ++it)
         {
-            (*it)->printNodeAndChildren(indent + 1, stream);
+            if (*it != NULL)
+                (*it)->printNodeAndChildren(indent + 1, stream);
         }
     }
     else

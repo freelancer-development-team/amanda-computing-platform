@@ -52,6 +52,24 @@ void NBlock::addStatement(NStatement* statement)
     addChild(statement);
 }
 
+void NBlock::cloneBlockState(NBlock* block)
+{
+    for (StatementList::iterator it = block->statements.begin(); it != block->statements.end(); ++it)
+    {
+        addStatement(static_cast<NStatement*>(*it));
+    }
+}
+
+const StatementList& NBlock::getStatementList() const
+{
+    return statements;
+}
+
+bool NBlock::hasStatements() const
+{
+    return !statements.empty();
+}
+
 Value* NBlock::generateCode(amanda::il::CodeGenContext& context)
 {
     return NULL;

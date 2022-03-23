@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,28 +16,37 @@
  */
 
 /* 
- * File:   NIdentifier.cpp
+ * File:   NVariableDeclaration.cpp
  * Author: Javier Marrero
  * 
- * Created on March 21, 2022, 1:05 AM
+ * Created on March 22, 2022, 5:42 PM
  */
 
-#include <amanda-c/ast/NIdentifier.h>
+#include <amanda-c/ast/NVariableDeclaration.h>
 
 using namespace amanda;
 using namespace amanda::compiler::ast;
 
-NIdentifier::NIdentifier(const core::String& name)
+NVariableDeclaration::NVariableDeclaration(const core::String& type, NIdentifier* id)
 :
-name(name)
+type(type),
+identifier(id)
 {
 }
 
-NIdentifier::~NIdentifier()
+NVariableDeclaration::~NVariableDeclaration()
 {
 }
 
-const core::String& NIdentifier::getName() const
+core::String NVariableDeclaration::toString() const
 {
-    return name;
+    core::String buffer(buildHeaderString());
+    buffer.appendWithFormat("type <%S> | name: '", type).append(identifier->getName()).append("'");
+
+    return buffer;
+}
+
+void NVariableDeclaration::setAssignmentExpression(NExpression* assignment)
+{
+    this->assignment = assignment;
 }

@@ -1020,6 +1020,13 @@ String& String::appendWithFormatArguments(const char* formatString, va_list args
                 break;
             }
 
+            case 'S':
+            {
+                String arg = va_arg(args, String);
+                append(arg);
+                break;
+            }
+
                 // Hex
             case 'x':
             {

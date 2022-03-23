@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,28 +16,27 @@
  */
 
 /* 
- * File:   NIdentifier.cpp
+ * File:   NAssignmentExpression.cpp
  * Author: Javier Marrero
  * 
- * Created on March 21, 2022, 1:05 AM
+ * Created on March 22, 2022, 6:07 PM
  */
 
-#include <amanda-c/ast/NIdentifier.h>
+#include <amanda-c/ast/NAssignmentExpression.h>
 
 using namespace amanda;
 using namespace amanda::compiler::ast;
 
-NIdentifier::NIdentifier(const core::String& name)
+NAssignmentExpression::NAssignmentExpression(NIdentifier* lhs, NExpression* rhs)
 :
-name(name)
+lhs(lhs),
+rhs(rhs)
 {
 }
 
-NIdentifier::~NIdentifier()
+NAssignmentExpression::~NAssignmentExpression()
 {
 }
 
-const core::String& NIdentifier::getName() const
-{
-    return name;
-}
+
+

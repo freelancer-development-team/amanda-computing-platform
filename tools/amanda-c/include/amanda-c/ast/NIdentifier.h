@@ -43,6 +43,8 @@ public:
     NIdentifier(const core::String& name);
     virtual ~NIdentifier();
 
+    const core::String& getName() const;
+
 private:
 
     core::String name;

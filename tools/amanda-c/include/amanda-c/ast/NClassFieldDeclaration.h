@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,18 +16,18 @@
  */
 
 /* 
- * File:   NWhileStatement.h
+ * File:   NClassFieldDeclaration.h
  * Author: Javier Marrero
  *
- * Created on March 20, 2022, 11:07 AM
+ * Created on March 23, 2022, 12:39 AM
  */
 
-#ifndef NWHILESTATEMENT_H
-#define NWHILESTATEMENT_H
+#ifndef NCLASSFIELDDECLARATION_H
+#define NCLASSFIELDDECLARATION_H
 
-#include <amanda-c/ast/NCompoundStatement.h>
-#include <amanda-c/ast/NExpression.h>
-#include <amanda-c/ast/NBlock.h>
+#include <amanda-c/ast/NStatement.h>
+#include <amanda-c/ast/NClassDeclaration.h>
+#include <amanda-c/ast/NIdentifier.h>
 
 namespace amanda
 {
@@ -36,24 +36,24 @@ namespace compiler
 namespace ast
 {
 
-class NWhileStatement : public NCompoundStatement
+class NClassFieldDeclaration : public NStatement
 {
-    AMANDA_OBJECT(NWhileStatement, NCompoundStatement)
+    AMANDA_OBJECT(NClassFieldDeclaration, NStatement)
+
 public:
 
-    NWhileStatement(NExpression* condition, NBlock* block);
-    virtual ~NWhileStatement();
-
-    virtual core::String toString() const;
+    NClassFieldDeclaration(const core::String& type, NIdentifier* identifier);
 
 protected:
 
-    core::StrongReference<NExpression> condition;
+    NClassDeclaration::AccessModifier   accessModifier;
+    core::String                        type;
+    core::StrongReference<NIdentifier>  identifier;
 } ;
 
 }
 }
 }
 
-#endif /* NWHILESTATEMENT_H */
+#endif /* NCLASSFIELDDECLARATION_H */
 

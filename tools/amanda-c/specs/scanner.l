@@ -84,19 +84,27 @@
             { "break",      TOKEN(BREAK)        },
             { "case",       TOKEN(CASE)         },
             { "class",      TOKEN(CLASS)        },
+            { "delete",     TOKEN(DELETE)       },
             { "do",         TOKEN(DO)           },
             { "else",       TOKEN(ELSE)         },
+            { "except",     TOKEN(EXCEPT)       },
             { "for",        TOKEN(FOR)          },
             { "if",         TOKEN(IF)           },
             { "interface",  TOKEN(INTERFACE)    },
             { "namespace",  TOKEN(NAMESPACE)    },
+            { "new",        TOKEN(NEW)          },
+            { "private",    TOKEN(PRIVATE)      },
+            { "protected",  TOKEN(PROTECTED)    },
+            { "public",     TOKEN(PUBLIC)       },
             { "switch",     TOKEN(SWITCH)       },
             { "return",     TOKEN(RETURN)       },
+            { "try",        TOKEN(TRY)          },
             { "using",      TOKEN(USING)        },
             { "while",      TOKEN(WHILE)        },
             // Data types
             { "void",       TOKEN(VOID) },
             { "bool",       TOKEN(BOOL) },
+            { "short",      TOKEN(SHORT) },
             { "int",        TOKEN(INT) },
             { "long",       TOKEN(LONG) },
             { "string",     TOKEN(STRING) },
@@ -148,6 +156,9 @@ integer_literal                 {decimal_integer}
 "#".*                           // ignore inline comment
 "/*"(.|\n)*?"*/"                // ignore multi-line comment using a lazy regex pattern
 
+"True"                          { return DefaultParser::make_BOOLEAN(true, location()); }
+"False"                         { return DefaultParser::make_BOOLEAN(false, location()); }
+
 {identifier}                    {   int token = getKeyWordToken(text());
                                     return token ?
                                             DefaultParser::symbol_type(token, location())
@@ -173,7 +184,7 @@ integer_literal                 {decimal_integer}
 ">"                             { return token('>'); }
 "<"                             { return token('<'); }
 "=="                            { return token(Tokens::TOKEN_EQ); }
-"!="                            { return token(Tokens::TOKEN_NEQ); }
+"!="                            { return token(Tokens::TOKEN_NE); }
 
 "="                             { return token('='); }
 "++"                            { return token(Tokens::TOKEN_PLUSPLUS); }

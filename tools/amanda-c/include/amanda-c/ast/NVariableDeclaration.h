@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,18 +16,17 @@
  */
 
 /* 
- * File:   NWhileStatement.h
+ * File:   NVariableDeclaration.h
  * Author: Javier Marrero
  *
- * Created on March 20, 2022, 11:07 AM
+ * Created on March 22, 2022, 5:42 PM
  */
 
-#ifndef NWHILESTATEMENT_H
-#define NWHILESTATEMENT_H
+#ifndef NVARIABLEDECLARATION_H
+#define NVARIABLEDECLARATION_H
 
-#include <amanda-c/ast/NCompoundStatement.h>
 #include <amanda-c/ast/NExpression.h>
-#include <amanda-c/ast/NBlock.h>
+#include <amanda-c/ast/NIdentifier.h>
 
 namespace amanda
 {
@@ -36,24 +35,28 @@ namespace compiler
 namespace ast
 {
 
-class NWhileStatement : public NCompoundStatement
+class NVariableDeclaration : public NExpression
 {
-    AMANDA_OBJECT(NWhileStatement, NCompoundStatement)
+    AMANDA_OBJECT(NVariableDeclaration, NExpression)
+
 public:
 
-    NWhileStatement(NExpression* condition, NBlock* block);
-    virtual ~NWhileStatement();
+    NVariableDeclaration(const core::String& type, NIdentifier* id);
+    virtual ~NVariableDeclaration();
 
-    virtual core::String toString() const;
+    void                    setAssignmentExpression(NExpression* assignment);
+    virtual core::String    toString() const;
 
 protected:
 
-    core::StrongReference<NExpression> condition;
+    core::String                        type;
+    core::StrongReference<NIdentifier>  identifier;
+    core::StrongReference<NExpression>  assignment;
 } ;
 
 }
 }
 }
 
-#endif /* NWHILESTATEMENT_H */
+#endif /* NVARIABLEDECLARATION_H */
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,28 +16,39 @@
  */
 
 /* 
- * File:   NIdentifier.cpp
+ * File:   NBoolean.h
  * Author: Javier Marrero
- * 
- * Created on March 21, 2022, 1:05 AM
+ *
+ * Created on March 22, 2022, 6:17 PM
  */
 
-#include <amanda-c/ast/NIdentifier.h>
+#ifndef NBOOLEAN_H
+#define NBOOLEAN_H
 
-using namespace amanda;
-using namespace amanda::compiler::ast;
+#include <amanda-c/ast/NExpression.h>
 
-NIdentifier::NIdentifier(const core::String& name)
-:
-name(name)
+namespace amanda
 {
+namespace compiler
+{
+namespace ast
+{
+
+class NBoolean : public NExpression
+{
+public:
+
+    NBoolean(bool value);
+    virtual ~NBoolean();
+    
+protected:
+
+    bool value;
+} ;
+
+}
+}
 }
 
-NIdentifier::~NIdentifier()
-{
-}
+#endif /* NBOOLEAN_H */
 
-const core::String& NIdentifier::getName() const
-{
-    return name;
-}

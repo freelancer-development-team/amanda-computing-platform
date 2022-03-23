@@ -56,6 +56,15 @@ void NConditionalStatement::addElseIfClause(NExpression* condition, NBlock* bloc
     // elseIfClauses.push_back(elseIfClause);
 }
 
+void NConditionalStatement::addMultipleElseIfClauses(std::vector<NConditionalStatement*>& conditionals)
+{
+    for (std::vector<NConditionalStatement*>::iterator it = conditionals.begin();
+         it != conditionals.end(); ++it)
+    {
+        addChild(*it);
+    }
+}
+
 core::String NConditionalStatement::toString() const
 {
     core::String buffer(buildHeaderString());

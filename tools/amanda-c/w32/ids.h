@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,28 +16,28 @@
  */
 
 /* 
- * File:   NIdentifier.cpp
+ * File:   idh.h
  * Author: Javier Marrero
- * 
- * Created on March 21, 2022, 1:05 AM
+ *
+ * Created on March 21, 2022, 10:05 PM
  */
 
-#include <amanda-c/ast/NIdentifier.h>
+#ifndef _RESOURCES_IDS_H
+#define _RESOURCES_IDS_H
 
-using namespace amanda;
-using namespace amanda::compiler::ast;
-
-NIdentifier::NIdentifier(const core::String& name)
-:
-name(name)
+#ifdef __cplusplus
+extern "C"
 {
-}
+#endif
 
-NIdentifier::~NIdentifier()
-{
-}
+#include "../include/amanda-c/c/version.h"
 
-const core::String& NIdentifier::getName() const
-{
-    return name;
+#define IDI_ICON_128    101
+
+#ifdef __cplusplus
 }
+#endif
+
+#endif /* IDH_H */
+
+

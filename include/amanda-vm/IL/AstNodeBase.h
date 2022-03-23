@@ -51,6 +51,7 @@ public:
     AstNodeBase();
     virtual ~AstNodeBase();
 
+    virtual void            doSemanticAnalysis();
     virtual Value*          generateCode(CodeGenContext& context);
     unsigned                countChildren() const;
     AstNodeBase&            getRootNode();

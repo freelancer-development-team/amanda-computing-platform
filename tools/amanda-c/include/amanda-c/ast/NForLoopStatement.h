@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,18 +16,16 @@
  */
 
 /* 
- * File:   NWhileStatement.h
+ * File:   NForLoopStatement.h
  * Author: Javier Marrero
  *
- * Created on March 20, 2022, 11:07 AM
+ * Created on March 22, 2022, 10:20 AM
  */
 
-#ifndef NWHILESTATEMENT_H
-#define NWHILESTATEMENT_H
+#ifndef NFORLOOPSTATEMENT_H
+#define NFORLOOPSTATEMENT_H
 
 #include <amanda-c/ast/NCompoundStatement.h>
-#include <amanda-c/ast/NExpression.h>
-#include <amanda-c/ast/NBlock.h>
 
 namespace amanda
 {
@@ -36,24 +34,30 @@ namespace compiler
 namespace ast
 {
 
-class NWhileStatement : public NCompoundStatement
+class NForLoopStatement : public NCompoundStatement
 {
-    AMANDA_OBJECT(NWhileStatement, NCompoundStatement)
+    AMANDA_OBJECT(NForLoopStatement, NCompoundStatement)
+
 public:
 
-    NWhileStatement(NExpression* condition, NBlock* block);
-    virtual ~NWhileStatement();
+    NForLoopStatement(NExpression* initializationExpression,
+                      NExpression* conditionExpression,
+                      NExpression* updateExpression,
+                      NBlock* block);
+    virtual ~NForLoopStatement();
 
     virtual core::String toString() const;
 
 protected:
 
-    core::StrongReference<NExpression> condition;
+    core::StrongReference<NExpression> initializationExpression;
+    core::StrongReference<NExpression> conditionExpression;
+    core::StrongReference<NExpression> updateExpression;
 } ;
 
 }
 }
 }
 
-#endif /* NWHILESTATEMENT_H */
+#endif /* NFORLOOPSTATEMENT_H */
 

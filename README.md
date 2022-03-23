@@ -13,7 +13,7 @@ Note that the project is still on set-up phase and in rudimentary stage.
 
 This repository is organized in a somewhat similar fashion to the LLVM repository. The project is designed as a collection of
 libraries (providing services) and tools. In the includes folder lies the C++ and C interface to the libraries. Tools reside
-into the tools subdirectory.
+into the tools subdirectory, including the reference implementation of the Amanda Programming Language compiler.
 
 ## The Amanda Programming Language
 

@@ -48,6 +48,7 @@ public:
 
     void                    addElseClause(NBlock* block);
     void                    addElseIfClause(NExpression* condition, NBlock* block);
+    void                    addMultipleElseIfClauses(std::vector<NConditionalStatement*>& conditionals);
     
     virtual core::String    toString() const;
 

@@ -94,7 +94,8 @@ void CompilationContext::printAbstractSyntaxTree()
 
     io::console().err.println("\n ===== ABSTRACT SYNTAX TREE ===== ");
     abstractSyntaxTree->printNodeAndChildren();
-    io::console().err.println(" ===== DONE ===== ");
+    io::console().err.println(" ===== DONE ===== \n");
+    
 }
 
 void CompilationContext::performSemmanticAnnalysis()

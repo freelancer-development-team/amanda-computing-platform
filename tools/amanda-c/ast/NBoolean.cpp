@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,28 +16,26 @@
  */
 
 /* 
- * File:   NIdentifier.cpp
+ * File:   NBoolean.cpp
  * Author: Javier Marrero
  * 
- * Created on March 21, 2022, 1:05 AM
+ * Created on March 22, 2022, 6:17 PM
  */
 
-#include <amanda-c/ast/NIdentifier.h>
+#include <amanda-c/ast/NBoolean.h>
 
 using namespace amanda;
 using namespace amanda::compiler::ast;
 
-NIdentifier::NIdentifier(const core::String& name)
+NBoolean::NBoolean(bool value)
 :
-name(name)
+value(value)
 {
 }
 
-NIdentifier::~NIdentifier()
+NBoolean::~NBoolean()
 {
 }
 
-const core::String& NIdentifier::getName() const
-{
-    return name;
-}
+
+

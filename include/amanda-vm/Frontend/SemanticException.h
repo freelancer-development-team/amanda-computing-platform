@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,28 +16,40 @@
  */
 
 /* 
- * File:   NIdentifier.cpp
+ * File:   SemanticException.h
  * Author: Javier Marrero
- * 
- * Created on March 21, 2022, 1:05 AM
+ *
+ * Created on March 23, 2022, 1:14 AM
  */
 
-#include <amanda-c/ast/NIdentifier.h>
+#ifndef SEMANTICEXCEPTION_H
+#define SEMANTICEXCEPTION_H
 
-using namespace amanda;
-using namespace amanda::compiler::ast;
+#include <amanda-vm/Exception.h>
 
-NIdentifier::NIdentifier(const core::String& name)
-:
-name(name)
+namespace amanda
 {
+namespace frontend
+{
+
+/**
+ * Semantic exceptions are exceptions throw by the semantic analysis phase of
+ * the compiler.
+ *
+ * @author J. Marrero
+ */
+class SemanticException : public core::Exception
+{
+    AMANDA_OBJECT(SemanticException, core::Exception)
+
+public:
+
+    SemanticException(const core::String& msg);
+    virtual ~SemanticException() throw();
+} ;
+
+}
 }
 
-NIdentifier::~NIdentifier()
-{
-}
+#endif /* SEMANTICEXCEPTION_H */
 
-const core::String& NIdentifier::getName() const
-{
-    return name;
-}

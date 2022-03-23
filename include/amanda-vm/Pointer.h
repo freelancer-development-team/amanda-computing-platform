@@ -46,9 +46,9 @@ public:
     AutomaticReferenceBase(const AutomaticReferenceBase<T>& rhs) : pointer(rhs.pointer) { }
     virtual ~AutomaticReferenceBase() {}
 
-    T*      get() const { return pointer; }
-    T&      getReference() const { return *pointer; }
-    bool    isNull() const { return pointer == NULL; }
+    inline T*      get() const { return pointer; }
+    inline T&      getReference() const { return *pointer; }
+    inline bool    isNull() const { return pointer == NULL; }
 
     operator bool() const                                           { return pointer != NULL; }
     operator T*() const                                             { return pointer; }
@@ -76,8 +76,8 @@ public:
 
 protected:
 
-    void increaseReference()  { if (this->pointer != NULL) this->pointer->grab(); }
-    void decreaseReference()  { if (this->pointer != NULL) this->pointer->release(); }
+    inline void increaseReference()  { if (this->pointer != NULL) this->pointer->grab(); }
+    inline void decreaseReference()  { if (this->pointer != NULL) this->pointer->release(); }
 };
 
 }

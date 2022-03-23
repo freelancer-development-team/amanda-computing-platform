@@ -15,28 +15,59 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-namespace amanda::test;
+namespace test;
 
-using std::io::console;
-using std::core::math;
-using std::core::file;
-
-void do_maths(int x, int y)
+public class Person
 {
-	if (x > y)
+public:
+
+protected:
+	
+private:
+
+	string 	name;
+	string	gender;
+	int		age;
+}
+
+int do_some_fancy_calculations(int x)
+{
+	if (x > 0)
 	{
-		while (y > 25)
+		while (x < 100)
 		{
-			math::decrementByAmount(y, 5);
+			for (int y = 0; y < 25; math::increment(y, 5))
+			{
+				math::incrementSquared(x - y);
+			}
 		}
+		return x;
 	}
 	else
 	{
-		console::println(x);
+		return 0;
 	}
+}
+
+void print_name(Person a)
+{
 }
 
 int main(string[] args)
 {
-	do_maths(pow(2, 31), math::pow(6, 10));
+	Person a;
+	Person b;
+	Person c;
+	Person d;
+	
+	# Print some names
+	print_name(a);
+	print_name(b);
+	print_name(c);
+	print_name(d);
+	
+	# Do some calculations around the age
+	do_some_fancy_calculations(29);
+	
+	return 0;
 }

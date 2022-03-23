@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,28 +16,13 @@
  */
 
 /* 
- * File:   NIdentifier.cpp
+ * File:   SemanticAnalysisContext.cpp
  * Author: Javier Marrero
  * 
- * Created on March 21, 2022, 1:05 AM
+ * Created on March 23, 2022, 1:18 AM
  */
 
-#include <amanda-c/ast/NIdentifier.h>
+#include <amanda-vm/IL/SemanticAnalysisContext.h>
 
-using namespace amanda;
-using namespace amanda::compiler::ast;
 
-NIdentifier::NIdentifier(const core::String& name)
-:
-name(name)
-{
-}
 
-NIdentifier::~NIdentifier()
-{
-}
-
-const core::String& NIdentifier::getName() const
-{
-    return name;
-}
