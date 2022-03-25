@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,46 +16,57 @@
  */
 
 /* 
- * File:   FileOutputStream.h
+ * File:   DerivedTypes.h
  * Author: Javier Marrero
  *
- * Created on March 1, 2022, 1:46 AM
+ * Created on March 24, 2022, 5:32 PM
  */
 
-#ifndef FILEOUTPUTSTREAM_H
-#define FILEOUTPUTSTREAM_H
+#ifndef DERIVEDTYPES_H
+#define DERIVEDTYPES_H
 
-#include <amanda-vm/IO/OutputStream.h>
+#include <amanda-vm/IL/Type.h>
+
+/* C standard integer types. */
+#include <stdint.h>
+#include <climits>
 
 namespace amanda
 {
-namespace io
+namespace il
 {
 
-class FileOutputStream : public OutputStream
+class IntegerType : public Type
 {
-    AMANDA_OBJECT(FileOutputStream, OutputStream)
+    AMANDA_OBJECT(IntegerType, Type)
 
 public:
 
-    FileOutputStream(const File* file);
-    virtual ~FileOutputStream();
+    enum
+    {
+        MIN_INT_BITS = 1,
+        MAX_INT_BITS = (1 << 23)
+    };
 
-    virtual void close();
-    virtual void write(const void* data, size_t size);
-    virtual void write(const char* data);
+    typedef uint64_t    uinteger_t;
+    typedef int64_t     integer_t;
 
+    static IntegerType* get(unsigned numBits);
+
+    uinteger_t  getBitMask() const;
+    unsigned    getNumberOfBits() const;
+    uinteger_t  getSignBit() const;
+    
 protected:
 
-    const File* file;
+    IntegerType(const unsigned numBits);
 
 private:
 
-    void releaseResource();
-} ;
+    const unsigned numBits;
+};
 
 }
 }
 
-#endif /* FILEOUTPUTSTREAM_H */
-
+#endif /* DERIVEDTYPES_H */

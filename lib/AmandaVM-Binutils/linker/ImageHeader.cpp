@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,32 +16,17 @@
  */
 
 /* 
- * File:   Stream.cpp
+ * File:   ImageHeader.cpp
  * Author: Javier Marrero
  * 
- * Created on March 1, 2022, 1:37 AM
+ * Created on March 24, 2022, 8:54 PM
  */
 
-#include <amanda-vm/IO/OutputStream.h>
+#include <amanda-vm/Binutils/Linker/ImageHeader.h>
 
-using amanda::io::OutputStream;
+using namespace amanda;
+using namespace amanda::binutils::ld;
 
-OutputStream::OutputStream()
-{
-}
-
-OutputStream::~OutputStream()
-{
-}
-
-void OutputStream::write(const void* data, size_t size)
-{
-    assert("This method is not implemented here!");
-}
-
-void OutputStream::write(const char* data)
-{
-    write(data, strlen(data));
-}
+uint8_t ImageHeader::MAGIC_NUMBER[4] = {0xFF, 0xFE, 0x00, 0x7F};
 
 

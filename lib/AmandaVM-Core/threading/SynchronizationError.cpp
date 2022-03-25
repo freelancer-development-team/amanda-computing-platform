@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,32 +16,26 @@
  */
 
 /* 
- * File:   Stream.cpp
+ * File:   SynchronizationError.cpp
  * Author: Javier Marrero
  * 
- * Created on March 1, 2022, 1:37 AM
+ * Created on March 25, 2022, 1:11 AM
  */
 
-#include <amanda-vm/IO/OutputStream.h>
+#include <amanda-vm/Threading/SynchronizationError.h>
 
-using amanda::io::OutputStream;
+using namespace amanda;
+using namespace amanda::concurrent;
 
-OutputStream::OutputStream()
+SynchronizationError::SynchronizationError(const core::String& message)
+:
+core::Exception(message)
 {
 }
 
-OutputStream::~OutputStream()
+SynchronizationError::~SynchronizationError() throw()
 {
 }
 
-void OutputStream::write(const void* data, size_t size)
-{
-    assert("This method is not implemented here!");
-}
-
-void OutputStream::write(const char* data)
-{
-    write(data, strlen(data));
-}
 
 

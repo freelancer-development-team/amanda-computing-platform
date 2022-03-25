@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,32 +16,34 @@
  */
 
 /* 
- * File:   Stream.cpp
+ * File:   Serializable.h
  * Author: Javier Marrero
- * 
- * Created on March 1, 2022, 1:37 AM
+ *
+ * Created on March 24, 2022, 10:54 PM
  */
 
+#ifndef _BINUTILS_SERIALIZABLE_H
+#define _BINUTILS_SERIALIZABLE_H
+
+#include <amanda-vm/TypeSystem.h>
 #include <amanda-vm/IO/OutputStream.h>
 
-using amanda::io::OutputStream;
-
-OutputStream::OutputStream()
+namespace amanda
 {
+namespace binutils
+{
+
+class Serializable : public core::Object
+{
+    AMANDA_OBJECT(Serializable, core::Object)
+    
+public:
+
+    virtual void marshall(io::OutputStream& stream);
+} ;
+
+}
 }
 
-OutputStream::~OutputStream()
-{
-}
-
-void OutputStream::write(const void* data, size_t size)
-{
-    assert("This method is not implemented here!");
-}
-
-void OutputStream::write(const char* data)
-{
-    write(data, strlen(data));
-}
-
+#endif /* SERIALIZABLE_H */
 

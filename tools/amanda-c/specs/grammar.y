@@ -526,7 +526,7 @@ statement_sequence
 type
     : simple_type
     | reference_type
-    | type '[' ']'
+    | type '[' ']'  { $$ = "Array@<"; $$.append($1).append(">"); }
     ;
 
 simple_type

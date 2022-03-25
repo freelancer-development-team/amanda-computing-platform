@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,32 +16,41 @@
  */
 
 /* 
- * File:   Stream.cpp
+ * File:   DerivedTypes.cpp
  * Author: Javier Marrero
  * 
- * Created on March 1, 2022, 1:37 AM
+ * Created on March 24, 2022, 5:32 PM
  */
 
-#include <amanda-vm/IO/OutputStream.h>
+#include <amanda-vm/IL/DerivedTypes.h>
 
-using amanda::io::OutputStream;
+using namespace amanda;
+using namespace amanda::il;
 
-OutputStream::OutputStream()
+/* INTEGER TYPE */
+
+IntegerType* IntegerType::get(unsigned numBits)
+{
+    return NULL;
+}
+
+IntegerType::IntegerType(const unsigned numBits)
+:
+numBits(numBits)
 {
 }
 
-OutputStream::~OutputStream()
+IntegerType::uinteger_t IntegerType::getBitMask() const
 {
+    return ~((uinteger_t) 0UL) >> (64 - getNumberOfBits());
 }
 
-void OutputStream::write(const void* data, size_t size)
+unsigned IntegerType::getNumberOfBits() const
 {
-    assert("This method is not implemented here!");
+    return numBits;
 }
 
-void OutputStream::write(const char* data)
+IntegerType::uinteger_t IntegerType::getSignBit() const
 {
-    write(data, strlen(data));
+    return 1ULL << (getNumberOfBits() - 1);
 }
-
-

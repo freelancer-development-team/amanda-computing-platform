@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,32 +16,47 @@
  */
 
 /* 
- * File:   Stream.cpp
+ * File:   ImageHeader.h
  * Author: Javier Marrero
- * 
- * Created on March 1, 2022, 1:37 AM
+ *
+ * Created on March 24, 2022, 8:54 PM
  */
 
-#include <amanda-vm/IO/OutputStream.h>
+#ifndef IMAGEHEADER_H
+#define IMAGEHEADER_H
 
-using amanda::io::OutputStream;
+#include <amanda-vm/TypeSystem.h>
+#include <amanda-vm/Binutils/Serializable.h>
+#include <amanda-vm/Binutils/VirtualMachineSpecs.h>
 
-OutputStream::OutputStream()
+#include <stdint.h>
+
+namespace amanda
 {
+namespace binutils
+{
+namespace ld
+{
+
+/**
+ */
+class ImageHeader : public Serializable
+{
+    AMANDA_OBJECT(ImageHeader, Serializable)
+public:
+
+    static uint8_t      MAGIC_NUMBER[4];
+    static const short  IMAGE_SIZEOF_SHORT_NAME = 24;
+
+private:
+
+    vm::VM_Address baseAddress; /// The base address of the executable image
+    
+} ;
+
+}
+}
 }
 
-OutputStream::~OutputStream()
-{
-}
-
-void OutputStream::write(const void* data, size_t size)
-{
-    assert("This method is not implemented here!");
-}
-
-void OutputStream::write(const char* data)
-{
-    write(data, strlen(data));
-}
-
+#endif /* IMAGEHEADER_H */
 

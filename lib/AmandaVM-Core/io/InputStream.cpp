@@ -33,3 +33,8 @@ InputStream::InputStream()
 InputStream::~InputStream()
 {
 }
+
+void InputStream::read(void* buffer, size_t size)
+{
+    assert("This method is not implemented here");
+}

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,32 +16,35 @@
  */
 
 /* 
- * File:   Stream.cpp
+ * File:   StringTable.cpp
  * Author: Javier Marrero
  * 
- * Created on March 1, 2022, 1:37 AM
+ * Created on March 24, 2022, 10:26 PM
  */
 
-#include <amanda-vm/IO/OutputStream.h>
+#include <amanda-vm/Binutils/Linker/StringTable.h>
 
-using amanda::io::OutputStream;
+using namespace amanda;
+using namespace amanda::binutils::ld;
 
-OutputStream::OutputStream()
+StringTable::StringTable()
 {
 }
 
-OutputStream::~OutputStream()
+StringTable::~StringTable()
 {
 }
 
-void OutputStream::write(const void* data, size_t size)
+void StringTable::add(const core::String& str)
 {
-    assert("This method is not implemented here!");
+    strings.push_back(str);
 }
 
-void OutputStream::write(const char* data)
+vm::VM_QWord StringTable::count() const
 {
-    write(data, strlen(data));
+    return strings.size();
 }
+
+
 
 

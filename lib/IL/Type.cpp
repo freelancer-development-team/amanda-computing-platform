@@ -40,6 +40,11 @@ bool Type::isFloatingPointType() const
     return getTypeId() == ID_FloatingPointType;
 }
 
+bool Type::isFunctionType() const
+{
+    return getTypeId() == ID_FunctionType;
+}
+
 bool Type::isIntegralType() const
 {
     return getTypeId() == ID_IntegerType;
@@ -49,3 +54,23 @@ bool Type::isSized() const
 {
     return getTypeId() != ID_VoidType;
 }
+
+bool Type::operator ==(const Type& object) const
+{
+    return id == object.id;
+}
+
+bool Type::operator ==(const Type* object) const
+{
+    assert(object != NULL && "Bad pointer");
+
+    return id == object->id;
+}
+
+/* ==================== DERIVED CLASSES ==================== */
+
+
+
+/* =========================== TYPE ========================================= */
+
+

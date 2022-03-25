@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,32 +16,35 @@
  */
 
 /* 
- * File:   Stream.cpp
+ * File:   VirtualMachineSpecs.h
  * Author: Javier Marrero
- * 
- * Created on March 1, 2022, 1:37 AM
+ *
+ * Created on March 24, 2022, 9:11 PM
  */
 
-#include <amanda-vm/IO/OutputStream.h>
+#ifndef VIRTUALMACHINESPECS_H
+#define VIRTUALMACHINESPECS_H
 
-using amanda::io::OutputStream;
+#include <stdint.h>
 
-OutputStream::OutputStream()
+namespace amanda
 {
+namespace vm
+{
+
+// Integral types
+typedef uint8_t     VM_Byte;
+typedef uint16_t    VM_Word;
+typedef uint32_t    VM_DWord;
+typedef uint64_t    VM_QWord;
+
+// Floating point types
+
+// Addresses & pointers
+typedef uint64_t    VM_Address;
+
+}
 }
 
-OutputStream::~OutputStream()
-{
-}
-
-void OutputStream::write(const void* data, size_t size)
-{
-    assert("This method is not implemented here!");
-}
-
-void OutputStream::write(const char* data)
-{
-    write(data, strlen(data));
-}
-
+#endif /* VIRTUALMACHINESPECS_H */
 

@@ -25,12 +25,19 @@
 #ifndef PACKAGE_IL_HXX
 #define PACKAGE_IL_HXX
 
+/*
+ * Includes the C++ API for the Intermediate Language library.
+ */
+
+#include "AbstractPass.h"
 #include "AstNodeBase.h"
 #include "BasicBlock.h"
 #include "CodeGenContext.h"
+#include "DerivedTypes.h"
 #include "ILExporter.h"
 #include "Location.h"
 #include "Module.h"
+#include "PassManager.h"
 #include "SemanticAnalysisContext.h"
 #include "Symbol.h"
 #include "SymbolTable.h"

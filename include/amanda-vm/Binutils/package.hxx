@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,32 +16,27 @@
  */
 
 /* 
- * File:   Stream.cpp
+ * File:   package.hxx
  * Author: Javier Marrero
- * 
- * Created on March 1, 2022, 1:37 AM
+ *
+ * Created on March 24, 2022, 6:43 PM
  */
 
-#include <amanda-vm/IO/OutputStream.h>
+#ifndef __AMANDA_BINUTILS_PACKAGE_HXX
+#define __AMANDA_BINUTILS_PACKAGE_HXX
 
-using amanda::io::OutputStream;
+// Assembler
 
-OutputStream::OutputStream()
-{
-}
+// Linker
+#include "Linker/GlobalOffsetTable.h"
+#include "Linker/ImageHeader.h"
+#include "Linker/Section.h"
+#include "Linker/StringTable.h"
 
-OutputStream::~OutputStream()
-{
-}
+// Root subdirectory
+#include "Opcodes.h"
+#include "Serializable.h"
+#include "VirtualMachineSpecs.h"
 
-void OutputStream::write(const void* data, size_t size)
-{
-    assert("This method is not implemented here!");
-}
-
-void OutputStream::write(const char* data)
-{
-    write(data, strlen(data));
-}
-
+#endif /* PACKAGE_HXX */
 

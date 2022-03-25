@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,32 +16,31 @@
  */
 
 /* 
- * File:   Stream.cpp
+ * File:   Section.cpp
  * Author: Javier Marrero
  * 
- * Created on March 1, 2022, 1:37 AM
+ * Created on March 24, 2022, 6:43 PM
  */
 
-#include <amanda-vm/IO/OutputStream.h>
+#include <amanda-vm/Binutils/Linker/Section.h>
 
-using amanda::io::OutputStream;
+using namespace amanda;
+using namespace amanda::binutils::ld;
 
-OutputStream::OutputStream()
+Section::Section(const core::String& name)
+:
+sectionName(name)
 {
 }
 
-OutputStream::~OutputStream()
+Section::~Section()
 {
 }
 
-void OutputStream::write(const void* data, size_t size)
+const core::String& Section::getSectionName() const
 {
-    assert("This method is not implemented here!");
+    return sectionName;
 }
 
-void OutputStream::write(const char* data)
-{
-    write(data, strlen(data));
-}
 
 

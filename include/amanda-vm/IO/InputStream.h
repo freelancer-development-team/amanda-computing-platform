@@ -49,6 +49,8 @@ public:
 
     InputStream();
     virtual ~InputStream();
+
+    virtual void read(void* buffer, size_t size);
 } ;
 
 }

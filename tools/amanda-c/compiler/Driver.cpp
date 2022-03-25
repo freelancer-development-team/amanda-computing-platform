@@ -102,39 +102,46 @@ int Driver::compileFile(io::File* input, io::File* output)
 
 void Driver::compileFiles()
 {
-    // For the maximum number of threads, initialize one compilation process in
-    // each of them.
-    if (verbose)
+    try
     {
-        log::info("Beginning compilation process... (%lu input file%s)",
-                  inputFiles.size(),
-                  inputFiles.size() > 1 ? "s" : "");
-    }
-
-    // Exit with the highest exit code
-    int result = 0;
-
-    /// TODO: Handle this properly
-    STL_ITERATOR(list, io::File*, o_it);
-    STL_ITERATOR(list, io::File*, i_it);
-    for (i_it = inputFiles.begin(),
-         o_it = outputFiles.begin(); i_it != inputFiles.end(); ++i_it)
-    {
-        int compileStatus = compileFile(*i_it, *o_it);
-        if (compileStatus > result)
+        // For the maximum number of threads, initialize one compilation process in
+        // each of them.
+        if (verbose)
         {
-            result = compileStatus;
+            log::info("Beginning compilation process... (%lu input file%s)",
+                      inputFiles.size(),
+                      inputFiles.size() > 1 ? "s" : "");
         }
 
-        if (o_it != outputFiles.end())
+        // Exit with the highest exit code
+        int result = 0;
+
+        /// TODO: Handle this properly
+        STL_ITERATOR(list, io::File*, o_it);
+        STL_ITERATOR(list, io::File*, i_it);
+        for (i_it = inputFiles.begin(),
+             o_it = outputFiles.begin(); i_it != inputFiles.end(); ++i_it)
         {
-            ++o_it;
+            int compileStatus = compileFile(*i_it, *o_it);
+            if (compileStatus > result)
+            {
+                result = compileStatus;
+            }
+
+            if (o_it != outputFiles.end())
+            {
+                ++o_it;
+            }
+        }
+
+        if (result != 0)
+        {
+            throw core::Exception("compilation failed...");
         }
     }
-
-    if (result != 0)
+    catch (...)
     {
-        throw core::Exception("compilation failed...");
+        log::fatal("unspecified internal error.");
     }
 }
 

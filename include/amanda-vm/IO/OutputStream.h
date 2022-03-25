@@ -49,6 +49,8 @@ public:
     OutputStream();
     virtual ~OutputStream();
 
+    virtual void write(const char* data);
+    virtual void write(const void* data, size_t size);
 } ;
 
 }

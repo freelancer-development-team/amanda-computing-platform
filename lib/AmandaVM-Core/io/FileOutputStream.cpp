@@ -55,3 +55,13 @@ void FileOutputStream::releaseResource()
     file = NULL;
 }
 
+void FileOutputStream::write(const void* data, size_t size)
+{
+    file->write(data, size);
+}
+
+void FileOutputStream::write(const char* data)
+{
+    file->write(data);
+}
+

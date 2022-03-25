@@ -57,5 +57,11 @@
 #include <amanda-vm/IO/Path.h>
 #include <amanda-vm/IO/PrintStream.h>
 
+#include <amanda-vm/Threading/Runnable.h>
+#include <amanda-vm/Threading/Synchronization.h>
+#include <amanda-vm/Threading/SynchronizationError.h>
+#include <amanda-vm/Threading/Thread.h>
+#include <amanda-vm/Threading/ThreadingException.h>
+
 #endif /* AMANDASDK_H */
 

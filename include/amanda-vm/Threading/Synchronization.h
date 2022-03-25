@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,32 +16,26 @@
  */
 
 /* 
- * File:   Stream.cpp
+ * File:   Synchronization.h
  * Author: Javier Marrero
- * 
- * Created on March 1, 2022, 1:37 AM
+ *
+ * Created on March 25, 2022, 12:49 AM
  */
 
-#include <amanda-vm/IO/OutputStream.h>
+#ifndef SYNCHRONIZATION_H
+#define SYNCHRONIZATION_H
 
-using amanda::io::OutputStream;
-
-OutputStream::OutputStream()
+namespace amanda
 {
+namespace concurrent
+{
+
+class SynchronizationLock;
+
+SynchronizationLock*    synchronized();
+void                    unlock(SynchronizationLock* lock);
+
+}
 }
 
-OutputStream::~OutputStream()
-{
-}
-
-void OutputStream::write(const void* data, size_t size)
-{
-    assert("This method is not implemented here!");
-}
-
-void OutputStream::write(const char* data)
-{
-    write(data, strlen(data));
-}
-
-
+#endif /* SYNCHRONIZATION_H */

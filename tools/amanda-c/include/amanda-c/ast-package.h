@@ -29,7 +29,6 @@
  * The following includes constitutes the Amanda programming language abstract
  * syntax tree representation. Please, when adding nodes to this tree, include
  * them here and sort the includes alphabetically.
- * 
  */
 
 #include <amanda-c/ast/Lists.h>

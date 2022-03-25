@@ -88,10 +88,6 @@ int CompilationContext::performSSATransformation()
     {
         log::fatal("internal compiler fault (%s).", ex.what());
     }
-    catch (...)
-    {
-        log::fatal("internal fault. (reason unknown)");
-    }
     return parserResult;
 }
 

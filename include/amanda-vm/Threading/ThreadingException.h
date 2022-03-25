@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,32 +16,39 @@
  */
 
 /* 
- * File:   Stream.cpp
+ * File:   ThreadingException.h
  * Author: Javier Marrero
- * 
- * Created on March 1, 2022, 1:37 AM
+ *
+ * Created on March 24, 2022, 11:43 PM
  */
 
-#include <amanda-vm/IO/OutputStream.h>
+#ifndef THREADINGEXCEPTION_H
+#define THREADINGEXCEPTION_H
 
-using amanda::io::OutputStream;
+#include <amanda-vm/TypeSystem.h>
 
-OutputStream::OutputStream()
+namespace amanda
 {
+namespace concurrent
+{
+
+/**
+ * Threading exception is the base class for all exceptions thrown by the
+ * threading library of the core framework.
+ */
+class ThreadingException : public core::Exception
+{
+    AMANDA_OBJECT(ThreadingException, core::Exception)
+    
+public:
+
+    ThreadingException(const core::String& message);
+    virtual ~ThreadingException() throw();
+    
+} ;
+
+}
 }
 
-OutputStream::~OutputStream()
-{
-}
-
-void OutputStream::write(const void* data, size_t size)
-{
-    assert("This method is not implemented here!");
-}
-
-void OutputStream::write(const char* data)
-{
-    write(data, strlen(data));
-}
-
+#endif /* THREADINGEXCEPTION_H */
 

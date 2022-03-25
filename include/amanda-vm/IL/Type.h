@@ -33,6 +33,11 @@ namespace amanda
 namespace il
 {
 
+/**
+ * Type instances are the supported data types in the IL library for the
+ * Amanda Computing Platform. There is only a single instance of a given type
+ * at any given time. They are obtained using builder functions.
+ */
 class Type : public core::Object
 {
 
@@ -55,14 +60,19 @@ public:
     virtual ~Type();
 
     TypeID          getTypeId() const;
-    virtual bool    isIntegralType() const;
     virtual bool    isFloatingPointType() const;
+    virtual bool    isFunctionType() const;
+    virtual bool    isIntegralType() const;
     virtual bool    isSized() const;
     virtual void    print(io::OutputStream& os, bool debug = false, bool detailed = false) const;
+
+    bool operator == (const Type& object) const;
+    bool operator == (const Type* object) const;
 
 protected:
 
     TypeID id;
+
 } ;
 
 }

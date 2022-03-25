@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,32 +16,33 @@
  */
 
 /* 
- * File:   Stream.cpp
+ * File:   Runnable.h
  * Author: Javier Marrero
- * 
- * Created on March 1, 2022, 1:37 AM
+ *
+ * Created on March 24, 2022, 11:35 PM
  */
 
-#include <amanda-vm/IO/OutputStream.h>
+#ifndef RUNNABLE_H
+#define RUNNABLE_H
 
-using amanda::io::OutputStream;
+#include <amanda-vm/TypeSystem.h>
 
-OutputStream::OutputStream()
+namespace amanda
 {
+namespace concurrent
+{
+
+class Runnable : public core::Object
+{
+    AMANDA_OBJECT(Runnable, core::Object)
+public:
+
+    virtual void run() = 0;
+    
+} ;
+
+}
 }
 
-OutputStream::~OutputStream()
-{
-}
-
-void OutputStream::write(const void* data, size_t size)
-{
-    assert("This method is not implemented here!");
-}
-
-void OutputStream::write(const char* data)
-{
-    write(data, strlen(data));
-}
-
+#endif /* RUNNABLE_H */
 

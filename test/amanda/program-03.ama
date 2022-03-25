@@ -60,10 +60,14 @@ void print_name(Person a)
 
 int main(string[] args)
 {
+	# Individual objects
 	Person a;
 	Person b;
 	Person c;
 	Person d;
+	
+	# An array
+	int[] array;
 	
 	# Print some names
 	print_name(a);
