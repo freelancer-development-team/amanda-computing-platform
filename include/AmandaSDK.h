@@ -49,8 +49,11 @@
 #include <amanda-vm/ADT/Iterators.h>
 
 #include <amanda-vm/IO/Closeable.h>
+#include <amanda-vm/IO/ConsistentInputStream.h>
+#include <amanda-vm/IO/ConsistentOutputStream.h>
 #include <amanda-vm/IO/Console.h>
 #include <amanda-vm/IO/File.h>
+#include <amanda-vm/IO/FileInputStream.h>
 #include <amanda-vm/IO/FileOutputStream.h>
 #include <amanda-vm/IO/InputStream.h>
 #include <amanda-vm/IO/OutputStream.h>

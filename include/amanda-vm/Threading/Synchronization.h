@@ -35,6 +35,8 @@ class SynchronizationLock;
 SynchronizationLock*    synchronized();
 void                    unlock(SynchronizationLock* lock);
 
+#define AMANDA_DECLARE_LOCK(name)   amanda::concurrent::SynchronizationLock* name
+
 }
 }
 

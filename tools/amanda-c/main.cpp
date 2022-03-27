@@ -90,7 +90,7 @@ int main(int argc, char** argv)
     {
         compiler::displayHelpMessage(options.getReference());
     }
-    else if (commandLine->hasOption('v'))
+    else if (commandLine->hasOption("version"))
     {
         compiler::displayVersionInformation();
     }

@@ -34,12 +34,12 @@ OutputStream::~OutputStream()
 {
 }
 
-void OutputStream::write(const void* data, size_t size)
+void OutputStream::write(const void* data, size_t size) const
 {
     assert("This method is not implemented here!");
 }
 
-void OutputStream::write(const char* data)
+void OutputStream::write(const char* data) const
 {
     write(data, strlen(data));
 }

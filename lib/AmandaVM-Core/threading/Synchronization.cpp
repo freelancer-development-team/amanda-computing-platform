@@ -68,6 +68,7 @@ SynchronizationLock* amanda::concurrent::synchronized()
     try
     {
         lock = new SynchronizationLock();
+        lock->grab();
     }
     catch (...)
     {
@@ -87,8 +88,7 @@ void amanda::concurrent::unlock(SynchronizationLock* lock)
     {
         if (lock != NULL)
         {
-            delete lock;
-            lock = NULL;
+            lock->release();
         }
     }
     catch (...)
@@ -97,4 +97,5 @@ void amanda::concurrent::unlock(SynchronizationLock* lock)
     }
     
     pthread_mutex_unlock(&mutex);
+    delete lock;
 }

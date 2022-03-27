@@ -53,9 +53,9 @@ public:
     virtual ~Thread();
 
     void            exit();
-    bool            isJoinable();
-    bool            isRunning();
-    bool            isStarted();
+    bool            isJoinable() const;
+    bool            isRunning() const;
+    bool            isStarted() const;
     virtual void    join();
     void            setJoinable(bool joinable);
     virtual void    start();
@@ -64,10 +64,10 @@ private:
 
     void*                           nativeHandle;
     std::map<const char*, void*>    handles;
-    unsigned long long              id;
-    bool                            joinable;
-    bool                            running;
-    bool                            started;
+    volatile unsigned long long     id;
+    volatile bool                   joinable;
+    volatile bool                   running;
+    volatile bool                   started;
     
 } ;
 

@@ -41,17 +41,17 @@ public:
     FileOutputStream(const File* file);
     virtual ~FileOutputStream();
 
-    virtual void close();
-    virtual void write(const void* data, size_t size);
-    virtual void write(const char* data);
+    virtual void close() const;
+    virtual void write(const void* data, size_t size) const;
+    virtual void write(const char* data) const;
 
 protected:
 
-    const File* file;
+    mutable const File* file;
 
 private:
 
-    void releaseResource();
+    void releaseResource() const;
 } ;
 
 }

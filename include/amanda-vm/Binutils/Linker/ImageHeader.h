@@ -50,7 +50,7 @@ public:
 
 private:
 
-    vm::VM_Address baseAddress; /// The base address of the executable image
+    vm::vm_address_t baseAddress; /// The base address of the executable image
     
 } ;
 

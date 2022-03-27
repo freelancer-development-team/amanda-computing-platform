@@ -1746,7 +1746,7 @@ namespace amanda { namespace compiler {
 
   case 70: // type: type '[' ']'
 #line 529 "specs/grammar.y"
-                    { yylhs.value.as < amanda::core::String > () = "default-types::array@<"; yylhs.value.as < amanda::core::String > ().append(yystack_[2].value.as < amanda::core::String > ()).append(">"); }
+                    { yylhs.value.as < amanda::core::String > () = "Array@<"; yylhs.value.as < amanda::core::String > ().append(yystack_[2].value.as < amanda::core::String > ()).append(">"); }
 #line 1751 "compiler/Parser.cpp"
     break;
 

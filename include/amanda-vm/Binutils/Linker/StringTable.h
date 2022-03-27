@@ -53,7 +53,7 @@ public:
     virtual ~StringTable();
 
     void            add(const core::String& str);
-    vm::VM_QWord    count() const;
+    vm::vm_qword_t  count() const;
 
 private:
 

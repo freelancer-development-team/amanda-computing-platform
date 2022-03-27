@@ -27,6 +27,6 @@
 using namespace amanda;
 using namespace amanda::binutils::ld;
 
-uint8_t ImageHeader::MAGIC_NUMBER[4] = {0xFF, 0xFE, 0x00, 0x7F};
+uint8_t ImageHeader::MAGIC_NUMBER[4] = {0x7F, '@', 'A', 'X'};
 
 

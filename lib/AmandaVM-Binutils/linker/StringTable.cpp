@@ -40,7 +40,7 @@ void StringTable::add(const core::String& str)
     strings.push_back(str);
 }
 
-vm::VM_QWord StringTable::count() const
+vm::vm_qword_t StringTable::count() const
 {
     return strings.size();
 }

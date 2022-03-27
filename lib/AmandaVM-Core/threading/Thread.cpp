@@ -97,17 +97,17 @@ void Thread::exit()
     pthread_exit(retval);
 }
 
-bool Thread::isJoinable()
+bool Thread::isJoinable() const
 {
     return joinable;
 }
 
-bool Thread::isRunning()
+bool Thread::isRunning() const
 {
     return running;
 }
 
-bool Thread::isStarted()
+bool Thread::isStarted() const
 {
     return started;
 }

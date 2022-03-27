@@ -33,15 +33,23 @@ namespace vm
 {
 
 // Integral types
-typedef uint8_t     VM_Byte;
-typedef uint16_t    VM_Word;
-typedef uint32_t    VM_DWord;
-typedef uint64_t    VM_QWord;
+typedef uint8_t     vm_byte_t;
+typedef uint16_t    vm_word_t;
+typedef uint32_t    vm_dword_t;
+typedef uint64_t    vm_qword_t;
 
 // Floating point types
+#include <amanda-vm/Binutils/IEEE754.h>
 
 // Addresses & pointers
-typedef uint64_t    VM_Address;
+typedef uint64_t    vm_pointer_t;
+typedef uint64_t    vm_size_t;
+typedef uint64_t    vm_index_t;
+typedef uint64_t    vm_address_t;
+
+// Runtime types
+typedef void*       vm_memory_t;
+typedef const void* vm_readonly_memory_t;
 
 }
 }

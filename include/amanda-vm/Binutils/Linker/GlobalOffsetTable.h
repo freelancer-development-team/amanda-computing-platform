@@ -56,8 +56,8 @@ public:
 
     private:
         
-        vm::VM_Address  loadedOffset;
-        vm::VM_QWord    symbolNameIndex;
+        vm::vm_address_t  loadedOffset;
+        vm::vm_qword_t    symbolNameIndex;
     } ;
 
     /// A set of descriptor objects (the table itself)
