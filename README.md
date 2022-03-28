@@ -31,6 +31,6 @@ in no particular order (by their nicks, they know who they are 😉):
 * <code>@SnowBlackQueen</code>, for designing the project logo and listening to my theoretical discussions about PLs.
 * <code>@JoseCarlos_1201</code>, for his support and endearing dedication to the purpose of keeping this project alive.
 * <code>@RoxAsLol</code>, <code>@Samurai_Serio</code> & <code>@Hyzokaaa</code> for pushing the limits of my imagination to unthinkable boundaries.
-* <code>@Amanda_bmu</code>... I believe I don't think I have much more to be said.
+* <code>@Amanda_bmu</code>... I don't believe I have to say much more.
 
 Thanks to you all, sincerely, <code>@the_philosopher_3401</code> 🇨🇺
