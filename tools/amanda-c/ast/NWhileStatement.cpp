@@ -27,9 +27,10 @@
 using namespace amanda;
 using namespace amanda::compiler::ast;
 
-NWhileStatement::NWhileStatement(NBlock* block)
+NWhileStatement::NWhileStatement(NExpression* condition, NBlock* block)
 :
-NCompoundStatement(block)
+NCompoundStatement(block),
+condition(condition)
 {
 }
 
@@ -37,5 +38,12 @@ NWhileStatement::~NWhileStatement()
 {
 }
 
+core::String NWhileStatement::toString() const
+{
+    core::String buffer(buildHeaderString());
+    buffer.append("\nWith condition: <").append(condition->toString()).append(">\n");
+
+    return buffer;
+}
 
 

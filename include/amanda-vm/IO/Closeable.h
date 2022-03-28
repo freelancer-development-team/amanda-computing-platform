@@ -45,7 +45,7 @@ class Closeable : extends core::Interface
 
 public:
 
-    virtual void close() = 0;
+    virtual void close() const = 0;
 };
 
 }

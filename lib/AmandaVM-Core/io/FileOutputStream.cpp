@@ -41,17 +41,27 @@ FileOutputStream::~FileOutputStream()
     releaseResource();
 }
 
-void FileOutputStream::close()
+void FileOutputStream::close() const
 {
     releaseResource();
 }
 
-void FileOutputStream::releaseResource()
+void FileOutputStream::releaseResource() const
 {
     if (file && !File::isTerminalStream(file))
     {
         file->release();
     }
     file = NULL;
+}
+
+void FileOutputStream::write(const void* data, size_t size) const
+{
+    file->write(data, size);
+}
+
+void FileOutputStream::write(const char* data) const
+{
+    file->write(data);
 }
 

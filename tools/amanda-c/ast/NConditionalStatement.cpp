@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -54,6 +54,15 @@ void NConditionalStatement::addElseIfClause(NExpression* condition, NBlock* bloc
     // Add them to both the tree structure and the easy access element.
     addChild(elseIfClause);
     // elseIfClauses.push_back(elseIfClause);
+}
+
+void NConditionalStatement::addMultipleElseIfClauses(std::vector<NConditionalStatement*>& conditionals)
+{
+    for (std::vector<NConditionalStatement*>::iterator it = conditionals.begin();
+         it != conditionals.end(); ++it)
+    {
+        addChild(*it);
+    }
 }
 
 core::String NConditionalStatement::toString() const

@@ -36,8 +36,28 @@
 #include <cstdio>
 #include <cstdlib>
 #include <csignal>
+#include <signal.h>
 
 using namespace amanda;
+
+void handleSegmentationFault(int signalNumber)
+{
+    compiler::log::fatal("internal compiler segmentation fault.");
+}
+
+void handleNonSigSegv(int signalNumber)
+{
+    switch (signalNumber)
+    {
+        case SIGINT:
+        case SIGTERM:
+            compiler::log::fatal("compilation canceled by user.");
+            break;
+        default:
+            compiler::log::fatal("unknown fault.");
+            break;
+    }
+}
 
 /*
  * This is the entry point for the Amanda Programming Language compiler
@@ -47,7 +67,9 @@ using namespace amanda;
 int main(int argc, char** argv)
 {
     /* Set-up signal handler */
-
+    signal(SIGSEGV, &handleSegmentationFault);
+    signal(SIGTERM, &handleNonSigSegv);
+    signal(SIGINT, &handleNonSigSegv);
 
     /* Create the compiler driver object. */
     core::StrongReference<compiler::Driver> driver = new compiler::Driver();
@@ -68,7 +90,7 @@ int main(int argc, char** argv)
     {
         compiler::displayHelpMessage(options.getReference());
     }
-    else if (commandLine->hasOption('v'))
+    else if (commandLine->hasOption("version"))
     {
         compiler::displayVersionInformation();
     }

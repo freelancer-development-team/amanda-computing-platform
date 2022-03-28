@@ -23,6 +23,7 @@
  */
 
 #include <amanda-vm/ReferenceCounted.h>
+#include <amanda-vm/Threading/Synchronization.h>
 
 #include <assert.h>
 
@@ -41,12 +42,12 @@ ReferenceCounted::~ReferenceCounted()
 
 void ReferenceCounted::grab() const
 {
-    strongReferenceCount++;
+    ++strongReferenceCount;
 }
 
 void ReferenceCounted::grabWeakReference() const
 {
-    weakReferenceCount++;
+    ++weakReferenceCount;
 }
 
 void ReferenceCounted::release() const

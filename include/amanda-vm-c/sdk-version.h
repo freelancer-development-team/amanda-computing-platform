@@ -39,6 +39,7 @@ extern "C"
 #define SDK_FULLVERSION_STRING  __private_stringify(SDK_VERSION_MAJOR) "." \
                                 __private_stringify(SDK_VERSION_MINOR) "." \
                                 __private_stringify(SDK_VERSION_REVISION)
+#define SDK_FULLVERSION_RC_STRING   SDK_FULLVERSION_STRING ".0\0"
 
 #ifdef __STDC__
 

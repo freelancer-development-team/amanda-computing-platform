@@ -25,7 +25,8 @@
 #ifndef INPUTSTREAM_H
 #define INPUTSTREAM_H
 
-#include <amanda-vm/Object.h>
+#include <amanda-vm/TypeSystem.h>
+#include <amanda-vm/IO/Closeable.h>
 
 namespace amanda
 {
@@ -41,7 +42,7 @@ namespace io
  *
  * @author J. Marrero
  */
-class InputStream : public core::Object
+class InputStream : extends core::Object, implements Closeable
 {
     AMANDA_OBJECT(InputStream, core::Object)
 
@@ -49,6 +50,8 @@ public:
 
     InputStream();
     virtual ~InputStream();
+
+    virtual void read(void* buffer, size_t size) const;
 } ;
 
 }

@@ -1,0 +1,8 @@
+# Copyright (C) 2022 FreeLancer Development Team
+# GIT ignore file
+#
+# Written by J. Marrero
+#
+
+# Exclude the JIT directory
+libjit-0.1.4-binaries

@@ -93,6 +93,14 @@ bool AstNodeBase::hasParent()
     return parent != NULL;
 }
 
+void AstNodeBase::doSemanticAnalysis(SemanticAnalysisContext& context)
+{
+    for (std::vector<AstNodeBase*>::iterator it = children.begin(); it != children.end(); ++it)
+    {
+        (*it)->doSemanticAnalysis(context);
+    }
+}
+
 Value* AstNodeBase::generateCode(CodeGenContext& context)
 {
     return NULL;
@@ -116,7 +124,8 @@ void AstNodeBase::printNodeAndChildren(unsigned indent, const io::PrintStream& s
     {
         for (std::vector<AstNodeBase*>::iterator it = children.begin(); it != children.end(); ++it)
         {
-            (*it)->printNodeAndChildren(indent + 1, stream);
+            if (*it != NULL)
+                (*it)->printNodeAndChildren(indent + 1, stream);
         }
     }
     else
@@ -128,6 +137,21 @@ void AstNodeBase::printNodeAndChildren(unsigned indent, const io::PrintStream& s
 core::String AstNodeBase::toString() const
 {
     return buildHeaderString();
+}
+
+void AstNodeBase::setLocation(Location location)
+{
+    this->location = location;
+}
+
+Location AstNodeBase::getLocation() const
+{
+    return location;
+}
+
+void AstNodeBase::setParent(AstNodeBase* parent)
+{
+    this->parent = parent;
 }
 
 core::String AstNodeBase::buildHeaderString() const

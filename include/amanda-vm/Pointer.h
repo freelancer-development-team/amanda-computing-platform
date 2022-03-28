@@ -26,6 +26,7 @@
 #define POINTER_H
 
 #include <amanda-vm/Object.h>
+#include <amanda-vm/Threading/Synchronization.h>
 
 #include <cassert>
 
@@ -37,25 +38,63 @@ namespace core
 template <class T>
 class AutomaticReferenceBase : public Object
 {
+
     AMANDA_OBJECT(AutomaticReferenceBase, Object)
 
 public:
 
     AutomaticReferenceBase() : pointer(NULL) { }
-    AutomaticReferenceBase(T* pointer) : pointer(pointer) {}
+
+    AutomaticReferenceBase(T* pointer) : pointer(pointer) { }
+
     AutomaticReferenceBase(const AutomaticReferenceBase<T>& rhs) : pointer(rhs.pointer) { }
-    virtual ~AutomaticReferenceBase() {}
 
-    T*      get() const { return pointer; }
-    T&      getReference() const { return *pointer; }
-    bool    isNull() const { return pointer == NULL; }
+    virtual ~AutomaticReferenceBase() { }
 
-    operator bool() const                                           { return pointer != NULL; }
-    operator T*() const                                             { return pointer; }
-    T&      operator*() const                                       { return *pointer; }
-    T*      operator->() const                                      { return pointer; }
-    bool    operator==(const AutomaticReferenceBase<T>& rhs) const  { return pointer == rhs.pointer; }
-    bool    operator==(const T* rhs) const                          { return pointer == rhs; }
+    inline T*      get() const
+    {
+        return pointer;
+    }
+
+    inline T&      getReference() const
+    {
+        return *pointer;
+    }
+
+    inline bool    isNull() const
+    {
+        return pointer == NULL;
+    }
+
+    operator bool() const
+    {
+        return pointer != NULL;
+    }
+
+    operator T*() const
+    {
+        return pointer;
+    }
+
+    T&      operator*() const
+    {
+        return *pointer;
+    }
+
+    T*      operator->() const
+    {
+        return pointer;
+    }
+
+    bool    operator==(const AutomaticReferenceBase<T>& rhs) const
+    {
+        return pointer == rhs.pointer;
+    }
+
+    bool    operator==(const T* rhs) const
+    {
+        return pointer == rhs;
+    }
 
 protected:
 
@@ -70,15 +109,34 @@ class StrongReference : public AutomaticReferenceBase<T>
 public:
 
     StrongReference() : AutomaticReferenceBase<T>() { }
-    StrongReference(T* pointer) : AutomaticReferenceBase<T>(pointer) { increaseReference(); }
-    StrongReference(const StrongReference<T>& rhs) : AutomaticReferenceBase<T>(rhs) { increaseReference(); }
-    virtual ~StrongReference() { decreaseReference(); }
+
+    StrongReference(T* pointer) : AutomaticReferenceBase<T>(pointer)
+    {
+        increaseReference();
+    }
+
+    StrongReference(const StrongReference<T>& rhs) : AutomaticReferenceBase<T>(rhs)
+    {
+        increaseReference();
+    }
+
+    virtual ~StrongReference()
+    {
+        decreaseReference();
+    }
 
 protected:
 
-    void increaseReference()  { if (this->pointer != NULL) this->pointer->grab(); }
-    void decreaseReference()  { if (this->pointer != NULL) this->pointer->release(); }
-};
+    inline void increaseReference()
+    {        
+        if (this->pointer != NULL) this->pointer->grab();
+    }
+
+    inline void decreaseReference()
+    {
+        if (this->pointer != NULL) this->pointer->release();
+    }
+} ;
 
 }
 }

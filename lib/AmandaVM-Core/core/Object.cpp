@@ -103,6 +103,7 @@ bool Object::operator ==(const Object& rhs)
 
 bool Object::operator ==(const Object* rhs)
 {
+    assert(rhs != NULL && "Bad pointer");
     return equals(rhs);
 }
 
