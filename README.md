@@ -27,10 +27,10 @@ that relies on several platform libraries.
 I would like to aknowledge some people for their contribution (be it in code, resources or just emotional support), and they are,
 in no particular order (by their nicks, they know who they are 😉):
 
-* @ysordo, for giving this project its first star, and for his invaluable support.
-* @SnowBlackQueen, for designing the project logo and listening to my theoretical discussions about PLs.
-* @JoseCarlos_1201, for his support and endearing dedication to the purpose of keeping this project alive.
-* @RoxAsLol, @Samurai_Serio & @Hyzokaaa for pushing the limits of my imagination to unthinkable boundaries.
-* @Amanda_bmu... I believe this doesn't need much more to be said.
+* <code>@ysordo</code>, for giving this project its first star, and for his invaluable support.
+* <code>@SnowBlackQueen</code>, for designing the project logo and listening to my theoretical discussions about PLs.
+* <code>@JoseCarlos_1201</code>, for his support and endearing dedication to the purpose of keeping this project alive.
+* <code>@RoxAsLol</code>, <code>@Samurai_Serio</code> & <code>@Hyzokaaa</code> for pushing the limits of my imagination to unthinkable boundaries.
+* <code>@Amanda_bmu</code>... I believe I don't think I have much more to be said.
 
-Thanks to you all, sincerely, @the_philosopher_3401 🇨🇺
+Thanks to you all, sincerely, <code>@the_philosopher_3401</code> 🇨🇺
