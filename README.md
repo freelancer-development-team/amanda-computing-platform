@@ -1,4 +1,5 @@
 # Amanda Computing Platform
+![Amanda Logotype](https://user-images.githubusercontent.com/53576341/160346824-3c17604d-8bc5-412b-a8ce-ab6bce7264c7.png)
 
 Welcome to the Amanda Computing Platform project: a free libre implementation of a virtual machine based on JIT compilation, 
 and a framework for developing programming languages infrastructures. Amanda's goals are extensibility, scalability, portability
@@ -20,3 +21,4 @@ into the tools subdirectory, including the reference implementation of the Amand
 The Amanda Programming Language is the reference implementation of a programming language for this platform. It exemplifies the
 processes taking part in the platform-oriented toolchains. The Amanda Programming Language compiler is implemented as an executable
 that relies on several platform libraries.
+
