@@ -28,6 +28,7 @@
 #include <map>
 #include <list>
 #include <vector>
+#include <deque>
 
 namespace amanda
 {
@@ -99,6 +100,24 @@ static inline bool contains(const std::list<E>& container, const E& element)
 }
 
 template <typename E>
+static inline bool contains(const std::deque<E>& container, const E& element)
+{
+    bool result = false;
+
+    typename std::deque<E>::const_iterator iter;
+    for (iter = container.begin();
+         iter != container.end() && (!result);
+         ++iter)
+    {
+        if (*iter == element)
+        {
+            result = true;
+        }
+    }
+    return result;
+}
+
+template <typename E>
 static inline void vectorAsList(const std::vector<E>& vector, std::list<E>& list)
 {
     typename std::vector<E>::const_iterator iter;
@@ -114,6 +133,29 @@ static inline std::list<E>& vectorAsList(const std::vector<E>& vector)
     std::list<E>& list;
     vectorAsList(vector, list);
     return list;
+}
+
+/**
+ * Retrieves the nth element of a list. This operation takes <code>O(n)</code>
+ * time.
+ *
+ * @param list
+ * @param position
+ * @return
+ */
+template <typename E>
+static inline E& atListPosition(std::list<E>& list, unsigned position)
+{
+    E& result = list.front();
+    
+    unsigned i = 0;
+    typename std::list<E>::iterator iter;
+    for (iter = list.begin(); iter != list.end() && i <= position; ++iter, ++i)
+    {
+        result = *iter;
+    }
+
+    return result;
 }
 
 }

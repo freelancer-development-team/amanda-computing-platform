@@ -48,6 +48,9 @@ class String : public ReferenceCounted
 {
 public:
 
+    static String makeFormattedStringWithArguments(const core::String& fmt, va_list va);
+    static String makeFormattedString(const core::String& fmt, ...);
+
     /// Construct empty.
     String() :
         bufferLength(0),
@@ -457,6 +460,8 @@ public:
     String& appendWithFormatArguments(const char* formatString, va_list args);
     /// Format a string and appends
     String& format(const String& fmt, ...);
+    /// Format a string and variable list
+    String& formatWithArguments(const String& fmt, va_list args);
     /// Splits a string according to given delimiter
     std::vector<String> split(const String& delimiter, unsigned maxCount = 0) const;
 

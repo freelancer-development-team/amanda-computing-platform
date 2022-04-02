@@ -42,7 +42,8 @@ option(option),
 longOption(longOption),
 description(description),
 required(required),
-argumentCount(UNINITIALIZED)
+argumentCount(UNINITIALIZED),
+valueSeparator(',')
 {
     if (hasArguments)
     {
@@ -228,6 +229,7 @@ void Option::processValue(core::String& value)
         while (index != String::NPOS
                && ((int) values.size() == (argumentCount - 1)))
         {
+            add(value.substring(0, index));
             value = value.substring(index + 1);
             index = value.find(separator);
         }

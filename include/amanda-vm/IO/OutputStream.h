@@ -49,6 +49,7 @@ public:
     OutputStream();
     virtual ~OutputStream();
 
+    virtual void flush() const;
     virtual void write(const char* data) const;
     virtual void write(const void* data, size_t size) const;
 } ;

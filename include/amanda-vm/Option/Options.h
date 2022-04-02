@@ -61,9 +61,17 @@ public:
 
 private:
 
-    std::map<core::String, const Option*>   shortOptions;
-    std::map<core::String, const Option*>   longOptions;
-    std::list<const Option*>                requiredOptions;
+    struct OptionComparator
+    {
+        bool operator()(const core::String& s1, const core::String& s2) const
+        {
+            return s1.compare(s2) < 0;
+        }
+    };
+
+    std::map<core::String, const Option*, OptionComparator>     shortOptions;
+    std::map<core::String, const Option*, OptionComparator>     longOptions;
+    std::list<const Option*>                                    requiredOptions;
 
 } ;
 

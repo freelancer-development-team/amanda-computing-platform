@@ -25,9 +25,12 @@
 #ifndef VMCONTEXT_H
 #define VMCONTEXT_H
 
+// Amanda API
 #include <amanda-vm/TypeSystem.h>
-#include <amanda-vm/Runtime/ExecutionContext.h>
+#include <amanda-vm/Runtime/BaseExceptions.h>
+#include <amanda-vm/Runtime/JitContext.h>
 
+// C++ API
 #include <vector>
 
 namespace amanda
@@ -44,9 +47,12 @@ class VMContext : public core::Object
     AMANDA_OBJECT(VMContext, core::Object)
 public:
 
+    VMContext();
+    virtual ~VMContext();
+
 private:
 
-    std::vector<ExecutionContext*> contexts;
+    core::StrongReference<jit::JitContext> jitContext;
 } ;
 
 }

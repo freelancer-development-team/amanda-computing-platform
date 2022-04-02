@@ -25,17 +25,36 @@
 #ifndef SYNCHRONIZATION_H
 #define SYNCHRONIZATION_H
 
+#include <amanda-vm/Object.h>
+
 namespace amanda
 {
 namespace concurrent
 {
 
 class SynchronizationLock;
+class SynchronizationLockWrapper : public core::Object
+{
+    AMANDA_OBJECT(SynchronizationLockWrapper, core::Object)
+public:
+
+    SynchronizationLockWrapper();
+    SynchronizationLockWrapper(SynchronizationLock* lock);
+    SynchronizationLockWrapper(const SynchronizationLockWrapper& rhs);
+    virtual ~SynchronizationLockWrapper();
+
+    SynchronizationLock* getLock();
+
+private:
+
+    SynchronizationLock* lock;
+};
 
 SynchronizationLock*    synchronized();
 void                    unlock(SynchronizationLock* lock);
 
-#define AMANDA_DECLARE_LOCK(name)   amanda::concurrent::SynchronizationLock* name
+#define AMANDA_SYNCHRONIZED(name)   amanda::concurrent::SynchronizationLockWrapper name
+#define AMANDA_DESYNCHRONIZED(name)  amanda::concurrent::unlock(name.getLock())
 
 }
 }

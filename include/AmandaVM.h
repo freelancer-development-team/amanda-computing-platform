@@ -25,8 +25,14 @@
 #ifndef AMANDAVM_H
 #define AMANDAVM_H
 
-#include <amanda-vm/Runtime/ExecutionContext.h>
+// Runtime Library
+#include <amanda-vm/Runtime/BaseExceptions.h>
+#include <amanda-vm/Runtime/JitContext.h>
+#include <amanda-vm/Runtime/MirJitContext.h>
+#include <amanda-vm/Runtime/NullJitContext.h>
+#include <amanda-vm/Runtime/VMContext.h>
 #include <amanda-vm/Runtime/VMStack.h>
+#include <amanda-vm/Runtime/VMThreadContext.h>
 
 // The Amanda Core Libraries
 #include <AmandaSDK.h>

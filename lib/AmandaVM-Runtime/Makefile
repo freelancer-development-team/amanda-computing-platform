@@ -54,8 +54,7 @@ CCADMIN=CCadmin
 build: .build-post
 
 .build-pre:
-	# Build libjit
-	utils/build-libjit.sh
+# Add your pre 'build' code here...
 
 .build-post: .build-impl
 # Add your post 'build' code here...
