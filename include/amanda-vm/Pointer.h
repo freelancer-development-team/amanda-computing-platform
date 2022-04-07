@@ -49,7 +49,10 @@ public:
 
     AutomaticReferenceBase(const AutomaticReferenceBase<T>& rhs) : pointer(rhs.pointer) { }
 
-    virtual ~AutomaticReferenceBase() { }
+    virtual ~AutomaticReferenceBase()
+    {
+        pointer = NULL;
+    }
 
     inline T*      get() const
     {
@@ -96,9 +99,23 @@ public:
         return pointer == rhs;
     }
 
+    AutomaticReferenceBase<T>& operator=(const AutomaticReferenceBase<T>& rhs)
+    {
+        if (this == &rhs)
+            return *this;
+
+        rhs.increaseReference();
+        this->pointer = rhs.pointer;
+
+        return *this;
+    }
+
 protected:
 
-    T*  pointer;
+    mutable T*  pointer;
+
+    virtual void increaseReference() const = 0;
+    virtual void decreaseReference() const = 0;
 } ;
 
 template <class T>
@@ -117,6 +134,8 @@ public:
 
     StrongReference(const StrongReference<T>& rhs) : AutomaticReferenceBase<T>(rhs)
     {
+        // Increase the reference of the object.
+        rhs.increaseReference();
         increaseReference();
     }
 
@@ -127,12 +146,12 @@ public:
 
 protected:
 
-    inline void increaseReference()
-    {        
+    virtual void increaseReference() const
+    {
         if (this->pointer != NULL) this->pointer->grab();
     }
 
-    inline void decreaseReference()
+    virtual void decreaseReference() const
     {
         if (this->pointer != NULL) this->pointer->release();
     }

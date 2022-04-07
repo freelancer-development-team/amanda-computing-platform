@@ -45,13 +45,28 @@ class ImageHeader : public Serializable
     AMANDA_OBJECT(ImageHeader, Serializable)
 public:
 
-    static uint8_t      MAGIC_NUMBER[4];
-    static const short  IMAGE_SIZEOF_SHORT_NAME = 24;
-
+    static const uint32_t   MAGIC_NUMBER_INT32_VALUE = 0x7F404158;
+    static uint8_t          MAGIC_NUMBER[4];
+    static const short      IMAGE_SIZEOF_SHORT_NAME = 24;
+    static const short      IMAGE_HEADER_SIZEOF = 22;
+    
+    vm::vm_address_t    getBaseAddress() const ;
+    vm::vm_word_t       getHeaderSize() const ;
+    vm::vm_address_t    getSectionHeaderOffset() const ;
+    vm::vm_qword_t      getSectionNamesIndex() const ;
+    virtual void        marshall(io::OutputStream& stream);
+    void                setSectionNamesIndex(vm::vm_qword_t sectionNamesIndex);
+    void                setSectionHeaderOffset(vm::vm_address_t sectionHeaderOffset);
+    void                setHeaderSize(vm::vm_word_t headerSize);
+    void                setBaseAddress(vm::vm_address_t baseAddress);
+    
 private:
 
-    vm::vm_address_t baseAddress; /// The base address of the executable image
-    
+    vm::vm_address_t    baseAddress; /// The base address of the executable image
+    vm::vm_word_t       headerSize;
+    vm::vm_address_t    sectionHeaderOffset;    /// Offset of the section header
+    vm::vm_qword_t      sectionNamesIndex;      /// Index of the section holding all the section names.
+
 } ;
 
 }

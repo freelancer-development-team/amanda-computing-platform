@@ -49,12 +49,13 @@ MKDIR=mkdir
 CP=cp
 CCADMIN=CCadmin
 
+FLEX := flex
 
 # build
 build: .build-post
 
 .build-pre:
-# Add your pre 'build' code here...
+	${FLEX} -o "assembler/_scanner.cpp" --header-file="assembler/_scanner.hpp" "assembler/scanner.l"
 
 .build-post: .build-impl
 # Add your post 'build' code here...

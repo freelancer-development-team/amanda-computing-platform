@@ -57,6 +57,10 @@ typedef enum VM_BytecodeConstants
  */
 typedef enum VM_Opcodes
 {
+    // Reserved
+    I_NOP,
+    I_HALT,
+
     // Data type conversion
 
     // Arithmetic
@@ -69,6 +73,22 @@ typedef enum VM_Opcodes
     I_SUBL,
     I_SUBQ,
     // Stack manipulation
+    I_PUSHB,
+    I_PUSHW,
+    I_PUSHL,
+    I_PUSHQ,
+    I_PUSHF,
+    I_PUSHD,
+    // Flow control
+    I_RETB,
+    I_RETW,
+    I_RETL,
+    I_RETQ,
+    I_RETF,
+    I_RETD,
+            
+    // Reserved
+    I_INVALID = 0xFF
 } VM_Opcodes;
 
 /**

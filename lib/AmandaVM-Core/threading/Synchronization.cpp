@@ -97,5 +97,41 @@ void amanda::concurrent::unlock(SynchronizationLock* lock)
     }
     
     pthread_mutex_unlock(&mutex);
-    delete lock;
 }
+
+// WRAPPER OBJECT
+
+SynchronizationLockWrapper::SynchronizationLockWrapper()
+:
+lock(amanda::concurrent::synchronized())
+{
+    assert(lock != NULL);
+    lock->grab();
+}
+
+SynchronizationLockWrapper::SynchronizationLockWrapper(SynchronizationLock* lock)
+:
+lock(lock)
+{
+    assert(lock != NULL);
+    lock->grab();
+}
+
+SynchronizationLockWrapper::SynchronizationLockWrapper(const SynchronizationLockWrapper& rhs)
+:
+lock(rhs.lock)
+{
+    lock->grab();
+}
+
+SynchronizationLockWrapper::~SynchronizationLockWrapper()
+{
+    assert(lock != NULL);
+    unlock(lock);
+}
+
+SynchronizationLock* SynchronizationLockWrapper::getLock()
+{
+    return lock;
+}
+

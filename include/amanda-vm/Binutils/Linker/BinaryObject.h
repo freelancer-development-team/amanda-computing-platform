@@ -28,6 +28,8 @@
 #include <amanda-vm/Binutils/Serializable.h>
 #include <amanda-vm/Binutils/Linker/GlobalOffsetTable.h>
 #include <amanda-vm/Binutils/Linker/ImageHeader.h>
+#include <amanda-vm/Binutils/Linker/Section.h>
+#include <amanda-vm/Binutils/Linker/StringTable.h>
 
 namespace amanda
 {
@@ -42,22 +44,29 @@ namespace ld
  *
  * @author J. Marrero
  */
-class BinaryObject : Serializable
+class BinaryObject : public Serializable
 {
     AMANDA_OBJECT(BinaryObject, Serializable)
 public:
 
     BinaryObject(io::File* file, const core::String& moduleName);
+    virtual ~BinaryObject();
 
-    virtual void marshall();
-    virtual void marshall(io::OutputStream& stream);
-
+    void                addSection(Section* section);
+    unsigned            countSections();
+    const core::String& getName() const;
+    const Section*      getSection(const core::String& name) const;
+    const SectionTable& getSections() const;
+    virtual void        marshall(io::OutputStream& stream);
+    
 private:
 
     core::StrongReference<io::File>             file;
     core::StrongReference<GlobalOffsetTable>    globalOffsetTable;
     core::StrongReference<ImageHeader>          header;
     core::String                                name;
+    SectionTable                                sections;
+    core::StrongReference<StringTable>          stringTable;
     
 } ;
 

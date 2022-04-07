@@ -29,4 +29,51 @@ using namespace amanda::binutils::ld;
 
 uint8_t ImageHeader::MAGIC_NUMBER[4] = {0x7F, '@', 'A', 'X'};
 
+void ImageHeader::marshall(io::OutputStream& stream)
+{
+    stream.write(MAGIC_NUMBER, 1, 4);
+    stream.write(&this->headerSize, sizeof(headerSize));
+    stream.write(&this->sectionHeaderOffset, sizeof(sectionHeaderOffset));
+    stream.write(&this->sectionNamesIndex, sizeof(sectionNamesIndex));
+}
+
+void ImageHeader::setSectionNamesIndex(vm::vm_qword_t sectionNamesIndex)
+{
+    this->sectionNamesIndex = sectionNamesIndex;
+}
+
+vm::vm_qword_t ImageHeader::getSectionNamesIndex() const
+{
+    return sectionNamesIndex;
+}
+
+void ImageHeader::setSectionHeaderOffset(vm::vm_address_t sectionHeaderOffset)
+{
+    this->sectionHeaderOffset = sectionHeaderOffset;
+}
+
+vm::vm_address_t ImageHeader::getSectionHeaderOffset() const
+{
+    return sectionHeaderOffset;
+}
+
+void ImageHeader::setHeaderSize(vm::vm_word_t headerSize)
+{
+    this->headerSize = headerSize;
+}
+
+vm::vm_word_t ImageHeader::getHeaderSize() const
+{
+    return headerSize;
+}
+
+void ImageHeader::setBaseAddress(vm::vm_address_t baseAddress)
+{
+    this->baseAddress = baseAddress;
+}
+
+vm::vm_address_t ImageHeader::getBaseAddress() const
+{
+    return baseAddress;
+}
 

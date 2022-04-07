@@ -33,6 +33,13 @@ namespace amanda
 namespace binutils
 {
 
+/**
+ * Serializable objects are capable of being converted into a byte stream and
+ * later be restored from that same byte stream. It has several utilities as
+ * sharing objects across networks or creating persistent objects.
+ *
+ * @autor J. Marrero
+ */
 class Serializable : public core::Object
 {
     AMANDA_OBJECT(Serializable, core::Object)

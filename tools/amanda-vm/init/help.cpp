@@ -24,7 +24,7 @@ using namespace amanda::vm;
 void amanda::vm::printFormattedHelpMessage(cli::Options& options)
 {
     cli::HelpFormatter formatter;
-    formatter.printHelp("amanda-exe [options] <module>",
+    formatter.printHelp("amanda-vm [options] <module>",
                         "Where possible options may include:",
                         options,
                         "Report bugs to the discussion page of the Amanda project.",

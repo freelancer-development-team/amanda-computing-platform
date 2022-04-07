@@ -36,9 +36,12 @@ namespace core
 
 
 #define AMANDA_OBJECT(Type, Super) \
-    public: \
+    private: \
         typedef Type    ClassName; \
         typedef Super   BaseClassName; \
+    \
+        typedef Super   super; \
+    public: \
         \
         static amanda::core::Class& getClass() { static amanda::core::Class _class(#Type, &BaseClassName::getClass()); return _class; } \
         \

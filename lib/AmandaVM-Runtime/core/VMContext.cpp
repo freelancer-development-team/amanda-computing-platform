@@ -24,8 +24,18 @@
 
 #include <amanda-vm/Runtime/VMContext.h>
 
+// Jit contexts
+#include <amanda-vm/Runtime/MirJitContext.h>
+
 using namespace amanda;
 using namespace amanda::vm;
 
+VMContext::VMContext()
+{
+    jitContext = new jit::MirJitContext();
+}
 
+VMContext::~VMContext()
+{
+}
 

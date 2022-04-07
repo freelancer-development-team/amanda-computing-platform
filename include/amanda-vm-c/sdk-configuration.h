@@ -39,15 +39,18 @@ extern "C"
 /// This must be set to 1 when using POSIX threads
 #ifndef SDK_BUILD_USING_PTHREADS
 #ifdef _W32
-#   if AMANDA_ARCH_TOOLCHAIN == AMANDA_ARCH_TOOLCHAIN_GCC
-#       define SDK_BUILD_USING_PTHREADS SDK_BUILD_USE_FLAG          // Using POSIX threads
-#   else
-#       define SDK_BUILD_USING_PTHREADS SDK_BUILD_NO_USE_FLAG       // Not using POSIX threads
-#   endif
+#if AMANDA_ARCH_TOOLCHAIN == AMANDA_ARCH_TOOLCHAIN_GCC
+#define SDK_BUILD_USING_PTHREADS SDK_BUILD_USE_FLAG          // Using POSIX threads
 #else
-#   define SDK_BUILD_USING_PTHREADS SDK_BUILD_USE_FLAG              // Using POSIX threads
+#define SDK_BUILD_USING_PTHREADS SDK_BUILD_NO_USE_FLAG       // Not using POSIX threads
+#endif
+#else
+#define SDK_BUILD_USING_PTHREADS SDK_BUILD_USE_FLAG              // Using POSIX threads
 #endif
 #endif
+
+// This must be set to 1 depending on the JIT framework used
+#define SDK_BUILD_USING_MIR_JIT 1
 
 #ifdef __cplusplus
 }

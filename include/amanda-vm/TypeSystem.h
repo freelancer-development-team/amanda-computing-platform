@@ -32,5 +32,7 @@
 #include "String.h"
 #include "Types.h"
 
+#include <amanda-vm-c/sdk-types.h>
+
 #endif /* TYPESYSTEM_H */
 

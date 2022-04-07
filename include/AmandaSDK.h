@@ -60,6 +60,13 @@
 #include <amanda-vm/IO/Path.h>
 #include <amanda-vm/IO/PrintStream.h>
 
+#include <amanda-vm/Logging/Filter.h>
+#include <amanda-vm/Logging/Formatter.h>
+#include <amanda-vm/Logging/Handler.h>
+#include <amanda-vm/Logging/LogManager.h>
+#include <amanda-vm/Logging/LogRecord.h>
+#include <amanda-vm/Logging/Logger.h>
+
 #include <amanda-vm/Threading/Runnable.h>
 #include <amanda-vm/Threading/Synchronization.h>
 #include <amanda-vm/Threading/SynchronizationError.h>

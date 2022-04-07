@@ -24,6 +24,26 @@ using amanda::core::String;
 char String::endZero = 0;
 const String String::EMPTY;
 
+String String::makeFormattedStringWithArguments(const core::String& fmt, va_list va)
+{
+    char* buffer = new char[0x1000];
+    ::vsnprintf(buffer, 0x1000, fmt.toCharArray(), va);
+    String result(buffer);
+
+    delete[] buffer;
+    return result;
+}
+
+String String::makeFormattedString(const core::String& fmt, ...)
+{
+    va_list va;
+    va_start(va, fmt);
+    String result = makeFormattedStringWithArguments(fmt, va);
+    va_end(va);
+
+    return result;
+}
+
 String::String(int value) :
 bufferLength(0),
 bufferCapacity(0),
@@ -154,52 +174,52 @@ buffer(&endZero)
         buffer[i] = value;
 }
 
-String& String::operator+=(int rhs)
+String& String::operator +=(int rhs)
 {
     return *this += String(rhs);
 }
 
-String& String::operator+=(short rhs)
+String& String::operator +=(short rhs)
 {
     return *this += String(rhs);
 }
 
-String& String::operator+=(long rhs)
+String& String::operator +=(long rhs)
 {
     return *this += String(rhs);
 }
 
-String& String::operator+=(long long rhs)
+String& String::operator +=(long long rhs)
 {
     return *this += String(rhs);
 }
 
-String& String::operator+=(unsigned rhs)
+String& String::operator +=(unsigned rhs)
 {
     return *this += String(rhs);
 }
 
-String& String::operator+=(unsigned short rhs)
+String& String::operator +=(unsigned short rhs)
 {
     return *this += String(rhs);
 }
 
-String& String::operator+=(unsigned long rhs)
+String& String::operator +=(unsigned long rhs)
 {
     return *this += String(rhs);
 }
 
-String& String::operator+=(unsigned long long rhs)
+String& String::operator +=(unsigned long long rhs)
 {
     return *this += String(rhs);
 }
 
-String& String::operator+=(float rhs)
+String& String::operator +=(float rhs)
 {
     return *this += String(rhs);
 }
 
-String& String::operator+=(bool rhs)
+String& String::operator +=(bool rhs)
 {
     return *this += String(rhs);
 }
@@ -1073,6 +1093,16 @@ String& String::format(const String& fmt, ...)
     return *this;
 }
 
+String& String::formatWithArguments(const String& fmt, va_list args)
+{
+    char* buffer = new char[0x1000];
+    ::vsnprintf(buffer, 0x1000, fmt.toCharArray(), args);
+    append(buffer);
+
+    delete[] buffer;
+    return *this;
+}
+
 int String::compare(const char* lhs, const char* rhs, bool caseSensitive)
 {
     if (!lhs || !rhs)
@@ -1082,7 +1112,7 @@ int String::compare(const char* lhs, const char* rhs, bool caseSensitive)
         return strcmp(lhs, rhs);
     else
     {
-        for (;;)
+        for (; ; )
         {
             char l = (char) tolower(*lhs);
             char r = (char) tolower(*rhs);
