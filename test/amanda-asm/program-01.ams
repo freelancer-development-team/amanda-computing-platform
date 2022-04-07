@@ -16,20 +16,20 @@
  */
 
 .section ".code"
+.attributes "rx"
 
 # Import table
 
+.def @bar
+	retq
+.endef
+
+.def @foo
+	retw
+.endef
+
 .def @main
-	pushl $20
-	pushl $5
-	mull
-	pushl $6000
-	addl
-	pushl $2
-	divl
-	
-	pushl $0
-	ret
+	retl
 .endef
 
 .section ".data"

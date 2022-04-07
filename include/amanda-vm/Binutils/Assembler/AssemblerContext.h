@@ -27,6 +27,7 @@
 
 #include <amanda-vm/TypeSystem.h>
 #include <amanda-vm/IO/File.h>
+#include <amanda-vm/Logging/Logger.h>
 
 namespace amanda
 {
@@ -45,20 +46,23 @@ class AssemblerContext : public core::Object
 
 public:
 
+    AssemblerContext();
     virtual ~AssemblerContext();
 
     io::File*   getInputFile() const ;
     io::File*   getOutputFile() const ;
     bool        isVerbose() const;
+    void        performAssemblyPass();
     void        setVerbose(bool verbose);
     void        setInputFile(io::File* inputFile);
     void        setOutputFile(io::File* outputFile);
 
 protected:
 
-    core::StrongReference<io::File> inputFile;
-    core::StrongReference<io::File> outputFile;
-    bool                            verbose;
+    core::StrongReference<io::File>         inputFile;
+    core::StrongReference<logging::Logger>  logger;
+    core::StrongReference<io::File>         outputFile;
+    bool                                    verbose;
     
 } ;
 

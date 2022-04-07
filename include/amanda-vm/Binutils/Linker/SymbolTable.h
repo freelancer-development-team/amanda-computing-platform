@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,23 +16,42 @@
  */
 
 /* 
- * File:   Typesystem.h
+ * File:   SymbolTable.h
  * Author: Javier Marrero
  *
- * Created on March 12, 2022, 3:08 PM
+ * Created on April 7, 2022, 3:11 AM
  */
 
-#ifndef TYPESYSTEM_H
-#define TYPESYSTEM_H
+#ifndef SYMBOLTABLE_H
+#define SYMBOLTABLE_H
 
-#include "Exception.h"
-#include "Interface.h"
-#include "Object.h"
-#include "Pointer.h"
-#include "String.h"
-#include "Types.h"
+#include <amanda-vm/Binutils/Linker/Section.h>
+#include <amanda-vm/Binutils/Linker/Symbol.h>
 
-#include <amanda-vm-c/sdk-types.h>
+namespace amanda
+{
+namespace binutils
+{
+namespace ld
+{
 
-#endif /* TYPESYSTEM_H */
+/**
+ * The symbol table is an especial section inside of the object file.
+ */
+class SymbolTable : public Section
+{
+    AMANDA_OBJECT(SymbolTable, Section)
+public:
+
+    SymbolTable();
+    
+    virtual void marshall(io::OutputStream& stream);
+
+} ;
+
+}
+}
+}
+
+#endif /* SYMBOLTABLE_H */
 

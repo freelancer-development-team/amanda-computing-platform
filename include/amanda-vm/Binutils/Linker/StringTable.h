@@ -46,19 +46,23 @@ namespace ld
 class StringTable : public Serializable
 {
     AMANDA_OBJECT(StringTable, Serializable)
-    
+
 public:
-    
+
     StringTable();
     virtual ~StringTable();
 
-    void            add(const core::String& str);
-    vm::vm_qword_t  count() const;
+    void                add(const core::String& str);
+    vm::vm_qword_t      count() const;
+    const core::String& get(vm::vm_qword_t index) const;
+    vm::vm_qword_t      getIndex(const core::String& str);
+    virtual void        marshall(io::OutputStream& stream);
 
 private:
 
+    std::vector<vm::vm_qword_t> indexes;
     std::vector<core::String>   strings;
-    
+
 } ;
 
 }

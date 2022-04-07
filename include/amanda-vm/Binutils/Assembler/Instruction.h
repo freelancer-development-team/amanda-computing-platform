@@ -16,41 +16,50 @@
  */
 
 /* 
- * File:   Serializable.h
+ * File:   Instruction.h
  * Author: Javier Marrero
  *
- * Created on March 24, 2022, 10:54 PM
+ * Created on April 6, 2022, 8:30 PM
  */
 
-#ifndef _BINUTILS_SERIALIZABLE_H
-#define _BINUTILS_SERIALIZABLE_H
+#ifndef _AMANDA_BINUTILS_AS_INSTRUCTION_H
+#define _AMANDA_BINUTILS_AS_INSTRUCTION_H
 
 #include <amanda-vm/TypeSystem.h>
-#include <amanda-vm/IO/OutputStream.h>
+#include <amanda-vm/Binutils/Opcodes.h>
+#include <amanda-vm/Binutils/VirtualMachineSpecs.h>
 
 namespace amanda
 {
 namespace binutils
 {
+namespace as
+{
 
 /**
- * Serializable objects are capable of being converted into a byte stream and
- * later be restored from that same byte stream. It has several utilities as
- * sharing objects across networks or creating persistent objects.
- *
- * @autor J. Marrero
+ * Instructions as, as their name indicates, the minimal execution unit of the
+ * virtual machine. Assembler code emits instructions to corresponding execution
+ * units named functions.
  */
-class Serializable : public core::Object
+class Instruction : public core::Object
 {
-    AMANDA_OBJECT(Serializable, core::Object)
-    
+    AMANDA_OBJECT(Instruction, core::Object)
 public:
 
-    virtual void marshall(io::OutputStream& stream);
+    Instruction(const vm::vm_byte_t opcode);
+
+    const vm::vm_byte_t getOpcode() const;
+    const sdk_ullong_t  getSize() const;
+    
+private:
+
+    vm::vm_byte_t   opcode;
+    sdk_ullong_t    size;
 } ;
 
 }
 }
+}
 
-#endif /* SERIALIZABLE_H */
+#endif /* INSTRUCTION_H */
 

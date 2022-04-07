@@ -117,6 +117,13 @@ int main(int argc, char** argv)
                 }
             }
 
+            /* Perform the assembly pass. */
+            for (unsigned i = 0; i < contexts.size(); ++i)
+            {
+                //TODO: Complete this
+                contexts[i]->performAssemblyPass();
+            }
+
             // Release a reference to all the hold contexts.
             for (std::vector<binutils::as::AssemblerContext*>::iterator it = contexts.begin(),
                  end = contexts.end(); it != end; ++it)

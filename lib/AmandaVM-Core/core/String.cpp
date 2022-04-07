@@ -26,13 +26,11 @@ const String String::EMPTY;
 
 String String::makeFormattedStringWithArguments(const core::String& fmt, va_list va)
 {
-    char* buffer = new char[2 * fmt.length()];
-    memset(buffer, 0, fmt.length() * 2);
-
-    ::vsnprintf(buffer, 2 * fmt.length(), fmt.toCharArray(), va);
+    char* buffer = new char[0x1000];
+    ::vsnprintf(buffer, 0x1000, fmt.toCharArray(), va);
     String result(buffer);
 
-    delete buffer;
+    delete[] buffer;
     return result;
 }
 

@@ -530,6 +530,39 @@ inline String operator +(const wchar_t* lhs, const String& rhs)
     return ret;
 }
 
+// The following set of structures are comparator structures for use with the
+// STL container. They are all related to the string type.
+
+/**
+ * Orders strings in the same order as insertion took place.
+ * 
+ * @param s1
+ * @param s2
+ * @return
+ */
+struct NaturalOrderComparator
+{
+    inline bool operator()(const String& s1, const String& s2) const
+    {
+        return false;
+    }
+};
+
+/**
+ * Sorts two strings by alphabetical order (a != A).
+ *
+ * @param s1
+ * @param s2
+ * @return
+ */
+struct AlphabeticalOrderComparator
+{
+    inline bool operator()(const String& s1, const String& s2) const
+    {
+        return s1.compare(s2) < 0;
+    }
+};
+
 }
 }
 

@@ -57,7 +57,10 @@ Object* Object::clone()
 
 bool Object::equals(const Object* object)
 {
-    return this == object;
+    unsigned long long thisAddress = (unsigned long long) this;
+    unsigned long long rhsAddress = (unsigned long long) object;
+
+    return thisAddress == rhsAddress;
 }
 
 int Object::hashCode()
@@ -103,7 +106,6 @@ bool Object::operator ==(const Object& rhs)
 
 bool Object::operator ==(const Object* rhs)
 {
-    assert(rhs != NULL && "Bad pointer");
     return equals(rhs);
 }
 

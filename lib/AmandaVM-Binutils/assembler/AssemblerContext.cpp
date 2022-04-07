@@ -23,9 +23,24 @@
  */
 
 #include <amanda-vm/Binutils/Assembler/AssemblerContext.h>
+#include <amanda-vm/Logging/ConsoleHandler.h>
+#include <amanda-vm/Logging/GNUFormatter.h>
+#include <amanda-vm/Binutils/Assembler/AssemblerParser.h>
+#include <amanda-vm/IO/ConsistentOutputStream.h>
+#include <amanda-vm/IO/FileOutputStream.h>
 
 using namespace amanda;
 using namespace amanda::binutils::as;
+
+AssemblerContext::AssemblerContext()
+:
+logger(logging::Logger::getLogger("amanda.binutils.as"))
+{
+    // Configure the logger
+    logger->setUseParentHandlers(false);
+    logger->addHandler(*(new logging::ConsoleHandler(new logging::GNUFormatter("amanda-as", true))));
+    // logger->setLevel(logging::Logger::INFO);
+}
 
 AssemblerContext::~AssemblerContext()
 {
@@ -61,5 +76,42 @@ io::File* AssemblerContext::getInputFile() const
     return inputFile;
 }
 
+void AssemblerContext::performAssemblyPass()
+{
+    // Log that we have started. These are debug level and therefore they
+    // do not show themselves when in production, nor they are even logged.
+    // The effort of calling these functions is minimal, please, don't fall
+    // pray of premature optimization!
+    logger->debug("initiating assembler pass for context @(0x%p).", this);
+
+    core::StrongReference<AssemblerParser> parser = new AssemblerParser(inputFile.get(), outputFile.get());
+    try
+    {
+        parser->parse();
+
+        // Create the output streams & generate the code
+        // Open the output file!
+        if (!outputFile->open())
+        {
+            logger->fatal("unable to open file '%s' for writing. %s.",
+                          outputFile->getPath().toCharArray(),
+                          outputFile->getLastErrorString().toCharArray());
+        }
+        else
+        {
+            core::StrongReference<io::FileOutputStream> fileStream = new io::FileOutputStream(outputFile);
+            io::ConsistentOutputStream byteStream(*fileStream);
+
+            parser->generateCode(byteStream);
+        }
+    }
+    catch (core::Exception& ex)
+    {
+        logger->fatal("%s", ex.getMessage().toCharArray());
+    }
+
+    // Log if done!
+    logger->debug("done assembler pass, cleaning up...");
+}
 
 

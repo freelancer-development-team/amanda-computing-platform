@@ -27,6 +27,7 @@
 
 #include <amanda-vm/TypeSystem.h>
 #include <amanda-vm/Binutils/Serializable.h>
+#include <amanda-vm/Binutils/Linker/Symbol.h>
 
 #include <map>
 
@@ -51,29 +52,38 @@ class Section : public Serializable
     AMANDA_OBJECT(Section, Serializable)
 public:
 
-    struct SectionOrderer
+    enum
     {
+        READ = 1,
+        WRITE = 2,
+        EXECUTE = 4
+    };
 
-        bool operator() (const core::String& str1, const core::String& str2) const
-        {
-            return str1.compare(str2) < 0;
-        }
-    } ;
+    static unsigned     capabilitiesFromString(const core::String& attributes);
+    static core::String stringFromCapabilities(const unsigned capabilities);
 
     Section(const core::String& name);
     virtual ~Section();
 
+    void                addSymbol(Symbol* symbol);
+    unsigned            getCapabilities() const;
     const core::String& getSectionName() const;
+    bool                hasCapability(unsigned cap) const;
+    virtual void        marshall(io::OutputStream& stream);
+    virtual Section&    merge(Section* section);
+    void                setCapabilities(unsigned newCaps);
 
 protected:
 
-    core::String sectionName;
+    unsigned                                                            capabilities;
+    core::String                                                        sectionName;
+    std::map<core::String, Symbol*, core::AlphabeticalOrderComparator>  symbols;
 } ;
 
 /*
  * Tables of sections.
  */
-typedef std::map<core::String, Section*, Section::SectionOrderer> SectionTable;
+typedef std::map<core::String, Section*, core::AlphabeticalOrderComparator> SectionTable;
 
 }
 }

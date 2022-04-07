@@ -105,6 +105,8 @@ public:
             return *this;
 
         rhs.increaseReference();
+        this->pointer = rhs.pointer;
+
         return *this;
     }
 

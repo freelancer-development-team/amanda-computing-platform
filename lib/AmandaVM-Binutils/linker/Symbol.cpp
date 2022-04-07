@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,23 +16,44 @@
  */
 
 /* 
- * File:   Typesystem.h
+ * File:   Symbol.cpp
  * Author: Javier Marrero
- *
- * Created on March 12, 2022, 3:08 PM
+ * 
+ * Created on April 6, 2022, 8:16 PM
  */
 
-#ifndef TYPESYSTEM_H
-#define TYPESYSTEM_H
+#include <amanda-vm/Binutils/Linker/Symbol.h>
 
-#include "Exception.h"
-#include "Interface.h"
-#include "Object.h"
-#include "Pointer.h"
-#include "String.h"
-#include "Types.h"
+using namespace amanda;
+using namespace amanda::binutils::ld;
 
-#include <amanda-vm-c/sdk-types.h>
+Symbol::Symbol(const core::String& name)
+:
+name(name),
+size(-1)
+{
+}
 
-#endif /* TYPESYSTEM_H */
+Symbol::~Symbol()
+{
+}
 
+sdk_ullong_t Symbol::computeSize() const
+{
+    return 0ull;
+}
+
+const core::String& Symbol::getName() const
+{
+    return name;
+}
+
+const sdk_ullong_t Symbol::getSize() const
+{
+    return (size == (sdk_ullong_t) -1) ? computeSize() : size;
+}
+
+bool Symbol::is(const unsigned kind) const
+{
+    return kind == this->kind;
+}

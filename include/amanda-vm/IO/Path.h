@@ -41,8 +41,7 @@ public:
 
     static const char PATH_SEPARATOR = '/';
 
-    Path();
-    Path(const core::String& pathName);
+    Path(const core::String& pathName = core::String::EMPTY);
     Path(const Path& first, ...);
     virtual ~Path();
 

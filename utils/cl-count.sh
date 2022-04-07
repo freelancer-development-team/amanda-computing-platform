@@ -11,7 +11,7 @@
 (
 cd ..
 echo -e "\nC++ Sources:"
-find . -name "*.cpp" | xargs wc -l | sort -nr
+find ! -path "./third-party/*" -name "*.cpp" | xargs wc -l | sort -nr
 
 echo -e "\nC++ Headers:"
 find include -name "*.h" | xargs wc -l | sort -nr

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,23 +16,33 @@
  */
 
 /* 
- * File:   Typesystem.h
+ * File:   Instruction.cpp
  * Author: Javier Marrero
- *
- * Created on March 12, 2022, 3:08 PM
+ * 
+ * Created on April 6, 2022, 8:30 PM
  */
 
-#ifndef TYPESYSTEM_H
-#define TYPESYSTEM_H
+#include <amanda-vm/Binutils/Assembler/Instruction.h>
 
-#include "Exception.h"
-#include "Interface.h"
-#include "Object.h"
-#include "Pointer.h"
-#include "String.h"
-#include "Types.h"
+using namespace amanda;
+using namespace amanda::binutils::as;
 
-#include <amanda-vm-c/sdk-types.h>
+Instruction::Instruction(const vm::vm_byte_t opcode)
+:
+opcode(opcode),
+size(sizeof(vm::vm_byte_t))
+{
+}
 
-#endif /* TYPESYSTEM_H */
+const vm::vm_byte_t Instruction::getOpcode() const
+{
+    return opcode;
+}
+
+const sdk_ullong_t Instruction::getSize() const
+{
+    return size;
+}
+
+
 

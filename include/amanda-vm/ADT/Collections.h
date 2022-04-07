@@ -117,6 +117,12 @@ static inline bool contains(const std::deque<E>& container, const E& element)
     return result;
 }
 
+template <typename K, typename V, typename O>
+static inline bool containsKey(const std::map<K, V, O>& container, const K& key)
+{
+    return container.find(key) != container.end();
+}
+
 template <typename E>
 static inline void vectorAsList(const std::vector<E>& vector, std::list<E>& list)
 {

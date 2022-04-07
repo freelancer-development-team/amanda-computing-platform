@@ -28,12 +28,6 @@ using amanda::io::Path;
 
 using amanda::core::String;
 
-Path::Path()
-:
-pathName("")
-{
-}
-
 Path::Path(const core::String& pathName)
 :
 pathName(pathName)
@@ -45,6 +39,12 @@ Path::Path(const Path& first, ...)
 :
 pathName(first.pathName)
 {
+    va_list va;
+    va_start(va, first);
+
+    va_end(va);
+
+    normalize();
 }
 
 Path::~Path()
@@ -53,7 +53,13 @@ Path::~Path()
 
 String Path::getLastPathComponent()
 {
-    return toString().substring(toString().findLast(PATH_SEPARATOR) != String::NPOS ? toString().findLast(PATH_SEPARATOR) : toString().length());
+    String lastComponent(pathName);
+    unsigned lastSeparator = lastComponent.findLast(PATH_SEPARATOR);
+    if (lastSeparator != String::NPOS)
+    {
+        lastComponent = lastComponent.substring(lastSeparator + 1);
+    }
+    return lastComponent;
 }
 
 Path Path::getParent()

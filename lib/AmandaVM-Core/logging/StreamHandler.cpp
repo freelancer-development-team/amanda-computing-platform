@@ -80,7 +80,8 @@ void StreamHandler::publish(const LogRecord& record) const
     {
         if (streamState == STATE_FRESH)
         {
-            outputStream->write(formatter->getHead().append('\n').toCharArray());
+            if (formatter->getHead() != core::String::EMPTY)
+                outputStream->write(formatter->getHead().append('\n').toCharArray());
             streamState = STATE_PUBLISHED;
         }
 
