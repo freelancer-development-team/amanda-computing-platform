@@ -45,6 +45,8 @@ public:
     virtual ~NFunctionCall();
 
     void                    addPassedArguments(ExpressionList& list);
+    const core::String&     getCallTarget() const;
+    bool                    hasPassedArguments() const;
     virtual core::String    toString() const;
 
 protected:

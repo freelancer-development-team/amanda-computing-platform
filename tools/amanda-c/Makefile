@@ -64,9 +64,12 @@ build: .build-post
 .build-pre:
     	# Build RE-Flex
 	utils/build-reflex.sh
-	
+
+	echo "Building Scanner"
 	${LEX} ${LEX_OPTIONS} -o "compiler/Scanner.cpp" --header-file="include/amanda-c/Scanner.h" "specs/scanner.l"
-	${YACC} ${YACC_OPTIONS} --report-file="specs/parser-report.txt" -o "compiler/Parser.cpp" --defines="include/amanda-c/Parser.h" "specs/grammar.y"
+
+	echo "Building Parser"
+	${YACC} ${YACC_OPTIONS} --report-file="specs/parser-report.txt" -o "compiler/Parser.cpp" --defines="include/amanda-c/Parser.h" "specs/grammar.y"	
 
 .build-post: .build-impl
 # Add your post 'build' code here...

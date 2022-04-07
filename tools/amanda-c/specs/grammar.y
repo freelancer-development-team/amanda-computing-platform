@@ -81,11 +81,22 @@
     #include <amanda-vm/TypeSystem.h>
     #include <amanda-c/ast-package.h>
 
+    // C++ API
+    #include <vector>
+
     namespace amanda {
         namespace compiler
         {
             class Scanner;
             class CompilationContext;
+
+            namespace ast
+            {
+
+            // Typedefs
+            typedef std::vector<amanda::compiler::ast::NConditionalStatement*> ConditionalStatementList;
+
+            }
         }
     }
 }
@@ -107,43 +118,61 @@
     #undef yylex
     #define yylex lexer.lex
 
+    // Using declarations
     using namespace amanda;
     using namespace amanda::compiler::ast;
 
+    // Class import
     using amanda::core::StrongReference;
+
 }
 
 /* =================== TOKENS WITH SEMANTIC VALUES ========================== */
 
+%token<bool>                    BOOLEAN     "boolean literal"
 %token<amanda::core::String>    INTEGER     "integer literal"
 %token<amanda::core::String>    IDENTIFIER  "identifier"
 %token EOF                      0           "end of file"
 
 /* ================== NONTERMINALS WITH SEMANTIC VALUES ===================== */
 
-%type<amanda::compiler::ast::NBinaryOperator*>          binary_operator
-%type<amanda::compiler::ast::NCompilationUnit*>         compilation_unit
-%type<amanda::compiler::ast::NStatement*>               compound_statement
-%type<amanda::compiler::ast::NDeclaration*>             declaration
-%type<amanda::compiler::ast::NDeclarationBlock*>        declarations
-%type<amanda::compiler::ast::NExpression*>              expression
-%type<amanda::compiler::ast::ExpressionList*>           expression_list
-%type<amanda::compiler::ast::NExpressionStatement*>     expression_statement
-%type<amanda::compiler::ast::NFunctionCall*>            function_call
-%type<amanda::compiler::ast::NFunctionDeclaration*>     function_declaration
-%type<amanda::compiler::ast::NIdentifier*>              id
-%type<amanda::compiler::ast::NConditionalStatement*>    if_statement
-%type<amanda::core::String>                             name
-%type<amanda::compiler::ast::NNamespaceDeclaration*>    namespace_declaration
-%type<amanda::compiler::ast::NExpression*>              numeric_literal
-%type<amanda::core::String>                             qualified_name
-%type<amanda::compiler::ast::NReturnStatement*>         return_statement
-%type<amanda::core::String>                             simple_name
-%type<amanda::compiler::ast::NStatement*>               simple_statement
-%type<amanda::compiler::ast::NStatement*>               statement
-%type<amanda::compiler::ast::NBlock*>                   statement_sequence
-%type<amanda::compiler::ast::NUsingDeclaration*>        using_declaration
-%type<amanda::compiler::ast::NWhileStatement*>          while_statement
+%type<amanda::compiler::ast::NClassDeclaration::AccessModifier>     access_modifier
+%type<amanda::compiler::ast::NAssignmentExpression*>                assignment_expression
+%type<amanda::compiler::ast::NBinaryOperator*>                      binary_operator
+%type<amanda::compiler::ast::NBoolean*>                             boolean_literal
+%type<amanda::compiler::ast::NClassDeclaration*>                    class_declaration
+%type<amanda::compiler::ast::NClassDeclaration::ClassSectionList*>  class_scope
+%type<amanda::compiler::ast::NClassDeclaration::ClassBodySection*>  class_section
+%type<amanda::compiler::ast::NStatement*>                           class_statement
+%type<amanda::compiler::ast::StatementList*>                        class_statement_sequence
+%type<amanda::compiler::ast::NCompilationUnit*>                     compilation_unit
+%type<amanda::compiler::ast::NStatement*>                           compound_statement
+%type<amanda::compiler::ast::NDeclaration*>                         declaration
+%type<amanda::compiler::ast::NDeclarationBlock*>                    declarations
+%type<amanda::compiler::ast::NExpression*>                          expression
+%type<amanda::compiler::ast::ExpressionList*>                       expression_list
+%type<amanda::compiler::ast::NExpressionStatement*>                 expression_statement
+%type<amanda::compiler::ast::NClassFieldDeclaration*>               field_declaration
+%type<amanda::compiler::ast::NForLoopStatement*>                    for_statement
+%type<amanda::compiler::ast::NFunctionCall*>                        function_call
+%type<amanda::compiler::ast::NFunctionDeclaration*>                 function_declaration
+%type<amanda::compiler::ast::NIdentifier*>                          id
+%type<amanda::compiler::ast::NConditionalStatement*>                if_statement
+%type<amanda::compiler::ast::ConditionalStatementList>              multiple_else_if_clauses
+%type<amanda::core::String>                                         name
+%type<amanda::compiler::ast::NNamespaceDeclaration*>                namespace_declaration
+%type<amanda::compiler::ast::NExpression*>                          numeric_literal
+%type<amanda::compiler::ast::NExpression*>                          optional_expression
+%type<amanda::core::String>                                         qualified_name
+%type<amanda::compiler::ast::NReturnStatement*>                     return_statement
+%type<amanda::core::String>                                         simple_name
+%type<amanda::compiler::ast::NStatement*>                           simple_statement
+%type<amanda::compiler::ast::NStatement*>                           statement
+%type<amanda::compiler::ast::NBlock*>                               statement_sequence
+%type<amanda::core::String>                                         type simple_type reference_type
+%type<amanda::compiler::ast::NUsingDeclaration*>                    using_declaration
+%type<amanda::compiler::ast::NVariableDeclaration*>                 variable_declaration
+%type<amanda::compiler::ast::NWhileStatement*>                      while_statement
 
 /* ============================ KEYWORDS ==================================== */
 
@@ -156,6 +185,7 @@
     DELETE      "delete"
     DO          "do"
     ELSE        "else"
+    EXCEPT      "except"
     FOR         "for"
     IF          "if"
     IS          "is"
@@ -169,6 +199,7 @@
     PUBLIC      "public"
     RETURN      "return"
     SWITCH      "switch"
+    TRY         "try"
     USING       "using"
     WHILE       "while"
 ;
@@ -201,7 +232,7 @@
     LE  "'<='"
     GE  "'>='"
     EQ  "'=='"
-    NEQ "'!='"
+    NE  "'!='"
 ;
 
 %token
@@ -215,6 +246,9 @@
 /* ==================== PRECEDENCE OF TERMINAL SYMBOLS ====================== */
 // Operator precedence & associativity
 // Includes ')' for casts and '[' for array indexing
+%left EQ NE LE '<' GE '>'
+%left '+' '-'
+%left '*' '/'
 
 /* ==================== PRECEDENCE OF NONTERMINALS ========================== */
 
@@ -252,9 +286,12 @@ declarations
     | declarations declaration  { $$ = $1; $$->addDeclaration($2); }
     ;
 
+/* ========================= DECLARATIONS =================================== */
+
 declaration
     : namespace_declaration { $$ = $1; }
     | using_declaration     { $$ = $1; }
+    | class_declaration     { $$ = $1; }
     | function_declaration  { $$ = $1; }
     ;
 
@@ -281,7 +318,54 @@ function_declaration
     : type IDENTIFIER '(' argument_list ')' '{' statement_sequence '}' { $$ = new NFunctionDeclaration($2, $7); }
     ;
 
-/* Statements */
+class_declaration
+    : access_modifier CLASS IDENTIFIER 
+        '{'
+            class_scope
+        '}'
+        {
+            $$ = new NClassDeclaration($3);
+            $$->addClassSections(*$5);
+
+            // Set class properties
+            $$->setAccessModifier($1);
+
+            // Clean-up
+            delete $5;
+        }
+    ;
+
+class_scope
+    : class_section                             { $$ = new NClassDeclaration::ClassSectionList(); $$->reserve(3); $$->push_back($1); }
+    | class_scope class_section                 { $$ = $1; $$->push_back($2); }
+    ;
+
+class_section
+    : access_modifier ':' class_statement_sequence
+                                                {
+                                                    $$ = new NClassDeclaration::ClassBodySection($1);
+                                                    $$->setStatements(*$3);
+
+                                                    // Clean-up the mess
+                                                    delete $3;
+                                                }
+    ;
+
+class_statement_sequence
+    : %empty                                    { $$ = new StatementList(); }
+    | class_statement                           { $$ = new StatementList(); $$->push_back($1); }
+    | class_statement_sequence class_statement  { $$ = $1; $$->push_back($2); }
+    ;
+
+class_statement
+    : field_declaration ';'                     { $$ = $1; }
+    ;
+
+field_declaration
+    : type id           { $$ = new NClassFieldDeclaration($1, $2); }
+    ;
+
+/* ============================ Statements ================================== */
 statement
     : simple_statement ';'
     | compound_statement
@@ -294,6 +378,7 @@ simple_statement
 
 compound_statement
     : if_statement                  { $$ = $1; }
+    | for_statement                 { $$ = $1; }
     | while_statement               { $$ = $1; }
     ;
 
@@ -301,15 +386,17 @@ compound_statement
 // statements
 expression_statement
     : function_call                 { $$ = new NExpressionStatement($1); }
+    | variable_declaration          { $$ = new NExpressionStatement($1); }
+    | assignment_expression         { $$ = new NExpressionStatement($1); }
     ;
 
-/* Simple statements */
+/* ======================== Simple statements =============================== */
 return_statement
     : RETURN expression             { $$ = new NReturnStatement(); }
     | RETURN                        { $$ = new NReturnStatement(); }
     ;
 
-/* Compound statements */
+/* ======================= Compound statements ============================== */
 if_statement
     : IF '(' expression ')' '{' statement_sequence '}'
                                                         {
@@ -320,21 +407,76 @@ if_statement
                                                         {
                                                             $$ = new NConditionalStatement($3, $6); $$->addElseClause($10); 
                                                         }
+    | IF '(' expression ')' '{' statement_sequence '}' multiple_else_if_clauses
+                                                        {
+                                                            $$ = new NConditionalStatement($3, $6);
+                                                            $$->addMultipleElseIfClauses($8);
+                                                        }
+    | IF '(' expression ')' '{' statement_sequence '}' multiple_else_if_clauses ELSE '{' statement_sequence '}'
+                                                        {
+                                                            $$ = new NConditionalStatement($3, $6);
+                                                            $$->addMultipleElseIfClauses($8);
+                                                            $$->addElseClause($11);
+                                                        }
+    | IF '(' expression ')' statement
+                                                        {
+                                                            // Add a statement sequence
+                                                            NBlock* block = new NBlock();
+                                                            block->addStatement($5);
+
+                                                            // Create the conditional statement
+                                                            $$ = new NConditionalStatement($3, block);
+                                                        }
+    ;
+
+multiple_else_if_clauses
+    :   ELSE IF '(' expression ')' '{' statement_sequence '}'
+                                                        {
+                                                            $$.push_back(new NConditionalStatement($4, $7));
+                                                        }
+    |   multiple_else_if_clauses ELSE IF '(' expression ')' '{' statement_sequence '}'
+                                                        {
+                                                            $$ = $1;
+                                                            $$.push_back(new NConditionalStatement($5, $8));
+                                                        }
+    ;
+
+for_statement
+    : FOR '(' optional_expression ';' expression ';' optional_expression ')' '{' statement_sequence '}'
+                                                        {
+                                                            $$ = new NForLoopStatement($3, $5, $7, $10);
+                                                        }
     ;
 
 while_statement
     : WHILE '(' expression ')' '{' statement_sequence '}'
                                                 {
-                                                    $$ = new NWhileStatement($6);
+                                                    $$ = new NWhileStatement($3, $6);
+                                                }
+    | WHILE '(' expression ')' statement
+                                                {
+                                                    // Add a new scope to the while loop
+                                                    NBlock* body = new NBlock();
+                                                    body->addStatement($5);
+
+                                                    $$ = new NWhileStatement($3, body);
                                                 }
     ;
 
-/* Expressions */
+/* =========================== Expressions ================================== */
+optional_expression
+    : expression                                { $$ = $1; }
+    | %empty                                    { $$ = NULL; }
+    ;
+
 expression
     : id                                        { $$ = $1; }
+    | boolean_literal                           { $$ = $1; }
     | numeric_literal                           { $$ = $1; }
+    | variable_declaration                      { $$ = $1; }
     | function_call                             { $$ = $1; }
     | binary_operator                           { $$ = $1; }
+    | assignment_expression                     { $$ = $1; }
     | '(' expression ')'                        { $$ = $2; }
     ;
 
@@ -342,7 +484,16 @@ function_call
     : name '(' expression_list ')'  { $$ = new NFunctionCall($1); $$->addPassedArguments(*$3); delete $3; }
     ;
 
-/* Auxiliary declarations */
+variable_declaration
+    : type id                               { $$ = new NVariableDeclaration($1, $2); }
+    | variable_declaration '=' expression   { $$ = $1; $$->setAssignmentExpression($3); }
+    ;
+
+assignment_expression
+    : id '=' expression         { $$ = new NAssignmentExpression($1, $3); }
+    ;
+
+/* =================== Auxiliary declarations =============================== */
 /* Identifier node */
 id  : name                      { $$ = new NIdentifier($1); }
     ;
@@ -350,6 +501,11 @@ id  : name                      { $$ = new NIdentifier($1); }
 /* Numeric */
 numeric_literal
     : INTEGER                   { $$ = new NInteger($1); }
+    ;
+
+/* Boolean */
+boolean_literal
+    : BOOLEAN                   { $$ = new NBoolean($1); }
     ;
 
 /* Expression list */
@@ -370,23 +526,23 @@ statement_sequence
 type
     : simple_type
     | reference_type
-    | type '[' ']'
+    | type '[' ']'  { $$ = "Array@<"; $$.append($1).append(">"); }
     ;
 
 simple_type
-    : VOID
-    | BOOL
-    | BYTE
-    | SHORT
-    | INT
-    | LONG
-    | FLOAT
-    | DOUBLE
+    : VOID      { $$ = "default-types::void"; }
+    | BOOL      { $$ = "default-types::bool"; }
+    | BYTE      { $$ = "default-types::byte"; }
+    | SHORT     { $$ = "default-types::short"; }
+    | INT       { $$ = "default-types::int"; }
+    | LONG      { $$ = "default-types::long"; }
+    | FLOAT     { $$ = "default-types::float"; }
+    | DOUBLE    { $$ = "default-types::double"; }
     ;
 
 reference_type
     : name
-    | STRING
+    | STRING    { $$ = "default-types::string"; }
     ;
 
 /* Names */
@@ -404,6 +560,13 @@ qualified_name
     | qualified_name SCOPE_OP IDENTIFIER    { $$ = $1; $$.append("::").append($3); }
     ;
 
+/* ========================= Access modifiers =============================== */
+access_modifier
+    : PRIVATE       { $$ = NClassDeclaration::createAccessModifierFromString("private"); }
+    | PROTECTED     { $$ = NClassDeclaration::createAccessModifierFromString("protected"); }
+    | PUBLIC        { $$ = NClassDeclaration::createAccessModifierFromString("public"); }
+    ;
+
 /* Lists */
 argument_list
     : %empty
@@ -414,7 +577,15 @@ argument_list
 /* Operators */
 binary_operator
     : expression '<' expression             { $$ = new NBinaryOperator(BO_Lesser, $1, $3); }
+    | expression LE expression              { $$ = new NBinaryOperator(BO_LesserEquals, $1, $3); }
     | expression '>' expression             { $$ = new NBinaryOperator(BO_Greater, $1, $3); }
+    | expression GE expression              { $$ = new NBinaryOperator(BO_GreaterEquals, $1, $3); }
+    | expression EQ expression              { $$ = new NBinaryOperator(BO_Equals, $1, $3); }
+    | expression NE expression              { $$ = new NBinaryOperator(BO_NotEquals, $1, $3); }
+    | expression '+' expression             { $$ = new NBinaryOperator(BO_Sum, $1, $3); }
+    | expression '-' expression             { $$ = new NBinaryOperator(BO_Sub, $1, $3); }
+    | expression '/' expression             { $$ = new NBinaryOperator(BO_Div, $1, $3); }
+    | expression '*' expression             { $$ = new NBinaryOperator(BO_Mult, $1, $3); }
     ;
 
 %%

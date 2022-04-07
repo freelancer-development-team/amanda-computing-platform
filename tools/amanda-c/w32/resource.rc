@@ -1,0 +1,45 @@
+/*
+ * Copyright (C) 2022 FreeLancer Development Team
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "ids.h"
+
+A   ICON DISCARDABLE    "icon64.ico"
+
+1 VERSIONINFO
+FILEVERSION     AMANDA_C_VERSION_MAJOR,AMANDA_C_VERSION_MINOR,AMANDA_C_VERSION_REVISION,0
+PRODUCTVERSION  SDK_VERSION_MAJOR,SDK_VERSION_MINOR,SDK_VERSION_REVISION,0
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080904E4"
+        BEGIN
+            VALUE "CompanyName",        "FreeLancer Development Team"
+            VALUE "FileDescription",    "Amanda Programming Language compiler binary."
+            VALUE "InternalName",       "amanda-c.exe"
+            VALUE "LegalCopyright",     "Copyright (C) 2022 FreeLancer Development Team"
+            VALUE "OriginalFilename",   "amanda-c.exe"
+            VALUE "ProductName",        "Amanda Computing Platform"
+            VALUE "ProductVersion",     SDK_FULLVERSION_RC_STRING
+        END
+    END
+
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x809, 1252
+    END
+END
+

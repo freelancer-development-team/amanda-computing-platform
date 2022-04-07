@@ -41,8 +41,10 @@ class NWhileStatement : public NCompoundStatement
     AMANDA_OBJECT(NWhileStatement, NCompoundStatement)
 public:
 
-    NWhileStatement(NBlock* block);
+    NWhileStatement(NExpression* condition, NBlock* block);
     virtual ~NWhileStatement();
+
+    virtual core::String toString() const;
 
 protected:
 

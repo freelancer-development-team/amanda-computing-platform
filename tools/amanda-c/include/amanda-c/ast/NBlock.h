@@ -45,8 +45,11 @@ public:
     NBlock();
     virtual ~NBlock();
 
-    void addStatement(NStatement* statement);
-    virtual amanda::il::Value* generateCode(amanda::il::CodeGenContext& context);
+    void                        addStatement(NStatement* statement);
+    void                        cloneBlockState(NBlock* block);
+    const StatementList&        getStatementList() const;
+    bool                        hasStatements() const;
+    virtual amanda::il::Value*  generateCode(amanda::il::CodeGenContext& context);
 
 protected:
 

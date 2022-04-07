@@ -23,7 +23,10 @@
  */
 
 #include <amanda-c/CompilationContext.h>
+#include <amanda-c/SemanticAnalizer.h>
 #include <amanda-c/Messages.h>
+
+#include <amanda-vm/Frontend/SemanticException.h>
 
 using namespace amanda;
 using namespace amanda::compiler;
@@ -78,7 +81,7 @@ int CompilationContext::performSSATransformation()
         parserResult = parserObject->parse();
         if (parserResult == 0)
         {
-            performSemmanticAnnalysis();
+            performSemanticAnalysis();
         }
     }
     catch (std::exception& ex)
@@ -94,10 +97,11 @@ void CompilationContext::printAbstractSyntaxTree()
 
     io::console().err.println("\n ===== ABSTRACT SYNTAX TREE ===== ");
     abstractSyntaxTree->printNodeAndChildren();
-    io::console().err.println(" ===== DONE ===== ");
+    io::console().err.println(" ===== DONE ===== \n");
+    
 }
 
-void CompilationContext::performSemmanticAnnalysis()
+void CompilationContext::performSemanticAnalysis()
 {
     assert(abstractSyntaxTree != NULL && "Null pointer exception.");
 
@@ -106,5 +110,15 @@ void CompilationContext::performSemmanticAnnalysis()
     printAbstractSyntaxTree();
 #endif
 
-    
+    try
+    {
+        core::StrongReference<SemanticAnalizer> semanticAnalizer = new SemanticAnalizer();
+        assert(!semanticAnalizer.isNull() && "Null pointer exception");
+
+        abstractSyntaxTree->doSemanticAnalysis(*semanticAnalizer);
+    }
+    catch (frontend::SemanticException& ex)
+    {
+        log::error(ex.getMessage());
+    }
 }

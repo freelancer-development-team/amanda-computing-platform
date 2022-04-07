@@ -28,10 +28,35 @@ using amanda::io::OutputStream;
 
 OutputStream::OutputStream()
 {
-    
 }
 
 OutputStream::~OutputStream()
 {
 }
+
+void OutputStream::flush() const
+{
+    assert("This method is not implemented here!");
+}
+
+void OutputStream::write(const void* data, size_t size, size_t count) const
+{
+    const char* buffer = (const char*) data;
+    for (size_t i = 0; i < count; ++i)
+    {
+        write(buffer, size);
+        buffer += size;
+    }
+}
+
+void OutputStream::write(const void* data, size_t size) const
+{
+    assert("This method is not implemented here!");
+}
+
+void OutputStream::write(const char* data) const
+{
+    write(data, strlen(data));
+}
+
 

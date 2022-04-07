@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,6 +48,7 @@ public:
 
     void                    addElseClause(NBlock* block);
     void                    addElseIfClause(NExpression* condition, NBlock* block);
+    void                    addMultipleElseIfClauses(std::vector<NConditionalStatement*>& conditionals);
     
     virtual core::String    toString() const;
 

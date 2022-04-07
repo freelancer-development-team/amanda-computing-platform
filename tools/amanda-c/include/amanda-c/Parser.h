@@ -51,15 +51,26 @@
     #include <amanda-vm/TypeSystem.h>
     #include <amanda-c/ast-package.h>
 
+    // C++ API
+    #include <vector>
+
     namespace amanda {
         namespace compiler
         {
             class Scanner;
             class CompilationContext;
+
+            namespace ast
+            {
+
+            // Typedefs
+            typedef std::vector<amanda::compiler::ast::NConditionalStatement*> ConditionalStatementList;
+
+            }
         }
     }
 
-#line 63 "include/amanda-c/Parser.h"
+#line 74 "include/amanda-c/Parser.h"
 
 
 # include <cstdlib> // std::abort
@@ -189,7 +200,7 @@
 
 #line 53 "specs/grammar.y"
 namespace amanda { namespace compiler {
-#line 193 "include/amanda-c/Parser.h"
+#line 204 "include/amanda-c/Parser.h"
 
 
 
@@ -380,66 +391,107 @@ namespace amanda { namespace compiler {
     /// An auxiliary type to compute the largest semantic type.
     union union_type
     {
+      // multiple_else_if_clauses
+      char dummy1[sizeof (amanda::compiler::ast::ConditionalStatementList)];
+
       // expression_list
-      char dummy1[sizeof (amanda::compiler::ast::ExpressionList*)];
+      char dummy2[sizeof (amanda::compiler::ast::ExpressionList*)];
+
+      // assignment_expression
+      char dummy3[sizeof (amanda::compiler::ast::NAssignmentExpression*)];
 
       // binary_operator
-      char dummy2[sizeof (amanda::compiler::ast::NBinaryOperator*)];
+      char dummy4[sizeof (amanda::compiler::ast::NBinaryOperator*)];
 
       // statement_sequence
-      char dummy3[sizeof (amanda::compiler::ast::NBlock*)];
+      char dummy5[sizeof (amanda::compiler::ast::NBlock*)];
+
+      // boolean_literal
+      char dummy6[sizeof (amanda::compiler::ast::NBoolean*)];
+
+      // class_declaration
+      char dummy7[sizeof (amanda::compiler::ast::NClassDeclaration*)];
+
+      // access_modifier
+      char dummy8[sizeof (amanda::compiler::ast::NClassDeclaration::AccessModifier)];
+
+      // class_section
+      char dummy9[sizeof (amanda::compiler::ast::NClassDeclaration::ClassBodySection*)];
+
+      // class_scope
+      char dummy10[sizeof (amanda::compiler::ast::NClassDeclaration::ClassSectionList*)];
+
+      // field_declaration
+      char dummy11[sizeof (amanda::compiler::ast::NClassFieldDeclaration*)];
 
       // compilation_unit
-      char dummy4[sizeof (amanda::compiler::ast::NCompilationUnit*)];
+      char dummy12[sizeof (amanda::compiler::ast::NCompilationUnit*)];
 
       // if_statement
-      char dummy5[sizeof (amanda::compiler::ast::NConditionalStatement*)];
+      char dummy13[sizeof (amanda::compiler::ast::NConditionalStatement*)];
 
       // declaration
-      char dummy6[sizeof (amanda::compiler::ast::NDeclaration*)];
+      char dummy14[sizeof (amanda::compiler::ast::NDeclaration*)];
 
       // declarations
-      char dummy7[sizeof (amanda::compiler::ast::NDeclarationBlock*)];
+      char dummy15[sizeof (amanda::compiler::ast::NDeclarationBlock*)];
 
+      // optional_expression
       // expression
       // numeric_literal
-      char dummy8[sizeof (amanda::compiler::ast::NExpression*)];
+      char dummy16[sizeof (amanda::compiler::ast::NExpression*)];
 
       // expression_statement
-      char dummy9[sizeof (amanda::compiler::ast::NExpressionStatement*)];
+      char dummy17[sizeof (amanda::compiler::ast::NExpressionStatement*)];
+
+      // for_statement
+      char dummy18[sizeof (amanda::compiler::ast::NForLoopStatement*)];
 
       // function_call
-      char dummy10[sizeof (amanda::compiler::ast::NFunctionCall*)];
+      char dummy19[sizeof (amanda::compiler::ast::NFunctionCall*)];
 
       // function_declaration
-      char dummy11[sizeof (amanda::compiler::ast::NFunctionDeclaration*)];
+      char dummy20[sizeof (amanda::compiler::ast::NFunctionDeclaration*)];
 
       // id
-      char dummy12[sizeof (amanda::compiler::ast::NIdentifier*)];
+      char dummy21[sizeof (amanda::compiler::ast::NIdentifier*)];
 
       // namespace_declaration
-      char dummy13[sizeof (amanda::compiler::ast::NNamespaceDeclaration*)];
+      char dummy22[sizeof (amanda::compiler::ast::NNamespaceDeclaration*)];
 
       // return_statement
-      char dummy14[sizeof (amanda::compiler::ast::NReturnStatement*)];
+      char dummy23[sizeof (amanda::compiler::ast::NReturnStatement*)];
 
+      // class_statement
       // statement
       // simple_statement
       // compound_statement
-      char dummy15[sizeof (amanda::compiler::ast::NStatement*)];
+      char dummy24[sizeof (amanda::compiler::ast::NStatement*)];
 
       // using_declaration
-      char dummy16[sizeof (amanda::compiler::ast::NUsingDeclaration*)];
+      char dummy25[sizeof (amanda::compiler::ast::NUsingDeclaration*)];
+
+      // variable_declaration
+      char dummy26[sizeof (amanda::compiler::ast::NVariableDeclaration*)];
 
       // while_statement
-      char dummy17[sizeof (amanda::compiler::ast::NWhileStatement*)];
+      char dummy27[sizeof (amanda::compiler::ast::NWhileStatement*)];
+
+      // class_statement_sequence
+      char dummy28[sizeof (amanda::compiler::ast::StatementList*)];
 
       // "integer literal"
       // "identifier"
+      // type
+      // simple_type
+      // reference_type
       // name
       // simple_name
       // qualified_name
-      char dummy18[sizeof (amanda::core::String)];
+      char dummy29[sizeof (amanda::core::String)];
+
+      // "boolean literal"
+      char dummy30[sizeof (bool)];
     };
 
     /// The size of the largest semantic type.
@@ -488,51 +540,54 @@ namespace amanda { namespace compiler {
     TOKEN_EOF = 0,                 // "end of file"
     TOKEN_YYerror = 256,           // error
     TOKEN_YYUNDEF = 257,           // "invalid token"
-    TOKEN_INTEGER = 258,           // "integer literal"
-    TOKEN_IDENTIFIER = 259,        // "identifier"
-    TOKEN_AND = 260,               // "and"
-    TOKEN_AS = 261,                // "as"
-    TOKEN_BREAK = 262,             // "break"
-    TOKEN_CASE = 263,              // "case"
-    TOKEN_CLASS = 264,             // "class"
-    TOKEN_DELETE = 265,            // "delete"
-    TOKEN_DO = 266,                // "do"
-    TOKEN_ELSE = 267,              // "else"
-    TOKEN_FOR = 268,               // "for"
-    TOKEN_IF = 269,                // "if"
-    TOKEN_IS = 270,                // "is"
-    TOKEN_INTERFACE = 271,         // "interface"
-    TOKEN_NAMESPACE = 272,         // "namespace"
-    TOKEN_NEW = 273,               // "new"
-    TOKEN_NOT = 274,               // "not"
-    TOKEN_OR = 275,                // "or"
-    TOKEN_PRIVATE = 276,           // "private"
-    TOKEN_PROTECTED = 277,         // "protected"
-    TOKEN_PUBLIC = 278,            // "public"
-    TOKEN_RETURN = 279,            // "return"
-    TOKEN_SWITCH = 280,            // "switch"
-    TOKEN_USING = 281,             // "using"
-    TOKEN_WHILE = 282,             // "while"
-    TOKEN_BOOL = 283,              // "bool"
-    TOKEN_BYTE = 284,              // "byte"
-    TOKEN_SHORT = 285,             // "short"
-    TOKEN_INT = 286,               // "int"
-    TOKEN_LONG = 287,              // "long"
-    TOKEN_USHORT = 288,            // "ushort"
-    TOKEN_UINT = 289,              // "uint"
-    TOKEN_ULONG = 290,             // "ulong"
-    TOKEN_STRING = 291,            // "string"
-    TOKEN_CHAR = 292,              // "char"
-    TOKEN_VOID = 293,              // "void"
-    TOKEN_FLOAT = 294,             // "float"
-    TOKEN_DOUBLE = 295,            // "double"
-    TOKEN_SCOPE_OP = 296,          // "'::'"
-    TOKEN_LE = 297,                // "'<='"
-    TOKEN_GE = 298,                // "'>='"
-    TOKEN_EQ = 299,                // "'=='"
-    TOKEN_NEQ = 300,               // "'!='"
-    TOKEN_PLUSPLUS = 301,          // "'++'"
-    TOKEN_MINUSMINUS = 302         // "'--'"
+    TOKEN_BOOLEAN = 258,           // "boolean literal"
+    TOKEN_INTEGER = 259,           // "integer literal"
+    TOKEN_IDENTIFIER = 260,        // "identifier"
+    TOKEN_AND = 261,               // "and"
+    TOKEN_AS = 262,                // "as"
+    TOKEN_BREAK = 263,             // "break"
+    TOKEN_CASE = 264,              // "case"
+    TOKEN_CLASS = 265,             // "class"
+    TOKEN_DELETE = 266,            // "delete"
+    TOKEN_DO = 267,                // "do"
+    TOKEN_ELSE = 268,              // "else"
+    TOKEN_EXCEPT = 269,            // "except"
+    TOKEN_FOR = 270,               // "for"
+    TOKEN_IF = 271,                // "if"
+    TOKEN_IS = 272,                // "is"
+    TOKEN_INTERFACE = 273,         // "interface"
+    TOKEN_NAMESPACE = 274,         // "namespace"
+    TOKEN_NEW = 275,               // "new"
+    TOKEN_NOT = 276,               // "not"
+    TOKEN_OR = 277,                // "or"
+    TOKEN_PRIVATE = 278,           // "private"
+    TOKEN_PROTECTED = 279,         // "protected"
+    TOKEN_PUBLIC = 280,            // "public"
+    TOKEN_RETURN = 281,            // "return"
+    TOKEN_SWITCH = 282,            // "switch"
+    TOKEN_TRY = 283,               // "try"
+    TOKEN_USING = 284,             // "using"
+    TOKEN_WHILE = 285,             // "while"
+    TOKEN_BOOL = 286,              // "bool"
+    TOKEN_BYTE = 287,              // "byte"
+    TOKEN_SHORT = 288,             // "short"
+    TOKEN_INT = 289,               // "int"
+    TOKEN_LONG = 290,              // "long"
+    TOKEN_USHORT = 291,            // "ushort"
+    TOKEN_UINT = 292,              // "uint"
+    TOKEN_ULONG = 293,             // "ulong"
+    TOKEN_STRING = 294,            // "string"
+    TOKEN_CHAR = 295,              // "char"
+    TOKEN_VOID = 296,              // "void"
+    TOKEN_FLOAT = 297,             // "float"
+    TOKEN_DOUBLE = 298,            // "double"
+    TOKEN_SCOPE_OP = 299,          // "'::'"
+    TOKEN_LE = 300,                // "'<='"
+    TOKEN_GE = 301,                // "'>='"
+    TOKEN_EQ = 302,                // "'=='"
+    TOKEN_NE = 303,                // "'!='"
+    TOKEN_PLUSPLUS = 304,          // "'++'"
+    TOKEN_MINUSMINUS = 305         // "'--'"
       };
       /// Backward compatibility alias (Bison 3.6).
       typedef token_kind_type yytokentype;
@@ -549,110 +604,126 @@ namespace amanda { namespace compiler {
     {
       enum symbol_kind_type
       {
-        YYNTOKENS = 74, ///< Number of tokens.
+        YYNTOKENS = 77, ///< Number of tokens.
         S_YYEMPTY = -2,
         S_YYEOF = 0,                             // "end of file"
         S_YYerror = 1,                           // error
         S_YYUNDEF = 2,                           // "invalid token"
-        S_INTEGER = 3,                           // "integer literal"
-        S_IDENTIFIER = 4,                        // "identifier"
-        S_AND = 5,                               // "and"
-        S_AS = 6,                                // "as"
-        S_BREAK = 7,                             // "break"
-        S_CASE = 8,                              // "case"
-        S_CLASS = 9,                             // "class"
-        S_DELETE = 10,                           // "delete"
-        S_DO = 11,                               // "do"
-        S_ELSE = 12,                             // "else"
-        S_FOR = 13,                              // "for"
-        S_IF = 14,                               // "if"
-        S_IS = 15,                               // "is"
-        S_INTERFACE = 16,                        // "interface"
-        S_NAMESPACE = 17,                        // "namespace"
-        S_NEW = 18,                              // "new"
-        S_NOT = 19,                              // "not"
-        S_OR = 20,                               // "or"
-        S_PRIVATE = 21,                          // "private"
-        S_PROTECTED = 22,                        // "protected"
-        S_PUBLIC = 23,                           // "public"
-        S_RETURN = 24,                           // "return"
-        S_SWITCH = 25,                           // "switch"
-        S_USING = 26,                            // "using"
-        S_WHILE = 27,                            // "while"
-        S_BOOL = 28,                             // "bool"
-        S_BYTE = 29,                             // "byte"
-        S_SHORT = 30,                            // "short"
-        S_INT = 31,                              // "int"
-        S_LONG = 32,                             // "long"
-        S_USHORT = 33,                           // "ushort"
-        S_UINT = 34,                             // "uint"
-        S_ULONG = 35,                            // "ulong"
-        S_STRING = 36,                           // "string"
-        S_CHAR = 37,                             // "char"
-        S_VOID = 38,                             // "void"
-        S_FLOAT = 39,                            // "float"
-        S_DOUBLE = 40,                           // "double"
-        S_SCOPE_OP = 41,                         // "'::'"
-        S_LE = 42,                               // "'<='"
-        S_GE = 43,                               // "'>='"
-        S_EQ = 44,                               // "'=='"
-        S_NEQ = 45,                              // "'!='"
-        S_PLUSPLUS = 46,                         // "'++'"
-        S_MINUSMINUS = 47,                       // "'--'"
-        S_48_ = 48,                              // '!'
-        S_49_ = 49,                              // '#'
-        S_50_ = 50,                              // '$'
-        S_51_ = 51,                              // '%'
-        S_52_ = 52,                              // '&'
-        S_53_ = 53,                              // '('
-        S_54_ = 54,                              // ')'
-        S_55_ = 55,                              // '*'
-        S_56_ = 56,                              // '+'
-        S_57_ = 57,                              // ','
-        S_58_ = 58,                              // '-'
-        S_59_ = 59,                              // '.'
-        S_60_ = 60,                              // '/'
-        S_61_ = 61,                              // ':'
-        S_62_ = 62,                              // ';'
-        S_63_ = 63,                              // '<'
-        S_64_ = 64,                              // '='
-        S_65_ = 65,                              // '>'
-        S_66_ = 66,                              // '?'
-        S_67_ = 67,                              // '['
-        S_68_ = 68,                              // ']'
-        S_69_ = 69,                              // '^'
-        S_70_ = 70,                              // '{'
-        S_71_ = 71,                              // '|'
-        S_72_ = 72,                              // '}'
-        S_73_ = 73,                              // '~'
-        S_YYACCEPT = 74,                         // $accept
-        S_compilation_unit = 75,                 // compilation_unit
-        S_declarations = 76,                     // declarations
-        S_declaration = 77,                      // declaration
-        S_namespace_declaration = 78,            // namespace_declaration
-        S_using_declaration = 79,                // using_declaration
-        S_function_declaration = 80,             // function_declaration
-        S_statement = 81,                        // statement
-        S_simple_statement = 82,                 // simple_statement
-        S_compound_statement = 83,               // compound_statement
-        S_expression_statement = 84,             // expression_statement
-        S_return_statement = 85,                 // return_statement
-        S_if_statement = 86,                     // if_statement
-        S_while_statement = 87,                  // while_statement
-        S_expression = 88,                       // expression
-        S_function_call = 89,                    // function_call
-        S_id = 90,                               // id
-        S_numeric_literal = 91,                  // numeric_literal
-        S_expression_list = 92,                  // expression_list
-        S_statement_sequence = 93,               // statement_sequence
-        S_type = 94,                             // type
-        S_simple_type = 95,                      // simple_type
-        S_reference_type = 96,                   // reference_type
-        S_name = 97,                             // name
-        S_simple_name = 98,                      // simple_name
-        S_qualified_name = 99,                   // qualified_name
-        S_argument_list = 100,                   // argument_list
-        S_binary_operator = 101                  // binary_operator
+        S_BOOLEAN = 3,                           // "boolean literal"
+        S_INTEGER = 4,                           // "integer literal"
+        S_IDENTIFIER = 5,                        // "identifier"
+        S_AND = 6,                               // "and"
+        S_AS = 7,                                // "as"
+        S_BREAK = 8,                             // "break"
+        S_CASE = 9,                              // "case"
+        S_CLASS = 10,                            // "class"
+        S_DELETE = 11,                           // "delete"
+        S_DO = 12,                               // "do"
+        S_ELSE = 13,                             // "else"
+        S_EXCEPT = 14,                           // "except"
+        S_FOR = 15,                              // "for"
+        S_IF = 16,                               // "if"
+        S_IS = 17,                               // "is"
+        S_INTERFACE = 18,                        // "interface"
+        S_NAMESPACE = 19,                        // "namespace"
+        S_NEW = 20,                              // "new"
+        S_NOT = 21,                              // "not"
+        S_OR = 22,                               // "or"
+        S_PRIVATE = 23,                          // "private"
+        S_PROTECTED = 24,                        // "protected"
+        S_PUBLIC = 25,                           // "public"
+        S_RETURN = 26,                           // "return"
+        S_SWITCH = 27,                           // "switch"
+        S_TRY = 28,                              // "try"
+        S_USING = 29,                            // "using"
+        S_WHILE = 30,                            // "while"
+        S_BOOL = 31,                             // "bool"
+        S_BYTE = 32,                             // "byte"
+        S_SHORT = 33,                            // "short"
+        S_INT = 34,                              // "int"
+        S_LONG = 35,                             // "long"
+        S_USHORT = 36,                           // "ushort"
+        S_UINT = 37,                             // "uint"
+        S_ULONG = 38,                            // "ulong"
+        S_STRING = 39,                           // "string"
+        S_CHAR = 40,                             // "char"
+        S_VOID = 41,                             // "void"
+        S_FLOAT = 42,                            // "float"
+        S_DOUBLE = 43,                           // "double"
+        S_SCOPE_OP = 44,                         // "'::'"
+        S_LE = 45,                               // "'<='"
+        S_GE = 46,                               // "'>='"
+        S_EQ = 47,                               // "'=='"
+        S_NE = 48,                               // "'!='"
+        S_PLUSPLUS = 49,                         // "'++'"
+        S_MINUSMINUS = 50,                       // "'--'"
+        S_51_ = 51,                              // '!'
+        S_52_ = 52,                              // '#'
+        S_53_ = 53,                              // '$'
+        S_54_ = 54,                              // '%'
+        S_55_ = 55,                              // '&'
+        S_56_ = 56,                              // '('
+        S_57_ = 57,                              // ')'
+        S_58_ = 58,                              // '*'
+        S_59_ = 59,                              // '+'
+        S_60_ = 60,                              // ','
+        S_61_ = 61,                              // '-'
+        S_62_ = 62,                              // '.'
+        S_63_ = 63,                              // '/'
+        S_64_ = 64,                              // ':'
+        S_65_ = 65,                              // ';'
+        S_66_ = 66,                              // '<'
+        S_67_ = 67,                              // '='
+        S_68_ = 68,                              // '>'
+        S_69_ = 69,                              // '?'
+        S_70_ = 70,                              // '['
+        S_71_ = 71,                              // ']'
+        S_72_ = 72,                              // '^'
+        S_73_ = 73,                              // '{'
+        S_74_ = 74,                              // '|'
+        S_75_ = 75,                              // '}'
+        S_76_ = 76,                              // '~'
+        S_YYACCEPT = 77,                         // $accept
+        S_compilation_unit = 78,                 // compilation_unit
+        S_declarations = 79,                     // declarations
+        S_declaration = 80,                      // declaration
+        S_namespace_declaration = 81,            // namespace_declaration
+        S_using_declaration = 82,                // using_declaration
+        S_function_declaration = 83,             // function_declaration
+        S_class_declaration = 84,                // class_declaration
+        S_class_scope = 85,                      // class_scope
+        S_class_section = 86,                    // class_section
+        S_class_statement_sequence = 87,         // class_statement_sequence
+        S_class_statement = 88,                  // class_statement
+        S_field_declaration = 89,                // field_declaration
+        S_statement = 90,                        // statement
+        S_simple_statement = 91,                 // simple_statement
+        S_compound_statement = 92,               // compound_statement
+        S_expression_statement = 93,             // expression_statement
+        S_return_statement = 94,                 // return_statement
+        S_if_statement = 95,                     // if_statement
+        S_multiple_else_if_clauses = 96,         // multiple_else_if_clauses
+        S_for_statement = 97,                    // for_statement
+        S_while_statement = 98,                  // while_statement
+        S_optional_expression = 99,              // optional_expression
+        S_expression = 100,                      // expression
+        S_function_call = 101,                   // function_call
+        S_variable_declaration = 102,            // variable_declaration
+        S_assignment_expression = 103,           // assignment_expression
+        S_id = 104,                              // id
+        S_numeric_literal = 105,                 // numeric_literal
+        S_boolean_literal = 106,                 // boolean_literal
+        S_expression_list = 107,                 // expression_list
+        S_statement_sequence = 108,              // statement_sequence
+        S_type = 109,                            // type
+        S_simple_type = 110,                     // simple_type
+        S_reference_type = 111,                  // reference_type
+        S_name = 112,                            // name
+        S_simple_name = 113,                     // simple_name
+        S_qualified_name = 114,                  // qualified_name
+        S_access_modifier = 115,                 // access_modifier
+        S_argument_list = 116,                   // argument_list
+        S_binary_operator = 117                  // binary_operator
       };
     };
 
@@ -689,8 +760,16 @@ namespace amanda { namespace compiler {
       {
         switch (this->kind ())
     {
+      case symbol_kind::S_multiple_else_if_clauses: // multiple_else_if_clauses
+        value.move< amanda::compiler::ast::ConditionalStatementList > (std::move (that.value));
+        break;
+
       case symbol_kind::S_expression_list: // expression_list
         value.move< amanda::compiler::ast::ExpressionList* > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_assignment_expression: // assignment_expression
+        value.move< amanda::compiler::ast::NAssignmentExpression* > (std::move (that.value));
         break;
 
       case symbol_kind::S_binary_operator: // binary_operator
@@ -699,6 +778,30 @@ namespace amanda { namespace compiler {
 
       case symbol_kind::S_statement_sequence: // statement_sequence
         value.move< amanda::compiler::ast::NBlock* > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_boolean_literal: // boolean_literal
+        value.move< amanda::compiler::ast::NBoolean* > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_class_declaration: // class_declaration
+        value.move< amanda::compiler::ast::NClassDeclaration* > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_access_modifier: // access_modifier
+        value.move< amanda::compiler::ast::NClassDeclaration::AccessModifier > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_class_section: // class_section
+        value.move< amanda::compiler::ast::NClassDeclaration::ClassBodySection* > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_class_scope: // class_scope
+        value.move< amanda::compiler::ast::NClassDeclaration::ClassSectionList* > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_field_declaration: // field_declaration
+        value.move< amanda::compiler::ast::NClassFieldDeclaration* > (std::move (that.value));
         break;
 
       case symbol_kind::S_compilation_unit: // compilation_unit
@@ -717,6 +820,7 @@ namespace amanda { namespace compiler {
         value.move< amanda::compiler::ast::NDeclarationBlock* > (std::move (that.value));
         break;
 
+      case symbol_kind::S_optional_expression: // optional_expression
       case symbol_kind::S_expression: // expression
       case symbol_kind::S_numeric_literal: // numeric_literal
         value.move< amanda::compiler::ast::NExpression* > (std::move (that.value));
@@ -724,6 +828,10 @@ namespace amanda { namespace compiler {
 
       case symbol_kind::S_expression_statement: // expression_statement
         value.move< amanda::compiler::ast::NExpressionStatement* > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_for_statement: // for_statement
+        value.move< amanda::compiler::ast::NForLoopStatement* > (std::move (that.value));
         break;
 
       case symbol_kind::S_function_call: // function_call
@@ -746,6 +854,7 @@ namespace amanda { namespace compiler {
         value.move< amanda::compiler::ast::NReturnStatement* > (std::move (that.value));
         break;
 
+      case symbol_kind::S_class_statement: // class_statement
       case symbol_kind::S_statement: // statement
       case symbol_kind::S_simple_statement: // simple_statement
       case symbol_kind::S_compound_statement: // compound_statement
@@ -756,16 +865,31 @@ namespace amanda { namespace compiler {
         value.move< amanda::compiler::ast::NUsingDeclaration* > (std::move (that.value));
         break;
 
+      case symbol_kind::S_variable_declaration: // variable_declaration
+        value.move< amanda::compiler::ast::NVariableDeclaration* > (std::move (that.value));
+        break;
+
       case symbol_kind::S_while_statement: // while_statement
         value.move< amanda::compiler::ast::NWhileStatement* > (std::move (that.value));
         break;
 
+      case symbol_kind::S_class_statement_sequence: // class_statement_sequence
+        value.move< amanda::compiler::ast::StatementList* > (std::move (that.value));
+        break;
+
       case symbol_kind::S_INTEGER: // "integer literal"
       case symbol_kind::S_IDENTIFIER: // "identifier"
+      case symbol_kind::S_type: // type
+      case symbol_kind::S_simple_type: // simple_type
+      case symbol_kind::S_reference_type: // reference_type
       case symbol_kind::S_name: // name
       case symbol_kind::S_simple_name: // simple_name
       case symbol_kind::S_qualified_name: // qualified_name
         value.move< amanda::core::String > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_BOOLEAN: // "boolean literal"
+        value.move< bool > (std::move (that.value));
         break;
 
       default:
@@ -792,6 +916,20 @@ namespace amanda { namespace compiler {
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, amanda::compiler::ast::ConditionalStatementList&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const amanda::compiler::ast::ConditionalStatementList& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
       basic_symbol (typename Base::kind_type t, amanda::compiler::ast::ExpressionList*&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
@@ -799,6 +937,20 @@ namespace amanda { namespace compiler {
       {}
 #else
       basic_symbol (typename Base::kind_type t, const amanda::compiler::ast::ExpressionList*& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, amanda::compiler::ast::NAssignmentExpression*&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const amanda::compiler::ast::NAssignmentExpression*& v, const location_type& l)
         : Base (t)
         , value (v)
         , location (l)
@@ -827,6 +979,90 @@ namespace amanda { namespace compiler {
       {}
 #else
       basic_symbol (typename Base::kind_type t, const amanda::compiler::ast::NBlock*& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, amanda::compiler::ast::NBoolean*&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const amanda::compiler::ast::NBoolean*& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, amanda::compiler::ast::NClassDeclaration*&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const amanda::compiler::ast::NClassDeclaration*& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, amanda::compiler::ast::NClassDeclaration::AccessModifier&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const amanda::compiler::ast::NClassDeclaration::AccessModifier& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, amanda::compiler::ast::NClassDeclaration::ClassBodySection*&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const amanda::compiler::ast::NClassDeclaration::ClassBodySection*& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, amanda::compiler::ast::NClassDeclaration::ClassSectionList*&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const amanda::compiler::ast::NClassDeclaration::ClassSectionList*& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, amanda::compiler::ast::NClassFieldDeclaration*&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const amanda::compiler::ast::NClassFieldDeclaration*& v, const location_type& l)
         : Base (t)
         , value (v)
         , location (l)
@@ -911,6 +1147,20 @@ namespace amanda { namespace compiler {
       {}
 #else
       basic_symbol (typename Base::kind_type t, const amanda::compiler::ast::NExpressionStatement*& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, amanda::compiler::ast::NForLoopStatement*&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const amanda::compiler::ast::NForLoopStatement*& v, const location_type& l)
         : Base (t)
         , value (v)
         , location (l)
@@ -1016,6 +1266,20 @@ namespace amanda { namespace compiler {
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, amanda::compiler::ast::NVariableDeclaration*&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const amanda::compiler::ast::NVariableDeclaration*& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
       basic_symbol (typename Base::kind_type t, amanda::compiler::ast::NWhileStatement*&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
@@ -1030,6 +1294,20 @@ namespace amanda { namespace compiler {
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, amanda::compiler::ast::StatementList*&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const amanda::compiler::ast::StatementList*& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
       basic_symbol (typename Base::kind_type t, amanda::core::String&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
@@ -1037,6 +1315,20 @@ namespace amanda { namespace compiler {
       {}
 #else
       basic_symbol (typename Base::kind_type t, const amanda::core::String& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, bool&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const bool& v, const location_type& l)
         : Base (t)
         , value (v)
         , location (l)
@@ -1065,8 +1357,16 @@ namespace amanda { namespace compiler {
         // Value type destructor.
 switch (yykind)
     {
+      case symbol_kind::S_multiple_else_if_clauses: // multiple_else_if_clauses
+        value.template destroy< amanda::compiler::ast::ConditionalStatementList > ();
+        break;
+
       case symbol_kind::S_expression_list: // expression_list
         value.template destroy< amanda::compiler::ast::ExpressionList* > ();
+        break;
+
+      case symbol_kind::S_assignment_expression: // assignment_expression
+        value.template destroy< amanda::compiler::ast::NAssignmentExpression* > ();
         break;
 
       case symbol_kind::S_binary_operator: // binary_operator
@@ -1075,6 +1375,30 @@ switch (yykind)
 
       case symbol_kind::S_statement_sequence: // statement_sequence
         value.template destroy< amanda::compiler::ast::NBlock* > ();
+        break;
+
+      case symbol_kind::S_boolean_literal: // boolean_literal
+        value.template destroy< amanda::compiler::ast::NBoolean* > ();
+        break;
+
+      case symbol_kind::S_class_declaration: // class_declaration
+        value.template destroy< amanda::compiler::ast::NClassDeclaration* > ();
+        break;
+
+      case symbol_kind::S_access_modifier: // access_modifier
+        value.template destroy< amanda::compiler::ast::NClassDeclaration::AccessModifier > ();
+        break;
+
+      case symbol_kind::S_class_section: // class_section
+        value.template destroy< amanda::compiler::ast::NClassDeclaration::ClassBodySection* > ();
+        break;
+
+      case symbol_kind::S_class_scope: // class_scope
+        value.template destroy< amanda::compiler::ast::NClassDeclaration::ClassSectionList* > ();
+        break;
+
+      case symbol_kind::S_field_declaration: // field_declaration
+        value.template destroy< amanda::compiler::ast::NClassFieldDeclaration* > ();
         break;
 
       case symbol_kind::S_compilation_unit: // compilation_unit
@@ -1093,6 +1417,7 @@ switch (yykind)
         value.template destroy< amanda::compiler::ast::NDeclarationBlock* > ();
         break;
 
+      case symbol_kind::S_optional_expression: // optional_expression
       case symbol_kind::S_expression: // expression
       case symbol_kind::S_numeric_literal: // numeric_literal
         value.template destroy< amanda::compiler::ast::NExpression* > ();
@@ -1100,6 +1425,10 @@ switch (yykind)
 
       case symbol_kind::S_expression_statement: // expression_statement
         value.template destroy< amanda::compiler::ast::NExpressionStatement* > ();
+        break;
+
+      case symbol_kind::S_for_statement: // for_statement
+        value.template destroy< amanda::compiler::ast::NForLoopStatement* > ();
         break;
 
       case symbol_kind::S_function_call: // function_call
@@ -1122,6 +1451,7 @@ switch (yykind)
         value.template destroy< amanda::compiler::ast::NReturnStatement* > ();
         break;
 
+      case symbol_kind::S_class_statement: // class_statement
       case symbol_kind::S_statement: // statement
       case symbol_kind::S_simple_statement: // simple_statement
       case symbol_kind::S_compound_statement: // compound_statement
@@ -1132,16 +1462,31 @@ switch (yykind)
         value.template destroy< amanda::compiler::ast::NUsingDeclaration* > ();
         break;
 
+      case symbol_kind::S_variable_declaration: // variable_declaration
+        value.template destroy< amanda::compiler::ast::NVariableDeclaration* > ();
+        break;
+
       case symbol_kind::S_while_statement: // while_statement
         value.template destroy< amanda::compiler::ast::NWhileStatement* > ();
         break;
 
+      case symbol_kind::S_class_statement_sequence: // class_statement_sequence
+        value.template destroy< amanda::compiler::ast::StatementList* > ();
+        break;
+
       case symbol_kind::S_INTEGER: // "integer literal"
       case symbol_kind::S_IDENTIFIER: // "identifier"
+      case symbol_kind::S_type: // type
+      case symbol_kind::S_simple_type: // simple_type
+      case symbol_kind::S_reference_type: // reference_type
       case symbol_kind::S_name: // name
       case symbol_kind::S_simple_name: // simple_name
       case symbol_kind::S_qualified_name: // qualified_name
         value.template destroy< amanda::core::String > ();
+        break;
+
+      case symbol_kind::S_BOOLEAN: // "boolean literal"
+        value.template destroy< bool > ();
         break;
 
       default:
@@ -1246,6 +1591,14 @@ switch (yykind)
         : super_type(token_type (tok), v, l)
 #endif
       {}
+#if 201103L <= YY_CPLUSPLUS
+      symbol_type (int tok, bool v, location_type l)
+        : super_type(token_type (tok), std::move (v), std::move (l))
+#else
+      symbol_type (int tok, const bool& v, const location_type& l)
+        : super_type(token_type (tok), v, l)
+#endif
+      {}
     };
 
     /// Build a parser object.
@@ -1337,6 +1690,21 @@ switch (yykind)
       make_YYUNDEF (const location_type& l)
       {
         return symbol_type (token::TOKEN_YYUNDEF, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_BOOLEAN (bool v, location_type l)
+      {
+        return symbol_type (token::TOKEN_BOOLEAN, std::move (v), std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_BOOLEAN (const bool& v, const location_type& l)
+      {
+        return symbol_type (token::TOKEN_BOOLEAN, v, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
@@ -1487,6 +1855,21 @@ switch (yykind)
       make_ELSE (const location_type& l)
       {
         return symbol_type (token::TOKEN_ELSE, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_EXCEPT (location_type l)
+      {
+        return symbol_type (token::TOKEN_EXCEPT, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_EXCEPT (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_EXCEPT, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
@@ -1682,6 +2065,21 @@ switch (yykind)
       make_SWITCH (const location_type& l)
       {
         return symbol_type (token::TOKEN_SWITCH, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_TRY (location_type l)
+      {
+        return symbol_type (token::TOKEN_TRY, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_TRY (const location_type& l)
+      {
+        return symbol_type (token::TOKEN_TRY, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
@@ -1972,16 +2370,16 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_NEQ (location_type l)
+      make_NE (location_type l)
       {
-        return symbol_type (token::TOKEN_NEQ, std::move (l));
+        return symbol_type (token::TOKEN_NE, std::move (l));
       }
 #else
       static
       symbol_type
-      make_NEQ (const location_type& l)
+      make_NE (const location_type& l)
       {
-        return symbol_type (token::TOKEN_NEQ, l);
+        return symbol_type (token::TOKEN_NE, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
@@ -2054,7 +2452,7 @@ switch (yykind)
     void yy_lac_discard_ (const char* event);
 
     /// Stored state numbers (used for stacks).
-    typedef signed char state_type;
+    typedef unsigned char state_type;
 
     /// The arguments of the error message.
     int yy_syntax_error_arguments_ (const context& yyctx,
@@ -2089,7 +2487,7 @@ switch (yykind)
     // Tables.
     // YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
     // STATE-NUM.
-    static const signed char yypact_[];
+    static const short yypact_[];
 
     // YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
     // Performed when YYTABLE does not specify something else to do.  Zero
@@ -2097,17 +2495,17 @@ switch (yykind)
     static const signed char yydefact_[];
 
     // YYPGOTO[NTERM-NUM].
-    static const signed char yypgoto_[];
+    static const short yypgoto_[];
 
     // YYDEFGOTO[NTERM-NUM].
-    static const signed char yydefgoto_[];
+    static const unsigned char yydefgoto_[];
 
     // YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
     // positive, shift that token.  If negative, reduce the rule whose
     // number is the opposite.  If YYTABLE_NINF, syntax error.
-    static const signed char yytable_[];
+    static const short yytable_[];
 
-    static const signed char yycheck_[];
+    static const short yycheck_[];
 
     // YYSTOS[STATE-NUM] -- The (internal number of the) accessing
     // symbol of state STATE-NUM.
@@ -2358,9 +2756,9 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 173,     ///< Last index in yytable_.
-      yynnts_ = 28,  ///< Number of nonterminal symbols.
-      yyfinal_ = 29 ///< Termination state number.
+      yylast_ = 791,     ///< Last index in yytable_.
+      yynnts_ = 41,  ///< Number of nonterminal symbols.
+      yyfinal_ = 34 ///< Termination state number.
     };
 
 
@@ -2383,16 +2781,16 @@ switch (yykind)
        0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,    48,     2,    49,    50,    51,    52,     2,
-      53,    54,    55,    56,    57,    58,    59,    60,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,    61,    62,
-      63,    64,    65,    66,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,    51,     2,    52,    53,    54,    55,     2,
+      56,    57,    58,    59,    60,    61,    62,    63,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,    64,    65,
+      66,    67,    68,    69,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,    67,     2,    68,    69,     2,     2,     2,     2,     2,
+       2,    70,     2,    71,    72,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,    70,    71,    72,    73,     2,     2,     2,
+       2,     2,     2,    73,    74,    75,    76,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -2410,10 +2808,10 @@ switch (yykind)
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
       35,    36,    37,    38,    39,    40,    41,    42,    43,    44,
-      45,    46,    47
+      45,    46,    47,    48,    49,    50
     };
     // Last valid token kind.
-    const int code_max = 302;
+    const int code_max = 305;
 
     if (t <= 0)
       return symbol_kind::S_YYEOF;
@@ -2432,8 +2830,16 @@ switch (yykind)
   {
     switch (this->kind ())
     {
+      case symbol_kind::S_multiple_else_if_clauses: // multiple_else_if_clauses
+        value.copy< amanda::compiler::ast::ConditionalStatementList > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_expression_list: // expression_list
         value.copy< amanda::compiler::ast::ExpressionList* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_assignment_expression: // assignment_expression
+        value.copy< amanda::compiler::ast::NAssignmentExpression* > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_binary_operator: // binary_operator
@@ -2442,6 +2848,30 @@ switch (yykind)
 
       case symbol_kind::S_statement_sequence: // statement_sequence
         value.copy< amanda::compiler::ast::NBlock* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_boolean_literal: // boolean_literal
+        value.copy< amanda::compiler::ast::NBoolean* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_class_declaration: // class_declaration
+        value.copy< amanda::compiler::ast::NClassDeclaration* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_access_modifier: // access_modifier
+        value.copy< amanda::compiler::ast::NClassDeclaration::AccessModifier > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_class_section: // class_section
+        value.copy< amanda::compiler::ast::NClassDeclaration::ClassBodySection* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_class_scope: // class_scope
+        value.copy< amanda::compiler::ast::NClassDeclaration::ClassSectionList* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_field_declaration: // field_declaration
+        value.copy< amanda::compiler::ast::NClassFieldDeclaration* > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_compilation_unit: // compilation_unit
@@ -2460,6 +2890,7 @@ switch (yykind)
         value.copy< amanda::compiler::ast::NDeclarationBlock* > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_optional_expression: // optional_expression
       case symbol_kind::S_expression: // expression
       case symbol_kind::S_numeric_literal: // numeric_literal
         value.copy< amanda::compiler::ast::NExpression* > (YY_MOVE (that.value));
@@ -2467,6 +2898,10 @@ switch (yykind)
 
       case symbol_kind::S_expression_statement: // expression_statement
         value.copy< amanda::compiler::ast::NExpressionStatement* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_for_statement: // for_statement
+        value.copy< amanda::compiler::ast::NForLoopStatement* > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_function_call: // function_call
@@ -2489,6 +2924,7 @@ switch (yykind)
         value.copy< amanda::compiler::ast::NReturnStatement* > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_class_statement: // class_statement
       case symbol_kind::S_statement: // statement
       case symbol_kind::S_simple_statement: // simple_statement
       case symbol_kind::S_compound_statement: // compound_statement
@@ -2499,16 +2935,31 @@ switch (yykind)
         value.copy< amanda::compiler::ast::NUsingDeclaration* > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_variable_declaration: // variable_declaration
+        value.copy< amanda::compiler::ast::NVariableDeclaration* > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_while_statement: // while_statement
         value.copy< amanda::compiler::ast::NWhileStatement* > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_class_statement_sequence: // class_statement_sequence
+        value.copy< amanda::compiler::ast::StatementList* > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_INTEGER: // "integer literal"
       case symbol_kind::S_IDENTIFIER: // "identifier"
+      case symbol_kind::S_type: // type
+      case symbol_kind::S_simple_type: // simple_type
+      case symbol_kind::S_reference_type: // reference_type
       case symbol_kind::S_name: // name
       case symbol_kind::S_simple_name: // simple_name
       case symbol_kind::S_qualified_name: // qualified_name
         value.copy< amanda::core::String > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_BOOLEAN: // "boolean literal"
+        value.copy< bool > (YY_MOVE (that.value));
         break;
 
       default:
@@ -2540,8 +2991,16 @@ switch (yykind)
     super_type::move (s);
     switch (this->kind ())
     {
+      case symbol_kind::S_multiple_else_if_clauses: // multiple_else_if_clauses
+        value.move< amanda::compiler::ast::ConditionalStatementList > (YY_MOVE (s.value));
+        break;
+
       case symbol_kind::S_expression_list: // expression_list
         value.move< amanda::compiler::ast::ExpressionList* > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_assignment_expression: // assignment_expression
+        value.move< amanda::compiler::ast::NAssignmentExpression* > (YY_MOVE (s.value));
         break;
 
       case symbol_kind::S_binary_operator: // binary_operator
@@ -2550,6 +3009,30 @@ switch (yykind)
 
       case symbol_kind::S_statement_sequence: // statement_sequence
         value.move< amanda::compiler::ast::NBlock* > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_boolean_literal: // boolean_literal
+        value.move< amanda::compiler::ast::NBoolean* > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_class_declaration: // class_declaration
+        value.move< amanda::compiler::ast::NClassDeclaration* > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_access_modifier: // access_modifier
+        value.move< amanda::compiler::ast::NClassDeclaration::AccessModifier > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_class_section: // class_section
+        value.move< amanda::compiler::ast::NClassDeclaration::ClassBodySection* > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_class_scope: // class_scope
+        value.move< amanda::compiler::ast::NClassDeclaration::ClassSectionList* > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_field_declaration: // field_declaration
+        value.move< amanda::compiler::ast::NClassFieldDeclaration* > (YY_MOVE (s.value));
         break;
 
       case symbol_kind::S_compilation_unit: // compilation_unit
@@ -2568,6 +3051,7 @@ switch (yykind)
         value.move< amanda::compiler::ast::NDeclarationBlock* > (YY_MOVE (s.value));
         break;
 
+      case symbol_kind::S_optional_expression: // optional_expression
       case symbol_kind::S_expression: // expression
       case symbol_kind::S_numeric_literal: // numeric_literal
         value.move< amanda::compiler::ast::NExpression* > (YY_MOVE (s.value));
@@ -2575,6 +3059,10 @@ switch (yykind)
 
       case symbol_kind::S_expression_statement: // expression_statement
         value.move< amanda::compiler::ast::NExpressionStatement* > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_for_statement: // for_statement
+        value.move< amanda::compiler::ast::NForLoopStatement* > (YY_MOVE (s.value));
         break;
 
       case symbol_kind::S_function_call: // function_call
@@ -2597,6 +3085,7 @@ switch (yykind)
         value.move< amanda::compiler::ast::NReturnStatement* > (YY_MOVE (s.value));
         break;
 
+      case symbol_kind::S_class_statement: // class_statement
       case symbol_kind::S_statement: // statement
       case symbol_kind::S_simple_statement: // simple_statement
       case symbol_kind::S_compound_statement: // compound_statement
@@ -2607,16 +3096,31 @@ switch (yykind)
         value.move< amanda::compiler::ast::NUsingDeclaration* > (YY_MOVE (s.value));
         break;
 
+      case symbol_kind::S_variable_declaration: // variable_declaration
+        value.move< amanda::compiler::ast::NVariableDeclaration* > (YY_MOVE (s.value));
+        break;
+
       case symbol_kind::S_while_statement: // while_statement
         value.move< amanda::compiler::ast::NWhileStatement* > (YY_MOVE (s.value));
         break;
 
+      case symbol_kind::S_class_statement_sequence: // class_statement_sequence
+        value.move< amanda::compiler::ast::StatementList* > (YY_MOVE (s.value));
+        break;
+
       case symbol_kind::S_INTEGER: // "integer literal"
       case symbol_kind::S_IDENTIFIER: // "identifier"
+      case symbol_kind::S_type: // type
+      case symbol_kind::S_simple_type: // simple_type
+      case symbol_kind::S_reference_type: // reference_type
       case symbol_kind::S_name: // name
       case symbol_kind::S_simple_name: // simple_name
       case symbol_kind::S_qualified_name: // qualified_name
         value.move< amanda::core::String > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_BOOLEAN: // "boolean literal"
+        value.move< bool > (YY_MOVE (s.value));
         break;
 
       default:
@@ -2682,7 +3186,7 @@ switch (yykind)
 
 #line 53 "specs/grammar.y"
 } } // amanda::compiler
-#line 2686 "include/amanda-c/Parser.h"
+#line 3190 "include/amanda-c/Parser.h"
 
 
 

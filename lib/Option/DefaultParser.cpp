@@ -22,8 +22,8 @@
  * Created on March 1, 2022, 2:16 PM
  */
 
-#include <amanda-vm/ADT/Collections.h>
 #include <amanda-vm/Option/DefaultParser.h>
+#include <amanda-vm/ADT/Collections.h>
 #include <amanda-vm/Option/Option.h>
 #include <amanda-vm/Option/Options.h>
 #include <amanda-vm/Option/MissingArgumentException.h>
@@ -350,17 +350,15 @@ void DefaultParser::handleToken(const core::String& token)
 
 void DefaultParser::handleUnknownToken(const core::String& token)
 {
-    if (!token.startsWith("-") || !(token.length() > 1) || stopAtNonOption)
+    if (token.startsWith("-") && token.length() > 1 && !stopAtNonOption)
     {
-        cmd->addArgument(token);
-        if (stopAtNonOption)
-        {
-            skipParsing = true;
-        }
+        throw UnrecognizedOptionException("Unrecognized option: " + token, token);
     }
-    else
+
+    cmd->addArgument(token);
+    if (stopAtNonOption)
     {
-        throw UnrecognizedOptionException(String("Unrecognized option: ").append(token), token);
+        skipParsing = true;
     }
 }
 
