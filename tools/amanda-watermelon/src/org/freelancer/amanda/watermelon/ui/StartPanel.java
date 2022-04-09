@@ -14,32 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package org.freelancer.amanda.watermelon.ui;
 
-/* 
- * File:   SymbolTable.cpp
- * Author: Javier Marrero
- * 
- * Created on April 7, 2022, 3:11 AM
+import javax.swing.JPanel;
+
+/**
+ *
+ * @author Javier Marrero
  */
-
-#include <amanda-vm/Binutils/Linker/SymbolTable.h>
-
-using namespace amanda;
-using namespace amanda::binutils::ld;
-
-SymbolTable::SymbolTable()
-:
-Section(".symbol-table")
-{
-}
-
-void SymbolTable::addSymbol(Symbol* symbol)
-{
-}
-
-void SymbolTable::marshall(io::OutputStream& stream)
+public class StartPanel extends JPanel
 {
     
 }
-
-

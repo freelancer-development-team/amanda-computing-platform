@@ -28,6 +28,8 @@
 #include <amanda-vm/Binutils/Linker/Section.h>
 #include <amanda-vm/Binutils/Linker/Symbol.h>
 
+#include <map>
+
 namespace amanda
 {
 namespace binutils
@@ -44,9 +46,13 @@ class SymbolTable : public Section
 public:
 
     SymbolTable();
-    
+
+    virtual void addSymbol(Symbol* symbol);
     virtual void marshall(io::OutputStream& stream);
 
+private:
+
+    
 } ;
 
 }
