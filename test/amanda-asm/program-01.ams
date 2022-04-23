@@ -20,16 +20,12 @@
 
 # Import table
 
-.def @bar
-	retq
+.def @@main?string
+	pop b8
+	ret b8
 .endef
 
-.def @foo
-	retw
+.def foo
+	push l32 $62
+	ret l32
 .endef
-
-.def @main
-	retl
-.endef
-
-.section ".data"

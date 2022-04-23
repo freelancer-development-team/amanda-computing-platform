@@ -33,6 +33,7 @@ cli::CommandLine* amanda::as::parseCommandLineOptions(cli::Options& options, adt
     /* Add the options. Please, keep them sorted in alphabetical order. */
     options.addOption(OptionBuilder::build().withShortOption("h").withLongOption("help").withDescription("Shows this message and exits.").get());
     options.addOption(OptionBuilder::build().withShortOption("o").withLongOption("output").hasRequiredArgument(true).withDescription("Outputs executable code to the given file.").get());
+    options.addOption(OptionBuilder::build().withShortOption("S").withLongOption("unlink").withDescription("Assemble only, do not link.").get());
     options.addOption(OptionBuilder::build().withLongOption("verbose").withDescription("Produces a more descriptive output.").get());
     options.addOption(OptionBuilder::build().withLongOption("version").withDescription("Shows the version information and exits.").get());
 

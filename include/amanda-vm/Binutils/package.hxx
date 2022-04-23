@@ -25,18 +25,28 @@
 #ifndef __AMANDA_BINUTILS_PACKAGE_HXX
 #define __AMANDA_BINUTILS_PACKAGE_HXX
 
-// Assembler
-
-// Linker
-#include "Linker/GlobalOffsetTable.h"
-#include "Linker/ImageHeader.h"
-#include "Linker/Section.h"
-#include "Linker/StringTable.h"
-
-// Root subdirectory
-#include "Opcodes.h"
+// Binutils package
+#include "AssemblerDriver.h"
+#include "AssemblerLexer.h"
+#include "AssemblerParser.h"
+#include "Function.h"
+#include "Input.h"
+#include "Instruction.h"
+#include "InvalidFileFormatException.h"
+#include "Locations.h"
+#include "Logging.h"
+#include "Module.h"
+#include "ModuleReader.h"
+#include "Section.h"
 #include "Serializable.h"
-#include "VirtualMachineSpecs.h"
+#include "Serializer.h"
+#include "StringTable.h"
+#include "Symbol.h"
+#include "SymbolTable.h"
+#include "SyntaxError.h"
+
+#include "vm-opcodes.h"
+#include "vm-types.h"
 
 #endif /* PACKAGE_HXX */
 

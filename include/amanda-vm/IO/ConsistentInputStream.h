@@ -34,7 +34,16 @@ namespace io
 
 /**
  * The consistent input stream is a class that consistently treats input as a
- * stream of big endian data independently of the machine endianness.
+ * stream of big endian data independently of the machine endianness. At the
+ * time of the class instantiation, endianness of the input data must be
+ * specified. If not specified, the class assumes the machine endianness.
+ * <p>
+ * If an incorrect endianness is specified, data byte order inversion may be
+ * carried out, and it will give inconsistent reads. The class has no means to
+ * compute the endianness of a chunk of data (since endianness is just a
+ * convention).
+ *
+ * @author J. Marrero
  */
 class ConsistentInputStream : public InputStream
 {
@@ -54,15 +63,26 @@ public:
     static bool         isLittleEndian();
     static bool         isBigEndian();
 
-    ConsistentInputStream(InputStream& stream);
+    ConsistentInputStream(InputStream& stream, Endianness endianness);
     virtual ~ConsistentInputStream();
 
-    virtual void close() const;
-    virtual void read(void* buffer, size_t size) const;
+    virtual void        close() const;
+    virtual Endianness  getEndianness() const;
+    virtual void        read(void* buffer, size_t size) const;
+    virtual void        read(void* buffer, size_t size, size_t count) const;
+    virtual void        reset() const;
+    virtual void        seek(uint64_t offset) const;
+    virtual uint64_t    tell() const;
+
+protected:
+
+    InputStream& getWrappedStream() const;
 
 private:
 
-    InputStream& stream;
+    Endianness      endianness;
+    InputStream&    stream;
+
 } ;
 
 }

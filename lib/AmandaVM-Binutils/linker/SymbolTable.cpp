@@ -19,27 +19,44 @@
  * File:   SymbolTable.cpp
  * Author: Javier Marrero
  * 
- * Created on April 7, 2022, 3:11 AM
+ * Created on April 11, 2022, 11:01 PM
  */
 
-#include <amanda-vm/Binutils/Linker/SymbolTable.h>
+#include <amanda-vm/Binutils/SymbolTable.h>
 
 using namespace amanda;
-using namespace amanda::binutils::ld;
+using namespace amanda::binutils;
 
-SymbolTable::SymbolTable()
+SymbolTable::SymbolTable(const core::String& name)
 :
-Section(".symbol-table")
+Section(name)
 {
+    setAttributes(Attr_Read);
+    setType(Type_StringTable);
 }
 
-void SymbolTable::addSymbol(Symbol* symbol)
+SymbolTable::~SymbolTable()
 {
+    for (std::map<core::String, const Symbol*>::const_iterator it = symbols.begin(),
+         end = symbols.end(); it != end; ++it)
+    {
+        assert(it->second != NULL && "Null pointer exception.");
+
+        // Release the previously grabbed reference.
+        it->second->release();
+    }
 }
 
-void SymbolTable::marshall(io::OutputStream& stream)
+void SymbolTable::addSymbol(const Symbol* symbol)
 {
-    
+    assert(symbol != NULL && "Null pointer exception.");
+
+    // Own a reference to the object for all the life-cycle of this class.
+    symbol->grab();
+
+    // Add the symbol.
+    symbols.insert(std::make_pair(symbol->getName(), symbol));
+
+    // Increase the size
+    setSize(getSize() + sizeof(Symbol::SymbolTableEntry));
 }
-
-

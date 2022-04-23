@@ -32,6 +32,10 @@ using namespace amanda::logging;
 ConsoleHandler::ConsoleHandler(Formatter* formatter)
 :
 super(&io::console().err, formatter)
+{    
+}
+
+ConsoleHandler::~ConsoleHandler()
 {
 }
 

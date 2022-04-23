@@ -54,6 +54,8 @@ class Handler : public core::Object
     
 public:
 
+    virtual ~Handler();
+
     virtual void    close() const = 0;
     virtual void    flush() const = 0;
     Filter*         getFilter() const;

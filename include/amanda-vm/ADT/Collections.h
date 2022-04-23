@@ -123,6 +123,29 @@ static inline bool containsKey(const std::map<K, V, O>& container, const K& key)
     return container.find(key) != container.end();
 }
 
+/**
+ * Returns the position at which the provided element is found.
+ * @param container
+ * @param element
+ * @return
+ */
+template <typename E>
+static inline unsigned getPosition(const std::vector<E>& container, const E& element)
+{
+    bool found = false;
+    unsigned result = -1;
+    
+    for (unsigned i = 0; i < container.size() && !found; ++i)
+    {
+        if (container.at(i) == element)
+        {
+            found = true;
+            result = i;
+        }
+    }
+    return result;
+}
+
 template <typename E>
 static inline void vectorAsList(const std::vector<E>& vector, std::list<E>& list)
 {

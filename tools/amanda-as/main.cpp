@@ -18,12 +18,13 @@
 /* Amanda API */
 #include <AmandaSDK.h>
 #include <amanda-vm/Option/package.hxx>
-#include <amanda-vm/Binutils/Assembler/AssemblerContext.h>
+#include <amanda-vm/Binutils/package.hxx>
 
 /* C++ API */
 #include <cstdio>
 #include <cstdlib>
 #include <vector>
+#include <deque>
 
 /* Internal API */
 #include <amanda-as/initialization.h>
@@ -33,6 +34,10 @@ using namespace amanda;
 
 int main(int argc, char** argv)
 {
+    /* The logger formatter. */
+    logging::GNUFormatter formatter("amanda-as", true);
+    binutils::setFormatterForPackage(formatter);
+
     /* Build the array of options */
     adt::Array<core::String> arguments = cli::makeArgumentsArray(argc, argv);
 
@@ -40,6 +45,9 @@ int main(int argc, char** argv)
     cli::Options options;
     core::StrongReference<cli::CommandLine> commandLine = amanda::as::parseCommandLineOptions(options, arguments);
     assert(!commandLine.isNull() && "Null pointer exception");
+
+    // Status flag
+    bool link = true;
 
     if (commandLine->hasOption('h'))
     {
@@ -51,6 +59,12 @@ int main(int argc, char** argv)
     }
     else
     {
+        // Parse the options & set the status flags
+        if (commandLine->hasOption('S'))
+        {
+            link = false;
+        }
+
         // Create the assembly context
         std::list<core::String>& argumentList = commandLine->getArgumentList();
         if (argumentList.empty())
@@ -70,63 +84,98 @@ int main(int argc, char** argv)
              * assembly files (all with the same options though) in only one
              * assembler program invocation.
              */
-            std::vector<binutils::as::AssemblerContext*> contexts;
-            contexts.reserve(argumentList.size());
-            for (unsigned i = 0; i < argumentList.size(); ++i)
+            std::vector<binutils::as::AssemblerDriver*> drivers;
+            for (std::list<core::String>::const_iterator it = argumentList.begin(),
+                 end = argumentList.end(); it != end; ++it)
             {
-                contexts.push_back(new binutils::as::AssemblerContext());
-                contexts[i]->grab(); // Grab a reference to the newly created object.
-
-                core::String inputFileName = adt::atListPosition(argumentList, i);
-                io::File* input = new io::File(inputFileName, io::File::READ | io::File::BINARY);
-                if (!input->open())
+                core::StrongReference<io::File> file = new io::File(*it, io::File::READ | io::File::BINARY);
+                if (!file->open() || !file->canRead())
                 {
-                    as::logger::fatal("unable to open file '%s'. %s.",
-                                      input->getPath().toCharArray(),
-                                      input->getLastErrorString().toCharArray());
+                    as::logger::fatal("unable to open file '%s' for reading.",
+                                      (*it).toCharArray());
                 }
-
-                contexts[i]->setInputFile(input);
-                contexts[i]->setVerbose(verbose);
-
-                if (verbose)
+                else
                 {
-                    as::logger::info("added '%s' to the list of input files.",
-                                     input->getPath().toCharArray());
+                    if (verbose)
+                    {
+                        as::logger::info("opened file '%s' for reading.",
+                                         (*it).toCharArray());
+                    }
+
+                    // Push a new driver object into the list
+                    core::String input = binutils::buildAssemblerInputFromFile(file);
+                    binutils::AssemblerInputStream instream = binutils::associateInputStream(file->getPath(), input);
+
+                    drivers.push_back(new amanda::binutils::as::AssemblerDriver(instream));
                 }
             }
 
-
+            // Put the output files in a deque
+            std::deque<io::File*> outputList;
             if (commandLine->hasOption('o'))
             {
-                adt::Array<core::String> values = commandLine->getOptionValues('o');
-                for (unsigned i = 0; i < contexts.size(); ++i)
+                const adt::Array<core::String>& values = commandLine->getOptionValues('o');
+
+                unsigned i;
+                for (i = 0; i < values.length() && i < drivers.size(); ++i)
                 {
-                    binutils::as::AssemblerContext* context = contexts[i];
-                    core::String fileName = (i < values.length())
-                            ? values[i]
-                            : context->getInputFile()->getPath();
-                    ;
-                    fileName.replace(".ams", ".ax", false);
+                    const core::String& fileName = values[i];
+                    outputList.push_back(new io::File(fileName, io::File::WRITE | io::File::CREATE | io::File::BINARY));
+                    outputList.back()->grab();  // Grab a reference to the file
 
                     if (verbose)
                     {
-                        as::logger::info("added '%s' to the list of output files.", fileName.toCharArray());
+                        as::logger::info("added '%s' to the output queue.",
+                                         fileName.toCharArray());
                     }
-                    context->setOutputFile(new io::File(fileName, io::File::CREATE | io::File::WRITE | io::File::READ | io::File::BINARY));
                 }
             }
 
-            /* Perform the assembly pass. */
-            for (unsigned i = 0; i < contexts.size(); ++i)
+            // Supposedly, we have initialized the assembler drivers. We may
+            // proceed to perform an assembler pass.
+            unsigned i = 0;
+            for (std::vector<binutils::as::AssemblerDriver*>::const_iterator
+                 it = drivers.begin(); it != drivers.end(); ++it, ++i)
             {
-                //TODO: Complete this
-                contexts[i]->performAssemblyPass();
+                try
+                {
+                    if (!link)
+                    {
+                        // Create the output files.
+                        if (!outputList[i]->open())
+                        {
+                            as::logger::fatal("unable to open '%s' for writing. %s.",
+                                              outputList[i]->getPath().toCharArray(),
+                                              outputList[i]->getLastErrorString().toCharArray());
+                            
+                        }
+                        else
+                        {
+                            io::FileOutputStream* fstream = new io::FileOutputStream(outputList[i]);
+                            io::ConsistentOutputStream* bstream = new io::ConsistentOutputStream(*fstream);
+
+                            (*it)->addOutputHandler(bstream);
+                        }
+                    }
+
+                    core::StrongReference<binutils::Module> module = (*it)->performAssemblerPass();
+                    assert(!module.isNull() && "How come module is null?");
+
+                    // Done!
+                    if (verbose)
+                        as::logger::info("assembly completed for module '%s'.",
+                                         (*it)->getInputStreamName().toCharArray());
+                }
+                catch (core::Exception& ex)
+                {
+                    //TODO: Remove files on exception!! :0
+                    as::logger::fatal("assembly failed.");
+                }
             }
 
-            // Release a reference to all the hold contexts.
-            for (std::vector<binutils::as::AssemblerContext*>::iterator it = contexts.begin(),
-                 end = contexts.end(); it != end; ++it)
+            // Clean up.
+            for (std::deque<io::File*>::const_iterator it = outputList.begin(),
+                 end = outputList.end(); it != end; ++it)
             {
                 (*it)->release();
             }

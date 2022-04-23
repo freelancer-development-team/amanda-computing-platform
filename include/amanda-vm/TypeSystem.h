@@ -26,6 +26,7 @@
 #define TYPESYSTEM_H
 
 #include "Exception.h"
+#include "Integer.h"
 #include "Interface.h"
 #include "Object.h"
 #include "Pointer.h"

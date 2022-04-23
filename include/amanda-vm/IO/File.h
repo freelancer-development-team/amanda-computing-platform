@@ -30,6 +30,7 @@
 #include <amanda-vm/io/Path.h>
 
 #include <stdio.h>
+#include <stdint.h>
 
 namespace amanda
 {
@@ -81,16 +82,21 @@ public:
     FILE*               getHandle() const;
     core::String        getLastErrorString() const;
     const core::String& getPath() const;
+    uint64_t            getSize() const;
     bool                isDirectory() const;
     bool                isEndOfFile() const;
     bool                isError() const;
     bool                isFile() const;
+    bool                isOpen() const;
     bool                modifyAccessMode(FileAccessMode newAccessMode);
     bool                open();
     bool                read(char* buffer, size_t size) const;
+    bool                read(char* buffer, size_t size, size_t count) const;
     bool                readline(char* buffer, size_t limit) const;
     void                rename(const core::String& str);
     bool                reset() const;
+    void                setPosition(uint64_t offset) const;
+    uint64_t            tell() const;
     bool                write(const char* str) const;
     bool                write(const void* bytes, size_t size) const;
 
@@ -104,6 +110,7 @@ private:
     {
         bool        attr_dir;
         bool        attr_file;
+        bool        attr_open;
     } attributes;
     
 } ;

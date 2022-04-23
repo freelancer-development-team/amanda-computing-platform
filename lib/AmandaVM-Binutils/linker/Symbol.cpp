@@ -19,18 +19,40 @@
  * File:   Symbol.cpp
  * Author: Javier Marrero
  * 
- * Created on April 6, 2022, 8:16 PM
+ * Created on April 11, 2022, 10:28 PM
  */
 
-#include <amanda-vm/Binutils/Linker/Symbol.h>
+#include <amanda-vm/Binutils/Symbol.h>
+#include <amanda-vm/IO/MemoryOutputStream.h>
+#include <amanda-vm/IO/ConsistentOutputStream.h>
 
 using namespace amanda;
-using namespace amanda::binutils::ld;
+using namespace amanda::binutils;
+
+const Symbol::SymbolTableEntry& Symbol::getNullSymbolTableEntry()
+{
+    static bool initialized = false;
+    static SymbolTableEntry entry;
+
+    if (!initialized)
+    {
+        entry.name = 0;
+        entry.value = 0;
+        entry.size = 0;
+        entry.type = Type_None;
+        entry.bind = Bind_Local;
+        entry.shndx = 0;
+
+        // Set the initialized flag to true.
+        initialized = true;
+    }
+
+    return entry;
+}
 
 Symbol::Symbol(const core::String& name)
 :
-name(name),
-size(-1)
+name(name)
 {
 }
 
@@ -38,9 +60,9 @@ Symbol::~Symbol()
 {
 }
 
-sdk_ullong_t Symbol::computeSize() const
+const Symbol::SymbolTableEntry& Symbol::getEntry() const
 {
-    return 0ull;
+    return entry;
 }
 
 const core::String& Symbol::getName() const
@@ -48,12 +70,36 @@ const core::String& Symbol::getName() const
     return name;
 }
 
-const sdk_ullong_t Symbol::getSize() const
+size_t Symbol::getSize() const
 {
-    return (size == (sdk_ullong_t) -1) ? computeSize() : size;
+    return this->entry.size;
 }
 
-bool Symbol::is(const unsigned kind) const
+Symbol& Symbol::setBindClass(vm::vm_byte_t bind)
 {
-    return kind == this->kind;
+    this->entry.bind = bind;
+    return *this;
+}
+
+Symbol& Symbol::setStringTableEntry(vm::vm_dword_t entry)
+{
+    this->entry.name = entry;
+    return *this;
+}
+
+Symbol& Symbol::setSize(size_t size)
+{
+    this->entry.size = size;
+    return *this;
+}
+
+Symbol& Symbol::setType(vm::vm_byte_t type)
+{
+    this->entry.type = type;
+    return *this;
+}
+
+void Symbol::marshallImpl(io::OutputStream& stream) const
+{
+    stream.write(&entry, sizeof (entry));
 }

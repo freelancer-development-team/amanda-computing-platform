@@ -36,11 +36,14 @@
 #include <amanda-vm/Callable.h>
 #include <amanda-vm/Class.h>
 #include <amanda-vm/Exception.h>
+#include <amanda-vm/IllegalArgumentException.h>
+#include <amanda-vm/Integer.h>
 #include <amanda-vm/Interface.h>
 #include <amanda-vm/Object.h>
 #include <amanda-vm/Pointer.h>
 #include <amanda-vm/ReferenceCounted.h>
 #include <amanda-vm/String.h>
+#include <amanda-vm/System.h>
 #include <amanda-vm/Types.h>
 
 #include <amanda-vm/ADT/Array.h>
@@ -55,17 +58,24 @@
 #include <amanda-vm/IO/File.h>
 #include <amanda-vm/IO/FileInputStream.h>
 #include <amanda-vm/IO/FileOutputStream.h>
+#include <amanda-vm/IO/Flushable.h>
 #include <amanda-vm/IO/InputStream.h>
+#include <amanda-vm/IO/MemoryOutputStream.h>
 #include <amanda-vm/IO/OutputStream.h>
 #include <amanda-vm/IO/Path.h>
 #include <amanda-vm/IO/PrintStream.h>
 
+#include <amanda-vm/Logging/ConsoleHandler.h>
+#include <amanda-vm/Logging/ErrorManager.h>
 #include <amanda-vm/Logging/Filter.h>
 #include <amanda-vm/Logging/Formatter.h>
+#include <amanda-vm/Logging/GNUFormatter.h>
 #include <amanda-vm/Logging/Handler.h>
 #include <amanda-vm/Logging/LogManager.h>
 #include <amanda-vm/Logging/LogRecord.h>
 #include <amanda-vm/Logging/Logger.h>
+#include <amanda-vm/Logging/SimpleFormatter.h>
+#include <amanda-vm/Logging/StreamHandler.h>
 
 #include <amanda-vm/Threading/Runnable.h>
 #include <amanda-vm/Threading/Synchronization.h>

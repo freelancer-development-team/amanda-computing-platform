@@ -19,54 +19,50 @@
  * File:   Function.cpp
  * Author: Javier Marrero
  * 
- * Created on April 6, 2022, 8:19 PM
+ * Created on April 17, 2022, 1:21 AM
  */
 
-#include <amanda-vm/Binutils/Linker/Function.h>
+#include <amanda-vm/Binutils/Function.h>
 
 using namespace amanda;
-using namespace amanda::binutils::ld;
+using namespace amanda::binutils;
 
 Function::Function(const core::String& name)
 :
-super(name)
+Symbol(name)
 {
+    setType(Symbol::Type_Function);
+    setBindClass(Symbol::Bind_Global);
 }
 
 Function::~Function()
 {
-    for (std::vector<as::Instruction*>::iterator it = instructions.begin(),
-            end = instructions.end(); it != end; ++it)
+    for (size_t i = 0; i < instructions.size(); ++i)
     {
-        (*it)->release();
+        instructions[i]->release();
     }
 }
 
-sdk_ullong_t Function::computeSize() const
+void Function::emit(Instruction* insn)
 {
-    for (std::vector<as::Instruction*>::const_iterator it = instructions.begin(),
-         end = instructions.end(); it != end; ++it)
+    assert(insn != NULL && "Null pointer exception.");
+    instructions.push_back(insn);
+
+    // Grab a reference to the object. The reference is owned by the function.
+    insn->grab();
+}
+
+size_t Function::getSize() const
+{
+    size_t result = 0;
+    for (size_t i = 0; i < instructions.size(); ++i)
     {
-        size += (*it)->getSize();
+        result += instructions[i]->getSize();
     }
-    return size;
+
+    return result;
 }
 
-void Function::emit(as::Instruction* instruction)
-{
-    assert(instruction != NULL && "Expected non-null pointer for an instruction.");
-    instruction->grab();
-    instructions.push_back(instruction);
-}
 
-void Function::marshall(io::OutputStream& stream)
-{
-    for (sdk_ullong_t i = 0; i < instructions.size(); ++i)
-    {
-        as::Instruction* insn = instructions[i];
-        assert(insn != NULL && "Null pointer exception.");
 
-        vm::vm_byte_t opcode = insn->getOpcode();
-        stream.write(&opcode, sizeof(vm::vm_byte_t));
-    }
-}
+

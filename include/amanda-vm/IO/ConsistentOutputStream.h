@@ -43,6 +43,7 @@ public:
     virtual void close() const;
     virtual void write(const char* data) const;
     virtual void write(const void* data, size_t size) const;
+    virtual void write(const void* data, size_t size, size_t count) const;
 
 private:
 

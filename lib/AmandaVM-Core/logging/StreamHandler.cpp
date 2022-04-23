@@ -35,6 +35,10 @@ outputStream(stream)
 {
 }
 
+StreamHandler::~StreamHandler()
+{
+}
+
 void StreamHandler::close() const
 {
     flush();
@@ -91,6 +95,11 @@ void StreamHandler::publish(const LogRecord& record) const
         ///TODO: Add try-catch
         outputStream->write(formattedMessage.toCharArray());
     }
+}
+
+const io::OutputStream* StreamHandler::getOutputStream() const
+{
+    return outputStream;
 }
 
 void StreamHandler::setOutputStream(io::OutputStream* out)

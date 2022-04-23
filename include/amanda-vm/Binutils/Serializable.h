@@ -19,14 +19,17 @@
  * File:   Serializable.h
  * Author: Javier Marrero
  *
- * Created on March 24, 2022, 10:54 PM
+ * Created on April 9, 2022, 4:06 PM
  */
 
-#ifndef _BINUTILS_SERIALIZABLE_H
-#define _BINUTILS_SERIALIZABLE_H
+#ifndef AMANDA_BINUTILS_SERIALIZABLE_H
+#define AMANDA_BINUTILS_SERIALIZABLE_H
 
 #include <amanda-vm/TypeSystem.h>
-#include <amanda-vm/IO/OutputStream.h>
+#include <amanda-vm/Binutils/Serializer.h>
+
+// C++ STL
+#include <vector>
 
 namespace amanda
 {
@@ -34,19 +37,46 @@ namespace binutils
 {
 
 /**
- * Serializable objects are capable of being converted into a byte stream and
- * later be restored from that same byte stream. It has several utilities as
- * sharing objects across networks or creating persistent objects.
- *
- * @autor J. Marrero
+ * Serializable objects are objects destined to be encoded as a mean of making
+ * objects persistent.
  */
 class Serializable : public core::Object
 {
     AMANDA_OBJECT(Serializable, core::Object)
-    
+
+    // Declare friends
+    friend class Serializer;
+
 public:
 
-    virtual void marshall(io::OutputStream& stream);
+    static const size_t DEFAULT_CAPACITY = sizeof (unsigned long long);
+    static const float  RESIZE_FACTOR = 0.2f;  // This thing will resize a 20% of the original capacity
+
+    Serializable();
+    virtual ~Serializable();
+
+    virtual void        addSerializationHandler(Serializer* marshaller);
+    virtual void        constructBinaryData();
+    const void*         getBinaryData();
+    virtual size_t      getBufferLength() const;
+    virtual void        marshall() const;
+    virtual void        marshallSingle(Serializer* marshaller);
+    virtual void        removeSerializationHandler(Serializer* marshaller);
+
+protected:
+
+    virtual void marshallImpl(io::OutputStream& stream) const = 0;
+    virtual void resize(long long delta);
+    virtual void write(const void* data, size_t size, size_t count = 1);
+
+private:
+
+    unsigned char*              buffer;
+    size_t                      bufferLength;
+    size_t                      capacity;
+    size_t                      pointer;
+
+    std::vector<Serializer*>    serializers;
 } ;
 
 }

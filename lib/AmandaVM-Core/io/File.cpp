@@ -36,8 +36,10 @@
  * Check this and replace for portability. While we're supporting GCC this
  * seems not to be a real issue.
  */
-#include <unistd.h>
-#include <sys/stat.h>
+#ifdef __GNUC__
+#    include <unistd.h>
+#    include <sys/stat.h>
+#endif
 
 using amanda::io::File;
 
@@ -140,6 +142,8 @@ void File::close()
             clearerr(handle);
 
             fclose(handle);
+
+            attributes.attr_open = false;
         }
     }
 }
@@ -228,6 +232,18 @@ const String& File::getPath() const
     return name;
 }
 
+uint64_t File::getSize() const
+{
+    uint64_t result = 0;
+#ifdef __GNUC__
+    struct _stat64 buf;
+    stat64(name.toCharArray(), &buf);
+
+    result = buf.st_size;
+#endif
+    return result;
+}
+
 bool File::isDirectory() const
 {
     return (attributes.attr_dir);
@@ -256,6 +272,11 @@ bool File::isError() const
 bool File::isFile() const
 {
     return (attributes.attr_file);
+}
+
+bool File::isOpen() const
+{
+    return (attributes.attr_open);
 }
 
 bool File::modifyAccessMode(FileAccessMode newAccessMode)
@@ -299,10 +320,21 @@ bool File::open()
         /* Return the opening status of the file. */
         result = (handle == NULL) ? false : true;
     }
+
+    if (result)
+    {
+        attributes.attr_open = true;
+    }
+
     return result;
 }
 
 bool File::read(char* buffer, size_t size) const
+{
+    return read(buffer, 1, size);
+}
+
+bool File::read(char* buffer, size_t size, size_t count) const
 {
     bool result = false;
     if ((size > 0) && (buffer != NULL)
@@ -311,7 +343,7 @@ bool File::read(char* buffer, size_t size) const
         && isFile())
     {
         clearerr(handle);
-        size_t read = fread(buffer, sizeof (char), size, handle);
+        size_t read = fread(buffer, size, count, handle);
 
         result = !ferror(handle) && (read > 0);
     }
@@ -321,13 +353,13 @@ bool File::read(char* buffer, size_t size) const
 bool File::readline(char* buffer, size_t limit) const
 {
     bool result = false;
-    if ((handle != NULL))
+    if ((handle != NULL) && canRead() && !isEndOfFile())
     {
         clearerr(handle);
         fgets(buffer, limit, handle);
         buffer[strlen(buffer) - 1] = '\0';
-        
-        result = !ferror(handle);
+
+        result = ferror(handle) == false;
     }
     return result;
 }
@@ -347,6 +379,24 @@ bool File::reset() const
         result = true;
     }
     return result;
+}
+
+void File::setPosition(uint64_t offset) const
+{
+    if (isOpen() && isFile())
+    {
+        fsetpos64(handle, (const fpos_t*) &offset);
+    }
+}
+
+uint64_t File::tell() const
+{
+    fpos_t position = 0;
+    if (isOpen() && isFile())
+    {
+        fgetpos64(handle, &position);
+    }
+    return (uint64_t) position;
 }
 
 bool File::write(const char* str) const

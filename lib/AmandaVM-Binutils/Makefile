@@ -50,16 +50,17 @@ CP=cp
 CCADMIN=CCadmin
 
 FLEX := flex
+YACC := bison
 
 # build
 build: .build-post
 
 .build-pre:
-	${FLEX} -o "assembler/_scanner.cpp" --header-file="assembler/_scanner.hpp" "assembler/scanner.l"
+	${FLEX} "specs/lexer.l"
+	${YACC} "specs/parser.y"
 
 .build-post: .build-impl
 # Add your post 'build' code here...
-
 
 # clean
 clean: .clean-post
