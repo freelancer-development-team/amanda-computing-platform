@@ -32,6 +32,35 @@
 using namespace amanda;
 using namespace amanda::binutils;
 
+unsigned Instruction::getInstructionNumericSuffix(char suffix)
+{
+    suffix = toupper(suffix);
+    switch (suffix)
+    {
+        case 'B':
+            return 0u;
+            break;
+        case 'W':
+            return 1u;
+            break;
+        case 'L':
+            return 2u;
+            break;
+        case 'Q':
+            return 3u;
+            break;
+        case 'F':
+            return 4u;
+            break;
+        case 'D':
+            return 5u;
+            break;
+        default:
+            return 0u;
+            break;
+    }
+}
+
 unsigned Instruction::getOperandSizeForSuffix(char suffix)
 {
     suffix = toupper(suffix);
@@ -74,14 +103,31 @@ size_t Instruction::encode(void* memory) const
     io::ConsistentOutputStream stream(mstream);
 
     stream.write(&opcode, VM_BYTE_SIZE);
-    stream.write(&operand, operandSize);
 
+    //TODO: Write the value
+    if (!operand.isNull())
+    {
+        const void* immediateOperand = operand->getValue();
+        assert(immediateOperand != NULL && "Null pointer exception.");
+
+        stream.write(immediateOperand, operandSize);
+    }
     return VM_BYTE_SIZE + operandSize;
+}
+
+bool Instruction::equals(vm::VM_Opcode opcode) const
+{
+    return this->opcode == (vm::vm_byte_t) opcode;
 }
 
 vm::vm_byte_t Instruction::getOpcode() const
 {
     return opcode;
+}
+
+const Operand* Instruction::getOperand() const
+{
+    return operand;
 }
 
 size_t Instruction::getSize() const
@@ -94,16 +140,27 @@ bool Instruction::hasOperand() const
     return operandSize != 0;
 }
 
-void Instruction::setOperand(vm::vm_float64_t operand)
+bool Instruction::isBranchInstruction() const
 {
-    this->operand.f_operand = operand;
+    using namespace amanda::vm;
+
+    bool result = false;
+    switch (opcode)
+    {
+        case I_JMP:
+        case I_JT:
+        case I_JF:
+            result = true;
+            break;
+        default:
+            result = false;
+            break;
+    }
+    return result;
 }
 
-void Instruction::setOperand(vm::vm_qword_t operand)
+void Instruction::setOperand(Operand* operand)
 {
-    this->operand.i_operand = operand;
+    assert(operand != NULL && "Operand is null");
+    this->operand = operand;
 }
-
-
-
-

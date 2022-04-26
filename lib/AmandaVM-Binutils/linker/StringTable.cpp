@@ -55,10 +55,17 @@ vm::vm_qword_t StringTable::addString(const core::String& str)
     // Update the last index count.
     lastIndex += str.length() + 2;
 
-    // Write this in the buffer.
-    Serializable::write(str.toCharArray(), sizeof(char), str.length() + 1);
-
     return result;
+}
+
+void StringTable::constructBinaryData()
+{
+    for (std::vector<core::String>::const_iterator it = strings.begin(),
+            end = strings.end(); it != end; ++it)
+    {
+        const core::String& str = *it;
+        Serializable::write(str.toCharArray(), VM_BYTE_SIZE, str.length() + 1);
+    }
 }
 
 StringTable::TablePair StringTable::get(const unsigned position) const

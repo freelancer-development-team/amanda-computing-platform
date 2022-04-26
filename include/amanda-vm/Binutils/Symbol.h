@@ -27,6 +27,7 @@
 
 #include <amanda-vm/Binutils/Serializable.h>
 #include <amanda-vm/Binutils/vm-types.h>
+#include <amanda-vm/IO/OutputStream.h>
 
 namespace amanda
 {

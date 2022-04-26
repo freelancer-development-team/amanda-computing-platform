@@ -108,6 +108,25 @@ void Section::addSymbol(const Symbol* symbol)
     // setSize(calculateSize());
 }
 
+void Section::constructBinaryData()
+{
+    for (std::vector<Symbol*>::const_iterator it = symbols.begin(),
+            end = symbols.end(); it != end; ++it)
+    {
+        Symbol* symbol = (*it);
+        assert(symbol != NULL && "Null pointer exception.");
+
+        // The heisenbug strikes again
+        // NOTE: This heisenbug is provoked by the troubling stuff that C++
+        // prior to C++11 had. The troubling bug is that compiler is allowed to
+        // evaluate expressions in any order.
+        const void*     serializedData = symbol->getBinaryData();
+        const size_t    serializedSize = symbol->getBufferLength();
+        
+        Serializable::write(serializedData, VM_BYTE_SIZE, serializedSize);
+    }
+}
+
 size_t Section::calculateSize() const
 {
     size_t result = 0;

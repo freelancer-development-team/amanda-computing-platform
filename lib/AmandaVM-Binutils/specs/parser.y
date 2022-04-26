@@ -45,6 +45,36 @@ void yyerror(YYLTYPE* location, void* scanner, void** module, void* state, char 
 
     #define MODULE(m)   ((amanda::binutils::Module*) (m))
     #define STATE(s)    ((amanda::binutils::as::AssemblerParser::YYPSTATE*) (s))
+
+    namespace amanda
+    {
+        namespace binutils
+        {
+            namespace as
+            {
+
+                inline Instruction* createZeroOpInstruction(const unsigned opcode, const char suffix)
+                {
+                    return new Instruction(opcode + Instruction::getInstructionNumericSuffix(suffix), 0);
+                }
+
+                inline Instruction* createZeroOpNoSuffixInstruction(const unsigned opcode)
+                {
+                    return new Instruction(opcode, 0);
+                }
+
+                inline Instruction* createUnaryInstruction(const unsigned opcode, const char suffix)
+                {
+                    return new Instruction(opcode + Instruction::getInstructionNumericSuffix(suffix), Instruction::getOperandSizeForSuffix(suffix));
+                }
+
+                inline Instruction* createBranchInstruction(const unsigned opcode)
+                {
+                    return new Instruction(opcode, VM_QWORD_SIZE);
+                }
+            }
+        }
+    }
 }
 
 %code provides
@@ -87,8 +117,10 @@ void yyerror(YYLTYPE* location, void* scanner, void** module, void* state, char 
     long double                                     fp_number;
     std::vector<amanda::binutils::Instruction*>*    instruction_list;
     amanda::binutils::Instruction*                  insn;
+    amanda::binutils::Operand*                      operand;
 }
 
+%destructor { $$->release(); } <operand>
 %destructor { $$->release(); } <string>
 %destructor { delete ($$);   } <instruction_list>
 
@@ -102,9 +134,39 @@ void yyerror(YYLTYPE* location, void* scanner, void** module, void* state, char 
 
 // Instructions
 %token
+    ADD         "add instruction"
+    DIV         "div instruction"
+    JF          "jump-if-false instruction"
+    JUMP        "jump instruction"
+    JT          "jump-if-true instruction"
+    MOD         "mod instruction"
+    MUL         "mul instruction"
     POP         "pop instruction"
     PUSH        "push instruction"
     RET         "return instruction"
+    SUB         "sub instruction"
+    ;
+
+%token
+    B2W         "byte-to-word instruction"
+    B2L
+    B2Q
+    B2F
+    B2D
+    W2L
+    W2Q         "word-to-quad instruction"
+    W2F
+    W2D
+    L2Q
+    L2F
+    L2D
+    Q2F
+    Q2D
+    ;
+
+%token
+    CEQ         "compare-equals instruction"
+    CNE         "compare-non-equals instruction"
     ;
 
 %token
@@ -117,8 +179,10 @@ void yyerror(YYLTYPE* location, void* scanner, void** module, void* state, char 
 %token<string>      STRING_LITERAL      "string literal"
 %token<integer>     INTEGER_LITERAL     "integer literal"
 %token<fp_number>   FP_LITERAL          "floating point literal"
+%token<integer>     ADDRESS_CONSTANT    "address constant"
 
 // Nonterminals
+%type<operand>          argument address_constant branch_target
 %type<instruction_list> instruction_sequence
 %type<insn>             instruction zeroed_instruction unary_instruction label_declaration
 
@@ -182,6 +246,9 @@ function_declaration
                                                     // Clean up
                                                     delete $2;
                                                     delete $3;
+
+                                                    // Reset the offset
+                                                    STATE(state)->localOffset = 0;
                                                 }
     ;
 
@@ -201,8 +268,8 @@ attributes_declaration
 
 // Instructions
 instruction_sequence
-    : instruction                           { $$ = new std::vector<amanda::binutils::Instruction*>(); $$->push_back($1); }
-    | instruction_sequence instruction      { $$ = $1; $$->push_back($2); }
+    : instruction                           { $$ = new std::vector<amanda::binutils::Instruction*>(); $$->push_back($1); if (!($1->is<Label>())) STATE(state)->localOffset++; }
+    | instruction_sequence instruction      { $$ = $1; $$->push_back($2); if (!($2->is<Label>())) STATE(state)->localOffset++; }
     | %empty                                { $$ = new std::vector<amanda::binutils::Instruction*>(); }
     ;
 
@@ -213,23 +280,59 @@ instruction
     ;
 
 zeroed_instruction
-    : POP INSTRUCTION_SUFFIX                { $$ = new Instruction(AMANDA_VM_ENCODE_INSN(POP, B), 0); }
-    | RET INSTRUCTION_SUFFIX                { $$ = new Instruction(AMANDA_VM_ENCODE_INSN(RET, B), 0); }
+    : ADD INSTRUCTION_SUFFIX                { $$ = new Instruction(AMANDA_VM_INSN_FAMILY(ADD) + Instruction::getInstructionNumericSuffix($2), 0); }
+    | CEQ INSTRUCTION_SUFFIX                { $$ = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(CEQ), $2); }
+    | CNE INSTRUCTION_SUFFIX                { $$ = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(CNE), $2); }
+    | DIV INSTRUCTION_SUFFIX                { $$ = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(DIV), $2); }
+    | POP INSTRUCTION_SUFFIX                { $$ = new Instruction(AMANDA_VM_INSN_FAMILY(POP) + Instruction::getInstructionNumericSuffix($2), 0); }
+    | RET INSTRUCTION_SUFFIX                { $$ = new Instruction(AMANDA_VM_INSN_FAMILY(RET) + Instruction::getInstructionNumericSuffix($2), 0); }
+    | SUB INSTRUCTION_SUFFIX                { $$ = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(SUB), $2); }
+    // Conversion instructions
+    | B2W                                   { $$ = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(B2W)); }
+    | B2L                                   { $$ = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(B2L)); }
+    | B2Q                                   { $$ = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(B2Q)); }
+    | W2L                                   { $$ = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(W2L)); }
+    | W2Q                                   { $$ = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(W2Q)); }
     ;
 
 unary_instruction
-    : PUSH INSTRUCTION_SUFFIX argument      { $$ = new Instruction(AMANDA_VM_ENCODE_INSN(PUSH, B), Instruction::getOperandSizeForSuffix($2)); }
+    : JUMP address_constant                 { $$ = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(JMP)); $$->setOperand($2); }
+    | JUMP IDENTIFIER                       {
+                                                $$ = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(JMP));
+
+                                                // Allocate the operand
+                                                Operand* operand = new Operand(*$2);
+                                                $$->setOperand(operand);
+
+                                                // Clean up
+                                                delete $2;
+                                            }
+    // Branch
+    | JF branch_target                      { $$ = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(JF)); $$->setOperand($2); }
+    | JT branch_target                      { $$ = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(JT)); $$->setOperand($2); }
+    // Stack
+    | PUSH INSTRUCTION_SUFFIX argument      { $$ = as::createUnaryInstruction(AMANDA_VM_INSN_FAMILY(PUSH), $2); $$->setOperand($3); }
     ;
 
 label_declaration
-    : IDENTIFIER ':'                        { $$ = NULL; delete $1; }
+    : IDENTIFIER ':'                        { $$ = new Label(*$1, STATE(state)->localOffset); delete $1; }
     ;
 
 // Arguments
 argument
-    : IDENTIFIER
-    | INTEGER_LITERAL
-    | FP_LITERAL
+    : IDENTIFIER                            { $$ = new Operand(*$1); delete $1; }
+    | INTEGER_LITERAL                       { $$ = new Operand($1); }
+    | FP_LITERAL                            { $$ = NULL; }
+    | address_constant                      
+    ;
+
+branch_target
+    : address_constant
+    | IDENTIFIER                            { $$ = new Operand(*$1); delete $1; }
+    ;
+
+address_constant
+    : '[' INTEGER_LITERAL ']'               { $$ = new Operand($2, VM_QWORD_SIZE); }
     ;
 
 // Misc

@@ -48,11 +48,14 @@ public:
     virtual ~SymbolTable();
 
     virtual void addSymbol(const Symbol* symbol);
+    virtual void constructBinaryData();
 
 protected:
 
+    typedef std::map<core::String, const Symbol*, core::AlphabeticalOrderComparator> SymbolMap;
+
     /// The symbols
-    std::map<core::String, const Symbol*, core::AlphabeticalOrderComparator> symbols;
+    SymbolMap symbols;
 } ;
 
 }

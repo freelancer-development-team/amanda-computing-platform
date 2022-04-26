@@ -16,22 +16,16 @@
  */
 
 /* 
- * File:   Function.h
+ * File:   Label.h
  * Author: Javier Marrero
  *
- * Created on April 17, 2022, 1:21 AM
+ * Created on April 24, 2022, 1:26 PM
  */
 
-#ifndef AMANDA_FUNCTION_H
-#define AMANDA_FUNCTION_H
+#ifndef _AMANDA_BINUTILS_LABEL_H
+#define _AMANDA_BINUTILS_LABEL_H
 
-#include <amanda-vm/Binutils/Symbol.h>
 #include <amanda-vm/Binutils/Instruction.h>
-#include <amanda-vm/Binutils/Label.h>
-
-// C++
-#include <deque>
-#include <vector>
 
 namespace amanda
 {
@@ -39,32 +33,34 @@ namespace binutils
 {
 
 /**
- * A <code>Function</code> is a special kind of symbol with the ability to emit
- * byte code (instructions).
+ * The label class represents a special kind of instruction: a marker in the
+ * assembler source code that allows symbolic naming of a particular address.
+ * Labels carry associated a symbolic name, and they are always part of a function.
+ * <p>
+ * Labels also have associated an integer offset that represents the offset
+ * since the function head, counting from zero onwards.
  *
  * @author J. Marrero
  */
-class Function : public Symbol
+class Label : public Instruction
 {
-    AMANDA_OBJECT(Function, Symbol)
+    AMANDA_OBJECT(Label, Instruction)
 public:
 
-    Function(const core::String& name);
-    virtual ~Function();
+    Label(const core::String& symbolicName, vm::vm_address_t offset);
+    virtual ~Label();
 
-    void            addLabel(Label* label);
-    virtual void    constructBinaryData();
-    void            emit(Instruction* insn);
-    size_t          getSize() const;
+    vm::vm_address_t    getOffset() const;
+    const core::String& getSymbolicName() const;
 
 private:
 
-    std::deque<Instruction*>    instructions;
-    std::vector<Label*>         labels;
+    vm::vm_address_t    offset;
+    core::String        symbolicName;
 } ;
 
 }
 }
 
-#endif /* FUNCTION_H */
+#endif /* LABEL_H */
 

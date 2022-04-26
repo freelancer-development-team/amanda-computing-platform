@@ -46,7 +46,7 @@ unsigned long long amanda::util::fromStreamOfBytes(const char* bytes)
     else if (literal.startsWith("0b", false))
     {
         // Binary constant
-        result.ull = strtoull(bytes, NULL, 2);
+        result.ull = strtoull(bytes + 2, NULL, 2);
     }
     else if (literal.startsWith("0") && literal.length() > 1)
     {

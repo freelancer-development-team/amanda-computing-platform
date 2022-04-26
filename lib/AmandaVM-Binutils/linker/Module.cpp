@@ -270,17 +270,22 @@ void Module::marshallImpl(io::OutputStream& stream) const
     stream.write(message, VM_BYTE_SIZE, 88);
     stream.write("\x0d\0xa");
 
-    stream.write("\nsections\n");   //TODO: COMMENT
+    //stream.write("\nsections\n");   //TODO: COMMENT
     // Write every section.
     for (std::vector<Section*>::const_iterator it = sections.begin(),
          end = sections.end(); it != end; ++it)
     {
         Section* section = *it;
-        stream.write(core::String::makeFormattedString("\n-- %s --\n", section->getName().toCharArray()).toCharArray());  //TODO: DEBUG PURPOSES ONLY!!!!!
+        //stream.write(core::String::makeFormattedString("\n-- %s --\n", section->getName().toCharArray()).toCharArray());  //TODO: DEBUG PURPOSES ONLY!!!!!
 
-        stream.write(section->getBinaryData(), VM_BYTE_SIZE, section->getBufferLength());
+        // We don't know why but we needed to store this data before writing.
+        // Anyway, problem solved. Do not perform the call directly.
+        const void* binaryData = section->getBinaryData();
+        size_t binaryDataLength = section->getBufferLength();
+
+        stream.write(binaryData, VM_BYTE_SIZE, binaryDataLength);
     }
-    stream.write("\nend-sections\n");   //TODO: COMMENT
+    //stream.write("\nend-sections\n");   //TODO: COMMENT
 
     // Write the section table
     for (std::vector<Section*>::const_iterator it = sections.begin(),

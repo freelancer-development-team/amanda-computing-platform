@@ -60,3 +60,16 @@ void SymbolTable::addSymbol(const Symbol* symbol)
     // Increase the size
     setSize(getSize() + sizeof(Symbol::SymbolTableEntry));
 }
+
+void SymbolTable::constructBinaryData()
+{
+    for (SymbolMap::const_iterator it = symbols.begin(), end = symbols.end();
+         it != end; ++it)
+    {
+        const Symbol* symbol = it->second;
+        assert(symbol != NULL && "Null pointer exception.");
+
+        const Symbol::SymbolTableEntry& entry = (const Symbol::SymbolTableEntry&) symbol->getEntry();
+        Serializable::write(&entry, sizeof(entry), 1);
+    }
+}

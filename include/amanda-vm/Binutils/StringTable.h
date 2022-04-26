@@ -51,6 +51,7 @@ public:
     StringTable(const core::String& name);
 
     vm::vm_qword_t      addString(const core::String& str);
+    virtual void        constructBinaryData();
     TablePair           get(const unsigned position) const;
     vm::vm_qword_t      getIndex(const core::String& str) const;
     const core::String& getString(vm::vm_qword_t index) const;

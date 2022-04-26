@@ -26,6 +26,7 @@
 #define INSTRUCTION_H
 
 #include <amanda-vm/TypeSystem.h>
+#include <amanda-vm/Binutils/Operand.h>
 #include <amanda-vm/Binutils/vm-opcodes.h>
 #include <amanda-vm/Binutils/vm-types.h>
 
@@ -47,22 +48,29 @@ namespace binutils
  */
 class Instruction : public core::Object
 {
+
     AMANDA_OBJECT(Instruction, core::Object)
 
 public:
 
-    enum { ZERO_OPERAND_SIZE = 0 };
+    enum
+    {
+        ZERO_OPERAND_SIZE = 0
+    } ;
 
+    static unsigned getInstructionNumericSuffix(char suffix);
     static unsigned getOperandSizeForSuffix(char suffix);
 
     Instruction(vm::VM_Opcode opcode, unsigned operandSize);
 
     size_t          encode(void* memory) const;
+    bool            equals(vm::VM_Opcode opcode) const;
     vm::vm_byte_t   getOpcode() const;
+    const Operand*  getOperand() const;
     size_t          getSize() const;
     bool            hasOperand() const;
-    void            setOperand(vm::vm_float64_t operand);
-    void            setOperand(vm::vm_qword_t operand);
+    bool            isBranchInstruction() const;
+    void            setOperand(Operand* operand);
 
 private:
 
@@ -72,11 +80,7 @@ private:
     /**
      * Defines the immediate operand on which the instruction works.
      */
-    union
-    {
-        vm::vm_float64_t    f_operand;
-        vm::vm_qword_t      i_operand;
-    } operand;
+    core::StrongReference<Operand> operand;
 } ;
 
 }

@@ -23,6 +23,7 @@
  */
 
 #include <amanda-vm/Binutils/Serializable.h>
+#include <amanda-vm/Binutils/Serializer.h>
 #include <amanda-vm/IO/ConsistentOutputStream.h>
 #include <amanda-vm/IO/MemoryOutputStream.h>
 

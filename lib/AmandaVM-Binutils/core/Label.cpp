@@ -16,39 +16,39 @@
  */
 
 /* 
- * File:   package.hxx
+ * File:   Label.cpp
  * Author: Javier Marrero
- *
- * Created on March 24, 2022, 6:43 PM
+ * 
+ * Created on April 24, 2022, 1:26 PM
  */
 
-#ifndef __AMANDA_BINUTILS_PACKAGE_HXX
-#define __AMANDA_BINUTILS_PACKAGE_HXX
+#include <amanda-vm/Binutils/Label.h>
+#include <amanda-vm/Binutils/Logging.h>
 
-// Binutils package
-#include "AssemblerDriver.h"
-#include "AssemblerLexer.h"
-#include "AssemblerParser.h"
-#include "Function.h"
-#include "Input.h"
-#include "Instruction.h"
-#include "InvalidFileFormatException.h"
-#include "Label.h"
-#include "Locations.h"
-#include "Logging.h"
-#include "Module.h"
-#include "ModuleReader.h"
-#include "Operand.h"
-#include "Section.h"
-#include "Serializable.h"
-#include "Serializer.h"
-#include "StringTable.h"
-#include "Symbol.h"
-#include "SymbolTable.h"
-#include "SyntaxError.h"
+using namespace amanda;
+using namespace amanda::binutils;
 
-#include "vm-opcodes.h"
-#include "vm-types.h"
+Label::Label(const core::String& symbolicName, vm::vm_address_t offset)
+:
+Instruction(vm::I_NOP, 0),
+offset(offset),
+symbolicName(symbolicName)
+{
+//    getPackageLogger().info("created label with name %s and offset %llu",
+//                            symbolicName.toCharArray(), offset);
+}
 
-#endif /* PACKAGE_HXX */
+Label::~Label()
+{
+}
+
+vm::vm_address_t Label::getOffset() const
+{
+    return offset;
+}
+
+const core::String& Label::getSymbolicName() const
+{
+    return symbolicName;
+}
 

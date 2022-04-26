@@ -23,6 +23,7 @@
  */
 
 #include <amanda-vm/Binutils/Function.h>
+#include <amanda-vm/Binutils/Logging.h>
 
 using namespace amanda;
 using namespace amanda::binutils;
@@ -33,6 +34,9 @@ Symbol(name)
 {
     setType(Symbol::Type_Function);
     setBindClass(Symbol::Bind_Global);
+
+    // Reserve space for two possible labels
+    labels.reserve(2);
 }
 
 Function::~Function()
@@ -41,15 +45,85 @@ Function::~Function()
     {
         instructions[i]->release();
     }
+    for (size_t i = 0; i < labels.size(); ++i)
+    {
+        labels[i]->release();
+    }
+}
+
+void Function::addLabel(Label* label)
+{
+    assert(label != NULL && "Null pointer exception");
+
+    //    getPackageLogger().info("Adding label %s : %llu",
+    //                            label->getSymbolicName().toCharArray(), label->getOffset());
+
+    // Push the label in the list of labels
+    labels.push_back(label);
+
+    // Grab a reference to the label
+    label->grab();
+}
+
+void Function::constructBinaryData()
+{
+    for (size_t i = 0; i < instructions.size(); ++i)
+    {
+        Instruction* insn = instructions.at(i);
+        if (insn->isBranchInstruction())
+        {
+            // Attempt to resolve the local branch target
+            // It has to be a local branch target
+            if (insn->getOperand()->isSymbol())
+            {
+                const Operand* operand = insn->getOperand();
+                if (operand->isResolved() == false)
+                {
+                    Label* label = NULL;
+                    for (unsigned i = 0; i < labels.size(); ++i)
+                    {
+                        if (labels.at(i)->getSymbolicName() == operand->getSymbolicName())
+                        {
+                            label = labels.at(i);
+                        }
+                    }
+
+                    // Throw an exception if we are unable to determinate the
+                    // branch instruction target
+                    if (label == NULL)
+                    {
+                        getPackageLogger().error("invalid branch target. Undefined reference to local branch '%s'.",
+                                                 operand->getSymbolicName().toCharArray());
+                    }
+
+                    // We have resolved the symbol.
+                    // Now the operand should contain the value of the offset.
+                    eliminateConstness(operand)->resolve(label->getOffset(), VM_ADDRESS_SIZE);
+                }
+            }
+        }
+
+        unsigned char encoded[insn->getSize()] = {0};
+        insn->encode(encoded);
+        write(encoded, VM_BYTE_SIZE, insn->getSize());
+    }
 }
 
 void Function::emit(Instruction* insn)
 {
     assert(insn != NULL && "Null pointer exception.");
-    instructions.push_back(insn);
 
-    // Grab a reference to the object. The reference is owned by the function.
-    insn->grab();
+    if (insn->is<Label>() == false)
+    {
+        instructions.push_back(insn);
+
+        // Grab a reference to the object. The reference is owned by the function.
+        insn->grab();
+    }
+    else
+    {
+        addLabel((Label*) insn);
+    }
 }
 
 size_t Function::getSize() const

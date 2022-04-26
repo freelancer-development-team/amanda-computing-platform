@@ -103,6 +103,7 @@ public:
     virtual ~Section();
 
     virtual void            addSymbol(const Symbol* symbol);
+    virtual void            constructBinaryData();
     bool                    canExecute() const;
     bool                    canWrite() const;
     virtual bool            equals(const core::Object* object);

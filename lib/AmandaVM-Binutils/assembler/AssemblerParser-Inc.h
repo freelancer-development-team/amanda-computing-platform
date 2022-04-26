@@ -58,14 +58,39 @@ extern int yydebug;
     T_DEF = 259,                   /* "subroutine definition keyword"  */
     T_ENDEF = 260,                 /* "end of subroutine"  */
     T_SECTION = 261,               /* "section directive"  */
-    T_POP = 262,                   /* "pop instruction"  */
-    T_PUSH = 263,                  /* "push instruction"  */
-    T_RET = 264,                   /* "return instruction"  */
-    T_IDENTIFIER = 265,            /* "identifier"  */
-    T_INSTRUCTION_SUFFIX = 266,    /* "instruction suffix"  */
-    T_STRING_LITERAL = 267,        /* "string literal"  */
-    T_INTEGER_LITERAL = 268,       /* "integer literal"  */
-    T_FP_LITERAL = 269             /* "floating point literal"  */
+    T_ADD = 262,                   /* "add instruction"  */
+    T_DIV = 263,                   /* "div instruction"  */
+    T_JF = 264,                    /* "jump-if-false instruction"  */
+    T_JUMP = 265,                  /* "jump instruction"  */
+    T_JT = 266,                    /* "jump-if-true instruction"  */
+    T_MOD = 267,                   /* "mod instruction"  */
+    T_MUL = 268,                   /* "mul instruction"  */
+    T_POP = 269,                   /* "pop instruction"  */
+    T_PUSH = 270,                  /* "push instruction"  */
+    T_RET = 271,                   /* "return instruction"  */
+    T_SUB = 272,                   /* "sub instruction"  */
+    T_B2W = 273,                   /* "byte-to-word instruction"  */
+    T_B2L = 274,                   /* B2L  */
+    T_B2Q = 275,                   /* B2Q  */
+    T_B2F = 276,                   /* B2F  */
+    T_B2D = 277,                   /* B2D  */
+    T_W2L = 278,                   /* W2L  */
+    T_W2Q = 279,                   /* "word-to-quad instruction"  */
+    T_W2F = 280,                   /* W2F  */
+    T_W2D = 281,                   /* W2D  */
+    T_L2Q = 282,                   /* L2Q  */
+    T_L2F = 283,                   /* L2F  */
+    T_L2D = 284,                   /* L2D  */
+    T_Q2F = 285,                   /* Q2F  */
+    T_Q2D = 286,                   /* Q2D  */
+    T_CEQ = 287,                   /* "compare-equals instruction"  */
+    T_CNE = 288,                   /* "compare-non-equals instruction"  */
+    T_IDENTIFIER = 289,            /* "identifier"  */
+    T_INSTRUCTION_SUFFIX = 290,    /* "instruction suffix"  */
+    T_STRING_LITERAL = 291,        /* "string literal"  */
+    T_INTEGER_LITERAL = 292,       /* "integer literal"  */
+    T_FP_LITERAL = 293,            /* "floating point literal"  */
+    T_ADDRESS_CONSTANT = 294       /* "address constant"  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -74,7 +99,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 83 "specs/parser.y"
+#line 113 "specs/parser.y"
 
     amanda::core::String*                           string;
     unsigned char                                   character;
@@ -82,8 +107,9 @@ union YYSTYPE
     long double                                     fp_number;
     std::vector<amanda::binutils::Instruction*>*    instruction_list;
     amanda::binutils::Instruction*                  insn;
+    amanda::binutils::Operand*                      operand;
 
-#line 87 "assembler/AssemblerParser-Inc.h"
+#line 113 "assembler/AssemblerParser-Inc.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -109,7 +135,7 @@ struct YYLTYPE
 
 int yyparse (void* scanner, void** module, void* state);
 /* "%code provides" blocks.  */
-#line 51 "specs/parser.y"
+#line 81 "specs/parser.y"
 
     // Include the corresponding definitions
     #include <amanda-vm/TypeSystem.h>
@@ -118,6 +144,6 @@ int yyparse (void* scanner, void** module, void* state);
     // C++
     #include <vector>
 
-#line 122 "assembler/AssemblerParser-Inc.h"
+#line 148 "assembler/AssemblerParser-Inc.h"
 
 #endif /* !YY_YY_ASSEMBLER_ASSEMBLERPARSER_INC_H_INCLUDED  */

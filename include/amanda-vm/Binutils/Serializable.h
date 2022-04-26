@@ -26,7 +26,7 @@
 #define AMANDA_BINUTILS_SERIALIZABLE_H
 
 #include <amanda-vm/TypeSystem.h>
-#include <amanda-vm/Binutils/Serializer.h>
+#include <amanda-vm/IO/OutputStream.h>
 
 // C++ STL
 #include <vector>
@@ -35,6 +35,8 @@ namespace amanda
 {
 namespace binutils
 {
+
+class Serializer;
 
 /**
  * Serializable objects are objects destined to be encoded as a mean of making

@@ -52,6 +52,8 @@ typedef uint64_t    vm_size_t;
 typedef uint64_t    vm_index_t;
 typedef uint64_t    vm_address_t;
 
+#define VM_ADDRESS_SIZE sizeof(amanda::vm::vm_address_t)
+
 // Runtime types
 typedef void*       vm_memory_t;
 typedef const void* vm_readonly_memory_t;

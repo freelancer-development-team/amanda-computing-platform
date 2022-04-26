@@ -55,10 +55,14 @@ class AssemblerParser : public core::Object
     AMANDA_OBJECT(AssemblerParser, core::Object)
 public:
 
+    /**
+     * This structure holds the parser internal state.
+     */
     typedef struct YYPSTATE
     {
         Function*   currentFunction;
         Section*    currentSection;
+        size_t      localOffset;
     } YYPSTATE;
 
     AssemblerParser(const AssemblerInputStream& stream);

@@ -77,6 +77,7 @@ namespace amanda
 #define SAVE_STRING()   yylval->string = amanda::binutils::as::makeString(yytext)
 #define SAVE_CHAR()     yylval->character = *yytext;
 #define SAVE_INT()      yylval->integer = amanda::binutils::as::parseIntegerLiteral(yytext + 1)
+#define SAVE_ADDR()     yylval->integer = amanda::binutils::as::parseIntegerLiteral(yytext)
 
 %}
 
@@ -103,7 +104,7 @@ OctDigit    [0-7]
 Comment     "#"[^\n]*
 WhiteSpace  [ \t\v\f\r\n]
 
-Identifier  [.@]?({Letter}|[_@.?!~$])+
+Identifier  [.@]?({Letter}|[_@.?!~$]|{Digit})+
 
 Byte        b8
 Word        w16
@@ -115,8 +116,12 @@ Double      d64
 InstructionSuffix   ({Byte}|{Word}|{Long}|{Quad}|{Float}|{Double})
 
 DecimalInteger  "-"?({Digit})+
+HexadecimalInt  ({HexDigit})+
+BinaryInt       "0b"[0-1]+
 
-Integer     "$"({DecimalInteger})
+IntegerLiteral  ({DecimalInteger}|("0x"{HexadecimalInt})|({BinaryInt}))
+Integer         "$"({IntegerLiteral})
+Address         {IntegerLiteral}
 
  // States
 %x C_COMMENT
@@ -181,18 +186,48 @@ Integer     "$"({DecimalInteger})
 ".def"                      { return T_DEF; }
 ".endef"                    { return T_ENDEF; }
 ".section"                  { return T_SECTION; }
+".dim"                      { }
 
  /* Instructions */
-"add"
-"sub"
-"mul"
-"div"
-"mod"                       
+"b2w"                       { return T_B2W; }
+"b2l"                       { return T_B2L; }
+"b2q"                       { return T_B2Q; }
+"b2f"                       { return T_B2F; }
+"b2d"                       { return T_B2D; }
+
+"w2l"                       { return T_W2L; }
+"w2q"                       { return T_W2Q; }
+"w2f"                       { return T_W2F; }
+"w2d"                       { return T_W2D; }
+
+"l2q"                       { return T_L2Q; }
+"l2f"                       { return T_L2F; }
+"l2d"                       { return T_L2D; }
+
+"q2f"                       { return T_Q2F; }
+"q2d"                       { return T_Q2D; }
+
+"add"                       { return T_ADD; }
+"sub"                       { return T_SUB; }
+"mul"                       { return T_MUL; }
+"div"                       { return T_DIV; }
+"mod"                       { return T_MOD; }
+
+"ceq"                       { return T_CEQ; }
+"cne"                       { return T_CNE; }
 
 "pop"                       { return T_POP; }
 "push"                      { return T_PUSH; }
 
+"jmp"                       { return T_JUMP; }
+"jt"                        { return T_JT; }
+"jf"                        { return T_JF; }
 "ret"                       { return T_RET; }
+
+ /* Operators */
+"["                         { return '['; }
+"]"                         { return ']'; }
+"$"                         { return '$'; }
 
  /* Suffixes */
 {InstructionSuffix}         { SAVE_CHAR(); return T_INSTRUCTION_SUFFIX; }
@@ -200,6 +235,7 @@ Integer     "$"({DecimalInteger})
  /* Literals */
 
 {Integer}                   { SAVE_INT(); return T_INTEGER_LITERAL; }
+{Address}                   { SAVE_ADDR(); return T_ADDRESS_CONSTANT; }
 {Identifier}                { SAVE_STRING(); return T_IDENTIFIER; }
 
  /* Delimiters */
@@ -231,7 +267,7 @@ location_t amanda::binutils::as::makeLocation(YYLTYPE* locp)
 
 core::String* amanda::binutils::as::makeString(const char* cStr)
 {
-    return new core::String(strdup(cStr));
+    return new core::String(cStr);
 }
 
 unsigned long long amanda::binutils::as::parseIntegerLiteral(const char* literal)

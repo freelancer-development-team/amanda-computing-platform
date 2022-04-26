@@ -66,20 +66,75 @@ typedef enum VM_BytecodeConstants
 typedef enum VM_Opcodes
 {
     // Reserved
-    I_NOP,
+    I_NOP = 0,
     I_HALT,
 
     // Data type conversion
+    I_B2W,
+    I_B2L,
+    I_B2Q,
+    I_B2F,
+    I_B2D,
+
+    I_W2L,
+    I_W2Q,
+    I_W2F,
+    I_W2D,
+
+    I_L2Q,
+    I_L2F,
+    I_L2D,
+
+    I_Q2F,
+    I_Q2D,
+
+    I_F2B,
+    I_F2W,
+    I_F2L,
+    I_F2Q,
+    I_F2D,
+
+    I_D2B,
+    I_D2W,
+    I_D2L,
+    I_D2Q,
+    I_D2F,
 
     // Arithmetic
     I_ADDB,
     I_ADDW,
     I_ADDL,
     I_ADDQ,
+    I_ADDF,
+    I_ADDD,
+
     I_SUBB,
     I_SUBW,
     I_SUBL,
     I_SUBQ,
+    I_SUBF,
+    I_SUBD,
+
+    I_MULB,
+    I_MULW,
+    I_MULL,
+    I_MULQ,
+    I_MULF,
+    I_MULD,
+
+    I_DIVB,
+    I_DIVW,
+    I_DIVL,
+    I_DIVQ,
+    I_DIVF,
+    I_DIVD,
+
+    I_MODB,
+    I_MODW,
+    I_MODL,
+    I_MODQ,
+    I_MODF,
+    I_MODD,
     // Stack manipulation
     I_PUSHB,
     I_PUSHW,
@@ -87,13 +142,38 @@ typedef enum VM_Opcodes
     I_PUSHQ,
     I_PUSHF,
     I_PUSHD,
+
     I_POPB,
     I_POPW,
     I_POPL,
     I_POPQ,
     I_POPF,
     I_POPD,
+    // Comparison
+    I_CEQB,
+    I_CEQW,
+    I_CEQL,
+    I_CEQQ,
+    I_CEQF,
+    I_CEQD,
+
+    I_CNEB,
+    I_CNEW,
+    I_CNEL,
+    I_CNEQ,
+    I_CNEF,
+    I_CNED,
+            
+    I_CGT,
+    I_CLT,
+    I_CGE,
+    I_CLE,
+
     // Flow control
+    I_JMP,
+    I_JT,
+    I_JF,
+
     I_RETB,
     I_RETW,
     I_RETL,
@@ -110,6 +190,9 @@ typedef enum VM_Opcodes
  * instruction suffix.
  */
 #define AMANDA_VM_ENCODE_INSN(F, S) amanda::vm::I_ ## F ## S
+
+#define AMANDA_VM_INSN_SINGLE(F)    amanda::vm::I_ ## F
+#define AMANDA_VM_INSN_FAMILY(F)    amanda::vm::I_ ## F ## B
 
 /**
  * Instruction codes are 8-bit unsigned integers without exception. There is no

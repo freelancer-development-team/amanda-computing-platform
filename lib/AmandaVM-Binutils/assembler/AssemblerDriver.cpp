@@ -23,6 +23,7 @@
  */
 
 #include <amanda-vm/Binutils/AssemblerDriver.h>
+#include <amanda-vm/Binutils/Serializer.h>
 
 using namespace amanda;
 using namespace amanda::binutils;
