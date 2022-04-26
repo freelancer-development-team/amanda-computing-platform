@@ -36,5 +36,11 @@ InputStream::~InputStream()
 
 void InputStream::read(void* buffer, size_t size) const
 {
+    read(buffer, size, 1);
+}
+
+void InputStream::read(void* buffer, size_t size, size_t count) const
+{
     assert("This method is not implemented here");
 }
+

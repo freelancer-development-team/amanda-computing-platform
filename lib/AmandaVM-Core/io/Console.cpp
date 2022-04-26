@@ -71,6 +71,12 @@ ansiInitialized(true)
 
     if (ansiInitialized)
         printf("\033[0m");
+
+    // Increase the reference to the console handlers
+    // Now there's no way an accidental release occurs
+    in.grab();
+    out.grab();
+    err.grab();
 }
 
 Console::~Console()

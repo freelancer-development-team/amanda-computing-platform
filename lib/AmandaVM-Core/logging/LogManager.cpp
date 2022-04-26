@@ -50,6 +50,15 @@ initialized(false)
 {
 }
 
+LogManager::~LogManager()
+{
+    for (LoggerMap::const_iterator it = loggers.begin(), end = loggers.end();
+         it != end; ++it)
+    {
+        it->second->release();
+    }
+}
+
 bool LogManager::addLogger(Logger* logger)
 {
     bool result = false;
@@ -149,7 +158,7 @@ Logger* LogManager::findAncestor(Logger* child) const
     return best;
 }
 
-Logger* LogManager::getLogger(const core::String& name)
+Logger* LogManager::getLogger(const core::String& name) const
 {
     Logger* result = NULL;
     AMANDA_SYNCHRONIZED(lock);

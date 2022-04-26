@@ -51,7 +51,13 @@ public:
     InputStream();
     virtual ~InputStream();
 
-    virtual void read(void* buffer, size_t size) const;
+    virtual void        close() const = 0;
+    virtual void        read(void* buffer, size_t size) const;
+    virtual void        read(void* buffer, size_t size, size_t count) const;
+    virtual void        reset() const = 0;
+    virtual void        seek(uint64_t offset) const = 0;
+    virtual uint64_t    tell() const = 0;
+    
 } ;
 
 }

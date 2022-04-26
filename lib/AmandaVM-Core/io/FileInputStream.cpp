@@ -50,7 +50,22 @@ void FileInputStream::close() const
     file = NULL;
 }
 
-void FileInputStream::read(void* buffer, size_t size) const
+void FileInputStream::read(void* buffer, size_t size, size_t count) const
 {
-    fread(buffer, size, 1, file->getHandle());
+    file->read((char*) buffer, size, count);
+}
+
+void FileInputStream::reset() const
+{
+   file->reset();
+}
+
+void FileInputStream::seek(uint64_t offset) const
+{
+    file->setPosition(offset);
+}
+
+uint64_t FileInputStream::tell() const
+{
+    return file->tell();
 }

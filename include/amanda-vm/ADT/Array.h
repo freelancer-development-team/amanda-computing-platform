@@ -47,7 +47,7 @@ class Array : extends core::Object
 
 public:
 
-    Array(size_t count)
+    Array(size_t count = 1)
     :
     array((T*) calloc(count, sizeof (T))),
     size(count)
@@ -69,6 +69,16 @@ public:
     ~Array()
     {
         free(array);
+    }
+
+    inline T* getInmutableCArray() const
+    {
+        return array;
+    }
+
+    inline T* getMutableCArray()
+    {
+        return array;
     }
 
     size_t length() const

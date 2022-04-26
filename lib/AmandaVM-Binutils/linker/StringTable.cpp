@@ -19,88 +19,73 @@
  * File:   StringTable.cpp
  * Author: Javier Marrero
  * 
- * Created on March 24, 2022, 10:26 PM
+ * Created on April 11, 2022, 8:29 PM
  */
 
-#include <amanda-vm/Binutils/Linker/StringTable.h>
+#include <amanda-vm/Binutils/StringTable.h>
+#include <amanda-vm/ADT/Collections.h>
 
 using namespace amanda;
-using namespace amanda::binutils::ld;
+using namespace amanda::binutils;
 
-StringTable::StringTable()
+StringTable::StringTable(const core::String& name)
+:
+Section(name),
+lastIndex(0)
 {
-    // Reserve initial space
-    strings.reserve(25);
-    indexes.reserve(25);
+    // Reserve enough space for the first 5 strings.
+    reserve(5);
 
-    // The first index in the string table points to an invalid entry with this
-    // descriptive message.
-    add("!I-N-V-A-L-I-D-E-N-T-R-Y?");
+    // Set some reserved values.
+    setAttributes(Attr_Alloc | Attr_Read);
+    setType(Type_StringTable);
+
+    // Add the first entry that is reserved
+    addString("");
 }
 
-StringTable::~StringTable()
+vm::vm_qword_t StringTable::addString(const core::String& str)
 {
-}
+    // Store the result for later use
+    vm::vm_qword_t result = lastIndex;
 
-void StringTable::add(const core::String& str)
-{
-    if (indexes.empty())
-    {
-        indexes.push_back(0);
-    }
-    else
-    {
-        indexes.push_back(indexes.back() + strings.back().length() + 1);
-    }
-
-    // Now you can push the string
+    indexes.push_back(lastIndex);
     strings.push_back(str);
-}
 
-vm::vm_qword_t StringTable::count() const
-{
-    return strings.size();
-}
-
-const core::String& StringTable::get(vm::vm_qword_t index) const
-{
-    core::String& result = amanda::eliminateConstness(strings[0]);
-
-    bool found = false;
-    for (unsigned i = 0; i < indexes.size() && !found; ++i)
-    {
-        if (index == indexes[i])
-        {
-            found = true;
-            result = strings[i];
-        }
-    }
+    // Update the last index count.
+    lastIndex += str.length() + 2;
 
     return result;
 }
 
-vm::vm_qword_t StringTable::getIndex(const core::String& str)
+void StringTable::constructBinaryData()
 {
-    bool found = false;
-    vm::vm_qword_t result = 0;
-    
-    for (unsigned i = 0; i < strings.size() && !found; ++i)
+    for (std::vector<core::String>::const_iterator it = strings.begin(),
+            end = strings.end(); it != end; ++it)
     {
-        if (strings[i] == str)
-        {
-            result = indexes[i];
-            found = true;
-        }
+        const core::String& str = *it;
+        Serializable::write(str.toCharArray(), VM_BYTE_SIZE, str.length() + 1);
     }
-    
-    return result;
 }
 
-void StringTable::marshall(io::OutputStream& stream)
+StringTable::TablePair StringTable::get(const unsigned position) const
 {
-    for (std::vector<core::String>::iterator it = strings.begin(), end = strings.end();
-         it != end; ++it)
-    {
-        stream.write((*it).toCharArray(), sizeof(sdk_utf8_char_t), (*it).length() + 1);
-    }
+    return std::make_pair(indexes.at(position), strings.at(position));
 }
+
+vm::vm_qword_t StringTable::getIndex(const core::String& str) const
+{
+    return indexes.at(adt::getPosition(strings, str));
+}
+
+const core::String& StringTable::getString(vm::vm_qword_t index) const
+{
+    return strings.at(adt::getPosition(indexes, index));
+}
+
+void StringTable::reserve(unsigned amount)
+{
+    indexes.reserve(amount);
+    strings.reserve(amount);
+}
+

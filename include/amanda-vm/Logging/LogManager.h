@@ -44,8 +44,10 @@ public:
 
     static LogManager& getLogManager();
 
+    ~LogManager();
+
     virtual bool    addLogger(Logger* logger);
-    virtual Logger* getLogger(const core::String& name);
+    virtual Logger* getLogger(const core::String& name) const;
 
 protected:
 

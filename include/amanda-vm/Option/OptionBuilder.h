@@ -53,7 +53,8 @@ public:
     OptionBuilder&  withDescription(const core::String& description);
     OptionBuilder&  withLongOption(const core::String& longOption);
     OptionBuilder&  withShortOption(const core::String& shortOption);
-    
+    OptionBuilder&  withValueSeparator(const char separator);
+
 protected:
 
     /**
@@ -70,7 +71,7 @@ protected:
     bool            requiresArguments;
     int             argumentCount;
     char            valueSeparator;
-    
+
 } ;
 
 }

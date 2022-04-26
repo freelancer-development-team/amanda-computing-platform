@@ -42,6 +42,7 @@ class StreamHandler : public Handler
 public:
 
     StreamHandler(io::OutputStream* stream, Formatter* formatter);
+    virtual ~StreamHandler();
 
     virtual void close() const;
     virtual void flush() const;
@@ -50,7 +51,8 @@ public:
 
 protected:
 
-    void setOutputStream(io::OutputStream* out);
+    const io::OutputStream* getOutputStream() const;
+    void                    setOutputStream(io::OutputStream* out);
     
 private:
 

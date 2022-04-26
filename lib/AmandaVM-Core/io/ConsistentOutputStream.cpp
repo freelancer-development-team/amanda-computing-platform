@@ -45,7 +45,7 @@ void ConsistentOutputStream::close() const
 
 void ConsistentOutputStream::write(const char* data) const
 {
-    write(data, strlen(data));
+    write(data, sizeof (char), strlen(data));
 }
 
 void ConsistentOutputStream::write(const void* data, size_t size) const
@@ -63,6 +63,13 @@ void ConsistentOutputStream::write(const void* data, size_t size) const
     stream.write(buffer, size);
 }
 
+void ConsistentOutputStream::write(const void* data, size_t size, size_t count) const
+{
+    for (size_t c = 0; c < count; ++c)
+    {
+        write(((char*) data) + c, size);
+    }
+}
 
 
 

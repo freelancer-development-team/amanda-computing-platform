@@ -39,6 +39,7 @@ class ConsoleHandler : public StreamHandler
 public:
 
     ConsoleHandler(Formatter* formatter = new SimpleFormatter());
+    virtual ~ConsoleHandler();
     
     virtual void close() const;
     virtual void publish(const LogRecord& record) const;

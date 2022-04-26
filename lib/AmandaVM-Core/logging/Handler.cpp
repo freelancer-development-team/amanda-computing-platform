@@ -36,6 +36,10 @@ level(Logger::ALL)
 {
 }
 
+Handler::~Handler()
+{
+}
+
 Filter* Handler::getFilter() const
 {
     return filter;

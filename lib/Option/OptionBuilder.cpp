@@ -34,6 +34,7 @@ OptionBuilder::OptionBuilder()
     requiresArguments = false;
     required = false;
     shortOption = Option::NO_OPTION;
+    valueSeparator = ',';
 }
 
 OptionBuilder OptionBuilder::build()
@@ -45,6 +46,9 @@ Option* OptionBuilder::get() const
 {
     Option* option = new Option(shortOption, longOption, description, required, requiresArguments);
     assert(option != NULL && "could not create Option object. Possible future segmentation failure.");
+
+    if (valueSeparator != ',')
+        option->setValueSeparator(valueSeparator);
 
     return option;
 }
@@ -76,5 +80,11 @@ OptionBuilder& OptionBuilder::withLongOption(const core::String& longOption)
 OptionBuilder& OptionBuilder::withShortOption(const core::String& shortOption)
 {
     this->shortOption = shortOption;
+    return *this;
+}
+
+OptionBuilder& OptionBuilder::withValueSeparator(const char separator)
+{
+    this->valueSeparator = separator;
     return *this;
 }
