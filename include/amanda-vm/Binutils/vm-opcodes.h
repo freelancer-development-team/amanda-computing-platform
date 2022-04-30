@@ -163,13 +163,15 @@ typedef enum VM_Opcodes
     I_CNEQ,
     I_CNEF,
     I_CNED,
-            
+
     I_CGT,
     I_CLT,
     I_CGE,
     I_CLE,
 
     // Flow control
+    I_INVOKE,
+    I_INVOKENATIVE,
     I_JMP,
     I_JT,
     I_JF,

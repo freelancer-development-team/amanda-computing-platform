@@ -23,6 +23,7 @@
  */
 
 #include <amanda-vm/Binutils/Symbol.h>
+#include <amanda-vm/Binutils/Module.h>
 #include <amanda-vm/IO/MemoryOutputStream.h>
 #include <amanda-vm/IO/ConsistentOutputStream.h>
 
@@ -52,6 +53,8 @@ const Symbol::SymbolTableEntry& Symbol::getNullSymbolTableEntry()
 
 Symbol::Symbol(const core::String& name)
 :
+entry(getNullSymbolTableEntry()),
+module(NULL),
 name(name)
 {
 }
@@ -65,9 +68,19 @@ const Symbol::SymbolTableEntry& Symbol::getEntry() const
     return entry;
 }
 
+const Module* Symbol::getModule() const
+{
+    return module;
+}
+
 const core::String& Symbol::getName() const
 {
     return name;
+}
+
+const Section* Symbol::getSection() const
+{
+    return section;
 }
 
 size_t Symbol::getSize() const
@@ -75,9 +88,30 @@ size_t Symbol::getSize() const
     return this->entry.size;
 }
 
+bool Symbol::isExternalSymbol() const
+{
+    return entry.bind == Bind_Extern;
+}
+
 Symbol& Symbol::setBindClass(vm::vm_byte_t bind)
 {
     this->entry.bind = bind;
+    return *this;
+}
+
+Symbol& Symbol::setModule(Module* module)
+{
+    // Set the module
+    this->module = module;
+    
+    return *this;
+}
+
+Symbol& Symbol::setSection(Section* section)
+{
+    // Set the section
+    this->section = section;
+    
     return *this;
 }
 

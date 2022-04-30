@@ -34,6 +34,10 @@ namespace amanda
 namespace binutils
 {
 
+// Forward declared
+class Module;
+class Section;
+
 /**
  * A symbol is data within a section of the program identified by some abstract
  * name or address.
@@ -65,6 +69,7 @@ public:
         Bind_Local = 0,     /// Local symbol only defined within the module
         Bind_Global,        /// Global symbol
         Bind_Weak,          /// Lesses precedence global symbol
+        Bind_Extern,
         Bind_LoProc = 13,   /// Reserved
         Bind_HiProc = 15    /// Reserved
     };
@@ -88,9 +93,14 @@ public:
     virtual ~Symbol();
 
     const SymbolTableEntry& getEntry() const;
+    const Module*           getModule() const;
     const core::String&     getName() const;
+    const Section*          getSection() const;
     virtual size_t          getSize() const;
+    bool                    isExternalSymbol() const;
     Symbol&                 setBindClass(vm::vm_byte_t bind);
+    Symbol&                 setModule(Module* module);
+    Symbol&                 setSection(Section* section);
     Symbol&                 setStringTableEntry(vm::vm_dword_t entry);
     Symbol&                 setSize(size_t size);
     Symbol&                 setType(vm::vm_byte_t type);
@@ -98,7 +108,9 @@ public:
 protected:
 
     SymbolTableEntry    entry;
+    Module*             module;
     core::String        name;
+    Section*            section;
 
     virtual void    marshallImpl(io::OutputStream& stream) const;
 

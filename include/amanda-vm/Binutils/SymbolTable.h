@@ -47,8 +47,9 @@ public:
     SymbolTable(const core::String& name);
     virtual ~SymbolTable();
 
-    virtual void addSymbol(const Symbol* symbol);
-    virtual void constructBinaryData();
+    virtual void    addSymbol(const Symbol* symbol);
+    virtual void    constructBinaryData();
+    virtual Symbol* getSymbol(const core::String& name) const;
 
 protected:
 

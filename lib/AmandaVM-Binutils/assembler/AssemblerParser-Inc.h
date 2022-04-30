@@ -60,37 +60,38 @@ extern int yydebug;
     T_SECTION = 261,               /* "section directive"  */
     T_ADD = 262,                   /* "add instruction"  */
     T_DIV = 263,                   /* "div instruction"  */
-    T_JF = 264,                    /* "jump-if-false instruction"  */
-    T_JUMP = 265,                  /* "jump instruction"  */
-    T_JT = 266,                    /* "jump-if-true instruction"  */
-    T_MOD = 267,                   /* "mod instruction"  */
-    T_MUL = 268,                   /* "mul instruction"  */
-    T_POP = 269,                   /* "pop instruction"  */
-    T_PUSH = 270,                  /* "push instruction"  */
-    T_RET = 271,                   /* "return instruction"  */
-    T_SUB = 272,                   /* "sub instruction"  */
-    T_B2W = 273,                   /* "byte-to-word instruction"  */
-    T_B2L = 274,                   /* B2L  */
-    T_B2Q = 275,                   /* B2Q  */
-    T_B2F = 276,                   /* B2F  */
-    T_B2D = 277,                   /* B2D  */
-    T_W2L = 278,                   /* W2L  */
-    T_W2Q = 279,                   /* "word-to-quad instruction"  */
-    T_W2F = 280,                   /* W2F  */
-    T_W2D = 281,                   /* W2D  */
-    T_L2Q = 282,                   /* L2Q  */
-    T_L2F = 283,                   /* L2F  */
-    T_L2D = 284,                   /* L2D  */
-    T_Q2F = 285,                   /* Q2F  */
-    T_Q2D = 286,                   /* Q2D  */
-    T_CEQ = 287,                   /* "compare-equals instruction"  */
-    T_CNE = 288,                   /* "compare-non-equals instruction"  */
-    T_IDENTIFIER = 289,            /* "identifier"  */
-    T_INSTRUCTION_SUFFIX = 290,    /* "instruction suffix"  */
-    T_STRING_LITERAL = 291,        /* "string literal"  */
-    T_INTEGER_LITERAL = 292,       /* "integer literal"  */
-    T_FP_LITERAL = 293,            /* "floating point literal"  */
-    T_ADDRESS_CONSTANT = 294       /* "address constant"  */
+    T_INVOKE = 264,                /* "call instruction"  */
+    T_JF = 265,                    /* "jump-if-false instruction"  */
+    T_JUMP = 266,                  /* "jump instruction"  */
+    T_JT = 267,                    /* "jump-if-true instruction"  */
+    T_MOD = 268,                   /* "mod instruction"  */
+    T_MUL = 269,                   /* "mul instruction"  */
+    T_POP = 270,                   /* "pop instruction"  */
+    T_PUSH = 271,                  /* "push instruction"  */
+    T_RET = 272,                   /* "return instruction"  */
+    T_SUB = 273,                   /* "sub instruction"  */
+    T_B2W = 274,                   /* "byte-to-word instruction"  */
+    T_B2L = 275,                   /* B2L  */
+    T_B2Q = 276,                   /* B2Q  */
+    T_B2F = 277,                   /* B2F  */
+    T_B2D = 278,                   /* B2D  */
+    T_W2L = 279,                   /* W2L  */
+    T_W2Q = 280,                   /* "word-to-quad instruction"  */
+    T_W2F = 281,                   /* W2F  */
+    T_W2D = 282,                   /* W2D  */
+    T_L2Q = 283,                   /* L2Q  */
+    T_L2F = 284,                   /* L2F  */
+    T_L2D = 285,                   /* L2D  */
+    T_Q2F = 286,                   /* Q2F  */
+    T_Q2D = 287,                   /* Q2D  */
+    T_CEQ = 288,                   /* "compare-equals instruction"  */
+    T_CNE = 289,                   /* "compare-non-equals instruction"  */
+    T_IDENTIFIER = 290,            /* "identifier"  */
+    T_INSTRUCTION_SUFFIX = 291,    /* "instruction suffix"  */
+    T_STRING_LITERAL = 292,        /* "string literal"  */
+    T_INTEGER_LITERAL = 293,       /* "integer literal"  */
+    T_FP_LITERAL = 294,            /* "floating point literal"  */
+    T_ADDRESS_CONSTANT = 295       /* "address constant"  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -109,7 +110,7 @@ union YYSTYPE
     amanda::binutils::Instruction*                  insn;
     amanda::binutils::Operand*                      operand;
 
-#line 113 "assembler/AssemblerParser-Inc.h"
+#line 114 "assembler/AssemblerParser-Inc.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -144,6 +145,6 @@ int yyparse (void* scanner, void** module, void* state);
     // C++
     #include <vector>
 
-#line 148 "assembler/AssemblerParser-Inc.h"
+#line 149 "assembler/AssemblerParser-Inc.h"
 
 #endif /* !YY_YY_ASSEMBLER_ASSEMBLERPARSER_INC_H_INCLUDED  */

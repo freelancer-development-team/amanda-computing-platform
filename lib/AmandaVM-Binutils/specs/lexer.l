@@ -213,6 +213,8 @@ Address         {IntegerLiteral}
 "div"                       { return T_DIV; }
 "mod"                       { return T_MOD; }
 
+"invoke"                    { return T_INVOKE; }
+
 "ceq"                       { return T_CEQ; }
 "cne"                       { return T_CNE; }
 

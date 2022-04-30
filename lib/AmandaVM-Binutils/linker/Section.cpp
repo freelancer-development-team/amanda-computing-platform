@@ -34,6 +34,8 @@
 // C
 #include <stdlib.h>
 
+#include "amanda-vm/Binutils/LinkException.h"
+
 
 using namespace amanda;
 using namespace amanda::binutils;
@@ -50,6 +52,22 @@ Section* Section::makeDataSection()
 {
     Section* section = new Section(DATA_SECTION_NAME);
     section->header->flags = Attr_Alloc | Attr_Read | Attr_Write;
+
+    return section;
+}
+
+Section* Section::makeDebugSection()
+{
+    Section* section = new Section(".debug-symbols");
+    section->header->flags = Attr_Read;
+
+    return section;
+}
+
+Section* Section::makeReadOnlyDataSection()
+{
+    Section* section = new Section(".debug-symbols");
+    section->header->flags = Attr_Alloc | Attr_Read;
 
     return section;
 }
@@ -118,11 +136,12 @@ void Section::constructBinaryData()
 
         // The heisenbug strikes again
         // NOTE: This heisenbug is provoked by the troubling stuff that C++
-        // prior to C++11 had. The troubling bug is that compiler is allowed to
+        // prior to C++11 had. The troubling thing is that compiler is allowed to
         // evaluate expressions in any order.
         const void*     serializedData = symbol->getBinaryData();
         const size_t    serializedSize = symbol->getBufferLength();
-        
+
+        setSize(serializedSize);
         Serializable::write(serializedData, VM_BYTE_SIZE, serializedSize);
     }
 }
@@ -176,6 +195,43 @@ Section::SectionHeader Section::getNullSectionHeader() const
     return header;
 }
 
+size_t Section::getOffsetToSymbol(const Symbol* symbol) const
+{
+    assert(symbol != NULL && "Null pointer exception");
+
+    size_t offset = 0;
+    size_t definitionIndex = 0;
+
+    // Find in which position is the symbol located
+    bool found;
+    for (std::vector<Symbol*>::const_iterator it = symbols.begin(), end = symbols.end();
+         it != end && !found; ++it)
+    {
+        if ((*it) == symbol)
+        {
+            found = true;
+        }
+        else
+        {
+            definitionIndex++;
+        }
+    }
+    
+    if (found)
+    {
+        for (size_t i = 0; i < definitionIndex; ++i)
+        {
+            Symbol* k = symbols.at(i);
+            offset += k->getSize();
+        }
+    }
+    else
+    {
+        throw LinkException("undefined symbol reference when querying offset.", *symbol);
+    }
+    return offset;
+}
+
 const Section::SectionHeader* Section::getSectionHeader() const
 {
     return header;
@@ -184,6 +240,11 @@ const Section::SectionHeader* Section::getSectionHeader() const
 size_t Section::getSize() const
 {
     return header->size;
+}
+
+const std::vector<Symbol*>& Section::getSymbols() const
+{
+    return symbols;
 }
 
 void Section::merge(const Section* section)

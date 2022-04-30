@@ -45,3 +45,8 @@ String Exception::toString() const
 {
     return String(this->getClassDynamically().getName()).append(": ").append(getMessage());
 }
+
+const char* Exception::what() const throw()
+{
+    return toString().toCharArray();
+}

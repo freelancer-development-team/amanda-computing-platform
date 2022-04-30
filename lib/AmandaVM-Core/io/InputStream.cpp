@@ -34,6 +34,17 @@ InputStream::~InputStream()
 {
 }
 
+void InputStream::popOffset() const
+{
+    seek(offsets.top());
+    offsets.pop();
+}
+
+void InputStream::pushOffset() const
+{
+    offsets.push(tell());
+}
+
 void InputStream::read(void* buffer, size_t size) const
 {
     read(buffer, size, 1);

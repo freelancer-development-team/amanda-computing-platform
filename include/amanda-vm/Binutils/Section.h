@@ -102,19 +102,21 @@ public:
     Section(const core::String& name);
     virtual ~Section();
 
-    virtual void            addSymbol(const Symbol* symbol);
-    virtual void            constructBinaryData();
-    bool                    canExecute() const;
-    bool                    canWrite() const;
-    virtual bool            equals(const core::Object* object);
-    const core::String&     getName() const;
-    SectionHeader           getNullSectionHeader() const;
-    const SectionHeader*    getSectionHeader() const;
-    size_t                  getSize() const;
-    virtual void            merge(const Section* section);
-    void                    setAttributes(unsigned attributes);
-    void                    setNameIndex(const vm::vm_qword_t index);
-    void                    setType(unsigned type);
+    virtual void                addSymbol(const Symbol* symbol);
+    virtual void                constructBinaryData();
+    bool                        canExecute() const;
+    bool                        canWrite() const;
+    virtual bool                equals(const core::Object* object);
+    const core::String&         getName() const;
+    SectionHeader               getNullSectionHeader() const;
+    size_t                      getOffsetToSymbol(const Symbol* symbol) const;
+    const SectionHeader*        getSectionHeader() const;
+    size_t                      getSize() const;
+    const std::vector<Symbol*>& getSymbols() const;
+    virtual void                merge(const Section* section);
+    void                        setAttributes(unsigned attributes);
+    void                        setNameIndex(const vm::vm_qword_t index);
+    void                        setType(unsigned type);
 
     bool operator== (const Section* section) const;
 

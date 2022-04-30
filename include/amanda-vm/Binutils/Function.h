@@ -52,10 +52,11 @@ public:
     Function(const core::String& name);
     virtual ~Function();
 
-    void            addLabel(Label* label);
-    virtual void    constructBinaryData();
-    void            emit(Instruction* insn);
-    size_t          getSize() const;
+    void                            addLabel(Label* label);
+    virtual void                    constructBinaryData();
+    void                            emit(Instruction* insn);
+    const std::deque<Instruction*>& getInstructions() const;
+    size_t                          getSize() const;
 
 private:
 

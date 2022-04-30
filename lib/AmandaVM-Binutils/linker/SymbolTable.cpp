@@ -73,3 +73,17 @@ void SymbolTable::constructBinaryData()
         Serializable::write(&entry, sizeof(entry), 1);
     }
 }
+
+Symbol* SymbolTable::getSymbol(const core::String& name) const
+{
+    //TODO: Optimize this
+    // We must have in account that finding is expensive. (I mean, not that
+    // expensive, just n*log(n) but, we are duplicating the cost this way)
+    
+    Symbol* result = NULL;
+    if (symbols.find(name) != symbols.end())
+    {
+        result = eliminateConstness(symbols.find(name)->second);
+    }
+    return result;
+}

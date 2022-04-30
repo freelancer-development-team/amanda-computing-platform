@@ -136,6 +136,7 @@ void yyerror(YYLTYPE* location, void* scanner, void** module, void* state, char 
 %token
     ADD         "add instruction"
     DIV         "div instruction"
+    INVOKE      "call instruction"
     JF          "jump-if-false instruction"
     JUMP        "jump instruction"
     JT          "jump-if-true instruction"
@@ -293,6 +294,7 @@ zeroed_instruction
     | B2Q                                   { $$ = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(B2Q)); }
     | W2L                                   { $$ = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(W2L)); }
     | W2Q                                   { $$ = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(W2Q)); }
+    | L2Q                                   { $$ = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(L2Q)); }
     ;
 
 unary_instruction
@@ -310,6 +312,8 @@ unary_instruction
     // Branch
     | JF branch_target                      { $$ = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(JF)); $$->setOperand($2); }
     | JT branch_target                      { $$ = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(JT)); $$->setOperand($2); }
+    // Invoke
+    | INVOKE IDENTIFIER                     { $$ = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(INVOKE)); Operand* operand = new Operand(*$2); $$->setOperand(operand); delete $2;}
     // Stack
     | PUSH INSTRUCTION_SUFFIX argument      { $$ = as::createUnaryInstruction(AMANDA_VM_INSN_FAMILY(PUSH), $2); $$->setOperand($3); }
     ;

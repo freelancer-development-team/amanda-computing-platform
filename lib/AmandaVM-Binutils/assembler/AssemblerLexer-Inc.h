@@ -518,7 +518,7 @@ extern int yylex \
 #undef yyTABLES_NAME
 #endif
 
-#line 257 "specs/lexer.l"
+#line 259 "specs/lexer.l"
 
 
 #line 524 "assembler/AssemblerLexer-Inc.h"

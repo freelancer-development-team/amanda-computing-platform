@@ -31,6 +31,7 @@
 #include <amanda-vm/Binutils/Serializable.h>
 #include <amanda-vm/Binutils/Section.h>
 
+// C++
 #include <vector>
 
 namespace amanda
@@ -81,8 +82,9 @@ public:
         vm::vm_word_t   _alignment;
     } version_triplet;
 
-    static const vm::vm_byte_t MAGIC_NUMBER[4]; /// The magic number that must be present in every module.
-    static const vm::vm_size_t SIZEOF_PROGRAM_HEADER = 128;  /// The program header is 128 bits long.
+    static const vm::vm_byte_t  MAGIC_NUMBER[4]; /// The magic number that must be present in every module.
+    static const core::String   ENTRY_POINT_PROCEDURE_NAME;
+    static const vm::vm_size_t  SIZEOF_PROGRAM_HEADER = 128;  /// The program header is 128 bits long.
 
     static bool             checkMagicNumber(const io::InputStream& stream);
     static core::String     decodeVersionFromTriplet(const version_triplet& triplet);
@@ -93,6 +95,7 @@ public:
 
     void                    addSymbol(Symbol& symbol, Section& section);
     void                    addSection(Section* section);
+    vm::vm_qword_t          calculateOffsetToSection(const core::String& name);
     size_t                  calculateSectionsSize() const;
     vm::vm_word_t           countSections() const;
     const version_triplet&  getBinaryFormatVersion() const;
@@ -100,8 +103,10 @@ public:
     vm::vm_qword_t          getEntryPointAddress() const;
     Section*                getSection(const core::String& name) const;
     vm::vm_qword_t          getSectionHeaderOffset() const;
+    vm::vm_qword_t          getSectionOffset(const Section* section);
     bool                    hasEntryPoint() const;
     bool                    hasProgramHeader() const;
+    void                    linkLocalSymbols();
     void                    setCompilerName(const core::String& name);
     void                    setBinaryFormatVersion(const core::String& version);
 
