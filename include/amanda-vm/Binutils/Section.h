@@ -41,6 +41,7 @@ namespace binutils
 #define STRINGS_SECTION_NAME            ".strings"
 #define SECTION_HEADERS_STRINGS_NAME    ".sh-strings"
 #define SYMBOL_TABLE_SECTION_NAME       ".symbols"
+#define RODATA_SECTION_NAME             ".rodata"
 
 /**
  * A section is a segment of binary data that is loaded at runtime by the

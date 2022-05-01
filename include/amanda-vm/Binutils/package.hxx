@@ -29,6 +29,7 @@
 #include "AssemblerDriver.h"
 #include "AssemblerLexer.h"
 #include "AssemblerParser.h"
+#include "DataObject.h"
 #include "Function.h"
 #include "Input.h"
 #include "Instruction.h"

@@ -25,6 +25,54 @@ bool ProcedureNameDescriptor::isArrayType(const core::String& typeName)
     return typeName.startsWith("A_");
 }
 
+core::String ProcedureNameDescriptor::makeHumanReadableType(const core::String& encoded)
+{
+    core::String result;
+    if (isArrayType(encoded))
+    {
+        core::String suffix = "[]";
+        result = makeHumanReadableType(encoded.substring(2)) + suffix;
+    }
+    else
+    {
+        if (encoded.equals("b8"))
+        {
+            result = "int8";
+        }
+        else if (encoded.equals("w16"))
+        {
+            result = "int16";
+        }
+        else if (encoded.equals("l32"))
+        {
+            result = "int32";
+        }
+        else if (encoded.equals("q64"))
+        {
+            result = "int64";
+        }
+        else if (encoded.equals("f32"))
+        {
+            result = "float32";
+        }
+        else if (encoded.equals("d64"))
+        {
+            result = "float64";
+        }
+        else if (encoded.equals("void"))
+        {
+            result = "None";
+        }
+        else
+        {
+            result = encoded;
+        }
+    }
+
+    // Return the string
+    return result;
+}
+
 ProcedureNameDescriptor ProcedureNameDescriptor::parse(const core::String& string)
 {
     ProcedureNameDescriptor descriptor;
@@ -43,7 +91,7 @@ ProcedureNameDescriptor ProcedureNameDescriptor::parse(const core::String& strin
     for (std::vector<core::String>::const_iterator it = split.begin(), end = split.end();
          it != end; ++it)
     {
-        descriptor.arguments.push_back(*it);
+        descriptor.arguments.push_back(makeHumanReadableType(*it));
     }
     
     // Get the return type.
@@ -56,6 +104,12 @@ ProcedureNameDescriptor ProcedureNameDescriptor::parse(const core::String& strin
 
 ProcedureNameDescriptor::ProcedureNameDescriptor()
 {
+    arguments.reserve(1);
+}
+
+const std::vector<core::String>& ProcedureNameDescriptor::getArguments() const
+{
+    return arguments;
 }
 
 const core::String& ProcedureNameDescriptor::getIdentifier() const

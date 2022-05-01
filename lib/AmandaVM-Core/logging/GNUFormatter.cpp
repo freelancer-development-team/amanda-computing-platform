@@ -50,7 +50,7 @@ core::String GNUFormatter::levelToString(int level) const
 
     if (useAnsiEscapes)
     {
-        if (level > Logger::INFO)
+        if (level >= Logger::INFO)
         {
             result = "\033[37;1m";
         }

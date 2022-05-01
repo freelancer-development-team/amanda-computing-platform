@@ -110,7 +110,8 @@ name(name)
     addSection(Section::makeStringTableSection());
     addSection(Section::makeSymbolTableSection());
     addSection(Section::makeCodeSection());
-    // addSection(Section::makeDataSection());
+    addSection(Section::makeDataSection());
+    addSection(Section::makeReadOnlyDataSection());
 }
 
 Module::~Module()
@@ -301,6 +302,9 @@ void Module::linkLocalSymbols()
         const Section* entrySection = entry->getSection();
 
         entryPointAddress = getSectionOffset(entrySection) + entrySection->getOffsetToSymbol(entry);
+
+        // Resolve the entry point
+        eliminateConstness(entry)->setResolved(true);
     }
 
 
@@ -350,6 +354,7 @@ void Module::linkLocalSymbols()
 
                                     // Resolve the jump to the local symbol
                                     operand->resolve(offset, VM_QWORD_SIZE);
+                                    symbol->setResolved(true);
                                 }
                             }
                             else

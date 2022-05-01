@@ -130,6 +130,20 @@ void yyerror(YYLTYPE* location, void* scanner, void** module, void* state, char 
     DEF         "subroutine definition keyword"
     ENDEF       "end of subroutine"
     SECTION     "section directive"
+    GLOBAL      "global symbol declaration"
+    LOCAL       "local symbol declaration"
+    WEAK        "weak symbol declaration"
+    ;
+
+%token
+    ADDRESS     "address pseudo-operator"
+    BYTE        "byte pseudo-operator"
+    WORD        "word pseudo-operator"
+    LONG        "long pseudo-operator"
+    QUAD        "quad pseudo-operator"
+    FLOAT       "float pseudo-operator"
+    DOUBLE      "double pseudo-operator"
+    UNICODE     "unicode pseudo-operator"
     ;
 
 // Instructions
@@ -202,6 +216,8 @@ declarations
 declaration
     : section_declaration
     | function_declaration
+    | symbol_declaration                        { MODULE(*module)->addSymbol(*(STATE(state)->currentObject), *(STATE(state)->currentSection)); }
+    | constant_declaration
     ;
 
 // Declarations
@@ -251,6 +267,13 @@ function_declaration
                                                     // Reset the offset
                                                     STATE(state)->localOffset = 0;
                                                 }
+
+symbol_declaration
+    : GLOBAL IDENTIFIER ':' { STATE(state)->currentObject = new DataObject(*$2, Symbol::Bind_Global); delete $2; }
+    | WEAK IDENTIFIER ':'   { STATE(state)->currentObject = new DataObject(*$2, Symbol::Bind_Weak); delete $2; }
+    | LOCAL IDENTIFIER ':'  { STATE(state)->currentObject = new DataObject(*$2, Symbol::Bind_Local); delete $2; }
+    ;
+
     ;
 
 // Secondary declarations
@@ -265,6 +288,11 @@ attributes_declaration
                                                     // Clean up
                                                     delete $2;
                                                 }
+    ;
+
+constant_operand
+    : ADDRESS INTEGER_LITERAL               { }
+    | UNICODE STRING_LITERAL                { }
     ;
 
 // Instructions

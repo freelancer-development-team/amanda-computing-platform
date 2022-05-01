@@ -51,15 +51,18 @@ public:
     /**
      * Represents an entry in the symbol table.
      */
-    typedef struct SymbolTableEntry
+    struct SymbolTableEntry
     {
-        vm::vm_dword_t      name;       /// Index of the same in the string table
+        vm::vm_dword_t      name;       /// Index of the name in the string table
         vm::vm_address_t    value;      /// Implementation dependent
         vm::vm_size_t       size;       /// Size
         vm::vm_byte_t       type;       /// Implementation defined
         vm::vm_byte_t       bind;       /// Bind class
-        vm::vm_word_t       shndx;      /// Section index associated with the symbol
-    } SymbolTableEntry;
+        vm::vm_dword_t      flags;      /// Flags
+        vm::vm_dword_t      shndx;      /// Section index associated with the symbol
+        vm::vm_dword_t      padding;    /// Reserved for alignment
+    } __attribute__((packed));
+    typedef struct SymbolTableEntry SymbolTableEntry;
 
     /*
      * Symbol bind classes.
@@ -67,9 +70,9 @@ public:
     enum
     {
         Bind_Local = 0,     /// Local symbol only defined within the module
-        Bind_Global,        /// Global symbol
-        Bind_Weak,          /// Lesses precedence global symbol
-        Bind_Extern,
+        Bind_Global = 1,    /// Global symbol
+        Bind_Weak = 2,      /// Lesses precedence global symbol
+        Bind_Extern = 3,
         Bind_LoProc = 13,   /// Reserved
         Bind_HiProc = 15    /// Reserved
     };
@@ -79,14 +82,20 @@ public:
      */
     enum
     {
-        Type_None = 0,
-        Type_Object,
-        Type_Function,
-        Type_Section,
-        Type_LoProc = 13,
-        Type_HiProc = 15,
+        Type_None = 0,      /// No symbol type
+        Type_Object = 1,    /// Object (raw data)
+        Type_Function = 2,  /// Function (procedure)
+        Type_Section = 3,   /// Section (sections are symbols... so it seems)
+        Type_LoProc = 13,   /// Reserved
+        Type_HiProc = 15,   /// Reserved
     };
 
+    /*
+     * Symbol flags
+     */
+    static const vm::vm_dword_t Flag_Resolved =     0x1;
+    static const vm::vm_dword_t Flag_Unresolved =   ~(Flag_Resolved);
+    
     static const SymbolTableEntry& getNullSymbolTableEntry();
 
     Symbol(const core::String& name);
@@ -98,8 +107,10 @@ public:
     const Section*          getSection() const;
     virtual size_t          getSize() const;
     bool                    isExternalSymbol() const;
+    bool                    isResolved() const;
     Symbol&                 setBindClass(vm::vm_byte_t bind);
     Symbol&                 setModule(Module* module);
+    Symbol&                 setResolved(bool resolved);
     Symbol&                 setSection(Section* section);
     Symbol&                 setStringTableEntry(vm::vm_dword_t entry);
     Symbol&                 setSize(size_t size);

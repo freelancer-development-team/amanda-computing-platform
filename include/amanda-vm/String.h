@@ -380,7 +380,7 @@ public:
     bool endsWith(const String& str, bool caseSensitive = true) const;
 
     /// Returns true if both strings are equals
-    bool equals(const String& rhs) { return (compare(rhs, true) == 0); }
+    bool equals(const String& rhs) const { return (compare(rhs, true) == 0); }
 
     /// Return the C string.
     const char* toCharArray() const { return buffer; }

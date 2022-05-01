@@ -37,12 +37,15 @@ const Symbol::SymbolTableEntry& Symbol::getNullSymbolTableEntry()
 
     if (!initialized)
     {
+        memset(&entry, 0, sizeof(entry));
+
         entry.name = 0;
         entry.value = 0;
         entry.size = 0;
         entry.type = Type_None;
         entry.bind = Bind_Local;
         entry.shndx = 0;
+        entry.flags &= Flag_Unresolved;
 
         // Set the initialized flag to true.
         initialized = true;
@@ -93,6 +96,11 @@ bool Symbol::isExternalSymbol() const
     return entry.bind == Bind_Extern;
 }
 
+bool Symbol::isResolved() const
+{
+    return entry.flags & Flag_Resolved;
+}
+
 Symbol& Symbol::setBindClass(vm::vm_byte_t bind)
 {
     this->entry.bind = bind;
@@ -104,6 +112,19 @@ Symbol& Symbol::setModule(Module* module)
     // Set the module
     this->module = module;
     
+    return *this;
+}
+
+Symbol& Symbol::setResolved(bool resolved)
+{
+    if (resolved)
+    {
+        entry.flags |= Flag_Resolved;
+    }
+    else
+    {
+        entry.flags &= Flag_Unresolved;
+    }
     return *this;
 }
 

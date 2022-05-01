@@ -66,7 +66,7 @@ Section* Section::makeDebugSection()
 
 Section* Section::makeReadOnlyDataSection()
 {
-    Section* section = new Section(".debug-symbols");
+    Section* section = new Section(RODATA_SECTION_NAME);
     section->header->flags = Attr_Alloc | Attr_Read;
 
     return section;

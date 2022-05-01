@@ -23,6 +23,7 @@
  */
 
 #include <amanda-vm/Binutils/SymbolTable.h>
+#include <amanda-vm/Binutils/Logging.h>
 
 using namespace amanda;
 using namespace amanda::binutils;
@@ -32,7 +33,7 @@ SymbolTable::SymbolTable(const core::String& name)
 Section(name)
 {
     setAttributes(Attr_Read);
-    setType(Type_StringTable);
+    setType(Type_SymbolTable);
 }
 
 SymbolTable::~SymbolTable()
@@ -69,8 +70,11 @@ void SymbolTable::constructBinaryData()
         const Symbol* symbol = it->second;
         assert(symbol != NULL && "Null pointer exception.");
 
-        const Symbol::SymbolTableEntry& entry = (const Symbol::SymbolTableEntry&) symbol->getEntry();
+        const Symbol::SymbolTableEntry entry = symbol->getEntry();
+
+        Serializable::write("!!", 1, 2);
         Serializable::write(&entry, sizeof(entry), 1);
+        Serializable::write("!!", 1, 2);
     }
 }
 

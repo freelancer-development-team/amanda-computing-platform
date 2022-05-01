@@ -48,10 +48,12 @@ class ProcedureNameDescriptor : public core::Object
 public:
 
     static bool                     isArrayType(const core::String& typeName);
+    static core::String             makeHumanReadableType(const core::String& encoded);
     static ProcedureNameDescriptor  parse(const core::String& string);
 
-    const core::String& getIdentifier() const;
-    const core::String& getReturnType() const;
+    const std::vector<core::String>&    getArguments() const;
+    const core::String&                 getIdentifier() const;
+    const core::String&                 getReturnType() const;
 
 protected:
 
