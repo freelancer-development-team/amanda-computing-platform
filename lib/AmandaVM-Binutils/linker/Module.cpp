@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -173,6 +173,9 @@ void Module::addSection(Section* section)
         // Grab a reference to the section object & add it to the vector.
         section->grab();
         sections.push_back(section);
+
+        // Set ownership to this object
+        section->setOwningModule(this);
     }
     else
     {
@@ -220,6 +223,11 @@ vm::vm_word_t Module::countSections() const
     return sectionHeaderEntries;
 }
 
+Symbol* Module::findSymbol(const core::String& name) const
+{
+    return getSection(SYMBOL_TABLE_SECTION_NAME)->cast<SymbolTable>().getSymbol(name);
+}
+
 const Module::version_triplet& Module::getBinaryFormatVersion() const
 {
     return version;
@@ -257,7 +265,7 @@ vm::vm_qword_t Module::getSectionHeaderOffset() const
     return sectionHeaderOffset;
 }
 
-vm::vm_qword_t Module::getSectionOffset(const Section* section)
+vm::vm_qword_t Module::getSectionOffset(const Section* section) const
 {
     vm::vm_qword_t offset = 0;
 
@@ -278,6 +286,16 @@ vm::vm_qword_t Module::getSectionOffset(const Section* section)
     return offset;
 }
 
+vm::vm_qword_t Module::getSymbolIndex(const Symbol* symbol) const
+{
+    return this->getSymbolIndex(symbol->getName());
+}
+
+vm::vm_qword_t Module::getSymbolIndex(const core::String& name) const
+{
+    return getSection(SYMBOL_TABLE_SECTION_NAME)->cast<SymbolTable>().getIndexToSymbol(name);
+}
+
 bool Module::hasEntryPoint() const
 {
     return entryPointAddress != 0;
@@ -292,7 +310,7 @@ void Module::linkLocalSymbols()
 {
     // Get some relevant information sections
     SymbolTable* symbolTable = (SymbolTable*) getSection(SYMBOL_TABLE_SECTION_NAME);
-    
+
     // Write correct information for the program header.
 
     // Set the main symbol address
@@ -306,7 +324,6 @@ void Module::linkLocalSymbols()
         // Resolve the entry point
         eliminateConstness(entry)->setResolved(true);
     }
-
 
     // For each section, check & resolve as appropriate
     for (std::vector<Section*>::const_iterator it = sections.begin(),
@@ -338,7 +355,9 @@ void Module::linkLocalSymbols()
                     Instruction* insn = (*it);
                     assert(insn != NULL && "Null pointer exception.");
 
-                    if (insn->equals(AMANDA_VM_INSN_SINGLE(INVOKE)))
+                    if (insn->equals(AMANDA_VM_INSN_SINGLE(INVOKE))
+                        || insn->equals(AMANDA_VM_ENCODE_INSN(PUSH, A))
+                        || insn->equals(AMANDA_VM_INSN_SINGLE(CCALL)))
                     {
                         if (insn->getOperand()->isSymbol() && !insn->getOperand()->isResolved())
                         {
@@ -350,10 +369,8 @@ void Module::linkLocalSymbols()
                                 Operand* operand = eliminateConstness(insn->getOperand());
                                 if (symbol->isExternalSymbol() == false)
                                 {
-                                    vm::vm_qword_t offset = getSectionOffset(section) + section->getOffsetToSymbol(symbol);
-
                                     // Resolve the jump to the local symbol
-                                    operand->resolve(offset, VM_QWORD_SIZE);
+                                    operand->resolve(getSymbolIndex(symbol), VM_QWORD_SIZE);
                                     symbol->setResolved(true);
                                 }
                             }
@@ -367,6 +384,18 @@ void Module::linkLocalSymbols()
             }
         }
     }
+}
+
+void Module::mergeExternalModule(Module& external)
+{
+    for (std::vector<Section*>::const_iterator it = external.sections.begin(),
+         end = external.sections.end(); it != end; ++it)
+    {
+        (*it)->grab();
+        addSection((*it));
+    }
+
+    // Recalculate header parameters
 }
 
 void Module::marshallImpl(io::OutputStream& stream) const

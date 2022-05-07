@@ -15,11 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+  
 .section ".code"
+
+# Reference the native method puts
+.native puts
 
 # This is the main function for this test program.
 .def @@main?A_string@!l32
+	push	a64 amanda::binutils::test::Fred::classname
+	ccall	puts
 	push	l32	$0xaabbccdd
 	ret		l32
 .endef
@@ -35,8 +40,16 @@
 # amongst compilers & implementations.
 #
 .global amanda::binutils::test::Fred:
-.weak amanda::binutils::test::Fred::this:		.address	$0								# This pointer
+# HEADER
+.long $0x0B1EC7
+.weak amanda::binutils::test::Fred::self:		.address	$0								# This pointer
+.weak amanda::binutils::test::Fred::refcount:	.quad		$0								# Reference count
+.weak amanda::binutils::test::Fred::size:		.quad		$0x8							# Object size
 .weak amanda::binutils::test::Fred::classname:	.unicode	"amanda::binutils::test::Fred"	# Class name
+# VTABLE
+
+# VPOINTER
+
 # PUBLIC DATA:
 .weak amanda::binutils::test::Fred::name:		.address	$0								# Pointer to Fred's name
 

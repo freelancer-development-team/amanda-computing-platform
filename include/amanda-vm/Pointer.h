@@ -157,6 +157,45 @@ protected:
     }
 } ;
 
+template <class T>
+class WeakReference : public AutomaticReferenceBase<T>
+{
+    AMANDA_OBJECT(WeakReference, AutomaticReferenceBase<T>);
+
+public:
+
+    WeakReference() : AutomaticReferenceBase<T>() { }
+
+    WeakReference(T* pointer) : AutomaticReferenceBase<T>(pointer)
+    {
+        increaseReference();
+    }
+
+    WeakReference(const WeakReference<T>& rhs) : AutomaticReferenceBase<T>(rhs)
+    {
+        // Increase the reference of the object.
+        rhs.increaseReference();
+        increaseReference();
+    }
+
+    virtual ~WeakReference()
+    {
+        decreaseReference();
+    }
+
+protected:
+
+    virtual void increaseReference() const
+    {
+        if (this->pointer != NULL) this->pointer->grabWeakReference();
+    }
+
+    virtual void decreaseReference() const
+    {
+        if (this->pointer != NULL) this->pointer->releaseWeakReference();
+    }
+};
+
 }
 }
 

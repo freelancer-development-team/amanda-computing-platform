@@ -112,8 +112,9 @@ Long        l32
 Quad        q64
 Float       f32
 Double      d64
+Pointer     a64
 
-InstructionSuffix   ({Byte}|{Word}|{Long}|{Quad}|{Float}|{Double})
+InstructionSuffix   ({Byte}|{Word}|{Long}|{Quad}|{Float}|{Double}|{Pointer})
 
 DecimalInteger  "-"?({Digit})+
 HexadecimalInt  ({HexDigit})+
@@ -189,6 +190,8 @@ Address         {IntegerLiteral}
 ".global"                   { return T_GLOBAL; }
 ".local"                    { return T_LOCAL; }
 ".weak"                     { return T_WEAK; }
+".native"                   { return T_NATIVE; }
+".extern"                   { return T_EXTERN; }
 
 ".address"                  { return T_ADDRESS; }
 ".byte"                     { return T_BYTE; }
@@ -225,6 +228,10 @@ Address         {IntegerLiteral}
 "mod"                       { return T_MOD; }
 
 "invoke"                    { return T_INVOKE; }
+"ccall"                     { return T_CCALL; }
+
+"alloc"                     { return T_ALLOC; }
+"delloc"                    { return T_DELLOC; }
 
 "ceq"                       { return T_CEQ; }
 "cne"                       { return T_CNE; }

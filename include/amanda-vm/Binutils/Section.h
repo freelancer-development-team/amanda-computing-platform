@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,12 +29,15 @@
 #include <amanda-vm/Binutils/Serializable.h>
 #include <amanda-vm/Binutils/Symbol.h>
 
+// C++
 #include <vector>
 
 namespace amanda
 {
 namespace binutils
 {
+
+class Module;
 
 #define CODE_SECTION_NAME               ".code"
 #define DATA_SECTION_NAME               ".data"
@@ -111,12 +114,14 @@ public:
     const core::String&         getName() const;
     SectionHeader               getNullSectionHeader() const;
     size_t                      getOffsetToSymbol(const Symbol* symbol) const;
+    const Module*               getOwningModule() const;
     const SectionHeader*        getSectionHeader() const;
     size_t                      getSize() const;
     const std::vector<Symbol*>& getSymbols() const;
     virtual void                merge(const Section* section);
     void                        setAttributes(unsigned attributes);
     void                        setNameIndex(const vm::vm_qword_t index);
+    void                        setOwningModule(Module* module);
     void                        setType(unsigned type);
 
     bool operator== (const Section* section) const;
@@ -142,6 +147,7 @@ private:
 
     SectionHeader*              header;
     core::String                name;
+    Module*                     owner;
     std::vector<Symbol*>        symbols;
 
     virtual void    marshallImpl(io::OutputStream& stream) const;

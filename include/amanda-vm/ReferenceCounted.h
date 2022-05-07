@@ -37,10 +37,12 @@ public:
     ReferenceCounted();
     virtual ~ReferenceCounted();
 
-    void grab() const;
-    void grabWeakReference() const;
-    void release() const;
-    void releaseWeakReference() const;
+    long long   getReferenceCount() const;
+    long long   getWeakReferenceCount() const;
+    void        grab() const;
+    void        grabWeakReference() const;
+    void        release() const;
+    void        releaseWeakReference() const;
     
 private:
 

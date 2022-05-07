@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,10 +72,32 @@ void SymbolTable::constructBinaryData()
 
         const Symbol::SymbolTableEntry entry = symbol->getEntry();
 
-        Serializable::write("!!", 1, 2);
+        // Serializable::write("!!", 1, 2);
         Serializable::write(&entry, sizeof(entry), 1);
-        Serializable::write("!!", 1, 2);
+        // Serializable::write("!!", 1, 2);
     }
+}
+
+unsigned SymbolTable::getIndexToSymbol(const core::String& name) const
+{
+    unsigned result = 0;
+    if (hasSymbol(name))
+    {
+        bool found = false;
+        for (SymbolMap::const_iterator it = symbols.begin(), end = symbols.end();
+             it != end && !found; ++it)
+        {
+            if (it->first == name)
+            {
+                found = true;
+            }
+            else
+            {
+                result++;
+            }
+        }
+    }
+    return result;
 }
 
 Symbol* SymbolTable::getSymbol(const core::String& name) const
@@ -90,4 +112,9 @@ Symbol* SymbolTable::getSymbol(const core::String& name) const
         result = eliminateConstness(symbols.find(name)->second);
     }
     return result;
+}
+
+bool SymbolTable::hasSymbol(const core::String& name) const
+{
+    return symbols.find(name) != symbols.end();
 }

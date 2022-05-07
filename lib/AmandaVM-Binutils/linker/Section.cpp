@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -106,6 +106,10 @@ Section::~Section()
         symbols.at(i)->release();
     }
     delete header;
+
+    // Release the weak reference to the module
+    if (owner)
+        owner->release();
 }
 
 void Section::addSymbol(const Symbol* symbol)
@@ -232,6 +236,11 @@ size_t Section::getOffsetToSymbol(const Symbol* symbol) const
     return offset;
 }
 
+const Module* Section::getOwningModule() const
+{
+    return owner;
+}
+
 const Section::SectionHeader* Section::getSectionHeader() const
 {
     return header;
@@ -259,7 +268,22 @@ void Section::merge(const Section* section)
                 end = section->symbols.end(); it != end; ++it)
         {
             const Symbol* symbol = (*it);
-            addSymbol(symbol);
+
+            // If we are owned by a module
+            // Add the symbol to the module.
+            if (owner != NULL)
+            {
+                // Add the symbol to the module
+                // This include updating the module's symbol table, string table
+                // and section.
+                owner->addSymbol(*(eliminateConstness(symbol)), *this);
+            }
+            else
+            {
+                // If we are not being owned by a module
+                // add the symbol to the normal list of symbols.
+                addSymbol(symbol);
+            }
         }
 
         // Release a reference to the object (possibly deleting it)
@@ -284,6 +308,15 @@ void Section::setAttributes(unsigned attributes)
 void Section::setNameIndex(const vm::vm_qword_t index)
 {
     header->name = (vm::vm_dword_t) index;
+}
+
+void Section::setOwningModule(Module* module)
+{
+    // Grab a reference to the module.
+    module->grab();
+
+    // Assign to the module
+    this->owner = module;
 }
 
 void Section::setSize(size_t size)

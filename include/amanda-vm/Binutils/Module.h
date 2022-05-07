@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ namespace binutils
 {
 
 // Forward declarations
+class LinkerDriver;
 class ModuleReader;
 class Symbol;
 
@@ -69,6 +70,7 @@ public:
 
     // Friends
     friend class ModuleReader;
+    friend class LinkerDriver;
 
     /**
      * Represents a version number stored as a single 64-bit quad word. This
@@ -98,15 +100,19 @@ public:
     vm::vm_qword_t          calculateOffsetToSection(const core::String& name);
     size_t                  calculateSectionsSize() const;
     vm::vm_word_t           countSections() const;
+    Symbol*                 findSymbol(const core::String& name) const;
     const version_triplet&  getBinaryFormatVersion() const;
     const core::String&     getCompilerName() const;
     vm::vm_qword_t          getEntryPointAddress() const;
     Section*                getSection(const core::String& name) const;
     vm::vm_qword_t          getSectionHeaderOffset() const;
-    vm::vm_qword_t          getSectionOffset(const Section* section);
+    vm::vm_qword_t          getSectionOffset(const Section* section) const;
+    vm::vm_qword_t          getSymbolIndex(const Symbol* symbol) const;
+    vm::vm_qword_t          getSymbolIndex(const core::String& name) const;
     bool                    hasEntryPoint() const;
     bool                    hasProgramHeader() const;
     void                    linkLocalSymbols();
+    void                    mergeExternalModule(Module& external);
     void                    setCompilerName(const core::String& name);
     void                    setBinaryFormatVersion(const core::String& version);
 

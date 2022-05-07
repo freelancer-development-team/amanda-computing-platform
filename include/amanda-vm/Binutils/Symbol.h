@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,6 +73,7 @@ public:
         Bind_Global = 1,    /// Global symbol
         Bind_Weak = 2,      /// Lesses precedence global symbol
         Bind_Extern = 3,
+        Bind_Native = 4,
         Bind_LoProc = 13,   /// Reserved
         Bind_HiProc = 15    /// Reserved
     };
@@ -107,6 +108,7 @@ public:
     const Section*          getSection() const;
     virtual size_t          getSize() const;
     bool                    isExternalSymbol() const;
+    bool                    isNativeProcedure() const;
     bool                    isResolved() const;
     Symbol&                 setBindClass(vm::vm_byte_t bind);
     Symbol&                 setModule(Module* module);

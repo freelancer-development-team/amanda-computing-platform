@@ -68,6 +68,11 @@ void yyerror(YYLTYPE* location, void* scanner, void** module, void* state, char 
                     return new Instruction(opcode + Instruction::getInstructionNumericSuffix(suffix), Instruction::getOperandSizeForSuffix(suffix));
                 }
 
+                inline Instruction* createUnaryNoSuffixInstruction(const unsigned opcode, const unsigned size)
+                {
+                    return new Instruction(opcode, size);
+                }
+
                 inline Instruction* createBranchInstruction(const unsigned opcode)
                 {
                     return new Instruction(opcode, VM_QWORD_SIZE);
@@ -120,6 +125,7 @@ void yyerror(YYLTYPE* location, void* scanner, void** module, void* state, char 
     amanda::binutils::Operand*                      operand;
 }
 
+%destructor { $$->release(); } <insn>
 %destructor { $$->release(); } <operand>
 %destructor { $$->release(); } <string>
 %destructor { delete ($$);   } <instruction_list>
@@ -133,6 +139,8 @@ void yyerror(YYLTYPE* location, void* scanner, void** module, void* state, char 
     GLOBAL      "global symbol declaration"
     LOCAL       "local symbol declaration"
     WEAK        "weak symbol declaration"
+    NATIVE      "native symbol declaration"
+    EXTERN      "extern symbol declaration"
     ;
 
 %token
@@ -149,6 +157,9 @@ void yyerror(YYLTYPE* location, void* scanner, void** module, void* state, char 
 // Instructions
 %token
     ADD         "add instruction"
+    ALLOC       "allocation instruction"
+    CCALL       "native call instruction"
+    DELLOC      "deallocation instruction"
     DIV         "div instruction"
     INVOKE      "call instruction"
     JF          "jump-if-false instruction"
@@ -217,6 +228,7 @@ declaration
     : section_declaration
     | function_declaration
     | symbol_declaration                        { MODULE(*module)->addSymbol(*(STATE(state)->currentObject), *(STATE(state)->currentSection)); }
+    | native_symbol_declaration
     | constant_declaration
     ;
 
@@ -272,8 +284,17 @@ symbol_declaration
     : GLOBAL IDENTIFIER ':' { STATE(state)->currentObject = new DataObject(*$2, Symbol::Bind_Global); delete $2; }
     | WEAK IDENTIFIER ':'   { STATE(state)->currentObject = new DataObject(*$2, Symbol::Bind_Weak); delete $2; }
     | LOCAL IDENTIFIER ':'  { STATE(state)->currentObject = new DataObject(*$2, Symbol::Bind_Local); delete $2; }
+    | EXTERN IDENTIFIER     {
+                                DataObject* externSymbol = new DataObject(*$2, Symbol::Bind_Extern); delete $2;
+                                MODULE(*module)->addSymbol(*externSymbol, *(STATE(state)->currentSection));
+                            }
     ;
 
+native_symbol_declaration
+    : NATIVE IDENTIFIER     {
+                                DataObject* nativeSymbol = new DataObject(*$2, Symbol::Bind_Native); delete $2;
+                                MODULE(*module)->addSymbol(*nativeSymbol, *(STATE(state)->currentSection));
+                            }
     ;
 
 // Secondary declarations
@@ -290,9 +311,11 @@ attributes_declaration
                                                 }
     ;
 
-constant_operand
-    : ADDRESS INTEGER_LITERAL               { }
-    | UNICODE STRING_LITERAL                { }
+constant_declaration
+    : ADDRESS INTEGER_LITERAL               { STATE(state)->currentObject->addData(&($2), VM_ADDRESS_SIZE);  }
+    | UNICODE STRING_LITERAL                { STATE(state)->currentObject->addUtf8Data($2->toCharArray(), $2->length()); }
+    | LONG INTEGER_LITERAL                  { STATE(state)->currentObject->addData(&($2), VM_DWORD_SIZE); }
+    | QUAD INTEGER_LITERAL                  { STATE(state)->currentObject->addData(&($2), VM_QWORD_SIZE); }
     ;
 
 // Instructions
@@ -326,7 +349,8 @@ zeroed_instruction
     ;
 
 unary_instruction
-    : JUMP address_constant                 { $$ = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(JMP)); $$->setOperand($2); }
+    : CCALL IDENTIFIER                      { $$ = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(CCALL)); Operand* operand = new Operand(*$2); $$->setOperand(operand); delete $2; }
+    | JUMP address_constant                 { $$ = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(JMP)); $$->setOperand($2); }
     | JUMP IDENTIFIER                       {
                                                 $$ = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(JMP));
 
@@ -344,6 +368,15 @@ unary_instruction
     | INVOKE IDENTIFIER                     { $$ = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(INVOKE)); Operand* operand = new Operand(*$2); $$->setOperand(operand); delete $2;}
     // Stack
     | PUSH INSTRUCTION_SUFFIX argument      { $$ = as::createUnaryInstruction(AMANDA_VM_INSN_FAMILY(PUSH), $2); $$->setOperand($3); }
+    // Memory management
+    | ALLOC INTEGER_LITERAL                 {
+                                                $$ = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(ALLOC), VM_QWORD_SIZE);
+                                                Operand* operand = new Operand($2); $$->setOperand(operand);
+                                            }
+    | DELLOC INTEGER_LITERAL                {
+                                                $$ = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(DELLOC), VM_QWORD_SIZE);
+                                                Operand* operand = new Operand($2); $$->setOperand(operand);
+                                            }
     ;
 
 label_declaration

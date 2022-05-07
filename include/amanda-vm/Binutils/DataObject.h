@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,8 @@
 #define DATAOBJECT_H
 
 #include <amanda-vm/Binutils/Symbol.h>
+#include <amanda-vm/Binutils/vm-types.h>
+#include <amanda-vm/ADT/BinaryBuffer.h>
 
 namespace amanda
 {
@@ -45,11 +47,30 @@ class DataObject : public Symbol
     AMANDA_OBJECT(DataObject, Symbol)
 public:
 
-    DataObject(const core::String& name, unsigned visibility = Bind_Global);
+    DataObject(const core::String& name, vm::vm_byte_t visibility = Bind_Global);
     ~DataObject();
-    
+
+    virtual void addData(const void* data, size_t size);
+    virtual void addUtf8Data(const char* data, size_t size);
+    virtual void constructBinaryData();
+
 protected:
 
+    /**
+     * A data type encapsulating binary data + size.
+     */
+    typedef struct TaggedData
+    {
+        char*   buffer;
+        size_t  size;
+        bool    utf8;
+        
+    } TaggedData;
+
+    std::vector<TaggedData*> data;
+
+    /// Create a new <code>TaggedData</code> struct with the specified size.
+    TaggedData* makeTag(size_t size) const;
 } ;
 
 }

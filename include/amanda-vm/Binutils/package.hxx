@@ -36,6 +36,7 @@
 #include "InvalidFileFormatException.h"
 #include "Label.h"
 #include "LinkException.h"
+#include "LinkerDriver.h"
 #include "Locations.h"
 #include "Logging.h"
 #include "Mangling.h"

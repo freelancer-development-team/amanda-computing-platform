@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -142,6 +142,7 @@ typedef enum VM_Opcodes
     I_PUSHQ,
     I_PUSHF,
     I_PUSHD,
+    I_PUSHA,
 
     I_POPB,
     I_POPW,
@@ -149,6 +150,8 @@ typedef enum VM_Opcodes
     I_POPQ,
     I_POPF,
     I_POPD,
+    I_POPA,
+            
     // Comparison
     I_CEQB,
     I_CEQW,
@@ -171,7 +174,7 @@ typedef enum VM_Opcodes
 
     // Flow control
     I_INVOKE,
-    I_INVOKENATIVE,
+    I_CCALL,
     I_JMP,
     I_JT,
     I_JF,
@@ -182,6 +185,12 @@ typedef enum VM_Opcodes
     I_RETQ,
     I_RETF,
     I_RETD,
+
+    // Memory access
+    I_ALLOC,
+    I_DELLOC,
+    I_STORE,
+    I_LOAD,
 
     // Reserved
     I_INVALID = 0xFF

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,6 +55,9 @@ unsigned Instruction::getInstructionNumericSuffix(char suffix)
         case 'D':
             return 5u;
             break;
+        case 'A':
+            return 6u;
+            break;
         default:
             return 0u;
             break;
@@ -83,6 +86,9 @@ unsigned Instruction::getOperandSizeForSuffix(char suffix)
             break;
         case 'D':
             return VM_FLOAT64_SIZE;
+            break;
+        case 'A':
+            return VM_ADDRESS_SIZE;
             break;
         default:
             return ZERO_OPERAND_SIZE;
