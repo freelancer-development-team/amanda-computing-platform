@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@
 #include <amanda-vm/Binutils/Module.h>
 #include <amanda-vm/Binutils/Section.h>
 #include <amanda-vm/Binutils/Function.h>
+#include <amanda-vm/Binutils/DataObject.h>
 
 #include <vector>
 
@@ -61,6 +62,7 @@ public:
     typedef struct YYPSTATE
     {
         Function*   currentFunction;
+        DataObject* currentObject;
         Section*    currentSection;
         size_t      localOffset;
     } YYPSTATE;

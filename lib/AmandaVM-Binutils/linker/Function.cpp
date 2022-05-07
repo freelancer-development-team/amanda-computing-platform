@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 
 #include <amanda-vm/Binutils/Function.h>
 #include <amanda-vm/Binutils/Logging.h>
+#include <amanda-vm/Binutils/LinkException.h>
 
 using namespace amanda;
 using namespace amanda::binutils;
@@ -101,6 +102,17 @@ void Function::constructBinaryData()
                     eliminateConstness(operand)->resolve(label->getOffset(), VM_ADDRESS_SIZE);
                 }
             }
+            else if (insn->equals(AMANDA_VM_INSN_SINGLE(INVOKE)))
+            {
+                // If the symbol is unresolved by this time, we're doing something
+                // quite wrong pal. Symbols must be resolved when the function
+                // is exported, except for local conditional branch targets.
+                const Operand* operand = insn->getOperand();
+                if (operand->isResolved() == false)
+                {
+                    throw LinkException("unresolved symbol", *this);
+                }
+            }
         }
 
         unsigned char encoded[insn->getSize()] = {0};
@@ -124,6 +136,11 @@ void Function::emit(Instruction* insn)
     {
         addLabel((Label*) insn);
     }
+}
+
+const std::deque<Instruction*>& Function::getInstructions() const
+{
+    return instructions;
 }
 
 size_t Function::getSize() const

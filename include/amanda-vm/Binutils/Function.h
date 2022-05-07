@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,10 +52,11 @@ public:
     Function(const core::String& name);
     virtual ~Function();
 
-    void            addLabel(Label* label);
-    virtual void    constructBinaryData();
-    void            emit(Instruction* insn);
-    size_t          getSize() const;
+    void                            addLabel(Label* label);
+    virtual void                    constructBinaryData();
+    void                            emit(Instruction* insn);
+    const std::deque<Instruction*>& getInstructions() const;
+    size_t                          getSize() const;
 
 private:
 

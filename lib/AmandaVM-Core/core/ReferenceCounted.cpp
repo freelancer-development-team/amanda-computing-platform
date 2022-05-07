@@ -40,6 +40,16 @@ ReferenceCounted::~ReferenceCounted()
 {
 }
 
+long long ReferenceCounted::getReferenceCount() const
+{
+    return strongReferenceCount;
+}
+
+long long ReferenceCounted::getWeakReferenceCount() const
+{
+    return weakReferenceCount;
+}
+
 void ReferenceCounted::grab() const
 {
     ++strongReferenceCount;

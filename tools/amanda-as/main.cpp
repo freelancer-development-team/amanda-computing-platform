@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,6 +48,7 @@ int main(int argc, char** argv)
 
     // Status flag
     bool link = true;
+    bool verbose = false;
 
     if (commandLine->hasOption('h'))
     {
@@ -64,6 +65,10 @@ int main(int argc, char** argv)
         {
             link = false;
         }
+        if (commandLine->hasOption("verbose"))
+        {
+            verbose = true;
+        }
 
         // Create the assembly context
         std::list<core::String>& argumentList = commandLine->getArgumentList();
@@ -73,11 +78,6 @@ int main(int argc, char** argv)
         }
         else
         {
-            bool verbose = false;
-            if (commandLine->hasOption("verbose"))
-            {
-                verbose = true;
-            }
 
             /* Create the necessary amount of contexts.
              * This will allow, in example, to assemble a certain number of
@@ -131,49 +131,95 @@ int main(int argc, char** argv)
                 }
             }
 
-            // Supposedly, we have initialized the assembler drivers. We may
-            // proceed to perform an assembler pass.
-            unsigned i = 0;
-            for (std::vector<binutils::as::AssemblerDriver*>::const_iterator
-                 it = drivers.begin(); it != drivers.end(); ++it, ++i)
+            // Assemble all the files & link the modules where necessary.
+            std::vector<binutils::Module*> modules;
+            modules.reserve(drivers.size());
+            for (unsigned moduleIndex = 0; moduleIndex < drivers.size(); ++moduleIndex)
             {
-                try
-                {
-                    if (!link)
-                    {
-                        // Create the output files.
-                        if (!outputList[i]->open())
-                        {
-                            as::logger::fatal("unable to open '%s' for writing. %s.",
-                                              outputList[i]->getPath().toCharArray(),
-                                              outputList[i]->getLastErrorString().toCharArray());
-                            
-                        }
-                        else
-                        {
-                            io::FileOutputStream* fstream = new io::FileOutputStream(outputList[i]);
-                            io::ConsistentOutputStream* bstream = new io::ConsistentOutputStream(*fstream);
+                modules.push_back(drivers.at(moduleIndex)->performAssemblerPass());
+            }
 
-                            (*it)->addOutputHandler(bstream);
+            // Modules are assembled.
+            // Now, if the link flag is set, we merge & produce the executable
+            // or libraries defined by the output list.
+            // If the link flag is not set, we produce output files.
+            if (link == false)
+            {
+                if (verbose)
+                {
+                    as::logger::info("producing object files.");
+                }
+                if (modules.size() > outputList.size())
+                {
+                    as::logger::warning("passed %lu modules and specified %lu output files. Default naming is used.",
+                                        modules.size(), outputList.size());
+
+                    ///TODO: Add default file names & files
+                }
+
+                for (unsigned fileIndex = 0; fileIndex < modules.size(); ++fileIndex)
+                {
+                    // Create the reference to the file
+                    core::StrongReference<io::File> output = outputList.at(fileIndex);
+                    if (output->open() == false)
+                    {
+                        as::logger::error("unable to open '%s' for writing. %s.",
+                                          output->getPath().toCharArray(),
+                                          output->getLastErrorString().toCharArray());
+                    }
+                    else
+                    {
+                        // Create the output stream
+                        io::FileOutputStream* ostream = new io::FileOutputStream(output.get());
+
+                        // Serialize the output
+                        core::StrongReference<binutils::Module> module = modules.at(fileIndex);
+                        module->linkLocalSymbols();
+                        module->addSerializationHandler(new binutils::Serializer(ostream));
+                        module->marshall();
+                    }
+                }
+            }
+            else
+            {
+                if (outputList.size() > 1)
+                {
+                    as::logger::warning("More than 1 output file specified (ignoring the rest).");
+                }
+
+                core::StrongReference<io::File> output = outputList.front();
+                if (output->open() == false)
+                {
+                    as::logger::fatal("unable to open '%s' for writing. %s.",
+                                      output->getPath().toCharArray(),
+                                      output->getLastErrorString().toCharArray());
+                }
+                else
+                {
+                    // Create the file output stream.
+                    core::StrongReference<io::FileOutputStream> ostream = new io::FileOutputStream(output);
+
+                    // Create the linker driver
+                    core::StrongReference<binutils::Module> master = modules.front();
+                    core::StrongReference<binutils::LinkerDriver> linker = new binutils::LinkerDriver(master);
+                    linker->addOutputStream(ostream);
+
+                    // Add all the object files
+                    if (modules.size() > 1)
+                    {
+                        for (unsigned moduleIndex = 1; moduleIndex < modules.size(); ++moduleIndex)
+                        {
+                            linker->addObjectFile(modules.at(moduleIndex));
                         }
                     }
 
-                    core::StrongReference<binutils::Module> module = (*it)->performAssemblerPass();
-                    assert(!module.isNull() && "How come module is null?");
-
-                    // Done!
-                    if (verbose)
-                        as::logger::info("assembly completed for module '%s'.",
-                                         (*it)->getInputStreamName().toCharArray());
-                }
-                catch (core::Exception& ex)
-                {
-                    //TODO: Remove files on exception!! :0
-                    as::logger::fatal("assembly failed.");
+                    // Link & export
+                    linker->link();
+                    linker->dump();
                 }
             }
 
-            // Clean up.
+            // Clean-up
             for (std::deque<io::File*>::const_iterator it = outputList.begin(),
                  end = outputList.end(); it != end; ++it)
             {

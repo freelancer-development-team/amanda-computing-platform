@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
  */
 
 #include <amanda-vm/Binutils/SymbolTable.h>
+#include <amanda-vm/Binutils/Logging.h>
 
 using namespace amanda;
 using namespace amanda::binutils;
@@ -32,7 +33,7 @@ SymbolTable::SymbolTable(const core::String& name)
 Section(name)
 {
     setAttributes(Attr_Read);
-    setType(Type_StringTable);
+    setType(Type_SymbolTable);
 }
 
 SymbolTable::~SymbolTable()
@@ -69,7 +70,51 @@ void SymbolTable::constructBinaryData()
         const Symbol* symbol = it->second;
         assert(symbol != NULL && "Null pointer exception.");
 
-        const Symbol::SymbolTableEntry& entry = (const Symbol::SymbolTableEntry&) symbol->getEntry();
+        const Symbol::SymbolTableEntry entry = symbol->getEntry();
+
+        // Serializable::write("!!", 1, 2);
         Serializable::write(&entry, sizeof(entry), 1);
+        // Serializable::write("!!", 1, 2);
     }
+}
+
+unsigned SymbolTable::getIndexToSymbol(const core::String& name) const
+{
+    unsigned result = 0;
+    if (hasSymbol(name))
+    {
+        bool found = false;
+        for (SymbolMap::const_iterator it = symbols.begin(), end = symbols.end();
+             it != end && !found; ++it)
+        {
+            if (it->first == name)
+            {
+                found = true;
+            }
+            else
+            {
+                result++;
+            }
+        }
+    }
+    return result;
+}
+
+Symbol* SymbolTable::getSymbol(const core::String& name) const
+{
+    //TODO: Optimize this
+    // We must have in account that finding is expensive. (I mean, not that
+    // expensive, just n*log(n) but, we are duplicating the cost this way)
+    
+    Symbol* result = NULL;
+    if (symbols.find(name) != symbols.end())
+    {
+        result = eliminateConstness(symbols.find(name)->second);
+    }
+    return result;
+}
+
+bool SymbolTable::hasSymbol(const core::String& name) const
+{
+    return symbols.find(name) != symbols.end();
 }

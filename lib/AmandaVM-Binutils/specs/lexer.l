@@ -104,7 +104,7 @@ OctDigit    [0-7]
 Comment     "#"[^\n]*
 WhiteSpace  [ \t\v\f\r\n]
 
-Identifier  [.@]?({Letter}|[_@.?!~$]|{Digit})+
+Identifier  [.@]?({Letter}|[_@.?!~$]|{Digit}|("::"))+
 
 Byte        b8
 Word        w16
@@ -112,8 +112,9 @@ Long        l32
 Quad        q64
 Float       f32
 Double      d64
+Pointer     a64
 
-InstructionSuffix   ({Byte}|{Word}|{Long}|{Quad}|{Float}|{Double})
+InstructionSuffix   ({Byte}|{Word}|{Long}|{Quad}|{Float}|{Double}|{Pointer})
 
 DecimalInteger  "-"?({Digit})+
 HexadecimalInt  ({HexDigit})+
@@ -186,7 +187,20 @@ Address         {IntegerLiteral}
 ".def"                      { return T_DEF; }
 ".endef"                    { return T_ENDEF; }
 ".section"                  { return T_SECTION; }
-".dim"                      { }
+".global"                   { return T_GLOBAL; }
+".local"                    { return T_LOCAL; }
+".weak"                     { return T_WEAK; }
+".native"                   { return T_NATIVE; }
+".extern"                   { return T_EXTERN; }
+
+".address"                  { return T_ADDRESS; }
+".byte"                     { return T_BYTE; }
+".word"                     { return T_WORD; }
+".long"                     { return T_LONG; }
+".quad"                     { return T_QUAD; }
+".float"                    { return T_FLOAT; }
+".double"                   { return T_DOUBLE; }
+".unicode"                  { return T_UNICODE; }
 
  /* Instructions */
 "b2w"                       { return T_B2W; }
@@ -212,6 +226,12 @@ Address         {IntegerLiteral}
 "mul"                       { return T_MUL; }
 "div"                       { return T_DIV; }
 "mod"                       { return T_MOD; }
+
+"invoke"                    { return T_INVOKE; }
+"ccall"                     { return T_CCALL; }
+
+"alloc"                     { return T_ALLOC; }
+"delloc"                    { return T_DELLOC; }
 
 "ceq"                       { return T_CEQ; }
 "cne"                       { return T_CNE; }

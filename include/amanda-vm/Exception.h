@@ -57,10 +57,10 @@ public:
     virtual ~Exception() throw();
 
     virtual const core::String& getMessage() const;
+    virtual String              toString() const;
+    virtual const char*         what() const throw();
 
-    virtual String toString() const;
-
-private:
+protected:
 
     core::String message;
 } ;

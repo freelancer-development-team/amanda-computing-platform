@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@
 #include <amanda-vm/Binutils/Serializable.h>
 #include <amanda-vm/Binutils/Section.h>
 
+// C++
 #include <vector>
 
 namespace amanda
@@ -39,6 +40,7 @@ namespace binutils
 {
 
 // Forward declarations
+class LinkerDriver;
 class ModuleReader;
 class Symbol;
 
@@ -68,6 +70,7 @@ public:
 
     // Friends
     friend class ModuleReader;
+    friend class LinkerDriver;
 
     /**
      * Represents a version number stored as a single 64-bit quad word. This
@@ -81,8 +84,9 @@ public:
         vm::vm_word_t   _alignment;
     } version_triplet;
 
-    static const vm::vm_byte_t MAGIC_NUMBER[4]; /// The magic number that must be present in every module.
-    static const vm::vm_size_t SIZEOF_PROGRAM_HEADER = 128;  /// The program header is 128 bits long.
+    static const vm::vm_byte_t  MAGIC_NUMBER[4]; /// The magic number that must be present in every module.
+    static const core::String   ENTRY_POINT_PROCEDURE_NAME;
+    static const vm::vm_size_t  SIZEOF_PROGRAM_HEADER = 128;  /// The program header is 128 bits long.
 
     static bool             checkMagicNumber(const io::InputStream& stream);
     static core::String     decodeVersionFromTriplet(const version_triplet& triplet);
@@ -93,15 +97,22 @@ public:
 
     void                    addSymbol(Symbol& symbol, Section& section);
     void                    addSection(Section* section);
+    vm::vm_qword_t          calculateOffsetToSection(const core::String& name);
     size_t                  calculateSectionsSize() const;
     vm::vm_word_t           countSections() const;
+    Symbol*                 findSymbol(const core::String& name) const;
     const version_triplet&  getBinaryFormatVersion() const;
     const core::String&     getCompilerName() const;
     vm::vm_qword_t          getEntryPointAddress() const;
     Section*                getSection(const core::String& name) const;
     vm::vm_qword_t          getSectionHeaderOffset() const;
+    vm::vm_qword_t          getSectionOffset(const Section* section) const;
+    vm::vm_qword_t          getSymbolIndex(const Symbol* symbol) const;
+    vm::vm_qword_t          getSymbolIndex(const core::String& name) const;
     bool                    hasEntryPoint() const;
     bool                    hasProgramHeader() const;
+    void                    linkLocalSymbols();
+    void                    mergeExternalModule(Module& external);
     void                    setCompilerName(const core::String& name);
     void                    setBinaryFormatVersion(const core::String& version);
 

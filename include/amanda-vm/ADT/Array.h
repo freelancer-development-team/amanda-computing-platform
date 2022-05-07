@@ -55,6 +55,18 @@ public:
         assert(array != NULL && ASSERT_MESSAGE("Unable to allocate array!"));
     }
 
+    Array(const T rhs[])
+    :
+    array((T*) calloc(sizeof(rhs) / sizeof(T), sizeof(T))),
+            size(sizeof(rhs) / sizeof(T))
+    {
+        assert(array != NULL && "Out of memory");
+        for (size_t i = 0; i < size; ++i)
+        {
+            array[i] = rhs[i];
+        }
+    }
+
     Array(const Array<T>& rhs)
     :
     array((T*) calloc(rhs.size, sizeof (T))),

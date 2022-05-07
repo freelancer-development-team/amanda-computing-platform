@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,9 +47,12 @@ public:
     SymbolTable(const core::String& name);
     virtual ~SymbolTable();
 
-    virtual void addSymbol(const Symbol* symbol);
-    virtual void constructBinaryData();
-
+    virtual void        addSymbol(const Symbol* symbol);
+    virtual void        constructBinaryData();
+    virtual unsigned    getIndexToSymbol(const core::String& name) const;
+    virtual Symbol*     getSymbol(const core::String& name) const;
+    virtual bool        hasSymbol(const core::String& name) const;
+    
 protected:
 
     typedef std::map<core::String, const Symbol*, core::AlphabeticalOrderComparator> SymbolMap;

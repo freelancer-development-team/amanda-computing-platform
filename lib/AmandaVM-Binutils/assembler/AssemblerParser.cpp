@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ AssemblerParser::AssemblerParser(const AssemblerInputStream& stream)
 logger(logging::Logger::getLogger("amanda.binutils.as.AssemblerParser")),
 scanner(stream)
 {
-    memset(&state, 0, sizeof(YYPSTATE));
+    memset(&state, 0, sizeof (YYPSTATE));
 }
 
 Module* AssemblerParser::parse() const
@@ -63,7 +63,9 @@ Module* AssemblerParser::parse() const
         assert(parserResult == 0 && result != NULL && "How did this happen???");
 
         // Perform semantic analysis of the module
-        
+        // Link local symbols first
+        result->linkLocalSymbols();
+
     }
     catch (SyntaxError& ex)
     {
@@ -77,6 +79,16 @@ Module* AssemblerParser::parse() const
         // Re-throw the exception (someone else has to catch this.
         // We only wanted to report the error.
         throw SyntaxError(ex.getLocation(), ex.getMessage());
+    }
+    catch (core::Exception& ex)
+    {
+        // Report the error
+        logger->error("%s: %s",
+                      scanner.getInputStreamName().toCharArray(),
+                      ex.getMessage().toCharArray());
+
+        // Re-throw the exception.
+        throw ex;
     }
     return result;
 }

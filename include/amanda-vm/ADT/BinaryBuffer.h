@@ -76,6 +76,8 @@ public:
     uint8_t* exportBinaryData(size_t* size) const
     {
         *size = watermark;
+        
+
         return buffer;
     }
 

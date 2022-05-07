@@ -19,22 +19,13 @@
 .section ".code"
 .attributes "rx"
 
-# This is the main function for our assembler executable. It loads two
-# numbers and then adds them, then  return the value of that sum.
-.def @@main?string
-	push	l32	$0xdeadbeef
-	push	l32	$0xcafebabe
-	add 	l32
-	ret 	l32
-.endef
-
 # This dummy function loads a number and a parameter (given by the offset)
 # adds them and then return that value
-.def @@help?void
+.def @@help?l64@l64@!b8
 	push	b8	$0xA0
-	push	q64 [$0]
+	push	a64 [$0]
 	add		b8
-	push	q64	[$1]
+	push	a64	[$0x8]
 	add		b8
 	ret		b8
 .endef
@@ -45,7 +36,7 @@
 	push	w16	$0xFF
 	w2q
 	ceq		q64
-	jf		.L2
+	jf			.L2
 .L1:
 	push	b8	$0xB0
 	push	b8	$0x0C
@@ -54,7 +45,5 @@
 .L2:
 	ret		q64
 .endef
-
-.section ".data"
 
 

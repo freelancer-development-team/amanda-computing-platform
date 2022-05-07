@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ core::String GNUFormatter::levelToString(int level) const
 
     if (useAnsiEscapes)
     {
-        if (level > Logger::INFO)
+        if (level >= Logger::INFO)
         {
             result = "\033[37;1m";
         }

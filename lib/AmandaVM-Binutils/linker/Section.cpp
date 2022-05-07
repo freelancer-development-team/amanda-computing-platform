@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,6 +34,8 @@
 // C
 #include <stdlib.h>
 
+#include "amanda-vm/Binutils/LinkException.h"
+
 
 using namespace amanda;
 using namespace amanda::binutils;
@@ -50,6 +52,22 @@ Section* Section::makeDataSection()
 {
     Section* section = new Section(DATA_SECTION_NAME);
     section->header->flags = Attr_Alloc | Attr_Read | Attr_Write;
+
+    return section;
+}
+
+Section* Section::makeDebugSection()
+{
+    Section* section = new Section(".debug-symbols");
+    section->header->flags = Attr_Read;
+
+    return section;
+}
+
+Section* Section::makeReadOnlyDataSection()
+{
+    Section* section = new Section(RODATA_SECTION_NAME);
+    section->header->flags = Attr_Alloc | Attr_Read;
 
     return section;
 }
@@ -88,6 +106,10 @@ Section::~Section()
         symbols.at(i)->release();
     }
     delete header;
+
+    // Release the weak reference to the module
+    if (owner)
+        owner->release();
 }
 
 void Section::addSymbol(const Symbol* symbol)
@@ -118,11 +140,12 @@ void Section::constructBinaryData()
 
         // The heisenbug strikes again
         // NOTE: This heisenbug is provoked by the troubling stuff that C++
-        // prior to C++11 had. The troubling bug is that compiler is allowed to
+        // prior to C++11 had. The troubling thing is that compiler is allowed to
         // evaluate expressions in any order.
         const void*     serializedData = symbol->getBinaryData();
         const size_t    serializedSize = symbol->getBufferLength();
-        
+
+        setSize(serializedSize);
         Serializable::write(serializedData, VM_BYTE_SIZE, serializedSize);
     }
 }
@@ -176,6 +199,48 @@ Section::SectionHeader Section::getNullSectionHeader() const
     return header;
 }
 
+size_t Section::getOffsetToSymbol(const Symbol* symbol) const
+{
+    assert(symbol != NULL && "Null pointer exception");
+
+    size_t offset = 0;
+    size_t definitionIndex = 0;
+
+    // Find in which position is the symbol located
+    bool found;
+    for (std::vector<Symbol*>::const_iterator it = symbols.begin(), end = symbols.end();
+         it != end && !found; ++it)
+    {
+        if ((*it) == symbol)
+        {
+            found = true;
+        }
+        else
+        {
+            definitionIndex++;
+        }
+    }
+    
+    if (found)
+    {
+        for (size_t i = 0; i < definitionIndex; ++i)
+        {
+            Symbol* k = symbols.at(i);
+            offset += k->getSize();
+        }
+    }
+    else
+    {
+        throw LinkException("undefined symbol reference when querying offset.", *symbol);
+    }
+    return offset;
+}
+
+const Module* Section::getOwningModule() const
+{
+    return owner;
+}
+
 const Section::SectionHeader* Section::getSectionHeader() const
 {
     return header;
@@ -184,6 +249,11 @@ const Section::SectionHeader* Section::getSectionHeader() const
 size_t Section::getSize() const
 {
     return header->size;
+}
+
+const std::vector<Symbol*>& Section::getSymbols() const
+{
+    return symbols;
 }
 
 void Section::merge(const Section* section)
@@ -198,7 +268,22 @@ void Section::merge(const Section* section)
                 end = section->symbols.end(); it != end; ++it)
         {
             const Symbol* symbol = (*it);
-            addSymbol(symbol);
+
+            // If we are owned by a module
+            // Add the symbol to the module.
+            if (owner != NULL)
+            {
+                // Add the symbol to the module
+                // This include updating the module's symbol table, string table
+                // and section.
+                owner->addSymbol(*(eliminateConstness(symbol)), *this);
+            }
+            else
+            {
+                // If we are not being owned by a module
+                // add the symbol to the normal list of symbols.
+                addSymbol(symbol);
+            }
         }
 
         // Release a reference to the object (possibly deleting it)
@@ -223,6 +308,15 @@ void Section::setAttributes(unsigned attributes)
 void Section::setNameIndex(const vm::vm_qword_t index)
 {
     header->name = (vm::vm_dword_t) index;
+}
+
+void Section::setOwningModule(Module* module)
+{
+    // Grab a reference to the module.
+    module->grab();
+
+    // Assign to the module
+    this->owner = module;
 }
 
 void Section::setSize(size_t size)
