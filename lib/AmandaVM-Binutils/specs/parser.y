@@ -165,12 +165,14 @@ void yyerror(YYLTYPE* location, void* scanner, void** module, void* state, char 
     JF          "jump-if-false instruction"
     JUMP        "jump instruction"
     JT          "jump-if-true instruction"
+    LOAD        "load instruction"
     MOD         "mod instruction"
     MUL         "mul instruction"
     POP         "pop instruction"
     PUSH        "push instruction"
     RET         "return instruction"
     SUB         "sub instruction"
+    STORE       "store instruction"
     ;
 
 %token
@@ -376,6 +378,16 @@ unary_instruction
     | DELLOC INTEGER_LITERAL                {
                                                 $$ = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(DELLOC), VM_QWORD_SIZE);
                                                 Operand* operand = new Operand($2); $$->setOperand(operand);
+                                            }
+    | LOAD IDENTIFIER                       {
+                                                $$ = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(LOAD), VM_ADDRESS_SIZE);
+
+                                                Operand* operand = new Operand(*$2); $$->setOperand(operand);
+                                                delete $2;
+                                            }
+    | STORE INSTRUCTION_SUFFIX argument     {
+                                                $$ = as::createUnaryInstruction(AMANDA_VM_INSN_FAMILY(STORE), $2);
+                                                $$->setOperand($3); 
                                             }
     ;
 

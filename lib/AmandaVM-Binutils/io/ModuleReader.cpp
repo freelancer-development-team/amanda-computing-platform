@@ -62,6 +62,8 @@ Module* ModuleReader::read() const
         super::read(message, VM_BYTE_SIZE, 88);
         result->compilerName = (const char*) message;
 
+        // Read the sections table & other section information
+        // not concerning section objects.
         
     }
     else

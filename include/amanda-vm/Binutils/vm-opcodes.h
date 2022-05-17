@@ -151,7 +151,7 @@ typedef enum VM_Opcodes
     I_POPF,
     I_POPD,
     I_POPA,
-            
+
     // Comparison
     I_CEQB,
     I_CEQW,
@@ -189,8 +189,14 @@ typedef enum VM_Opcodes
     // Memory access
     I_ALLOC,
     I_DELLOC,
-    I_STORE,
     I_LOAD,
+
+    I_STOREB,
+    I_STOREW,
+    I_STOREL,
+    I_STOREQ,
+    I_STOREF,
+    I_STORED,
 
     // Reserved
     I_INVALID = 0xFF

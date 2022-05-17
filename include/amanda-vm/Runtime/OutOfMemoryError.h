@@ -16,26 +16,33 @@
  */
 
 /* 
- * File:   VMContext.cpp
+ * File:   OutOfMemoryError.h
  * Author: Javier Marrero
- * 
- * Created on March 26, 2022, 10:46 PM
+ *
+ * Created on May 17, 2022, 10:17 AM
  */
 
-#include <amanda-vm/Runtime/VMContext.h>
+#ifndef OUTOFMEMORYERROR_H
+#define OUTOFMEMORYERROR_H
 
-// Jit contexts
-#include <amanda-vm/Runtime/MirJitContext.h>
+#include <amanda-vm/Runtime/InvalidAllocationError.h>
 
-using namespace amanda;
-using namespace amanda::vm;
-
-VMContext::VMContext()
+namespace amanda
 {
-    jitContext = new jit::MirJitContext();
+namespace vm
+{
+
+class OutOfMemoryError : public InvalidAllocationError
+{
+    AMANDA_OBJECT(OutOfMemoryError, InvalidAllocationError)
+public:
+
+    OutOfMemoryError();
+    virtual ~OutOfMemoryError() throw ();
+} ;
+
+}
 }
 
-VMContext::~VMContext()
-{
-}
+#endif /* OUTOFMEMORYERROR_H */
 

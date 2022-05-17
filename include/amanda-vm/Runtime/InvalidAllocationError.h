@@ -16,44 +16,34 @@
  */
 
 /* 
- * File:   VMThreadContext.h
+ * File:   InvalidAllocationError.h
  * Author: Javier Marrero
  *
- * Created on March 28, 2022, 7:32 PM
+ * Created on May 17, 2022, 9:51 AM
  */
 
-#ifndef VMTHREADCONTEXT_H
-#define VMTHREADCONTEXT_H
+#ifndef INVALIDALLOCATIONERROR_H
+#define INVALIDALLOCATIONERROR_H
 
-// Amanda C++ API
 #include <amanda-vm/TypeSystem.h>
-
-// Amanda C API
-#include <amanda-vm-c/sdk-jit-engine.h>
 
 namespace amanda
 {
 namespace vm
 {
 
-/**
- * The thread context
- */
-class VMThreadContext : public core::Object
+class InvalidAllocationError : public core::Exception
 {
-    AMANDA_OBJECT(VMThreadContext, core::Object)
+    AMANDA_OBJECT(InvalidAllocationError, core::Exception)
 public:
 
-    VMThreadContext();
-    virtual ~VMThreadContext();
+    InvalidAllocationError(const core::String& message);
 
-private:
-
-    
+    virtual ~InvalidAllocationError() throw ();
 } ;
 
 }
 }
 
-#endif /* VMTHREADCONTEXT_H */
+#endif /* INVALIDALLOCATIONERROR_H */
 

@@ -61,7 +61,7 @@ public:
     template<typename T>
     T& getContext()
     {
-        return context;
+        return *((T*) context);
     }
 
 protected:

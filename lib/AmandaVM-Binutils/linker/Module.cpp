@@ -306,6 +306,11 @@ bool Module::hasProgramHeader() const
     return programHeaderOffset != 0;
 }
 
+bool Module::hasSymbolDefined(const core::String& name) const
+{
+    return getSection(SYMBOL_TABLE_SECTION_NAME)->cast<SymbolTable>().hasSymbol(name);
+}
+
 void Module::linkLocalSymbols()
 {
     // Get some relevant information sections
@@ -357,7 +362,8 @@ void Module::linkLocalSymbols()
 
                     if (insn->equals(AMANDA_VM_INSN_SINGLE(INVOKE))
                         || insn->equals(AMANDA_VM_ENCODE_INSN(PUSH, A))
-                        || insn->equals(AMANDA_VM_INSN_SINGLE(CCALL)))
+                        || insn->equals(AMANDA_VM_INSN_SINGLE(CCALL))
+                        || insn->equals(AMANDA_VM_INSN_SINGLE(LOAD)))
                     {
                         if (insn->getOperand()->isSymbol() && !insn->getOperand()->isResolved())
                         {

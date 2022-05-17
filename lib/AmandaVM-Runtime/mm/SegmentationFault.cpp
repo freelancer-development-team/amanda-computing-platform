@@ -16,42 +16,33 @@
  */
 
 /* 
- * File:   BaseExceptions.h
+ * File:   SegmentationFault.cpp
  * Author: Javier Marrero
- *
- * Created on March 28, 2022, 7:41 PM
+ * 
+ * Created on May 17, 2022, 1:25 AM
  */
 
-#ifndef BASEEXCEPTIONS_H
-#define BASEEXCEPTIONS_H
+#include <amanda-vm/Runtime/SegmentationFault.h>
 
-#include <amanda-vm/TypeSystem.h>
+using namespace amanda;
+using namespace amanda::vm;
 
-namespace amanda
+SegmentationFault::SegmentationFault(const core::String& message, const void* __restrict__ address)
+:
+super(message),
+faultAddress(address)
 {
-namespace vm
-{
-
-class VMRuntimeException : public core::Exception
-{
-    AMANDA_OBJECT(VMRuntimeException, core::Exception)
-
-public:
-
-    VMRuntimeException(const core::String& message)
-    :
-    core::Exception(message)
-    {   
-    }
-
-    virtual ~VMRuntimeException() throw()
-    {
-    }
-
-};
-
-}
 }
 
-#endif /* BASEEXCEPTIONS_H */
+SegmentationFault::~SegmentationFault() throw ()
+{
+}
+
+
+
+vm::vm_address_t SegmentationFault::getFaultAddress() const
+{
+    return reinterpret_cast<vm::vm_address_t>(faultAddress);
+}
+
 

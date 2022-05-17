@@ -80,34 +80,36 @@ extern int yydebug;
     T_JF = 281,                    /* "jump-if-false instruction"  */
     T_JUMP = 282,                  /* "jump instruction"  */
     T_JT = 283,                    /* "jump-if-true instruction"  */
-    T_MOD = 284,                   /* "mod instruction"  */
-    T_MUL = 285,                   /* "mul instruction"  */
-    T_POP = 286,                   /* "pop instruction"  */
-    T_PUSH = 287,                  /* "push instruction"  */
-    T_RET = 288,                   /* "return instruction"  */
-    T_SUB = 289,                   /* "sub instruction"  */
-    T_B2W = 290,                   /* "byte-to-word instruction"  */
-    T_B2L = 291,                   /* B2L  */
-    T_B2Q = 292,                   /* B2Q  */
-    T_B2F = 293,                   /* B2F  */
-    T_B2D = 294,                   /* B2D  */
-    T_W2L = 295,                   /* W2L  */
-    T_W2Q = 296,                   /* "word-to-quad instruction"  */
-    T_W2F = 297,                   /* W2F  */
-    T_W2D = 298,                   /* W2D  */
-    T_L2Q = 299,                   /* L2Q  */
-    T_L2F = 300,                   /* L2F  */
-    T_L2D = 301,                   /* L2D  */
-    T_Q2F = 302,                   /* Q2F  */
-    T_Q2D = 303,                   /* Q2D  */
-    T_CEQ = 304,                   /* "compare-equals instruction"  */
-    T_CNE = 305,                   /* "compare-non-equals instruction"  */
-    T_IDENTIFIER = 306,            /* "identifier"  */
-    T_INSTRUCTION_SUFFIX = 307,    /* "instruction suffix"  */
-    T_STRING_LITERAL = 308,        /* "string literal"  */
-    T_INTEGER_LITERAL = 309,       /* "integer literal"  */
-    T_FP_LITERAL = 310,            /* "floating point literal"  */
-    T_ADDRESS_CONSTANT = 311       /* "address constant"  */
+    T_LOAD = 284,                  /* "load instruction"  */
+    T_MOD = 285,                   /* "mod instruction"  */
+    T_MUL = 286,                   /* "mul instruction"  */
+    T_POP = 287,                   /* "pop instruction"  */
+    T_PUSH = 288,                  /* "push instruction"  */
+    T_RET = 289,                   /* "return instruction"  */
+    T_SUB = 290,                   /* "sub instruction"  */
+    T_STORE = 291,                 /* "store instruction"  */
+    T_B2W = 292,                   /* "byte-to-word instruction"  */
+    T_B2L = 293,                   /* B2L  */
+    T_B2Q = 294,                   /* B2Q  */
+    T_B2F = 295,                   /* B2F  */
+    T_B2D = 296,                   /* B2D  */
+    T_W2L = 297,                   /* W2L  */
+    T_W2Q = 298,                   /* "word-to-quad instruction"  */
+    T_W2F = 299,                   /* W2F  */
+    T_W2D = 300,                   /* W2D  */
+    T_L2Q = 301,                   /* L2Q  */
+    T_L2F = 302,                   /* L2F  */
+    T_L2D = 303,                   /* L2D  */
+    T_Q2F = 304,                   /* Q2F  */
+    T_Q2D = 305,                   /* Q2D  */
+    T_CEQ = 306,                   /* "compare-equals instruction"  */
+    T_CNE = 307,                   /* "compare-non-equals instruction"  */
+    T_IDENTIFIER = 308,            /* "identifier"  */
+    T_INSTRUCTION_SUFFIX = 309,    /* "instruction suffix"  */
+    T_STRING_LITERAL = 310,        /* "string literal"  */
+    T_INTEGER_LITERAL = 311,       /* "integer literal"  */
+    T_FP_LITERAL = 312,            /* "floating point literal"  */
+    T_ADDRESS_CONSTANT = 313       /* "address constant"  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -126,7 +128,7 @@ union YYSTYPE
     amanda::binutils::Instruction*                  insn;
     amanda::binutils::Operand*                      operand;
 
-#line 130 "assembler/AssemblerParser-Inc.h"
+#line 132 "assembler/AssemblerParser-Inc.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -161,6 +163,6 @@ int yyparse (void* scanner, void** module, void* state);
     // C++
     #include <vector>
 
-#line 165 "assembler/AssemblerParser-Inc.h"
+#line 167 "assembler/AssemblerParser-Inc.h"
 
 #endif /* !YY_YY_ASSEMBLER_ASSEMBLERPARSER_INC_H_INCLUDED  */

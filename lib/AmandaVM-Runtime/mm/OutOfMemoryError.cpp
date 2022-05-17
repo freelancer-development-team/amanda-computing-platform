@@ -16,26 +16,27 @@
  */
 
 /* 
- * File:   VMThreadContext.cpp
+ * File:   OutOfMemoryError.cpp
  * Author: Javier Marrero
  * 
- * Created on March 28, 2022, 7:32 PM
+ * Created on May 17, 2022, 10:17 AM
  */
 
-#include <amanda-vm/Runtime/VMThreadContext.h>
+#include <amanda-vm/Runtime/OutOfMemoryError.h>
 
 using namespace amanda;
 using namespace amanda::vm;
 
-VMThreadContext::VMThreadContext()
+OutOfMemoryError::OutOfMemoryError()
+:
+super("The system has ran out of virtual memory space to allocate.")
 {
-        
 }
 
-VMThreadContext::~VMThreadContext()
+OutOfMemoryError::~OutOfMemoryError() throw()
 {
-    
 }
+
 
 
 

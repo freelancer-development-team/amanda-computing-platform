@@ -129,7 +129,7 @@ Address         {IntegerLiteral}
 %x STRING
 
 %%
-                            char* string_buf_ptr;
+                            char* string_buf_ptr = NULL;
 
  /* Ignore */
 {WhiteSpace}
@@ -232,6 +232,8 @@ Address         {IntegerLiteral}
 
 "alloc"                     { return T_ALLOC; }
 "delloc"                    { return T_DELLOC; }
+"load"                      { return T_LOAD; }
+"store"                     { return T_STORE; }
 
 "ceq"                       { return T_CEQ; }
 "cne"                       { return T_CNE; }

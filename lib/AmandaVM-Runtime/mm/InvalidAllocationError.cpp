@@ -16,47 +16,26 @@
  */
 
 /* 
- * File:   VMContext.h
+ * File:   InvalidAllocationError.cpp
  * Author: Javier Marrero
- *
- * Created on March 26, 2022, 10:46 PM
+ * 
+ * Created on May 17, 2022, 9:51 AM
  */
 
-#ifndef VMCONTEXT_H
-#define VMCONTEXT_H
+#include <amanda-vm/Runtime/InvalidAllocationError.h>
 
-// Amanda API
-#include <amanda-vm/TypeSystem.h>
-#include <amanda-vm/Runtime/BaseExceptions.h>
-#include <amanda-vm/Runtime/JitContext.h>
+using namespace amanda;
+using namespace amanda::vm;
 
-// C++ API
-#include <vector>
-
-namespace amanda
+InvalidAllocationError::InvalidAllocationError(const core::String& message)
+:
+super(message)
 {
-namespace vm
-{
-
-/**
- * The virtual machine context is a global object holding configuration data,
- * and with dispatch and execution responsibilities.
- */
-class VMContext : public core::Object
-{
-    AMANDA_OBJECT(VMContext, core::Object)
-public:
-
-    VMContext();
-    virtual ~VMContext();
-
-private:
-
-    core::StrongReference<jit::JitContext> jitContext;
-} ;
-
-}
 }
 
-#endif /* VMCONTEXT_H */
+InvalidAllocationError::~InvalidAllocationError() throw ()
+{
+}
+
+
 

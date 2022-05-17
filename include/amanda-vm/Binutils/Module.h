@@ -111,6 +111,7 @@ public:
     vm::vm_qword_t          getSymbolIndex(const core::String& name) const;
     bool                    hasEntryPoint() const;
     bool                    hasProgramHeader() const;
+    bool                    hasSymbolDefined(const core::String& name) const;
     void                    linkLocalSymbols();
     void                    mergeExternalModule(Module& external);
     void                    setCompilerName(const core::String& name);

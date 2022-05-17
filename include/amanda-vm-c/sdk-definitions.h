@@ -33,7 +33,23 @@ extern "C"
  * The Free Software Foundation doesn't like it and me neither.
  */
 #ifdef _WIN32
-#   define _W32
+#define _W32 1
+#endif
+
+// Different architecture macros
+#define ARCH_i386   0
+#define ARCH_AMD64  1
+#define ARCH_PPC    2
+#define ARCH_ARM    3
+#define ARCH_RASBPI 4
+
+// Architecture detection macros
+#if defined(__x86__) || defined(__i386)
+#define  SDK_CPU_ARCHITECTURE    ARCH_i386
+#elif defined(__x86_64) || defined(__x86_64__)
+#define  SDK_CPU_ARCHITECTURE    ARCH_AMD64
+#else
+#error "Unsupported or unknown architecture."
 #endif
 
 #ifdef __cplusplus
