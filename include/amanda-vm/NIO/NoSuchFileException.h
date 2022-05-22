@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,33 +16,42 @@
  */
 
 /* 
- * File:   Flushable.h
+ * File:   NoSuchFileException.h
  * Author: Javier Marrero
  *
- * Created on April 11, 2022, 11:29 PM
+ * Created on May 22, 2022, 9:51 AM
  */
 
-#ifndef FLUSHABLE_H
-#define FLUSHABLE_H
+#ifndef NOSUCHFILEEXCEPTION_H
+#define NOSUCHFILEEXCEPTION_H
 
-#include <amanda-vm/TypeSystem.h>
+#include <amanda-vm/NIO/IOException.h>
 
 namespace amanda
 {
-namespace io
+namespace nio
 {
 
-class Flushable : extends core::Interface
+/**
+ * This exception is thrown when an access to a nonexistent file is performed.
+ */
+class NoSuchFileException : public IOException
 {
-    AMANDA_OBJECT(Flushable, core::Interface)
-
+    AMANDA_OBJECT(NoSuchFileException, IOException)
 public:
 
-    virtual void flush() const = 0;
-};
+    NoSuchFileException(const core::String& file);
+    virtual ~NoSuchFileException() throw();
+
+    const core::String& getFileName() const;
+
+private:
+
+    core::String file;
+} ;
 
 }
 }
 
-#endif /* FLUSHABLE_H */
+#endif /* NOSUCHFILEEXCEPTION_H */
 

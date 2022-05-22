@@ -52,8 +52,21 @@ namespace core
         } \
         \
         virtual amanda::core::Class& getClassDynamically() const { return getClass(); } \
+        \
+        inline Type&        getReference() { return *this; }\
+        inline const Type&  getConstReference() const { return *this; } \
     private:
 
+/**
+ * The <code>Object</code> class is the base class for all the Amanda Framework
+ * types. It provides several utilities, including runtime type information
+ * and reference counting (via the <code>ReferenceCounted</code>) class.
+ * <p>
+ * This mechanism ensures any object can be casted to and from an <code>Object</code>
+ * reference. It also provides a way to clone an object.
+ *
+ * @author J. Marrero
+ */
 class Object : virtual public ReferenceCounted
 {
 public:

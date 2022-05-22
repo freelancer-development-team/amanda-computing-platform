@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,33 +16,29 @@
  */
 
 /* 
- * File:   Flushable.h
+ * File:   NoSuchFileException.cpp
  * Author: Javier Marrero
- *
- * Created on April 11, 2022, 11:29 PM
+ * 
+ * Created on May 22, 2022, 9:51 AM
  */
 
-#ifndef FLUSHABLE_H
-#define FLUSHABLE_H
+#include <amanda-vm/NIO/NoSuchFileException.h>
 
-#include <amanda-vm/TypeSystem.h>
+using namespace amanda;
+using namespace nio;
 
-namespace amanda
+NoSuchFileException::NoSuchFileException(const core::String& file)
+:
+IOException("No such file or directory"),
+file(file)
 {
-namespace io
-{
-
-class Flushable : extends core::Interface
-{
-    AMANDA_OBJECT(Flushable, core::Interface)
-
-public:
-
-    virtual void flush() const = 0;
-};
-
-}
 }
 
-#endif /* FLUSHABLE_H */
+NoSuchFileException::~NoSuchFileException() throw()
+{
+}
 
+const core::String& NoSuchFileException::getFileName() const
+{
+    return file;
+}

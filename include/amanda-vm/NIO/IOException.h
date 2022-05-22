@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,33 +16,33 @@
  */
 
 /* 
- * File:   Flushable.h
+ * File:   IOException.h
  * Author: Javier Marrero
  *
- * Created on April 11, 2022, 11:29 PM
+ * Created on May 22, 2022, 9:46 AM
  */
 
-#ifndef FLUSHABLE_H
-#define FLUSHABLE_H
+#ifndef IOEXCEPTION_H
+#define IOEXCEPTION_H
 
 #include <amanda-vm/TypeSystem.h>
 
 namespace amanda
 {
-namespace io
+namespace nio
 {
 
-class Flushable : extends core::Interface
+class IOException : public core::Exception
 {
-    AMANDA_OBJECT(Flushable, core::Interface)
-
+    AMANDA_OBJECT(IOException, core::Exception)
 public:
 
-    virtual void flush() const = 0;
-};
+    IOException(const core::String& message);
+    virtual ~IOException() throw ();
+} ;
 
 }
 }
 
-#endif /* FLUSHABLE_H */
+#endif /* IOEXCEPTION_H */
 

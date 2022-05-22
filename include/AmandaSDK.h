@@ -77,6 +77,8 @@
 #include <amanda-vm/Logging/SimpleFormatter.h>
 #include <amanda-vm/Logging/StreamHandler.h>
 
+#include <amanda-vm/NIO/IOException.h>
+
 #include <amanda-vm/Threading/Runnable.h>
 #include <amanda-vm/Threading/Synchronization.h>
 #include <amanda-vm/Threading/SynchronizationError.h>

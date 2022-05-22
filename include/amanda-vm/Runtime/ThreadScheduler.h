@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,33 +16,33 @@
  */
 
 /* 
- * File:   Flushable.h
+ * File:   ThreadScheduler.h
  * Author: Javier Marrero
  *
- * Created on April 11, 2022, 11:29 PM
+ * Created on May 21, 2022, 11:58 PM
  */
 
-#ifndef FLUSHABLE_H
-#define FLUSHABLE_H
+#ifndef THREADSCHEDULER_H
+#define THREADSCHEDULER_H
 
 #include <amanda-vm/TypeSystem.h>
+#include <amanda-vm/Runtime/Schedulable.h>
 
 namespace amanda
 {
-namespace io
+namespace vm
 {
 
-class Flushable : extends core::Interface
+class ThreadScheduler : public core::Object
 {
-    AMANDA_OBJECT(Flushable, core::Interface)
-
+    AMANDA_OBJECT(ThreadScheduler, core::Object)
 public:
 
-    virtual void flush() const = 0;
-};
+    unsigned getActiveThreadCount() const;
+} ;
 
 }
 }
 
-#endif /* FLUSHABLE_H */
+#endif /* THREADSCHEDULER_H */
 

@@ -57,7 +57,7 @@ int main(int argc, char** argv)
         }
         if (commandLine->hasOption('L'))
         {
-            
+
         }
 
         const std::list<core::String>& arguments = commandLine->getArgumentList();
@@ -75,7 +75,13 @@ int main(int argc, char** argv)
             abort();
         }
 
+        /* Create the virtual machine context. */
+        //TODO: Add the allocation limit
+        core::StrongReference<vm::MemoryManager> memoryManager = new vm::MemoryManager();
+        core::StrongReference<vm::MemoryAllocator> memoryAllocator = new vm::LocklessDefaultAllocator(memoryManager->getReference());
+
         /* Load the file and start executing. */
+
 
     }
     return EXIT_SUCCESS;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,33 +16,26 @@
  */
 
 /* 
- * File:   Flushable.h
+ * File:   MemoryAllocator.cpp
  * Author: Javier Marrero
- *
- * Created on April 11, 2022, 11:29 PM
+ * 
+ * Created on May 17, 2022, 2:51 PM
  */
 
-#ifndef FLUSHABLE_H
-#define FLUSHABLE_H
+#include <amanda-vm/Runtime/MemoryAllocator.h>
 
-#include <amanda-vm/TypeSystem.h>
+using namespace amanda;
+using namespace amanda::vm;
 
-namespace amanda
+MemoryAllocator::MemoryAllocator(MemoryManager& memoryManager)
+:
+memoryManager(memoryManager)
 {
-namespace io
-{
-
-class Flushable : extends core::Interface
-{
-    AMANDA_OBJECT(Flushable, core::Interface)
-
-public:
-
-    virtual void flush() const = 0;
-};
-
-}
 }
 
-#endif /* FLUSHABLE_H */
+const MemoryManager& MemoryAllocator::getMemoryManager() const
+{
+    return memoryManager;
+}
+
 

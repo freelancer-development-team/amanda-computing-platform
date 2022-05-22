@@ -41,7 +41,7 @@ pathName(first.pathName)
 {
     va_list va;
     va_start(va, first);
-
+    
     va_end(va);
 
     normalize();
