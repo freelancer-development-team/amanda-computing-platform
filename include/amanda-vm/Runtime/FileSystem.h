@@ -26,7 +26,9 @@
 #define FILESYSTEMMANAGER_H
 
 #include <amanda-vm/TypeSystem.h>
+#include <amanda-vm/Runtime/ResourceIdentifier.h>
 #include <amanda-vm/IO/Path.h>
+#include <amanda-vm/IO/File.h>
 
 namespace amanda
 {
@@ -54,10 +56,11 @@ class FileSystem : public core::Object
     AMANDA_OBJECT(FileSystem, core::Object)
 public:
 
-    virtual io::Path getVirtualMachineLocalPath() const;
+    virtual io::File getResourceAsFile(const ResourceIdentifier& ) const;
 
 protected:
 
+    
 } ;
 
 }

@@ -27,6 +27,9 @@
 
 #include <amanda-vm/TypeSystem.h>
 #include <amanda-vm/IO/Path.h>
+#include <amanda-vm/Logging/ConsoleHandler.h>
+#include <amanda-vm/Logging/GNUFormatter.h>
+#include <amanda-vm/Logging/Logger.h>
 #include <amanda-vm/Runtime/FileSystem.h>
 #include <amanda-vm/Runtime/MemoryManager.h>
 #include <amanda-vm/Runtime/MemoryAllocator.h>
@@ -101,14 +104,18 @@ private:
 
     typedef std::map<const core::String, NativeLibraryDescriptor, core::AlphabeticalOrderComparator> LibraryMap;
 
-    core::StrongReference<FileSystem>       fileSystem;
-    core::StrongReference<MemoryAllocator>  memoryAllocator;
-    core::StrongReference<MemoryManager>    memoryManager;
-    core::StrongReference<ModuleLoader>     moduleLoader;
-    LibraryMap                              nativeLibraries;
-    core::StrongReference<io::Path>         path;
-    PropertiesMap                           properties;
-    core::StrongReference<ThreadScheduler>  scheduler;
+    static logging::ConsoleHandler              CONSOLE_HANDLER;
+    static logging::GNUFormatter                FORMATTER;
+    static logging::Logger&                     LOGGER;
+
+    core::StrongReference<FileSystem>           fileSystem;
+    core::StrongReference<MemoryAllocator>      memoryAllocator;
+    core::StrongReference<MemoryManager>        memoryManager;
+    core::StrongReference<ModuleLoader>         moduleLoader;
+    LibraryMap                                  nativeLibraries;
+    core::StrongReference<io::Path>             path;
+    PropertiesMap                               properties;
+    core::StrongReference<ThreadScheduler>      scheduler;
 
     /// Initializes the default system properties
     void initializeSystemProperties();

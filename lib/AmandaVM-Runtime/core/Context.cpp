@@ -38,6 +38,10 @@ using namespace amanda::vm;
 const core::String Context::OS_NAME_KEY = "amanda::vm::os.name";
 const core::String Context::SDK_VERSION_KEY = "amanda::vm::sdk.version";
 
+logging::ConsoleHandler Context::CONSOLE_HANDLER;
+logging::GNUFormatter Context::FORMATTER("amanda-vm", true);
+logging::Logger& Context::LOGGER = logging::Logger::getLogger("amanda.vm.Context")->getReference();
+
 Context::Context(MemoryAllocator* memoryAllocator,
                  const core::String& path)
 :
@@ -55,11 +59,27 @@ memoryManager(amanda::eliminateConstness(&memoryAllocator->getMemoryManager()))
 
     // Initialize the default system properties.
     initializeSystemProperties();
+
+    // Create the logging object and output the first message.
+    LOGGER.setUseParentHandlers(false);
+    LOGGER.setLevel(logging::Logger::ALL);
+
+    // Configure the handlers
+    CONSOLE_HANDLER.setFormatter(FORMATTER);
+
+    // Add the handlers
+    LOGGER.addHandler(CONSOLE_HANDLER);
+
+    // Trace the context creation
+    LOGGER.trace("creating virtual machine context object (0x%p)", this);
 }
 
 Context::~Context()
 {
     properties.clear();
+
+    // Trace the context deletion
+    LOGGER.trace("destroying virtual machine context @ 0x%p", this);
 }
 
 void Context::initializeSystemProperties()

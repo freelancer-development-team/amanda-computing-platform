@@ -81,7 +81,9 @@ int main(int argc, char** argv)
         core::StrongReference<vm::MemoryAllocator> memoryAllocator = new vm::LocklessDefaultAllocator(memoryManager->getReference());
 
         /* Load the file and start executing. */
-
+        core::StrongReference<vm::Context> context =
+                new vm::Context(memoryAllocator,
+                argv[1]);
 
     }
     return EXIT_SUCCESS;
