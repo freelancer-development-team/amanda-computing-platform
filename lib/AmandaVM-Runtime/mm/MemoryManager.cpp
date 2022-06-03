@@ -71,7 +71,7 @@ MemoryManager::~MemoryManager()
     }
 }
 
-MemoryManager::MemoryDescriptor MemoryManager::allocateMemoryRegion(size_t size, Attributes attributes)
+MemoryManager::MemoryDescriptor MemoryManager::allocateMemoryRegion(size_t size, int attributes)
 {
     void* pointerToRegion = NULL;
     if (allocatedSpace + size > allocationLimit)
@@ -127,7 +127,7 @@ MemoryManager::MemoryDescriptor MemoryManager::allocateMemoryRegion(size_t size,
     AMANDA_DESYNCHRONIZED(lock);
 
     // Create the memory descriptor
-    MemoryDescriptor descriptor = {attributes, pointerToRegion, size};
+    MemoryDescriptor descriptor = {(amanda::vm::vm_byte_t) attributes, pointerToRegion, size};
 
     // Add the descriptor to the map of descriptors & return
     descriptors.insert(std::make_pair(descriptor.pointer, descriptor));

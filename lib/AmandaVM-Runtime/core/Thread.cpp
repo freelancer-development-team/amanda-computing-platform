@@ -16,40 +16,28 @@
  */
 
 /* 
- * File:   InvalidResourceIdentifierException.h
+ * File:   Thread.cpp
  * Author: Javier Marrero
- *
- * Created on May 27, 2022, 12:57 AM
+ * 
+ * Created on May 31, 2022, 3:27 PM
  */
 
-#ifndef INVALIDRESOURCEIDENTIFIEREXCEPTION_H
-#define INVALIDRESOURCEIDENTIFIEREXCEPTION_H
+#include <amanda-vm/Runtime/Thread.h>
 
-#include <amanda-vm/NIO/IOException.h>
-#include <amanda-vm/Runtime/ResourceIdentifier.h>
+using namespace amanda;
+using namespace amanda::vm;
 
-namespace amanda
+Thread::Thread(const Schedulable* parent)
+:
+Schedulable(parent),
+operationStack(new Stack())
 {
-namespace vm
-{
-
-class InvalidResourceIdentifierException : public nio::IOException
-{
-    AMANDA_OBJECT(InvalidResourceIdentifierException, nio::IOException)
-public:
-
-    InvalidResourceIdentifierException(const core::String& rid);
-    virtual ~InvalidResourceIdentifierException() throw ();
-
-    const core::String& getResourceIdentifier() const;
-
-private:
-
-    const core::String rid;
-} ;
-
-}
 }
 
-#endif /* INVALIDRESOURCEIDENTIFIEREXCEPTION_H */
+Stack& Thread::getOperationStack() const
+{
+    assert(operationStack.isNotNull() && "Null pointer exception.");
+
+    return operationStack->getReference();
+}
 

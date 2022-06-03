@@ -55,7 +55,10 @@ namespace core
         \
         inline Type&        getReference() { return *this; }\
         inline const Type&  getConstReference() const { return *this; } \
-    private:
+        \
+        AMANDA_REFCOUNTED(ClassName) \
+        \
+        private:
 
 /**
  * The <code>Object</code> class is the base class for all the Amanda Framework

@@ -16,40 +16,45 @@
  */
 
 /* 
- * File:   InvalidResourceIdentifierException.h
+ * File:   AdaptiveOptimizationCondition.h
  * Author: Javier Marrero
  *
- * Created on May 27, 2022, 12:57 AM
+ * Created on June 3, 2022, 2:57 AM
  */
 
-#ifndef INVALIDRESOURCEIDENTIFIEREXCEPTION_H
-#define INVALIDRESOURCEIDENTIFIEREXCEPTION_H
+#ifndef ADAPTIVEOPTIMIZATIONCONDITION_H
+#define ADAPTIVEOPTIMIZATIONCONDITION_H
 
-#include <amanda-vm/NIO/IOException.h>
-#include <amanda-vm/Runtime/ResourceIdentifier.h>
+#include <amanda-vm/TypeSystem.h>
 
 namespace amanda
 {
 namespace vm
 {
 
-class InvalidResourceIdentifierException : public nio::IOException
+/**
+ * Allows to judge when a procedure must be just-in-time compiled based on
+ * arbitrary conditions.
+ *
+ * @author J. Marrero
+ */
+class AdaptiveOptimizationCondition : public core::Object
 {
-    AMANDA_OBJECT(InvalidResourceIdentifierException, nio::IOException)
+    AMANDA_OBJECT(AdaptiveOptimizationCondition, core::Object)
+
 public:
 
-    InvalidResourceIdentifierException(const core::String& rid);
-    virtual ~InvalidResourceIdentifierException() throw ();
-
-    const core::String& getResourceIdentifier() const;
-
-private:
-
-    const core::String rid;
+    /**
+     * If eval returns true, the function has a criteria for being just-in-time
+     * compiled.
+     * 
+     * @return true if the function must be optimized, false otherwise
+     */
+    virtual bool eval() const = 0;
 } ;
 
 }
 }
 
-#endif /* INVALIDRESOURCEIDENTIFIEREXCEPTION_H */
+#endif /* ADAPTIVEOPTIMIZATIONCONDITION_H */
 

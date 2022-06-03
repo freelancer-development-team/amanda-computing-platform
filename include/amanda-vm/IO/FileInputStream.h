@@ -40,6 +40,7 @@ class FileInputStream : public InputStream
 public:
 
     FileInputStream(const File* file);
+    FileInputStream(const File& file);
     virtual ~FileInputStream();
 
     virtual void        close() const;
@@ -51,6 +52,7 @@ public:
 private:
 
     mutable const File* file;
+    bool                inHeap;
 } ;
 
 }

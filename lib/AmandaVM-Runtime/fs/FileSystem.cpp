@@ -23,9 +23,49 @@
  */
 
 #include <amanda-vm/Runtime/FileSystem.h>
+#include <amanda-vm/IO/FileInputStream.h>
+#include <amanda-vm/NIO/NoSuchFileException.h>
 
 using namespace amanda;
 using namespace amanda::vm;
+
+const logging::Logger& FileSystem::LOGGER = logging::Logger::getLogger("amanda.vm.FileSystem")->getConstReference();
+
+io::File* FileSystem::getResourceAsFile(const ResourceIdentifier& id) const
+{
+    if (!id.isLocal())
+    {
+        throw nio::NoSuchFileException(id.toString());
+    }
+
+    io::File* result = new io::File(id.getAddress(), io::File::READ | io::File::WRITE);
+    if (!result->exists())
+    {
+        throw nio::NoSuchFileException(result->getPath());
+    }
+    if (!result->open())
+    {
+        throw nio::IOException(result->getLastErrorString());
+    }
+
+    return result;
+}
+
+io::InputStream* FileSystem::getResourceAsStream(const ResourceIdentifier& id) const
+{
+    // Debug
+    LOGGER.trace("accessing resource with id <%s>", id.toString().toCharArray());
+
+    io::InputStream* result = NULL;
+
+    // Identify the protocol and act accordingly
+    if (id.isLocal())
+    {
+        result = new io::FileInputStream(getResourceAsFile(id));
+    }
+
+    return result;
+}
 
 
 

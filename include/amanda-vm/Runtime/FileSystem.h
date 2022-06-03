@@ -27,6 +27,8 @@
 
 #include <amanda-vm/TypeSystem.h>
 #include <amanda-vm/Runtime/ResourceIdentifier.h>
+#include <amanda-vm/Logging/Logger.h>
+#include <amanda-vm/IO/InputStream.h>
 #include <amanda-vm/IO/Path.h>
 #include <amanda-vm/IO/File.h>
 
@@ -56,11 +58,12 @@ class FileSystem : public core::Object
     AMANDA_OBJECT(FileSystem, core::Object)
 public:
 
-    virtual io::File getResourceAsFile(const ResourceIdentifier& ) const;
+    virtual io::File*           getResourceAsFile(const ResourceIdentifier& id) const;
+    virtual io::InputStream*    getResourceAsStream(const ResourceIdentifier& id) const;
 
 protected:
 
-    
+    static const logging::Logger& LOGGER;
 } ;
 
 }

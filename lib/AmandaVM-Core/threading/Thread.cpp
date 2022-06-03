@@ -58,16 +58,19 @@ Thread::Thread()
 :
 started(false)
 {
-    nativeHandle = malloc(sizeof (pthread_t));
-    if (!nativeHandle)
-    {
-        throw ThreadingException("Not enough memory.");
-    }
+    // Initialize common state
+    initializeState();
+}
 
-    handles[PTHREAD_ATTRIBUTE_NAME] = malloc(sizeof (pthread_attr_t));
+Thread::Thread(Runnable& runnable)
+:
+started(false)
+{
+    // Initialize common state
+    initializeState();
 
-    /* Initialize the attributes. */
-    pthread_attr_init(PTHREAD_ATTRIBUTE(handles[PTHREAD_ATTRIBUTE_NAME]));
+    // Set the runnable
+    this->runnable = &runnable;
 }
 
 Thread::~Thread()
@@ -97,6 +100,25 @@ void Thread::exit()
     pthread_exit(retval);
 }
 
+bool Thread::hasRunnable() const
+{
+    return runnable.isNotNull();
+}
+
+void Thread::initializeState()
+{
+    nativeHandle = malloc(sizeof (pthread_t));
+    if (!nativeHandle)
+    {
+        throw ThreadingException("Not enough memory.");
+    }
+
+    handles[PTHREAD_ATTRIBUTE_NAME] = malloc(sizeof (pthread_attr_t));
+
+    /* Initialize the attributes. */
+    pthread_attr_init(PTHREAD_ATTRIBUTE(handles[PTHREAD_ATTRIBUTE_NAME]));
+}
+
 bool Thread::isJoinable() const
 {
     return joinable;
@@ -119,6 +141,14 @@ void Thread::join()
         throw ThreadingException("Unable to join thread (native threading API error).");
     }
     running = false;
+}
+
+void Thread::run()
+{
+    if (hasRunnable())
+    {
+        runnable->run();
+    }
 }
 
 void Thread::setJoinable(bool joinable)

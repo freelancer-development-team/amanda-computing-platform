@@ -109,6 +109,15 @@ handle(NULL)
     }
 }
 
+File::File(const File& file)
+:
+name(file.name),
+accessMode(file.accessMode),
+handle(file.handle)
+{
+    std::memcpy(&attributes, &file.attributes, sizeof(file.attributes));
+}
+
 File::~File()
 {
     close();

@@ -23,6 +23,7 @@
  */
 
 #include <amanda-vm/Runtime/Context.h>
+#include <amanda-vm/Binutils/package.hxx>
 #include <amanda-vm-c/sdk-version.h>
 #include <amanda-vm/NIO/IOException.h>
 #include <amanda-vm/NIO/NoSuchFileException.h>
@@ -43,10 +44,13 @@ logging::GNUFormatter Context::FORMATTER("amanda-vm", true);
 logging::Logger& Context::LOGGER = logging::Logger::getLogger("amanda.vm.Context")->getReference();
 
 Context::Context(MemoryAllocator* memoryAllocator,
+                 ThreadScheduler* scheduler,
                  const core::String& path)
 :
 memoryAllocator(memoryAllocator),
-memoryManager(amanda::eliminateConstness(&memoryAllocator->getMemoryManager()))
+memoryManager(amanda::eliminateConstness(&memoryAllocator->getMemoryManager())),
+moduleLoader(new ModuleLoader()),
+scheduler(scheduler)
 {
     // Get the virtual machine execution path
     {
@@ -56,6 +60,9 @@ memoryManager(amanda::eliminateConstness(&memoryAllocator->getMemoryManager()))
         // Assign to the path reference
         this->path = new io::Path(full.getParent().toString());
     }
+
+    // Initialize the local file system
+    fileSystem = new FileSystem();
 
     // Initialize the default system properties.
     initializeSystemProperties();
@@ -100,6 +107,17 @@ const core::String& Context::getProperty(const core::String& key) const
     return properties.at(key);
 }
 
+void Context::loadAndExecute(const core::String& fullPath)
+{
+    // Load the module as a library first.
+    loadModule(fullPath);
+
+    // Initialize the first virtual machine thread (the main thread) with
+    // information on the current thread
+    
+
+}
+
 void Context::loadLibrary(const core::String& fullPath)
 {
     // Separate the path components
@@ -119,6 +137,21 @@ void Context::loadLibrary(const core::String& fullPath)
 
     // Add the descriptor to the list of loaded libraries
     nativeLibraries.insert(std::make_pair(descriptor.getName(), descriptor));
+}
+
+void Context::loadModule(const core::String& fullPath)
+{
+    // Get the resource as input stream
+    ResourceIdentifier rid = ResourceIdentifier::parse(fullPath);
+    core::StrongReference<io::InputStream> stream = fileSystem->getResourceAsStream(rid);
+
+    // Trace the resulting id
+    LOGGER.trace("loading module: %s (scheme: %s)", rid.toString().toCharArray(), rid.getScheme().toCharArray());
+
+    // Create the module reader object & load the resultant module object
+    // propagate exceptions if any.
+    binutils::ModuleReader reader(rid.getAddress(), stream->getReference());
+    moduleLoader->addModule(reader.read());
 }
 
 bool Context::putProperty(const core::String& key, const core::String& value)

@@ -78,7 +78,7 @@ public:
     MemoryManager(vm::vm_size_t allocationLimit = MINIMUM_ALLOCATION_LIMIT);
     virtual ~MemoryManager();
 
-    virtual MemoryDescriptor    allocateMemoryRegion(size_t size, Attributes attributes);
+    virtual MemoryDescriptor    allocateMemoryRegion(size_t size, int attributes);
     virtual void                deallocateMemoryRegion(const MemoryDescriptor& descriptor);
     const MemoryDescriptor&     findDescriptorForPointer(const void* __restrict__ pointer) const;
     vm::vm_size_t               getAllocationLimit() const;
@@ -91,6 +91,7 @@ protected:
     vm::vm_size_t                           allocatedSpace;
     vm::vm_size_t                           allocationLimit;
     std::map<const void*, MemoryDescriptor> descriptors;
+    
 } ;
 
 }

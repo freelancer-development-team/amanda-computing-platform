@@ -71,11 +71,14 @@ public:
     static const core::String SDK_VERSION_KEY;
 
     Context(MemoryAllocator* memoryAllocator,
+            ThreadScheduler* scheduler,
             const core::String& path);
     virtual ~Context();
 
     const core::String& getProperty(const core::String& key) const;
+    void                loadAndExecute(const core::String& fullPath);
     void                loadLibrary(const core::String& fullPath);
+    void                loadModule(const core::String& fullPath);
     bool                putProperty(const core::String& key, const core::String& value);
     void                setMemoryAllocator(MemoryAllocator* memoryAllocator);
     void                setProperty(const core::String& key, const core::String& value);

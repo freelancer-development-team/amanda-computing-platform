@@ -29,7 +29,8 @@ using namespace amanda::io;
 
 FileInputStream::FileInputStream(const File* file)
 :
-file(file)
+file(file),
+inHeap(true)
 {
     if (file)
     {
@@ -37,13 +38,21 @@ file(file)
     }
 }
 
+FileInputStream::FileInputStream(const File& file)
+:
+file(&file),
+inHeap(false)
+{
+}
+
 FileInputStream::~FileInputStream()
 {
+    close();
 }
 
 void FileInputStream::close() const
 {
-    if (file && !File::isTerminalStream(file))
+    if (file && !File::isTerminalStream(file) && inHeap)
     {
         file->release();
     }
@@ -57,7 +66,7 @@ void FileInputStream::read(void* buffer, size_t size, size_t count) const
 
 void FileInputStream::reset() const
 {
-   file->reset();
+    file->reset();
 }
 
 void FileInputStream::seek(uint64_t offset) const

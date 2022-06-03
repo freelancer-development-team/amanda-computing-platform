@@ -52,13 +52,37 @@ public:
     LocklessDefaultAllocator(MemoryManager& memoryManager);
     virtual ~LocklessDefaultAllocator();
 
-
-    virtual void*   allocate(size_t size);
-    virtual void*   allocateAligned(size_t size, size_t alignment);
-    virtual void    deallocate(size_t size);
-
 private:
 
+    class TreeNode : public core::ReferenceCounted
+    {
+    public:
+
+        static const unsigned short BLACK =     0xF0u;
+        static const unsigned short RED =       0x0Fu;
+        static const unsigned short UNCOLORED = 0x55AA;
+
+        TreeNode(uintptr_t address, size_t size, TreeNode* root);
+
+        TreeNode* rotateLeft();
+        TreeNode* rotateRight();
+
+        unsigned short                      color;
+        MemoryAllocator::AllocationHeader   data;
+        core::StrongReference<TreeNode>     left;
+        core::WeakReference<TreeNode>       parent;
+        core::StrongReference<TreeNode>     right;
+        core::WeakReference<TreeNode>       root;
+    } ;
+
+    unsigned                        freeNodeCount;
+    unsigned                        nodeCount;
+    core::StrongReference<TreeNode> root;
+
+    virtual void                                        expandAddressSpace(size_t amount);
+    virtual const MemoryAllocator::AllocationHeader&    find(size_t size) const;
+    bool                                                hasFreeNodes() const;
+    virtual bool                                        isNeedingExpansion() const;
 
 } ;
 

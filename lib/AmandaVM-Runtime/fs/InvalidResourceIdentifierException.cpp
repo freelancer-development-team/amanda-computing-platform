@@ -37,3 +37,9 @@ rid(rid)
 InvalidResourceIdentifierException::~InvalidResourceIdentifierException() throw ()
 {
 }
+
+const core::String& InvalidResourceIdentifierException::getResourceIdentifier() const
+{
+    return rid;
+}
+

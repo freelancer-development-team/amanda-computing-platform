@@ -17,6 +17,10 @@ PREFIX="${PREFIX/\//}"
 echo "libck will be installed at: $PREFIX"
 
 # Only build if not built yet
+if [[ ! -f "/$PREFIX/lib/libck.a" ]]
+then
+
+echo "-- need to build libck because could not find library --"
 
 # Goto libck sources
 cd "$ABSOLUTE_PATH/third-party/ck"
@@ -33,5 +37,9 @@ mkdir -p bin
 # Make, make check & make install
 make -j8
 make -j8 install
+
+else
+echo "-- no need to build libck --"
+fi
 
 echo "-- done, success --"

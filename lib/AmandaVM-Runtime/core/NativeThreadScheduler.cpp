@@ -16,40 +16,16 @@
  */
 
 /* 
- * File:   InvalidResourceIdentifierException.h
+ * File:   NativeThreadScheduler.cpp
  * Author: Javier Marrero
- *
- * Created on May 27, 2022, 12:57 AM
+ * 
+ * Created on June 3, 2022, 2:36 AM
  */
 
-#ifndef INVALIDRESOURCEIDENTIFIEREXCEPTION_H
-#define INVALIDRESOURCEIDENTIFIEREXCEPTION_H
+#include <amanda-vm/Runtime/NativeThreadScheduler.h>
 
-#include <amanda-vm/NIO/IOException.h>
-#include <amanda-vm/Runtime/ResourceIdentifier.h>
+using namespace amanda;
+using namespace amanda::vm;
 
-namespace amanda
-{
-namespace vm
-{
 
-class InvalidResourceIdentifierException : public nio::IOException
-{
-    AMANDA_OBJECT(InvalidResourceIdentifierException, nio::IOException)
-public:
-
-    InvalidResourceIdentifierException(const core::String& rid);
-    virtual ~InvalidResourceIdentifierException() throw ();
-
-    const core::String& getResourceIdentifier() const;
-
-private:
-
-    const core::String rid;
-} ;
-
-}
-}
-
-#endif /* INVALIDRESOURCEIDENTIFIEREXCEPTION_H */
 

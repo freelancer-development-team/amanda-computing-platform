@@ -50,6 +50,7 @@ public:
     } ThreadPriority;
 
     Thread();
+    Thread(Runnable& runnable);
     virtual ~Thread();
 
     void            exit();
@@ -57,6 +58,7 @@ public:
     bool            isRunning() const;
     bool            isStarted() const;
     virtual void    join();
+    virtual void    run();
     void            setJoinable(bool joinable);
     virtual void    start();
 
@@ -66,8 +68,12 @@ private:
     std::map<const char*, void*>    handles;
     volatile unsigned long long     id;
     volatile bool                   joinable;
+    core::StrongReference<Runnable> runnable;
     volatile bool                   running;
     volatile bool                   started;
+
+    bool            hasRunnable() const;
+    void            initializeState();
     
 } ;
 

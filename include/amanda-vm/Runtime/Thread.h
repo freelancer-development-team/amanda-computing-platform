@@ -16,49 +16,44 @@
  */
 
 /* 
- * File:   ResourceIdentifier.h
+ * File:   Thread.h
  * Author: Javier Marrero
  *
- * Created on May 25, 2022, 11:16 PM
+ * Created on May 31, 2022, 3:27 PM
  */
 
-#ifndef RESOURCEIDENTIFIER_H
-#define RESOURCEIDENTIFIER_H
+#ifndef THREAD_H
+#define THREAD_H
 
 #include <amanda-vm/TypeSystem.h>
+#include <amanda-vm/Runtime/Stack.h>
+#include <amanda-vm/Runtime/Schedulable.h>
 
 namespace amanda
 {
 namespace vm
 {
 
-class ResourceIdentifier : public core::Object
+/**
+ * The <code>Thread</code> class encapsulates schedulable behavior.
+ */
+class Thread : public Schedulable
 {
-    AMANDA_OBJECT(ResourceIdentifier, core::Object)
+    AMANDA_OBJECT(Thread, Schedulable)
 public:
 
-    static const core::String FS_SCHEME_DELIMITER;
-    static const core::String LOCAL_FS_SCHEME;
+    Thread(const Schedulable* parent);
 
-    static ResourceIdentifier parse(const core::String& uri);
-
-    const core::String&     getAddress() const;
-    const core::String&     getScheme() const;
-    bool                    isLocal() const;
-    bool                    isScheme(const core::String& scheme) const;
-    virtual core::String    toString() const;
+    Stack&          getOperationStack() const;
 
 protected:
 
-    ResourceIdentifier(const core::String& scheme, const core::String& address);
-
-    core::String address;
-    core::String scheme;
-
+    core::StrongReference<Stack>    operationStack;
+    
 } ;
 
 }
 }
 
-#endif /* RESOURCEIDENTIFIER_H */
+#endif /* THREAD_H */
 

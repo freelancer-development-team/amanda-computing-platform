@@ -28,17 +28,26 @@
 using namespace amanda;
 using namespace amanda::vm;
 
-const core::String ResourceIdentifier::LOCAL_FS_SCHEME = "vfs:";
+const core::String ResourceIdentifier::FS_SCHEME_DELIMITER = "://";
+const core::String ResourceIdentifier::LOCAL_FS_SCHEME = "vfs";
 
 ResourceIdentifier ResourceIdentifier::parse(const core::String& uri)
 {
-    std::vector<core::String> splitted = uri.split(":", 1);
-    if (splitted.size() != 2)
+    // The return components
+    core::String scheme;
+    core::String address;
+
+    if (uri.find(':') != core::String::NPOS)
     {
-        throw InvalidResourceIdentifierException(uri);
+        std::vector<core::String> splitted = uri.split(FS_SCHEME_DELIMITER, 1);
+    }
+    else
+    {
+        scheme = LOCAL_FS_SCHEME;
+        address = uri;
     }
 
-    return ResourceIdentifier(splitted[0], splitted[1]);
+    return ResourceIdentifier(scheme, address);
 }
 
 ResourceIdentifier::ResourceIdentifier(const core::String& scheme, const core::String& address)
@@ -48,14 +57,29 @@ scheme(scheme)
 {
 }
 
+const core::String& ResourceIdentifier::getAddress() const
+{
+    return address;
+}
+
+const core::String& ResourceIdentifier::getScheme() const
+{
+    return scheme;
+}
+
 bool ResourceIdentifier::isLocal() const
 {
-    return scheme == LOCAL_FS_SCHEME;
+    return isScheme(LOCAL_FS_SCHEME);
+}
+
+bool ResourceIdentifier::isScheme(const core::String& scheme) const
+{
+    return this->scheme.toLower() == scheme.toLower();
 }
 
 core::String ResourceIdentifier::toString() const
 {
-    return scheme + address;
+    return scheme + FS_SCHEME_DELIMITER + address;
 }
 
 
