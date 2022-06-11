@@ -95,13 +95,15 @@ public:
 
     static const float RESIZE_FACTOR = 1.1f;
 
-    static Section* makeCodeSection();
-    static Section* makeDataSection();
-    static Section* makeReadOnlyDataSection();
-    static Section* makeDebugSection();
-    static Section* makeSectionHeaderStringTableSection();
-    static Section* makeStringTableSection();
-    static Section* makeSymbolTableSection();
+    static Section*     makeCodeSection();
+    static Section*     makeDataSection();
+    static Section*     makeReadOnlyDataSection();
+    static Section*     makeDebugSection();
+    static Section*     makeSectionHeaderStringTableSection();
+    static Section*     makeStringTableSection();
+    static Section*     makeSymbolTableSection();
+
+    static core::String sectionTypeToString(unsigned type);
 
     Section(const core::String& name);
     virtual ~Section();
@@ -140,17 +142,14 @@ public:
 
 protected:
 
-    virtual size_t  calculateSize() const;
-    virtual void    setSize(size_t size);
-
-private:
-
     SectionHeader*              header;
     core::String                name;
     Module*                     owner;
     std::vector<Symbol*>        symbols;
 
+    virtual size_t  calculateSize() const;
     virtual void    marshallImpl(io::OutputStream& stream) const;
+    virtual void    setSize(size_t size);
 
 } ;
 

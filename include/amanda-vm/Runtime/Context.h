@@ -26,6 +26,7 @@
 #define CONTEXT_H
 
 #include <amanda-vm/TypeSystem.h>
+#include <amanda-vm/Binutils/Function.h>
 #include <amanda-vm/IO/Path.h>
 #include <amanda-vm/Logging/ConsoleHandler.h>
 #include <amanda-vm/Logging/GNUFormatter.h>
@@ -43,6 +44,8 @@ namespace amanda
 {
 namespace vm
 {
+
+class Procedure;
 
 /**
  * The context class represents a running virtual machine. It holds all the
@@ -70,18 +73,21 @@ public:
     static const core::String OS_NAME_KEY;
     static const core::String SDK_VERSION_KEY;
 
+    static const logging::Logger& getLogger();
+
     Context(MemoryAllocator* memoryAllocator,
-            ThreadScheduler* scheduler,
             const core::String& path);
     virtual ~Context();
 
+    void                execute(binutils::Function* function);
     const core::String& getProperty(const core::String& key) const;
-    void                loadAndExecute(const core::String& fullPath);
+    binutils::Module*   loadAndExecute(const core::String& fullPath);
     void                loadLibrary(const core::String& fullPath);
-    void                loadModule(const core::String& fullPath);
+    binutils::Module*   loadModule(const core::String& fullPath);
     bool                putProperty(const core::String& key, const core::String& value);
     void                setMemoryAllocator(MemoryAllocator* memoryAllocator);
     void                setProperty(const core::String& key, const core::String& value);
+    void                setScheduler(const ThreadScheduler* scheduler);
 
 private:
 

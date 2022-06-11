@@ -65,7 +65,10 @@ void StringTable::constructBinaryData()
     {
         const core::String& str = *it;
         Serializable::write(str.toCharArray(), VM_BYTE_SIZE, str.length() + 1);
+
+        header->size += (str.length() + 1);
     }
+    setSize(header->size);
 }
 
 StringTable::TablePair StringTable::get(const unsigned position) const

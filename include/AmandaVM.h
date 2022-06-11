@@ -26,19 +26,27 @@
 #define AMANDAVM_H
 
 // Runtime Library
+#include <amanda-vm/Runtime/AdaptiveOptimizationCondition.h>
 #include <amanda-vm/Runtime/Context.h>
 #include <amanda-vm/Runtime/FileSystem.h>
 #include <amanda-vm/Runtime/InvalidAllocationError.h>
+#include <amanda-vm/Runtime/InvalidResourceIdentifierException.h>
 #include <amanda-vm/Runtime/JitContext.h>
 #include <amanda-vm/Runtime/LocklessDefaultAllocator.h>
 #include <amanda-vm/Runtime/MemoryAllocator.h>
 #include <amanda-vm/Runtime/MemoryManager.h>
 #include <amanda-vm/Runtime/MirJitContext.h>
 #include <amanda-vm/Runtime/ModuleLoader.h>
+#include <amanda-vm/Runtime/NativeCProcedure.h>
+#include <amanda-vm/Runtime/NativeProcedure.h>
+#include <amanda-vm/Runtime/NativeThreadScheduler.h>
 #include <amanda-vm/Runtime/NullJitContext.h>
 #include <amanda-vm/Runtime/OutOfMemoryError.h>
+#include <amanda-vm/Runtime/Procedure.h>
+#include <amanda-vm/Runtime/ResourceIdentifier.h>
 #include <amanda-vm/Runtime/Schedulable.h>
 #include <amanda-vm/Runtime/SegmentationFault.h>
+#include <amanda-vm/Runtime/Stack.h>
 #include <amanda-vm/Runtime/ThreadScheduler.h>
 
 // The Amanda Core Libraries

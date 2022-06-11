@@ -23,14 +23,56 @@
  */
 
 #include <amanda-vm/Runtime/Schedulable.h>
+#include <amanda-vm/Runtime/Context.h>
 
 using namespace amanda;
 using namespace amanda::vm;
 
-Schedulable::Schedulable(const Schedulable* parent)
+Schedulable::Schedulable(const Schedulable* parent,
+                         const Context& context,
+                         Procedure* init)
 :
-parent(parent)
+context(context),
+currentProcedure(init),
+parent(parent),
+stack(new Stack())
 {
 }
 
+Schedulable::~Schedulable()
+{
+}
 
+const Context& Schedulable::getContext() const
+{
+    // Lock access to the context
+    AMANDA_SYNCHRONIZED(lock);
+
+    // Set result as the reference
+    const Context& result = context;
+
+    // Unlock access to the context
+    AMANDA_DESYNCHRONIZED(lock);
+    return result;
+}
+
+bool Schedulable::hasParent() const
+{
+    return parent.isNotNull();
+}
+
+bool Schedulable::isRoot() const
+{
+    return parent.isNull();
+}
+
+void Schedulable::run()
+{
+    // Preconditions
+    assert(currentProcedure.isNotNull() && "Null pointer exception");
+    assert(stack.isNotNull() && "Null pointer exception");
+
+    // Apply the stack to the current procedure and begin executing
+    currentProcedure->applyStack(stack);
+    currentProcedure->execute();
+}

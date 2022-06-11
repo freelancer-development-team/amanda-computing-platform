@@ -23,6 +23,7 @@
  */
 
 #include <amanda-vm/io/File.h>
+#include <amanda-vm/Threading/Synchronization.h>
 
 /* C interface */
 #include <amanda-vm-c/sdk-definitions.h>
@@ -115,7 +116,7 @@ name(file.name),
 accessMode(file.accessMode),
 handle(file.handle)
 {
-    std::memcpy(&attributes, &file.attributes, sizeof(file.attributes));
+    std::memcpy(&attributes, &file.attributes, sizeof (file.attributes));
 }
 
 File::~File()
@@ -346,30 +347,38 @@ bool File::read(char* buffer, size_t size) const
 bool File::read(char* buffer, size_t size, size_t count) const
 {
     bool result = false;
-    if ((size > 0) && (buffer != NULL)
-        && handle != NULL
-        && (accessMode & READ)
-        && isFile())
+    AMANDA_SYNCHRONIZED(lock);
     {
-        clearerr(handle);
-        size_t read = fread(buffer, size, count, handle);
+        if ((size > 0) && (buffer != NULL)
+            && handle != NULL
+            && (accessMode & READ)
+            && isFile())
+        {
+            clearerr(handle);
+            size_t read = fread(buffer, size, count, handle);
 
-        result = !ferror(handle) && (read > 0);
+            result = !ferror(handle) && (read > 0);
+        }
     }
+    AMANDA_DESYNCHRONIZED(lock);
     return result;
 }
 
 bool File::readline(char* buffer, size_t limit) const
 {
     bool result = false;
-    if ((handle != NULL) && canRead() && !isEndOfFile())
+    AMANDA_SYNCHRONIZED(lock);
     {
-        clearerr(handle);
-        fgets(buffer, limit, handle);
-        buffer[strlen(buffer) - 1] = '\0';
+        if ((handle != NULL) && canRead() && !isEndOfFile())
+        {
+            clearerr(handle);
+            fgets(buffer, limit, handle);
+            buffer[strlen(buffer) - 1] = '\0';
 
-        result = ferror(handle) == false;
+            result = ferror(handle) == false;
+        }
     }
+    AMANDA_DESYNCHRONIZED(lock);
     return result;
 }
 
@@ -392,44 +401,64 @@ bool File::reset() const
 
 void File::setPosition(uint64_t offset) const
 {
-    if (isOpen() && isFile())
+    AMANDA_SYNCHRONIZED(lock);
     {
-        fsetpos64(handle, (const fpos_t*) &offset);
+        if (isOpen() && isFile())
+        {
+            // Reset the file indicator
+            rewind(handle);
+
+            // Get how many iterations and the final addendum
+            fseeko64(handle, (off64_t) offset, SEEK_SET);
+        }
     }
+    AMANDA_DESYNCHRONIZED(lock);
 }
 
 uint64_t File::tell() const
 {
-    fpos_t position = 0;
-    if (isOpen() && isFile())
+    off64_t position = 0;
+    AMANDA_SYNCHRONIZED(lock);
     {
-        fgetpos64(handle, &position);
+        if (isOpen() && isFile())
+        {
+            position = ftello64(handle);
+        }
     }
+    AMANDA_DESYNCHRONIZED(lock);
     return (uint64_t) position;
 }
 
 bool File::write(const char* str) const
 {
     bool result = false;
-    if (handle && (accessMode & WRITE) && isFile())
+    AMANDA_SYNCHRONIZED(lock);
     {
-        size_t written = fwrite(str, sizeof (char), strlen(str), handle);
-        fflush(handle);
+        if (handle && (accessMode & WRITE) && isFile())
+        {
+            size_t written = fwrite(str, sizeof (char), strlen(str), handle);
+            fflush(handle);
 
-        result = (written == strlen(str));
+            result = (written == strlen(str));
+        }
     }
+    AMANDA_DESYNCHRONIZED(lock);
     return result;
 }
 
 bool File::write(const void* bytes, size_t size) const
 {
     bool result = false;
-    if (handle && (accessMode & WRITE) && isFile())
+    AMANDA_SYNCHRONIZED(lock);
     {
-        size_t written = fwrite(bytes, sizeof (char), size, handle);
-        fflush(handle);
+        if (handle && (accessMode & WRITE) && isFile())
+        {
+            size_t written = fwrite(bytes, sizeof (char), size, handle);
+            fflush(handle);
 
-        result = (written == size);
+            result = (written == size);
+        }
     }
+    AMANDA_DESYNCHRONIZED(lock);
     return result;
 }

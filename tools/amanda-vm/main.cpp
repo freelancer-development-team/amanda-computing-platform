@@ -72,19 +72,31 @@ int main(int argc, char** argv)
         //TODO: Add the allocation limit
         core::StrongReference<vm::MemoryManager> memoryManager = new vm::MemoryManager();
         core::StrongReference<vm::MemoryAllocator> memoryAllocator = new vm::LocklessDefaultAllocator(memoryManager->getReference());
-        core::StrongReference<vm::ThreadScheduler> scheduler = new vm::NativeThreadScheduler();
+        
 
         /* Create the virtual machine context. */
         core::StrongReference<vm::Context> context =
                 new vm::Context(memoryAllocator,
-                                scheduler,
                                 argv[1]);
+
+        /* Create & configure the scheduler */
+        core::StrongReference<vm::ThreadScheduler> scheduler = new vm::NativeThreadScheduler(context->getReference());
+        context->setScheduler(scheduler);
 
         /* Load the file and start executing. */
         for (std::list<core::String>::const_iterator iter = arguments.begin(),
              end = arguments.end(); iter != end; ++iter)
         {
-            context->loadAndExecute(*iter);
+            try
+            {
+                context->loadAndExecute(*iter);
+            }
+            catch (core::Exception& ex)
+            {
+                vm::Context::getLogger().fatal("%s: %s",
+                                               core::String(ex.getClass().getName()).toLower(),
+                                               ex.getMessage().toLower().toCharArray());
+            }
         }
     }
     return EXIT_SUCCESS;

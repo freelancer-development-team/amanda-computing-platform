@@ -26,30 +26,49 @@
 #define SCHEDULABLE_H
 
 #include <amanda-vm/TypeSystem.h>
+#include <amanda-vm/Threading/Runnable.h>
+#include <amanda-vm/Runtime/Stack.h>
+#include <amanda-vm/Runtime/Schedulable.h>
 #include <amanda-vm/Binutils/vm-types.h>
+
+#include "Procedure.h"
 
 namespace amanda
 {
 namespace vm
 {
 
-class Schedulable : public core::Object
-{
+class Context;
 
-    AMANDA_OBJECT(Schedulable, core::Object)
+/**
+ * Objects of this class are designed to be used as discrete scheduling units
+ * by the virtual machine thread scheduler.
+ *
+ * @author J. Marrero
+ */
+class Schedulable : public concurrent::Runnable
+{
+    AMANDA_OBJECT(Schedulable, concurrent::Runnable)
 
 public:
 
-    typedef struct ThreadInformationBlock
-    {
-    } ThreadInformationBlock;
+    Schedulable(const Schedulable* parent,
+                const Context& context,
+                Procedure* init);
+    virtual ~Schedulable();
 
-    Schedulable(const Schedulable* parent);
+    const Context&  getContext() const;
+    bool            hasParent() const;
+    bool            isRoot() const;
+    virtual void    run();
 
 private:
 
+    const Context&                              context;
+    core::StrongReference<Procedure>            currentProcedure;
     core::StrongReference<const Schedulable>    parent;
-    ThreadInformationBlock                      threadInfo;
+    core::StrongReference<Stack>                stack;
+
 } ;
 
 }

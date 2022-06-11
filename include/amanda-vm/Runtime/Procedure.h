@@ -39,6 +39,8 @@ namespace amanda
 namespace vm
 {
 
+class Context;
+
 /**
  * Procedure objects encapsulate the information needed by the virtual machine
  * execution engine in order to apply the adaptive optimizations (heuristics
@@ -53,17 +55,19 @@ class Procedure : public core::Object
     AMANDA_OBJECT(Procedure, core::Object)
 public:
 
-    Procedure(binutils::Function* symbol);
+    Procedure(const Context& context, binutils::Function* symbol);
     virtual ~Procedure();
 
-    void    addOptimizationCriteria(const AdaptiveOptimizationCondition* criteria);
-    void    applyStack(Stack * const stack);
-    void    execute();
-    void    executeInterpreted();
-    void    executeOptimized();
-    bool    isOptimized() const;
-    void    optimize();
-    bool    shouldOptimize() const;
+    void                addOptimizationCriteria(const AdaptiveOptimizationCondition* criteria);
+    void                applyStack(Stack * const stack);
+    virtual bool        equals(const Object* object);
+    void                execute();
+    void                executeInterpreted();
+    void                executeOptimized();
+    const core::String& getName() const;
+    bool                isOptimized() const;
+    void                optimize();
+    bool                shouldOptimize() const;
 
 protected:
 
@@ -85,6 +89,7 @@ protected:
         Procedure& procedure;
     } ;
 
+    const Context&                                      context;
     sdk_ullong_t                                        executionCount;
     std::deque<const AdaptiveOptimizationCondition*>    optimizationCritera;
     bool                                                optimized;

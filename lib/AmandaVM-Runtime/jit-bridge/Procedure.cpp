@@ -23,6 +23,7 @@
  */
 
 #include <amanda-vm/Runtime/Procedure.h>
+#include <amanda-vm/Runtime/Context.h>
 #include <amanda-vm/Threading/Runnable.h>
 #include <amanda-vm/Threading/Thread.h>
 #include <amanda-vm/System.h>
@@ -33,8 +34,9 @@
 using namespace amanda;
 using namespace amanda::vm;
 
-Procedure::Procedure(binutils::Function* symbol)
+Procedure::Procedure(const Context& context, binutils::Function* symbol)
 :
+context(context),
 executionCount(0),
 symbol(symbol)
 {
@@ -62,6 +64,19 @@ void Procedure::addOptimizationCriteria(const AdaptiveOptimizationCondition* cri
 void Procedure::applyStack(Stack * const stack)
 {
     this->stack = stack;
+}
+
+bool Procedure::equals(const Object* object)
+{
+    bool result = false;
+    if (object->is<Procedure>())
+    {
+        if (static_cast<const Procedure*> (object)->getName() == getName())
+        {
+            result = true;
+        }
+    }
+    return result;
 }
 
 void Procedure::execute()
@@ -93,6 +108,11 @@ void Procedure::executeInterpreted()
 
 void Procedure::executeOptimized()
 {
+}
+
+const core::String& Procedure::getName() const
+{
+    return symbol->getName();
 }
 
 bool Procedure::isOptimized() const

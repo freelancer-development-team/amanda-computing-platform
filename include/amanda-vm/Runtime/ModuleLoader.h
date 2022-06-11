@@ -31,6 +31,7 @@
 
 // C++
 #include <vector>
+#include <map>
 
 namespace amanda
 {
@@ -55,14 +56,14 @@ public:
     ModuleLoader();
     virtual ~ModuleLoader();
     
-    void addModules(const adt::Array<const binutils::Module*>& array);
-    void addModule(const binutils::Module* module);
+    void addModules(const adt::Array<std::pair<const core::String, const binutils::Module*> >& array);
+    void addModule(const core::String& identifier, const binutils::Module* module);
 
 private:
 
-    typedef std::vector<const binutils::Module*> ModuleList;
+    typedef std::map<const core::String, const binutils::Module*> ModuleMap;
 
-    ModuleList modules;
+    ModuleMap modules;
 } ;
 
 }

@@ -16,44 +16,33 @@
  */
 
 /* 
- * File:   Thread.h
+ * File:   UnschedulableException.h
  * Author: Javier Marrero
  *
- * Created on May 31, 2022, 3:27 PM
+ * Created on June 3, 2022, 10:36 PM
  */
 
-#ifndef THREAD_H
-#define THREAD_H
+#ifndef UNSCHEDULABLEEXCEPTION_H
+#define UNSCHEDULABLEEXCEPTION_H
 
 #include <amanda-vm/TypeSystem.h>
-#include <amanda-vm/Runtime/Stack.h>
-#include <amanda-vm/Runtime/Schedulable.h>
 
 namespace amanda
 {
 namespace vm
 {
 
-/**
- * The <code>Thread</code> class encapsulates schedulable behavior.
- */
-class Thread : public Schedulable
+class UnschedulableException : public core::Exception
 {
-    AMANDA_OBJECT(Thread, Schedulable)
+    AMANDA_OBJECT(UnschedulableException, core::Exception)
 public:
 
-    Thread(const Schedulable* parent);
-
-    Stack&          getOperationStack() const;
-
-protected:
-
-    core::StrongReference<Stack>    operationStack;
-    
+    UnschedulableException();
+    virtual ~UnschedulableException() throw();
 } ;
 
 }
 }
 
-#endif /* THREAD_H */
+#endif /* UNSCHEDULABLEEXCEPTION_H */
 

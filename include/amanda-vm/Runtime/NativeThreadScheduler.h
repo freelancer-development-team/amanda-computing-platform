@@ -29,6 +29,7 @@
 
 //TODO: Replace by concurrence API
 #include <amanda-vm/Threading/Thread.h>
+#include <amanda-vm/Threading/Runnable.h>
 
 namespace amanda
 {
@@ -48,11 +49,18 @@ namespace vm
  */
 class NativeThreadScheduler : public ThreadScheduler
 {
+    AMANDA_OBJECT(NativeThreadScheduler, ThreadScheduler)
 public:
+
+    NativeThreadScheduler(const Context& context);
+
+    virtual unsigned    getActiveThreadCount() const;
+    virtual void        notifyThreadFinalization();
+    virtual void        schedule(const Procedure* procedure);
 
 private:
 
-    
+    unsigned threadCount;
 } ;
 
 }

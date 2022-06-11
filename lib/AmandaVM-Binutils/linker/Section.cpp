@@ -44,6 +44,7 @@ Section* Section::makeCodeSection()
 {
     Section* section = new Section(CODE_SECTION_NAME);
     section->header->flags = Attr_Alloc | Attr_Exec | Attr_Read;
+    section->header->type = Type_ProgramBits;
 
     return section;
 }
@@ -52,6 +53,7 @@ Section* Section::makeDataSection()
 {
     Section* section = new Section(DATA_SECTION_NAME);
     section->header->flags = Attr_Alloc | Attr_Read | Attr_Write;
+    section->header->type = Type_ProgramBits;
 
     return section;
 }
@@ -60,6 +62,7 @@ Section* Section::makeDebugSection()
 {
     Section* section = new Section(".debug-symbols");
     section->header->flags = Attr_Read;
+    section->header->type = Type_Debug;
 
     return section;
 }
@@ -68,6 +71,7 @@ Section* Section::makeReadOnlyDataSection()
 {
     Section* section = new Section(RODATA_SECTION_NAME);
     section->header->flags = Attr_Alloc | Attr_Read;
+    section->header->type = Type_ProgramBits;
 
     return section;
 }
@@ -91,12 +95,38 @@ Section* Section::makeSymbolTableSection()
     return new SymbolTable(SYMBOL_TABLE_SECTION_NAME);
 }
 
+core::String Section::sectionTypeToString(unsigned type)
+{
+    core::String result = "UNKNOWN";
+    switch (type)
+    {
+        case Type_SymbolTable:
+            result = "SYMBOL TABLE";
+            break;
+        case Type_StringTable:
+            result = "STRING TABLE";
+            break;
+        case Type_Debug:
+            result = "DEBUG INFO";
+            break;
+        case Type_Note:
+            result = "NOTES";
+            break;
+        case Type_ProgramBits:
+            result = "PROGRAM BITS";
+            break;
+    }
+
+    return result;
+}
+
 Section::Section(const core::String& name)
 :
 header(new SectionHeader()),
-name(name)
+name(name),
+owner(NULL)
 {
-    memset(header, 0, sizeof(*header));
+    memset(header, 0, sizeof (*header));
 }
 
 Section::~Section()
@@ -133,7 +163,7 @@ void Section::addSymbol(const Symbol* symbol)
 void Section::constructBinaryData()
 {
     for (std::vector<Symbol*>::const_iterator it = symbols.begin(),
-            end = symbols.end(); it != end; ++it)
+         end = symbols.end(); it != end; ++it)
     {
         Symbol* symbol = (*it);
         assert(symbol != NULL && "Null pointer exception.");
@@ -145,7 +175,10 @@ void Section::constructBinaryData()
         const void*     serializedData = symbol->getBinaryData();
         const size_t    serializedSize = symbol->getBufferLength();
 
-        setSize(serializedSize);
+        // Correctly implement this field
+        header->size += serializedSize;
+
+        setSize(header->size);
         Serializable::write(serializedData, VM_BYTE_SIZE, serializedSize);
     }
 }
@@ -154,7 +187,7 @@ size_t Section::calculateSize() const
 {
     size_t result = 0;
     for (std::vector<Symbol*>::const_iterator it = symbols.begin(),
-            end = symbols.end(); it != end; ++it)
+         end = symbols.end(); it != end; ++it)
     {
         result += (*it)->getSize();
     }
@@ -220,7 +253,7 @@ size_t Section::getOffsetToSymbol(const Symbol* symbol) const
             definitionIndex++;
         }
     }
-    
+
     if (found)
     {
         for (size_t i = 0; i < definitionIndex; ++i)
@@ -265,7 +298,7 @@ void Section::merge(const Section* section)
 
         // Transpose the symbols
         for (std::vector<Symbol*>::const_iterator it = section->symbols.begin(),
-                end = section->symbols.end(); it != end; ++it)
+             end = section->symbols.end(); it != end; ++it)
         {
             const Symbol* symbol = (*it);
 
@@ -297,7 +330,12 @@ void Section::merge(const Section* section)
 void Section::marshallImpl(io::OutputStream& stream) const
 {
     Section* self = (Section*) eliminateConstness(this);
-    stream.write(self->getBinaryData(), VM_BYTE_SIZE, getSize());
+
+    // Avoid heisenbug
+    const void* data = self->getBinaryData();
+    size_t size = getSize();
+
+    stream.write(data, VM_BYTE_SIZE, size);
 }
 
 void Section::setAttributes(unsigned attributes)

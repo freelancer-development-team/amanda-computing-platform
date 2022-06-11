@@ -27,6 +27,10 @@
 
 #include <amanda-vm/IO/ConsistentInputStream.h>
 #include <amanda-vm/Binutils/Module.h>
+#include <amanda-vm/Logging/Logger.h>
+
+// C/C++
+#include <stack>
 
 namespace amanda
 {
@@ -54,7 +58,14 @@ public:
 
 protected:
 
-    core::String name;
+    static const logging::Logger& LOGGER;
+
+    core::String                    name;
+    mutable std::stack<uint64_t>    records;
+
+    void                            mark() const;
+    uint64_t                        retrieve() const;
+
 } ;
 
 }

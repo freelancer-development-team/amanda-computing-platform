@@ -23,12 +23,30 @@
  */
 
 #include <amanda-vm/Runtime/ThreadScheduler.h>
+#include <amanda-vm/System.h>
+#include <amanda-vm/Runtime/Context.h>
+
+// C++
+#include <cmath>
 
 using namespace amanda;
 using namespace amanda::vm;
 
-unsigned ThreadScheduler::getActiveThreadCount() const
+ThreadScheduler::ThreadScheduler(const Context& context)
+:
+context(context),
+maxThreads(std::pow(core::getNumberOfAvailableCores(), 2))
 {
-    return 0;
 }
+
+unsigned ThreadScheduler::getMaximunThreadCount() const
+{
+    return maxThreads;
+}
+
+void ThreadScheduler::setMaximumThreadCount(unsigned count)
+{
+    maxThreads = count;
+}
+
 

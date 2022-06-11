@@ -97,7 +97,7 @@ name(name)
 {
     // Initialize the rest of the fields
     entryPointAddress = 0;
-    programHeaderOffset = 0;
+    stringTableOffset = 0;
     sectionHeaderEntries = 0;
     sectionHeaderOffset = 0;
     memset(&version, 0, sizeof (version_triplet));
@@ -187,7 +187,7 @@ void Module::addSection(Section* section)
     sectionHeaderEntries = sections.size();
 }
 
-vm::vm_qword_t Module::calculateOffsetToSection(const core::String& name)
+vm::vm_qword_t Module::calculateOffsetToSection(const core::String& name) const
 {
     vm::vm_qword_t result = 0;
 
@@ -207,6 +207,11 @@ vm::vm_qword_t Module::calculateOffsetToSection(const core::String& name)
     return result;
 }
 
+size_t Module::calculateSectionHeaderTableSize() const
+{
+    return sectionHeaderEntries * sizeof (Section::SectionHeader);
+}
+
 size_t Module::calculateSectionsSize() const
 {
     size_t result = 0;
@@ -216,6 +221,18 @@ size_t Module::calculateSectionsSize() const
         result += (*it)->getSize();
     }
     return result;
+}
+
+void Module::constructBinaryData()
+{
+    // Recalculate the data concerning sections
+    sectionHeaderEntries = countSections();
+    sectionHeaderOffset = OFFSETOF_PROGRAM_HEADER;
+
+    // Offset to the string table
+    stringTableOffset = OFFSETOF_PROGRAM_HEADER
+            + calculateSectionHeaderTableSize()
+            + calculateOffsetToSection(SECTION_HEADERS_STRINGS_NAME) - 1;
 }
 
 vm::vm_word_t Module::countSections() const
@@ -303,7 +320,7 @@ bool Module::hasEntryPoint() const
 
 bool Module::hasProgramHeader() const
 {
-    return programHeaderOffset != 0;
+    return stringTableOffset != 0;
 }
 
 bool Module::hasSymbolDefined(const core::String& name) const
@@ -406,6 +423,9 @@ void Module::mergeExternalModule(Module& external)
 
 void Module::marshallImpl(io::OutputStream& stream) const
 {
+    // Synchronize
+    AMANDA_SYNCHRONIZED(lock);
+    
     /*
      * BINARY LAYOUT OF THE OBJECT/EXECUTABLE/LIBRARY FILE:
      *
@@ -429,12 +449,20 @@ void Module::marshallImpl(io::OutputStream& stream) const
     // Write the magic number.
     stream.write(MAGIC_NUMBER, VM_BYTE_SIZE, 4);
     stream.write(&entryPointAddress, VM_QWORD_SIZE);
-    stream.write(&programHeaderOffset, VM_QWORD_SIZE);
+    stream.write(&stringTableOffset, VM_QWORD_SIZE);
     stream.write(&sectionHeaderEntries, VM_WORD_SIZE);
     stream.write(&sectionHeaderOffset, VM_QWORD_SIZE);
     stream.write(&version, VM_QWORD_SIZE);
     stream.write(message, VM_BYTE_SIZE, 88);
-    stream.write("\x0d\0xa");
+    stream.write("\x0d\0x0a", VM_BYTE_SIZE, 2);
+
+    // Write the section table
+    for (std::vector<Section*>::const_iterator it = sections.begin(),
+         end = sections.end(); it != end; ++it)
+    {
+        const Section::SectionHeader* header = (*it)->getSectionHeader();
+        stream.write(header, sizeof (Section::SectionHeader));
+    }
 
     //stream.write("\nsections\n");   //TODO: COMMENT
     // Write every section.
@@ -453,13 +481,8 @@ void Module::marshallImpl(io::OutputStream& stream) const
     }
     //stream.write("\nend-sections\n");   //TODO: COMMENT
 
-    // Write the section table
-    for (std::vector<Section*>::const_iterator it = sections.begin(),
-         end = sections.end(); it != end; ++it)
-    {
-        const Section::SectionHeader* header = (*it)->getSectionHeader();
-        stream.write(header, sizeof (*header));
-    }
+    // Desynchronize
+    AMANDA_DESYNCHRONIZED(lock);
 }
 
 void Module::setBinaryFormatVersion(const core::String& version)

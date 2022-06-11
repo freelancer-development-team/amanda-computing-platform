@@ -29,28 +29,27 @@ using namespace amanda::vm;
 
 ModuleLoader::ModuleLoader()
 {
-    // Reserve enough space for loading 10 modules without rebuilding the array
-    modules.reserve(10);
 }
 
 ModuleLoader::~ModuleLoader()
 {
     // Release a reference to every module.
-    for (unsigned i = 0; i < modules.size(); ++i)
+    for (ModuleMap::const_iterator it = modules.begin(),
+            end = modules.end(); it != end; ++it)
     {
-        modules.at(i)->release();
+        (it)->second->release();
     }
 }
 
-void ModuleLoader::addModules(const adt::Array<const binutils::Module*>& array)
+void ModuleLoader::addModules(const adt::Array<std::pair<const core::String, const binutils::Module*> >& array)
 {
     for (unsigned i = 0; i < array.length(); ++i)
     {
-        addModule(array[i]);
+        addModule(array[i].first, array[i].second);
     }
 }
 
-void ModuleLoader::addModule(const binutils::Module* module)
+void ModuleLoader::addModule(const core::String& identifier, const binutils::Module* module)
 {
     // Assertions
     assert(module != NULL && "Null pointer exception.");
@@ -59,7 +58,7 @@ void ModuleLoader::addModule(const binutils::Module* module)
     module->grab();
 
     // Push the reference back into the vector
-    modules.push_back(module);
+    modules.insert(std::make_pair(identifier, module));
 
     // Shouldn't this link the external symbols?
 }

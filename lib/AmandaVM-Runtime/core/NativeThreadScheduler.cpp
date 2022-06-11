@@ -23,9 +23,61 @@
  */
 
 #include <amanda-vm/Runtime/NativeThreadScheduler.h>
+#include <amanda-vm/Runtime/UnschedulableException.h>
 
 using namespace amanda;
 using namespace amanda::vm;
+
+NativeThreadScheduler::NativeThreadScheduler(const Context& context)
+:
+ThreadScheduler(context),
+threadCount(0)
+{
+}
+
+unsigned NativeThreadScheduler::getActiveThreadCount() const
+{
+    //TODO: Perhaps synchronize?
+    return threadCount;
+}
+
+void NativeThreadScheduler::notifyThreadFinalization()
+{
+    AMANDA_SYNCHRONIZED(lock);
+    {
+        // Decrease the active thread count
+        --threadCount;
+    }
+    AMANDA_DESYNCHRONIZED(lock);
+}
+
+void NativeThreadScheduler::schedule(const Procedure* procedure)
+{
+    assert(procedure != NULL && "Null pointer exception");
+    if (getActiveThreadCount() > getMaximunThreadCount())
+    {
+        throw UnschedulableException();
+    }
+    // Create the schedulable
+    core::WeakReference<Schedulable> schedulable
+            = new Schedulable(NULL, context, amanda::eliminateConstness(procedure));
+
+    // Add procedure to the set of procedures
+
+    // Execute the runnable
+    core::WeakReference<concurrent::Thread> thread
+            = new concurrent::Thread(schedulable->getReference());
+    thread->start();
+
+    // Increase the count of active threads
+    AMANDA_SYNCHRONIZED(lock);
+    {
+        ++threadCount;
+    }
+    AMANDA_DESYNCHRONIZED(lock);
+}
+
+/* =========================== EXECUTABLE RUNNABLE ========================== */
 
 
 

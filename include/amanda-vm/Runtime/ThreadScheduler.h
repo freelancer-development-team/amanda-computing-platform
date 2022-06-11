@@ -27,18 +27,36 @@
 
 #include <amanda-vm/TypeSystem.h>
 #include <amanda-vm/Runtime/Schedulable.h>
+#include <amanda-vm/Runtime/Procedure.h>
 
 namespace amanda
 {
 namespace vm
 {
 
+class Context;
+
+/**
+ * The <code>ThreadScheduler</code> class defines a contract that concrete
+ * implementor classes must fulfill in order to comply with the virtual machine
+ * scheduling policies.
+ */
 class ThreadScheduler : public core::Object
 {
     AMANDA_OBJECT(ThreadScheduler, core::Object)
 public:
 
-    unsigned getActiveThreadCount() const;
+    ThreadScheduler(const Context& context);
+
+    virtual void        schedule(const Procedure* procedure) = 0;
+    virtual unsigned    getActiveThreadCount() const = 0;
+    virtual unsigned    getMaximunThreadCount() const;
+    virtual void        setMaximumThreadCount(unsigned count);
+
+protected:
+
+    const Context&      context;
+    unsigned            maxThreads;
 } ;
 
 }

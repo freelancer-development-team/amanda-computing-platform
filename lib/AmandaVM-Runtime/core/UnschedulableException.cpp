@@ -16,28 +16,26 @@
  */
 
 /* 
- * File:   Thread.cpp
+ * File:   UnschedulableException.cpp
  * Author: Javier Marrero
  * 
- * Created on May 31, 2022, 3:27 PM
+ * Created on June 3, 2022, 10:36 PM
  */
 
-#include <amanda-vm/Runtime/Thread.h>
+#include <amanda-vm/Runtime/UnschedulableException.h>
 
 using namespace amanda;
 using namespace amanda::vm;
 
-Thread::Thread(const Schedulable* parent)
+UnschedulableException::UnschedulableException()
 :
-Schedulable(parent),
-operationStack(new Stack())
+core::Exception("The system is unable to schedule any more tasks")
 {
 }
 
-Stack& Thread::getOperationStack() const
+UnschedulableException::~UnschedulableException() throw ()
 {
-    assert(operationStack.isNotNull() && "Null pointer exception.");
-
-    return operationStack->getReference();
 }
+
+
 

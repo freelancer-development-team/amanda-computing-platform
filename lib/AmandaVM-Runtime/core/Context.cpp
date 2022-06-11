@@ -35,6 +35,11 @@
 using namespace amanda;
 using namespace amanda::vm;
 
+const logging::Logger& Context::getLogger()
+{
+    return LOGGER;
+}
+
 // Const fields
 const core::String Context::OS_NAME_KEY = "amanda::vm::os.name";
 const core::String Context::SDK_VERSION_KEY = "amanda::vm::sdk.version";
@@ -44,13 +49,11 @@ logging::GNUFormatter Context::FORMATTER("amanda-vm", true);
 logging::Logger& Context::LOGGER = logging::Logger::getLogger("amanda.vm.Context")->getReference();
 
 Context::Context(MemoryAllocator* memoryAllocator,
-                 ThreadScheduler* scheduler,
                  const core::String& path)
 :
 memoryAllocator(memoryAllocator),
 memoryManager(amanda::eliminateConstness(&memoryAllocator->getMemoryManager())),
-moduleLoader(new ModuleLoader()),
-scheduler(scheduler)
+moduleLoader(new ModuleLoader())
 {
     // Get the virtual machine execution path
     {
@@ -89,6 +92,14 @@ Context::~Context()
     LOGGER.trace("destroying virtual machine context @ 0x%p", this);
 }
 
+void Context::execute(binutils::Function* function)
+{
+    // Spawn a new thread with the procedure defined by the selected
+    // function as function
+    core::StrongReference<Procedure> procedure = new Procedure(this->getConstReference(), function);
+    scheduler->schedule(procedure);
+}
+
 void Context::initializeSystemProperties()
 {
 
@@ -107,15 +118,31 @@ const core::String& Context::getProperty(const core::String& key) const
     return properties.at(key);
 }
 
-void Context::loadAndExecute(const core::String& fullPath)
+binutils::Module* Context::loadAndExecute(const core::String& fullPath)
 {
     // Load the module as a library first.
-    loadModule(fullPath);
+    binutils::Module* module = loadModule(fullPath);
 
     // Initialize the first virtual machine thread (the main thread) with
     // information on the current thread
-    
+    LOGGER.trace("initializing virtual machine 'init' thread...");
 
+    // If the module does not contain an entry point throw an exception
+    if (module->hasEntryPoint() == false)
+    {
+        throw binutils::InvalidFileFormatException(core::String::makeFormattedString("The module <%s> does not contain a valid entry point.",
+                                                                                     fullPath.toCharArray()),
+                                                   fullPath);
+    }
+    else
+    {
+        // Create the procedure with the main entry point
+        binutils::Function* mainFunction = static_cast<binutils::Function*> (module->findSymbol(binutils::Module::ENTRY_POINT_PROCEDURE_NAME));
+        assert(mainFunction != NULL && "Null pointer exception.");
+
+        execute(mainFunction);
+    }
+    return module;
 }
 
 void Context::loadLibrary(const core::String& fullPath)
@@ -139,7 +166,7 @@ void Context::loadLibrary(const core::String& fullPath)
     nativeLibraries.insert(std::make_pair(descriptor.getName(), descriptor));
 }
 
-void Context::loadModule(const core::String& fullPath)
+binutils::Module* Context::loadModule(const core::String& fullPath)
 {
     // Get the resource as input stream
     ResourceIdentifier rid = ResourceIdentifier::parse(fullPath);
@@ -151,7 +178,10 @@ void Context::loadModule(const core::String& fullPath)
     // Create the module reader object & load the resultant module object
     // propagate exceptions if any.
     binutils::ModuleReader reader(rid.getAddress(), stream->getReference());
-    moduleLoader->addModule(reader.read());
+    binutils::Module* module = reader.read();
+    moduleLoader->addModule(fullPath, module);
+
+    return module;
 }
 
 bool Context::putProperty(const core::String& key, const core::String& value)
@@ -170,6 +200,12 @@ void Context::setMemoryAllocator(MemoryAllocator* memoryAllocator)
 void Context::setProperty(const core::String& key, const core::String& value)
 {
     properties[key] = value;
+}
+
+void Context::setScheduler(const ThreadScheduler* scheduler)
+{
+    assert(scheduler != NULL && "Null pointer exception");
+    this->scheduler = const_cast<ThreadScheduler*>(scheduler);
 }
 
 // *************************** INNER CLASS ************************************

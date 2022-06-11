@@ -53,8 +53,9 @@ namespace core
         \
         virtual amanda::core::Class& getClassDynamically() const { return getClass(); } \
         \
-        inline Type&        getReference() { return *this; }\
-        inline const Type&  getConstReference() const { return *this; } \
+        inline Type&                getReference() { return *this; }\
+        inline const Type&          getConstReference() const { return *this; } \
+        inline const Type* const    getSelfPointer() const { return this; } \
         \
         AMANDA_REFCOUNTED(ClassName) \
         \
