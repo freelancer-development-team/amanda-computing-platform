@@ -40,6 +40,7 @@ int main(int argc, char** argv)
     core::StrongReference<cli::CommandLine> commandLine = vm::parseCommandLineArguments(argumentsArray, options);
 
     /* Parse the command line */
+    int finalResult = EXIT_SUCCESS;
     if (commandLine->hasOption('h'))
     {
         amanda::vm::printFormattedHelpMessage(options);
@@ -72,7 +73,6 @@ int main(int argc, char** argv)
         //TODO: Add the allocation limit
         core::StrongReference<vm::MemoryManager> memoryManager = new vm::MemoryManager();
         core::StrongReference<vm::MemoryAllocator> memoryAllocator = new vm::LocklessDefaultAllocator(memoryManager->getReference());
-        
 
         /* Create the virtual machine context. */
         core::StrongReference<vm::Context> context =
@@ -89,15 +89,20 @@ int main(int argc, char** argv)
         {
             try
             {
-                context->loadAndExecute(*iter);
+                int partialResult = context->loadAndExecute(*iter);
+                if (((unsigned) partialResult) > ((unsigned) finalResult))
+                {
+                    // Exit with the highest exit code
+                    finalResult = partialResult;
+                }
             }
             catch (core::Exception& ex)
             {
                 vm::Context::getLogger().fatal("%s: %s",
-                                               core::String(ex.getClass().getName()).toLower(),
+                                               core::String(ex.getClassDynamically().getName()).toCharArray(),
                                                ex.getMessage().toLower().toCharArray());
             }
         }
     }
-    return EXIT_SUCCESS;
+    return finalResult;
 }

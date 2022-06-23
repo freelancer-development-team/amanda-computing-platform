@@ -23,6 +23,7 @@
  */
 
 #include <amanda-vm/Binutils/ModuleReader.h>
+#include <amanda-vm/Binutils/SectionReader.h>
 #include <amanda-vm/Binutils/InvalidFileFormatException.h>
 #include <amanda-vm/Binutils/vm-types.h>
 
@@ -45,6 +46,11 @@ ModuleReader::~ModuleReader()
 {
 }
 
+int ModuleReader::read(void* buffer, size_t size, size_t count) const
+{
+    return super::read(buffer, size, count);
+}
+
 Module* ModuleReader::read() const
 {
     // Synchronize
@@ -59,15 +65,15 @@ Module* ModuleReader::read() const
         seek(4);
 
         // Read the program header
-        super::read(&result->entryPointAddress, VM_QWORD_SIZE);
-        super::read(&result->stringTableOffset, VM_QWORD_SIZE);
-        super::read(&result->sectionHeaderEntries, VM_WORD_SIZE);
-        super::read(&result->sectionHeaderOffset, VM_QWORD_SIZE);
-        super::read(&result->version, sizeof (Module::version_triplet));
+        read(&result->entryPointAddress, VM_QWORD_SIZE);
+        read(&result->stringTableOffset, VM_QWORD_SIZE);
+        read(&result->sectionHeaderEntries, VM_WORD_SIZE);
+        read(&result->sectionHeaderOffset, VM_QWORD_SIZE);
+        read(&result->version, sizeof (Module::version_triplet));
 
         // Read the compiler message
         vm::vm_byte_t message[89] = {0};
-        super::read(message, VM_BYTE_SIZE, 88);
+        read(message, VM_BYTE_SIZE, 88);
         result->compilerName = (const char*) message;
 
         // Read the sections table & other section information
@@ -76,7 +82,8 @@ Module* ModuleReader::read() const
                      result->sectionHeaderEntries, result->sectionHeaderOffset,
                      result->stringTableOffset);
 
-        super::seek(result->sectionHeaderOffset);
+        std::vector<Section::SectionHeader> headers;
+        seek(result->sectionHeaderOffset);
         for (unsigned i = 0; i < result->sectionHeaderEntries; i++)
         {
             // As we read every section header table we shall create the
@@ -84,31 +91,43 @@ Module* ModuleReader::read() const
             Section::SectionHeader header;
             std::memset(&header, 0, sizeof (Section::SectionHeader));
 
-            super::read(&header, sizeof (Section::SectionHeader));
+            read(&header, sizeof (Section::SectionHeader));
+            headers.push_back(header);
+        }
 
-            // Read the section name
-            char    sectionName[512] = {0};
-            size_t  sectionNameOffset = result->stringTableOffset + header.name;
+        // For each of the section headers, initialize the sections.
+        for (std::vector<Section::SectionHeader>::iterator it = headers.begin(),
+             end = headers.end(); it != end; ++it)
+        {
+            Section::SectionHeader& header = (*it);
 
-            mark();
+            // Read the section name.
+            vm::vm_address_t nameOffset = header.name + result->stringTableOffset;
+            char name[512] = {0};
+
+            seek(nameOffset);
             {
-                seek(sectionNameOffset);
-                char c = '\0';
-                unsigned i = 0;
+                unsigned counter = 0;
 
+                char c = '\0';
                 do
                 {
-                    super::read(&c, sizeof(char));
-                    sectionName[i++] = c;
-                } while (c != '\0');
+                    read(&c, sizeof (char), 1);
+                    name[counter++] = c;
+                }
+                while (c != '\0');
             }
-            seek(retrieve());
 
             // Trace
-            LOGGER.trace("section with name <%s> and size 0x%llx of type <%s>",
-                         sectionName,
+            LOGGER.trace("section with name <%s> size 0x%llx of type <%s>",
+                         name,
                          header.size,
                          Section::sectionTypeToString(header.type).toCharArray());
+
+            // Initialize the sections
+            SectionReader sectionReader(this->getConstReference(), header, name);
+            sectionReader.setOwningModule(result);
+            result->addSection(sectionReader.read());
         }
     }
     else
@@ -130,7 +149,7 @@ void ModuleReader::mark() const
 {
     AMANDA_SYNCHRONIZED(lock);
     {
-        uint64_t position = super::tell();
+        uint64_t position = tell();
         LOGGER.trace("push: 0x%llx", position);
 
         records.push(position);
@@ -146,7 +165,7 @@ uint64_t ModuleReader::retrieve() const
         result = records.top();
         LOGGER.trace("pop: 0x%llx", result);
 
-        
+        seek(result);
 
         // Pop the data
         records.pop();

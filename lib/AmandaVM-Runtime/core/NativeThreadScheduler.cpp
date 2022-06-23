@@ -24,6 +24,7 @@
 
 #include <amanda-vm/Runtime/NativeThreadScheduler.h>
 #include <amanda-vm/Runtime/UnschedulableException.h>
+#include <amanda-vm/Runtime/Schedulable.h>
 
 using namespace amanda;
 using namespace amanda::vm;
@@ -33,6 +34,11 @@ NativeThreadScheduler::NativeThreadScheduler(const Context& context)
 ThreadScheduler(context),
 threadCount(0)
 {
+}
+
+NativeThreadScheduler::~NativeThreadScheduler()
+{
+    waitForAll();
 }
 
 unsigned NativeThreadScheduler::getActiveThreadCount() const
@@ -51,28 +57,66 @@ void NativeThreadScheduler::notifyThreadFinalization()
     AMANDA_DESYNCHRONIZED(lock);
 }
 
-void NativeThreadScheduler::schedule(const Procedure* procedure)
+Schedulable& NativeThreadScheduler::schedule(const Procedure* procedure)
 {
     assert(procedure != NULL && "Null pointer exception");
+    for (unsigned i = 0; i < threads.size(); ++i)
+    {
+        if (threads.at(i)->isDead())
+        {
+            threads.at(i)->release();
+            threads.erase(threads.begin() + i);
+
+            notifyThreadFinalization();
+        }
+    }
     if (getActiveThreadCount() > getMaximunThreadCount())
     {
         throw UnschedulableException();
     }
+
     // Create the schedulable
     core::WeakReference<Schedulable> schedulable
             = new Schedulable(NULL, context, amanda::eliminateConstness(procedure));
 
-    // Add procedure to the set of procedures
-
     // Execute the runnable
     core::WeakReference<concurrent::Thread> thread
             = new concurrent::Thread(schedulable->getReference());
+
+    // Start the thread we've just scheduled
     thread->start();
 
     // Increase the count of active threads
     AMANDA_SYNCHRONIZED(lock);
     {
+        // Grab reference
+        thread->grab();
+
+        // Push the thread
+        threads.push_front(thread);
         ++threadCount;
+    }
+    AMANDA_DESYNCHRONIZED(lock);
+
+    return schedulable->getReference();
+}
+
+void NativeThreadScheduler::waitForAll() const
+{
+    AMANDA_SYNCHRONIZED(lock);
+    {
+        for (std::deque<concurrent::Thread*>::const_iterator it = threads.begin(),
+             end = threads.end(); it != end; ++it)
+        {
+            concurrent::Thread* thread = *it;
+            if (thread != NULL)
+            {
+                if (thread->isDead() == false)
+                {
+                    concurrent::Thread::wait((*it)->getThreadId());
+                }
+            }
+        }
     }
     AMANDA_DESYNCHRONIZED(lock);
 }

@@ -59,9 +59,21 @@ void FileInputStream::close() const
     file = NULL;
 }
 
-void FileInputStream::read(void* buffer, size_t size, size_t count) const
+int FileInputStream::read(void* buffer, size_t size, size_t count) const
 {
-    file->read((char*) buffer, size, count);
+    int result = 0;
+    bool state = file->read((char*) buffer, size, count);
+
+    // Return the end of stream if that's what we've reached
+    if (file->isEndOfFile())
+    {
+        result = END_OF_STREAM;
+    }
+    if (state == false)
+    {
+        result = READ_ERROR;
+    }
+    return result;
 }
 
 void FileInputStream::reset() const

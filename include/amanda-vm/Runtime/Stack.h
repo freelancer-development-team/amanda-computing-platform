@@ -53,21 +53,21 @@ public:
 
     bool    isEmpty() const;
     void    pop(vm_byte_t* buffer, vm_size_t size);
-    void    push(const vm_byte_t* data, vm_size_t size);
+    void    push(const vm_byte_t* data, vm_size_t size, bool convert = true);
 
     template <typename T>
     inline T pop()
     {
         T data;
-        pop(&data, sizeof(T));
-        
+        pop((vm::vm_byte_t*) (&data), sizeof (T));
+
         return data;
     }
 
     template <typename T>
     inline void push(T data)
     {
-        push(&data, sizeof (data));
+        push((vm::vm_byte_t*) (&data), sizeof (data), false);
     }
 
 private:

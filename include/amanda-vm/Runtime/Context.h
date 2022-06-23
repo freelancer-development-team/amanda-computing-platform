@@ -26,9 +26,9 @@
 #define CONTEXT_H
 
 #include <amanda-vm/TypeSystem.h>
-#include <amanda-vm/Binutils/Function.h>
 #include <amanda-vm/IO/Path.h>
 #include <amanda-vm/Logging/ConsoleHandler.h>
+#include <amanda-vm/Logging/FileHandler.h>
 #include <amanda-vm/Logging/GNUFormatter.h>
 #include <amanda-vm/Logging/Logger.h>
 #include <amanda-vm/Runtime/FileSystem.h>
@@ -36,6 +36,7 @@
 #include <amanda-vm/Runtime/MemoryAllocator.h>
 #include <amanda-vm/Runtime/ModuleLoader.h>
 #include <amanda-vm/Runtime/ThreadScheduler.h>
+#include <amanda-vm/Runtime/ExecutableModule.h>
 
 // C++
 #include <map>
@@ -79,11 +80,11 @@ public:
             const core::String& path);
     virtual ~Context();
 
-    void                execute(binutils::Function* function);
+    int                 callNative(const core::String& name, void* arguments, void* retval) const;
     const core::String& getProperty(const core::String& key) const;
-    binutils::Module*   loadAndExecute(const core::String& fullPath);
+    int                 loadAndExecute(const core::String& fullPath);
     void                loadLibrary(const core::String& fullPath);
-    binutils::Module*   loadModule(const core::String& fullPath);
+    ExecutableModule*   loadModule(const core::String& fullPath);
     bool                putProperty(const core::String& key, const core::String& value);
     void                setMemoryAllocator(MemoryAllocator* memoryAllocator);
     void                setProperty(const core::String& key, const core::String& value);
@@ -118,6 +119,9 @@ private:
     static logging::Logger&                     LOGGER;
 
     core::StrongReference<FileSystem>           fileSystem;
+    core::StrongReference<logging::Formatter>   fileFormatter;
+    core::StrongReference<logging::FileHandler> fileHandler;
+    core::StrongReference<io::File>             loggingFile;
     core::StrongReference<MemoryAllocator>      memoryAllocator;
     core::StrongReference<MemoryManager>        memoryManager;
     core::StrongReference<ModuleLoader>         moduleLoader;

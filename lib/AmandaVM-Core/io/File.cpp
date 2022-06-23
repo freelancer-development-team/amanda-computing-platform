@@ -141,21 +141,25 @@ bool File::canWrite() const
 
 void File::close()
 {
-    if (handle)
+    AMANDA_SYNCHRONIZED(lock);
     {
-        if (handle != stdout
-            && handle != stdin
-            && handle != stderr)
+        if (handle)
         {
-            fflush(handle);
-            rewind(handle);
-            clearerr(handle);
+            if (handle != stdout
+                && handle != stdin
+                && handle != stderr)
+            {
+                fflush(handle);
+                rewind(handle);
+                clearerr(handle);
 
-            fclose(handle);
+                fclose(handle);
 
-            attributes.attr_open = false;
+                attributes.attr_open = false;
+            }
         }
     }
+    AMANDA_DESYNCHRONIZED(lock);
 }
 
 bool File::exists() const
@@ -274,7 +278,11 @@ bool File::isError() const
     bool result = false;
     if (handle)
     {
-        result = ferror(handle);
+        AMANDA_SYNCHRONIZED(lock);
+        {
+            result = ferror(handle);
+        }
+        AMANDA_DESYNCHRONIZED(lock);
     }
     return result;
 }
@@ -292,50 +300,58 @@ bool File::isOpen() const
 bool File::modifyAccessMode(FileAccessMode newAccessMode)
 {
     bool result = false;
-    if (handle && isFile())
+    AMANDA_SYNCHRONIZED(lock);
     {
-        handle = freopen(getPath().toCharArray(), getAccessModeString(newAccessMode), handle);
-        this->accessMode = newAccessMode;
+        if (handle && isFile())
+        {
+            handle = freopen(getPath().toCharArray(), getAccessModeString(newAccessMode), handle);
+            this->accessMode = newAccessMode;
 
-        result = (handle == NULL);
+            result = (handle == NULL);
+        }
     }
+    AMANDA_DESYNCHRONIZED(lock);
     return result;
 }
 
 bool File::open()
 {
     bool result = false;
-    handle = fopen(name.toCharArray(), getAccessModeString(accessMode));
 
-    /*
-     * Stat system call. May replace if something more portable appears.
-     */
-    struct stat stat_info;
-    if (stat(name.toCharArray(), &stat_info) == 0)
+    AMANDA_SYNCHRONIZED(lock);
     {
-        unsigned short fmode = (stat_info.st_mode & S_IFMT);
-        switch (fmode)
+        handle = fopen(name.toCharArray(), getAccessModeString(accessMode));
+
+        /*
+         * Stat system call. May replace if something more portable appears.
+         */
+        struct stat stat_info;
+        if (stat(name.toCharArray(), &stat_info) == 0)
         {
-            case S_IFDIR:
-                attributes.attr_dir = true;
-                break;
-            case S_IFREG:
-                attributes.attr_file = true;
-                break;
-            default:
-                attributes.attr_file = true;
-                break;
+            unsigned short fmode = (stat_info.st_mode & S_IFMT);
+            switch (fmode)
+            {
+                case S_IFDIR:
+                    attributes.attr_dir = true;
+                    break;
+                case S_IFREG:
+                    attributes.attr_file = true;
+                    break;
+                default:
+                    attributes.attr_file = true;
+                    break;
+            }
+
+            /* Return the opening status of the file. */
+            result = (handle == NULL) ? false : true;
         }
 
-        /* Return the opening status of the file. */
-        result = (handle == NULL) ? false : true;
+        if (result)
+        {
+            attributes.attr_open = true;
+        }
     }
-
-    if (result)
-    {
-        attributes.attr_open = true;
-    }
-
+    AMANDA_DESYNCHRONIZED(lock);
     return result;
 }
 
@@ -384,8 +400,12 @@ bool File::readline(char* buffer, size_t limit) const
 
 void File::rename(const core::String& str)
 {
-    ::rename(name.toCharArray(), str.toCharArray());
-    name = str;
+    AMANDA_SYNCHRONIZED(lock);
+    {
+        ::rename(name.toCharArray(), str.toCharArray());
+        name = str;
+    }
+    AMANDA_DESYNCHRONIZED(lock);
 }
 
 bool File::reset() const
@@ -393,7 +413,11 @@ bool File::reset() const
     bool result = false;
     if (handle && isFile())
     {
-        rewind(handle);
+        AMANDA_SYNCHRONIZED(lock);
+        {
+            rewind(handle);
+        }
+        AMANDA_DESYNCHRONIZED(lock);
         result = true;
     }
     return result;

@@ -38,7 +38,7 @@ io::File* FileSystem::getResourceAsFile(const ResourceIdentifier& id) const
         throw nio::NoSuchFileException(id.toString());
     }
 
-    io::File* result = new io::File(id.getAddress(), io::File::READ | io::File::WRITE);
+    io::File* result = new io::File(id.getAddress(), io::File::READ | io::File::WRITE | io::File::BINARY);
     if (!result->exists())
     {
         throw nio::NoSuchFileException(result->getPath());

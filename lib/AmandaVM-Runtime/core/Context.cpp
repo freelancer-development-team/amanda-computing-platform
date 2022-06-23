@@ -29,8 +29,11 @@
 #include <amanda-vm/NIO/NoSuchFileException.h>
 
 // C++
+#include <ffi.h>
+#include <ffitarget.h>
 #include <cstdlib>
 #include <cerrno>
+#include <ctime>
 
 using namespace amanda;
 using namespace amanda::vm;
@@ -53,8 +56,16 @@ Context::Context(MemoryAllocator* memoryAllocator,
 :
 memoryAllocator(memoryAllocator),
 memoryManager(amanda::eliminateConstness(&memoryAllocator->getMemoryManager())),
-moduleLoader(new ModuleLoader())
+moduleLoader(new ModuleLoader(memoryAllocator->getReference()))
 {
+    // Create the logging file
+    loggingFile = new io::File("amandavm-session.log", io::File::WRITE | io::File::CREATE);
+    if (!loggingFile->open())
+    {
+        fprintf(stderr, "amanda-vm: fatal error: unable to open log file (%s).", loggingFile->getLastErrorString().toCharArray());
+        throw nio::IOException("unable to open log file.");
+    }
+
     // Get the virtual machine execution path
     {
         // Get the full path object
@@ -74,11 +85,17 @@ moduleLoader(new ModuleLoader())
     LOGGER.setUseParentHandlers(false);
     LOGGER.setLevel(logging::Logger::ALL);
 
+    // Create the file handler
+    fileFormatter = new logging::GNUFormatter("amanda-vm", false);
+    fileHandler = new logging::FileHandler(loggingFile, fileFormatter);
+
     // Configure the handlers
-    CONSOLE_HANDLER.setFormatter(FORMATTER);
+    CONSOLE_HANDLER.setFormatter(fileFormatter->getReference());
+    CONSOLE_HANDLER.setLevel(logging::Logger::WARN);
 
     // Add the handlers
     LOGGER.addHandler(CONSOLE_HANDLER);
+    LOGGER.addHandler(fileHandler->getReference());
 
     // Trace the context creation
     LOGGER.trace("creating virtual machine context object (0x%p)", this);
@@ -89,21 +106,11 @@ Context::~Context()
     properties.clear();
 
     // Trace the context deletion
-    LOGGER.trace("destroying virtual machine context @ 0x%p", this);
-}
-
-void Context::execute(binutils::Function* function)
-{
-    // Spawn a new thread with the procedure defined by the selected
-    // function as function
-    core::StrongReference<Procedure> procedure = new Procedure(this->getConstReference(), function);
-    scheduler->schedule(procedure);
+    LOGGER.trace("destroying virtual machine context @ 0x%p\n", this);
 }
 
 void Context::initializeSystemProperties()
 {
-
-
 #ifdef _W32
     putProperty(OS_NAME_KEY, "Windows");
 #else
@@ -113,36 +120,74 @@ void Context::initializeSystemProperties()
     putProperty(SDK_VERSION_KEY, SDK_FULLVERSION_STRING);
 }
 
+int Context::callNative(const core::String& name, void* arguments, void* retval) const
+{
+    // Log the attempt
+    LOGGER.info("attempting call to native function named <%s> (args @0x%p, return value @0x%p)",
+                name.toCharArray(), arguments, retval);
+
+    // First of all, find the symbol we're looking for
+
+    // Return 0
+    return 0;
+}
+
 const core::String& Context::getProperty(const core::String& key) const
 {
     return properties.at(key);
 }
 
-binutils::Module* Context::loadAndExecute(const core::String& fullPath)
+int Context::loadAndExecute(const core::String& fullPath)
 {
-    // Load the module as a library first.
-    binutils::Module* module = loadModule(fullPath);
+    // The final result
+    int result = EXIT_SUCCESS;
 
-    // Initialize the first virtual machine thread (the main thread) with
-    // information on the current thread
-    LOGGER.trace("initializing virtual machine 'init' thread...");
+    // Load the executable module first
+    ExecutableModule* module = loadModule(fullPath);
 
-    // If the module does not contain an entry point throw an exception
-    if (module->hasEntryPoint() == false)
+    // Look for the main function
+    const binutils::Symbol::SymbolTableEntry* main = module->findSymbol(binutils::Module::ENTRY_POINT_PROCEDURE_NAME,
+                                                                        binutils::Symbol::Type_Function);
+    if (!main)
     {
-        throw binutils::InvalidFileFormatException(core::String::makeFormattedString("The module <%s> does not contain a valid entry point.",
-                                                                                     fullPath.toCharArray()),
-                                                   fullPath);
+        LOGGER.error("the selected module <%s> does not contain an entry point of name <%s>.",
+                     fullPath.toCharArray(),
+                     binutils::Module::ENTRY_POINT_PROCEDURE_NAME.toCharArray());
+        throw nio::NoSuchFileException(fullPath);
     }
     else
     {
-        // Create the procedure with the main entry point
-        binutils::Function* mainFunction = static_cast<binutils::Function*> (module->findSymbol(binutils::Module::ENTRY_POINT_PROCEDURE_NAME));
-        assert(mainFunction != NULL && "Null pointer exception.");
+        LOGGER.trace("entry symbol <%s>\n"
+                     "  - symbol address    : 0x%llx\n"
+                     "  - symbol type       : %s\n"
+                     "  - symbol size       : %lluB\n"
+                     "      -- end of symbol data --",
+                     binutils::Module::ENTRY_POINT_PROCEDURE_NAME.toCharArray(),
+                     main->value,
+                     binutils::Symbol::getTypeStringFromValue(main->type).toCharArray(),
+                     main->size);
 
-        execute(mainFunction);
+        // Create the procedure object and execute!!!
+        core::WeakReference<Procedure> mainProcedure = new Procedure(this->getReference(), binutils::Module::ENTRY_POINT_PROCEDURE_NAME, main);
+        mainProcedure->setExecutableModule(module->getReference());
+
+        // Get the current time & date
+        std::time_t localtime = std::time(NULL);
+        char*   localCTime = std::ctime(&localtime);
+        char    strLocalTime[128] = {0};
+        std::strncpy(strLocalTime, localCTime, strlen(localCTime) - 1);
+
+        LOGGER.info("execution started (local date & time: %s)", strLocalTime);
+        core::StrongReference<const Schedulable> mainSchedulable = scheduler->schedule(mainProcedure).getSelfPointer();
+
+        // Wait until this thread (and all the spawned threads) finishes executing
+        scheduler->waitForAll();
+
+        // Collect the execution result
+        result = (int) mainSchedulable->getReturnValue();
+        LOGGER.info("execution finished, return value: %d", result);
     }
-    return module;
+    return result;
 }
 
 void Context::loadLibrary(const core::String& fullPath)
@@ -166,22 +211,19 @@ void Context::loadLibrary(const core::String& fullPath)
     nativeLibraries.insert(std::make_pair(descriptor.getName(), descriptor));
 }
 
-binutils::Module* Context::loadModule(const core::String& fullPath)
+ExecutableModule* Context::loadModule(const core::String& fullPath)
 {
     // Get the resource as input stream
     ResourceIdentifier rid = ResourceIdentifier::parse(fullPath);
     core::StrongReference<io::InputStream> stream = fileSystem->getResourceAsStream(rid);
+    core::StrongReference<io::ConsistentInputStream> cstream = new io::ConsistentInputStream(stream->getReference(), io::ConsistentInputStream::BIG_ENDIAN);
 
     // Trace the resulting id
     LOGGER.trace("loading module: %s (scheme: %s)", rid.toString().toCharArray(), rid.getScheme().toCharArray());
 
     // Create the module reader object & load the resultant module object
     // propagate exceptions if any.
-    binutils::ModuleReader reader(rid.getAddress(), stream->getReference());
-    binutils::Module* module = reader.read();
-    moduleLoader->addModule(fullPath, module);
-
-    return module;
+    return moduleLoader->load(fullPath, cstream);
 }
 
 bool Context::putProperty(const core::String& key, const core::String& value)
@@ -205,7 +247,7 @@ void Context::setProperty(const core::String& key, const core::String& value)
 void Context::setScheduler(const ThreadScheduler* scheduler)
 {
     assert(scheduler != NULL && "Null pointer exception");
-    this->scheduler = const_cast<ThreadScheduler*>(scheduler);
+    this->scheduler = const_cast<ThreadScheduler*> (scheduler);
 }
 
 // *************************** INNER CLASS ************************************

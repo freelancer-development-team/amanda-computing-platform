@@ -27,7 +27,9 @@
 
 #include <amanda-vm/TypeSystem.h>
 #include <amanda-vm/ADT/Array.h>
-#include <amanda-vm/Binutils/ModuleReader.h>
+#include <amanda-vm/Runtime/ExecutableModule.h>
+#include <amanda-vm/Runtime/MemoryAllocator.h>
+#include <amanda-vm/Logging/Logger.h>
 
 // C++
 #include <vector>
@@ -53,17 +55,20 @@ class ModuleLoader : public core::Object
     AMANDA_OBJECT(ModuleLoader, core::Object)
 public:
 
-    ModuleLoader();
+    ModuleLoader(MemoryAllocator& allocator);
     virtual ~ModuleLoader();
-    
-    void addModules(const adt::Array<std::pair<const core::String, const binutils::Module*> >& array);
-    void addModule(const core::String& identifier, const binutils::Module* module);
+
+    ExecutableModule* load(const core::String& identifier, io::InputStream* stream);
 
 private:
 
-    typedef std::map<const core::String, const binutils::Module*> ModuleMap;
+    typedef std::map<const core::String, ExecutableModule*> ModuleMap;
 
-    ModuleMap modules;
+    static logging::Logger& LOGGER;
+
+    MemoryAllocator&    allocator;
+    ModuleMap           modules;
+
 } ;
 
 }

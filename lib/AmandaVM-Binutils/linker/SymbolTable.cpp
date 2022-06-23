@@ -34,6 +34,9 @@ Section(name)
 {
     setAttributes(Attr_Read);
     setType(Type_SymbolTable);
+
+    // Reserve space
+    ordererSymbols.reserve(25);
 }
 
 SymbolTable::~SymbolTable()
@@ -57,23 +60,24 @@ void SymbolTable::addSymbol(const Symbol* symbol)
 
     // Add the symbol.
     symbols.insert(std::make_pair(symbol->getName(), symbol));
+    ordererSymbols.push_back(symbol);
 
     // Increase the size
-    setSize(getSize() + sizeof(Symbol::SymbolTableEntry));
+    setSize(symbols.size() * sizeof (Symbol::SymbolTableEntry));
 }
 
 void SymbolTable::constructBinaryData()
 {
-    for (SymbolMap::const_iterator it = symbols.begin(), end = symbols.end();
+    for (SymbolVector::const_iterator it = ordererSymbols.begin(), end = ordererSymbols.end();
          it != end; ++it)
     {
-        const Symbol* symbol = it->second;
+        const Symbol* symbol =  (*it);
         assert(symbol != NULL && "Null pointer exception.");
 
         const Symbol::SymbolTableEntry entry = symbol->getEntry();
 
         // Serializable::write("!!", 1, 2);
-        Serializable::write(&entry, sizeof(entry), 1);
+        Serializable::write(&entry, sizeof (entry), 1);
         // Serializable::write("!!", 1, 2);
     }
 }
@@ -83,11 +87,13 @@ unsigned SymbolTable::getIndexToSymbol(const core::String& name) const
     unsigned result = 0;
     if (hasSymbol(name))
     {
+        const Symbol* object = getSymbol(name);
+
         bool found = false;
-        for (SymbolMap::const_iterator it = symbols.begin(), end = symbols.end();
+        for (SymbolVector::const_iterator it = ordererSymbols.begin(), end = ordererSymbols.end();
              it != end && !found; ++it)
         {
-            if (it->first == name)
+            if ((*it) == object)
             {
                 found = true;
             }
@@ -104,8 +110,8 @@ Symbol* SymbolTable::getSymbol(const core::String& name) const
 {
     //TODO: Optimize this
     // We must have in account that finding is expensive. (I mean, not that
-    // expensive, just n*log(n) but, we are duplicating the cost this way)
-    
+    // expensive, just log(n) but, we are duplicating the cost this way)
+
     Symbol* result = NULL;
     if (symbols.find(name) != symbols.end())
     {

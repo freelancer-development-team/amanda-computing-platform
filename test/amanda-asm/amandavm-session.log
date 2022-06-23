@@ -1,0 +1,57 @@
+amanda-vm: trace: creating virtual machine context object (0x0000027aeec76cc0)
+amanda-vm: trace: accessing resource with id <vfs://program-02.ax>
+amanda-vm: trace: loading module: vfs://program-02.ax (scheme: vfs)
+amanda-vm: trace: read program header for module <program-02.ax>:
+  - magic number    : 0x7F404158
+  - entry address   : 0x0000000000000298
+  - section table   : 0x000000000000014c
+  - section count   : 0x00000006
+  - stab offset     : 0x0000000000000080
+  - version number  : 0x0000000200010000
+         -- end of header data --
+amanda-vm: trace: section: <.sh-strings> (STRING TABLE)
+  - section size      : 0x33
+  - section offset    : 0x14c
+  - section address   : 0x27aeedc9760
+      -- end of section data --
+amanda-vm: trace: section: <.strings> (STRING TABLE)
+  - section size      : 0x111
+  - section offset    : 0x17f
+  - section address   : 0x27aeedcbc50
+      -- end of section data --
+amanda-vm: trace: section: <.symbols> (SYMBOL TABLE)
+  - section size      : 0x154
+  - section offset    : 0x290
+  - section address   : 0x27aeedce8b0
+      -- end of section data --
+amanda-vm: trace: section: <.code> (PROGRAM BITS)
+  - section size      : 0x52
+  - section offset    : 0x3e4
+  - section address   : 0x27aeedcbd70
+      -- end of section data --
+amanda-vm: trace: section: <.data> (PROGRAM BITS)
+  - section size      : 0x0
+  - section offset    : 0x436
+  - section address   : 0x0
+      -- end of section data --
+amanda-vm: trace: section: <.rodata> (PROGRAM BITS)
+  - section size      : 0x0
+  - section offset    : 0x436
+  - section address   : 0x0
+      -- end of section data --
+amanda-vm: debug: last loaded module ('program-02.ax') available symbols are (10 results):
+	NAME: puts                                               | INDEX: 0x0                | TYPE: DATA OBJECT
+	NAME: @@main?A_string@!l32                               | INDEX: 0x1                | TYPE: FUNCTION  
+	NAME: amanda::binutils::test::Fred                       | INDEX: 0x2                | TYPE: DATA OBJECT
+	NAME: amanda::binutils::test::Fred::self                 | INDEX: 0x3                | TYPE: DATA OBJECT
+	NAME: amanda::binutils::test::Fred::refcount             | INDEX: 0x4                | TYPE: DATA OBJECT
+	NAME: amanda::binutils::test::Fred::size                 | INDEX: 0x5                | TYPE: DATA OBJECT
+	NAME: amanda::binutils::test::Fred::classname            | INDEX: 0x6                | TYPE: DATA OBJECT
+	NAME: amanda::binutils::test::Fred::name                 | INDEX: 0x7                | TYPE: DATA OBJECT
+	NAME: @@help?l64@l64@!b8                                 | INDEX: 0x8                | TYPE: FUNCTION  
+	NAME: @@labels?void                                      | INDEX: 0x9                | TYPE: FUNCTION  
+
+amanda-vm: error: the selected module <program-02.ax> does not contain an entry point of name <@@main?A_string@!l32>.
+amanda-vm: fatal error: NoSuchFileException: no such file or directory
+amanda-vm: trace: destroying virtual machine context @ 0x0000027aeec76cc0
+

@@ -236,7 +236,6 @@ void ReferenceCounted::releaseWeakReference() const
 
 void ReferenceCounted::operator delete(void* pointer)
 {
-
     // Delete the object
     ::operator delete(pointer);
 }

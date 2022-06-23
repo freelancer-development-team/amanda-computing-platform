@@ -62,6 +62,8 @@ protected:
     std::vector<vm::vm_qword_t> indexes;
     std::vector<core::String>   strings;
 
+    virtual size_t      calculateSize() const;
+
 private:
 
     vm::vm_qword_t lastIndex;

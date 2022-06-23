@@ -30,6 +30,21 @@
 using namespace amanda;
 using namespace amanda::binutils;
 
+const core::String Symbol::getTypeStringFromValue(int type)
+{
+    core::String result("UNKNOWN TYPE");
+    switch (type)
+    {
+        case Type_Function:
+            result = "FUNCTION";
+            break;
+        case Type_Object:
+            result = "DATA OBJECT";
+            break;
+    }
+    return result;
+}
+
 const Symbol::SymbolTableEntry& Symbol::getNullSymbolTableEntry()
 {
     static bool initialized = false;
@@ -37,7 +52,7 @@ const Symbol::SymbolTableEntry& Symbol::getNullSymbolTableEntry()
 
     if (!initialized)
     {
-        memset(&entry, 0, sizeof(entry));
+        memset(&entry, 0, sizeof (entry));
 
         entry.name = 0;
         entry.value = 0;
@@ -116,7 +131,7 @@ Symbol& Symbol::setModule(Module* module)
 {
     // Set the module
     this->module = module;
-    
+
     return *this;
 }
 
@@ -137,7 +152,7 @@ Symbol& Symbol::setSection(Section* section)
 {
     // Set the section
     this->section = section;
-    
+
     return *this;
 }
 
@@ -156,6 +171,12 @@ Symbol& Symbol::setSize(size_t size)
 Symbol& Symbol::setType(vm::vm_byte_t type)
 {
     this->entry.type = type;
+    return *this;
+}
+
+Symbol& Symbol::setValue(vm::vm_address_t value)
+{
+    this->entry.value = value;
     return *this;
 }
 

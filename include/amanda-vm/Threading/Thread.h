@@ -38,8 +38,11 @@ namespace concurrent
 class Thread : public Runnable
 {
     AMANDA_OBJECT(Thread, Runnable)
-    
+
 public:
+
+    static void     sleep(unsigned long milliseconds);
+    static void     wait(unsigned long long id);
 
     /**
      * Enumerates all the possible thread priorities.
@@ -53,17 +56,21 @@ public:
     Thread(Runnable& runnable);
     virtual ~Thread();
 
-    void            exit();
-    bool            isJoinable() const;
-    bool            isRunning() const;
-    bool            isStarted() const;
-    virtual void    join();
-    virtual void    run();
-    void            setJoinable(bool joinable);
-    virtual void    start();
+    void                exit();
+    unsigned long long  getThreadId() const;
+    bool                isDead() const;
+    bool                isJoinable() const;
+    bool                isRunning() const;
+    bool                isStarted() const;
+    virtual void        join(unsigned long long id);
+    virtual void        run();
+    void                setJoinable(bool joinable);
+    void                setDead(bool dead);
+    virtual void        start();
 
 private:
 
+    volatile bool                   dead;
     void*                           nativeHandle;
     std::map<const char*, void*>    handles;
     volatile unsigned long long     id;
@@ -74,7 +81,7 @@ private:
 
     bool            hasRunnable() const;
     void            initializeState();
-    
+
 } ;
 
 }

@@ -25,6 +25,9 @@
 #include <amanda-vm/Runtime/Schedulable.h>
 #include <amanda-vm/Runtime/Context.h>
 
+// C++
+#include <cerrno>
+
 using namespace amanda;
 using namespace amanda::vm;
 
@@ -35,6 +38,7 @@ Schedulable::Schedulable(const Schedulable* parent,
 context(context),
 currentProcedure(init),
 parent(parent),
+returnValue(0),
 stack(new Stack())
 {
 }
@@ -56,6 +60,11 @@ const Context& Schedulable::getContext() const
     return result;
 }
 
+vm::vm_qword_t Schedulable::getReturnValue() const
+{
+    return returnValue;
+}
+
 bool Schedulable::hasParent() const
 {
     return parent.isNotNull();
@@ -74,5 +83,32 @@ void Schedulable::run()
 
     // Apply the stack to the current procedure and begin executing
     currentProcedure->applyStack(stack);
-    currentProcedure->execute();
+    try
+    {
+        currentProcedure->execute();
+    }
+    catch (core::Exception& ex)
+    {
+        returnValue = -1;
+        throw ex;
+    }
+
+    // The last value in the stack is the return value
+    // the trouble is how to know which data is the adequate
+    AMANDA_SYNCHRONIZED(lock);
+    {
+        const size_t returnValueSize = currentProcedure->getReturnValueSize();
+        if (returnValueSize > 0)
+        {
+            vm::vm_dword_t returnValueBuffer = 0;
+            stack->pop((vm::vm_byte_t*) (&returnValueBuffer), returnValueSize);
+
+            AMANDA_SYNCHRONIZED(valueLock);
+            {
+                returnValue = returnValueBuffer;
+            }
+            AMANDA_DESYNCHRONIZED(valueLock);
+        }
+    }
+    AMANDA_DESYNCHRONIZED(lock);
 }

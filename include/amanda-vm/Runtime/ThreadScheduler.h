@@ -34,6 +34,7 @@ namespace amanda
 namespace vm
 {
 
+class Schedulable;
 class Context;
 
 /**
@@ -48,10 +49,11 @@ public:
 
     ThreadScheduler(const Context& context);
 
-    virtual void        schedule(const Procedure* procedure) = 0;
-    virtual unsigned    getActiveThreadCount() const = 0;
-    virtual unsigned    getMaximunThreadCount() const;
-    virtual void        setMaximumThreadCount(unsigned count);
+    virtual Schedulable&    schedule(const Procedure* procedure) = 0;
+    virtual unsigned        getActiveThreadCount() const = 0;
+    virtual unsigned        getMaximunThreadCount() const;
+    virtual void            setMaximumThreadCount(unsigned count);
+    virtual void            waitForAll() const = 0;
 
 protected:
 

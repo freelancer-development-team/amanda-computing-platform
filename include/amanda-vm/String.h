@@ -544,7 +544,7 @@ struct NaturalOrderComparator
 {
     inline bool operator()(const String& s1, const String& s2) const
     {
-        return false;
+        return true;
     }
 };
 

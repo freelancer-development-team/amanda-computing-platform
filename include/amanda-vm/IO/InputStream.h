@@ -50,14 +50,18 @@ class InputStream : extends core::Object, implements Closeable
 
 public:
 
+    static const int NO_ERROR = 0;
+    static const int READ_ERROR = 1;
+    static const int END_OF_STREAM = -1;
+
     InputStream();
     virtual ~InputStream();
 
     virtual void        close() const = 0;
     void                popOffset() const;
     void                pushOffset() const;
-    virtual void        read(void* buffer, size_t size) const;
-    virtual void        read(void* buffer, size_t size, size_t count) const;
+    virtual int         read(void* buffer, size_t size) const;
+    virtual int         read(void* buffer, size_t size, size_t count) const;
     virtual void        reset() const = 0;
     virtual void        seek(uint64_t offset) const = 0;
     virtual uint64_t    tell() const = 0;
@@ -65,7 +69,7 @@ public:
 private:
 
     mutable std::stack<uint64_t> offsets;
-    
+
 } ;
 
 }

@@ -29,6 +29,7 @@
 #include <pthread.h>
 #include <unistd.h>
 #include <cstdlib>
+#include <queue>
 
 using namespace amanda;
 using namespace amanda::concurrent;
@@ -37,33 +38,99 @@ using namespace amanda::concurrent;
 #define PTHREAD_ATTRIBUTE(x)    ((pthread_attr_t*) (x))
 #define PTHREAD_ATTRIBUTE_NAME  "pthread-attribute"
 
-/**
- * This block must be declared as extern C.
- */
-extern "C"
-{
+static std::queue<core::Exception*>     exceptionQueue;
+static std::deque<concurrent::Thread*>  actives;
 
-static void* internalRun(void* args)
+static void internalThrow()
+{
+    AMANDA_SYNCHRONIZED(lock);
+    {
+        if (!exceptionQueue.empty())
+        {
+            core::Exception* ex = exceptionQueue.front();
+            exceptionQueue.pop();
+
+            assert(ex != NULL && "Null pointer dereference in exception handling.");
+            throw *ex;
+        }
+    }
+    AMANDA_DESYNCHRONIZED(lock);
+}
+
+void* internalRun(void* args)
 {
     assert(args != NULL && "Bad pointer");
-    Thread* thread = reinterpret_cast<Thread*> (args);
-    thread->run();
+    Thread* thread = static_cast<Thread*> (args);
 
+    try
+    {
+        thread->run();
+    }
+    catch (core::Exception& ex)
+    {
+        core::Exception* clone = (core::Exception*) ex.clone();
+        AMANDA_SYNCHRONIZED(lock);
+        {
+            exceptionQueue.push(clone);
+        }
+        AMANDA_DESYNCHRONIZED(lock);
+    }
+
+    thread->setDead(true);
     return args;
 }
 
+void Thread::sleep(unsigned long milliseconds)
+{
+    usleep(milliseconds);
+}
+
+void Thread::wait(unsigned long long id)
+{
+    AMANDA_SYNCHRONIZED(lock);
+    {
+        int result = pthread_join((pthread_t) id, NULL);
+        if (result != 0)
+        {
+            core::String cause = "unknown";
+            switch (result)
+            {
+                case EDEADLK:
+                    cause = "a deadlock was detected";
+                    break;
+                case EINVAL:
+                    cause = "thread is not a joinable thread or another thread is waiting to join";
+                    break;
+                case ESRCH:
+                    cause = "no thread with that ID could be found";
+                    break;
+            }
+            throw ThreadingException("unable to join threads: " + cause);
+        }
+    }
+    AMANDA_DESYNCHRONIZED(lock);
 }
 
 Thread::Thread()
 :
+dead(false),
+nativeHandle(NULL),
+id(0),
+joinable(true),
+running(false),
 started(false)
 {
     // Initialize common state
     initializeState();
 }
 
-Thread::Thread(Runnable& runnable)
+Thread::Thread(Runnable & runnable)
 :
+dead(false),
+nativeHandle(NULL),
+id(0),
+joinable(true),
+running(false),
 started(false)
 {
     // Initialize common state
@@ -75,7 +142,7 @@ started(false)
 
 Thread::~Thread()
 {
-    free(nativeHandle);
+    std::free(nativeHandle);
 
     // Free all the handles.
     for (std::map<const char*, void*>::iterator it = handles.begin(), end = handles.end();
@@ -83,10 +150,13 @@ Thread::~Thread()
     {
         if (it->second != NULL)
         {
-            free(it->second);
+            std::free(it->second);
             it->second = NULL;
         }
     }
+
+    // Throw any exception
+    internalThrow();
 }
 
 void Thread::exit()
@@ -100,6 +170,11 @@ void Thread::exit()
     pthread_exit(retval);
 }
 
+unsigned long long Thread::getThreadId() const
+{
+    return id;
+}
+
 bool Thread::hasRunnable() const
 {
     return runnable.isNotNull();
@@ -107,16 +182,21 @@ bool Thread::hasRunnable() const
 
 void Thread::initializeState()
 {
-    nativeHandle = malloc(sizeof (pthread_t));
+    nativeHandle = std::calloc(1, sizeof (pthread_t));
     if (!nativeHandle)
     {
         throw ThreadingException("Not enough memory.");
     }
 
-    handles[PTHREAD_ATTRIBUTE_NAME] = malloc(sizeof (pthread_attr_t));
+    handles[PTHREAD_ATTRIBUTE_NAME] = std::calloc(1, sizeof (pthread_attr_t));
 
     /* Initialize the attributes. */
     pthread_attr_init(PTHREAD_ATTRIBUTE(handles[PTHREAD_ATTRIBUTE_NAME]));
+}
+
+bool Thread::isDead() const
+{
+    return dead;
 }
 
 bool Thread::isJoinable() const
@@ -134,9 +214,9 @@ bool Thread::isStarted() const
     return started;
 }
 
-void Thread::join()
+void Thread::join(unsigned long long id)
 {
-    if (!joinable || pthread_join(*(PTHREAD_HANDLE(nativeHandle)), NULL) != 0)
+    if (!joinable || pthread_join((pthread_t) id, NULL) != 0)
     {
         throw ThreadingException("Unable to join thread (native threading API error).");
     }
@@ -162,15 +242,58 @@ void Thread::setJoinable(bool joinable)
     this->joinable = joinable;
 }
 
+void Thread::setDead(bool dead)
+{
+    this->dead = dead;
+    if (dead)
+    {
+        AMANDA_SYNCHRONIZED(lock);
+        {
+            for (unsigned i = 0; i < actives.size(); ++i)
+            {
+                if (actives.at(i) == this)
+                {
+                    actives.erase(actives.begin() + i);
+                    release();
+                }
+            }
+        }
+        AMANDA_DESYNCHRONIZED(lock);
+        exit();
+    }
+}
+
 void Thread::start()
 {
-    id = pthread_create(PTHREAD_HANDLE(nativeHandle), PTHREAD_ATTRIBUTE(handles[PTHREAD_ATTRIBUTE_NAME]), &internalRun, this);
-    if (id != 0)
+    int result = pthread_create(PTHREAD_HANDLE(nativeHandle), PTHREAD_ATTRIBUTE(handles[PTHREAD_ATTRIBUTE_NAME]), &internalRun, static_cast<void*> (this));
+    if (result != 0)
     {
-        throw ThreadingException("Unable to create thread (native threading API error).");
+        core::String cause = "unknown error";
+        switch (result)
+        {
+            case EAGAIN:
+                cause = "insufficient resources to spawn thread";
+                break;
+            case EINVAL:
+                cause = "invalid settings in attributes parameter";
+                break;
+            case EPERM:
+                cause = "insufficient permissions.";
+                break;
+        }
+        throw ThreadingException("Unable to create thread (native threading API error: " + cause + ").");
     }
     started = true;
     running = true;
+    id = *PTHREAD_HANDLE(nativeHandle);
+
+    // Add this to the list of active threads
+    AMANDA_SYNCHRONIZED(lock);
+    {
+        grab();
+        actives.push_back(this);
+    }
+    AMANDA_DESYNCHRONIZED(lock);
 }
 
 

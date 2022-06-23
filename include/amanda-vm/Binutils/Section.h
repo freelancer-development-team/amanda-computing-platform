@@ -38,6 +38,7 @@ namespace binutils
 {
 
 class Module;
+class SectionReader;
 
 #define CODE_SECTION_NAME               ".code"
 #define DATA_SECTION_NAME               ".data"
@@ -53,6 +54,9 @@ class Module;
 class Section : public Serializable
 {
 public:
+
+    // Friends
+    friend class SectionReader;
 
     /**
      * Represents a section header.
@@ -123,6 +127,7 @@ public:
     virtual void                merge(const Section* section);
     void                        setAttributes(unsigned attributes);
     void                        setNameIndex(const vm::vm_qword_t index);
+    void                        setOffset(vm::vm_qword_t offset);
     void                        setOwningModule(Module* module);
     void                        setType(unsigned type);
 

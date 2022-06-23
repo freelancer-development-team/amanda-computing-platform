@@ -122,7 +122,7 @@ core::String Section::sectionTypeToString(unsigned type)
 
 Section::Section(const core::String& name)
 :
-header(new SectionHeader()),
+header((SectionHeader*) std::malloc(sizeof (SectionHeader))),
 name(name),
 owner(NULL)
 {
@@ -135,7 +135,7 @@ Section::~Section()
     {
         symbols.at(i)->release();
     }
-    delete header;
+    std::free(header);
 
     // Release the weak reference to the module
     if (owner)
@@ -346,6 +346,11 @@ void Section::setAttributes(unsigned attributes)
 void Section::setNameIndex(const vm::vm_qword_t index)
 {
     header->name = (vm::vm_dword_t) index;
+}
+
+void Section::setOffset(vm::vm_qword_t offset)
+{
+    header->offset = (vm::vm_qword_t) offset;
 }
 
 void Section::setOwningModule(Module* module)

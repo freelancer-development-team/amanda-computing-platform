@@ -47,7 +47,7 @@ Logger* Logger::getLogger(const core::String& name)
 
             result = new Logger(name);
             couldBeAdded = lm.addLogger(result);
-            
+
             assert(couldBeAdded == true && "Couldn't add logger to the logging manager!");
         }
     }
@@ -58,10 +58,14 @@ Logger* Logger::getLogger(const core::String& name)
 #define DECLARE_SHORTCUT(name, l) \
     void Logger::name(const core::String& fmt, ...) const \
     { \
-        va_list va; \
-        va_start(va, fmt); \
-        logp(l, fmt, va); \
-        va_end(va); \
+        AMANDA_SYNCHRONIZED(lock); \
+        { \
+            va_list va; \
+            va_start(va, fmt); \
+            logp(l, fmt, va); \
+            va_end(va); \
+        } \
+        AMANDA_DESYNCHRONIZED(lock); \
     }
 
 #define DECLARE_SHORTCUTS \

@@ -26,9 +26,10 @@
 #define PROCEDURE_H
 
 #include <amanda-vm/TypeSystem.h>
+#include <amanda-vm/Logging/Logger.h>
 #include <amanda-vm/Runtime/Stack.h>
 #include <amanda-vm/Runtime/AdaptiveOptimizationCondition.h>
-#include <amanda-vm/Binutils/Function.h>
+#include <amanda-vm/Binutils/Symbol.h>
 #include <amanda-vm/Threading/Runnable.h>
 
 // C++
@@ -39,6 +40,7 @@ namespace amanda
 namespace vm
 {
 
+class ExecutableModule;
 class Context;
 
 /**
@@ -55,7 +57,7 @@ class Procedure : public core::Object
     AMANDA_OBJECT(Procedure, core::Object)
 public:
 
-    Procedure(const Context& context, binutils::Function* symbol);
+    Procedure(const Context& context, const core::String& name, const binutils::Symbol::SymbolTableEntry* symbol);
     virtual ~Procedure();
 
     void                addOptimizationCriteria(const AdaptiveOptimizationCondition* criteria);
@@ -65,8 +67,11 @@ public:
     void                executeInterpreted();
     void                executeOptimized();
     const core::String& getName() const;
+    logging::Logger&    getLoggerInstance() const;
+    const size_t        getReturnValueSize() const;
     bool                isOptimized() const;
     void                optimize();
+    void                setExecutableModule(ExecutableModule& module);
     bool                shouldOptimize() const;
 
 protected:
@@ -89,14 +94,21 @@ protected:
         Procedure& procedure;
     } ;
 
+    static logging::Logger& LOGGER;
+
     const Context&                                      context;
     sdk_ullong_t                                        executionCount;
+    core::WeakReference<ExecutableModule>               executableModule;
+    mutable vm::vm_qword_t                              ip;
+    core::String                                        name;
     std::deque<const AdaptiveOptimizationCondition*>    optimizationCritera;
     bool                                                optimized;
+    size_t                                              returnValueSize;
     core::WeakReference<Stack>                          stack;
-    core::StrongReference<binutils::Function>           symbol;
+    const binutils::Symbol::SymbolTableEntry*           symbol;
 
-    void    setOptimized(bool optimized);
+    vm::vm_byte_t   fetch() const;
+    void            setOptimized(bool optimized);
 
 } ;
 

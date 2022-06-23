@@ -31,10 +31,15 @@
 #include <amanda-vm/Threading/Thread.h>
 #include <amanda-vm/Threading/Runnable.h>
 
+// C
+#include <deque>
+
 namespace amanda
 {
 namespace vm
 {
+
+class Schedulable;
 
 /**
  * The native thread scheduler is the simplest of the scheduler classes. It
@@ -53,14 +58,18 @@ class NativeThreadScheduler : public ThreadScheduler
 public:
 
     NativeThreadScheduler(const Context& context);
+    virtual ~NativeThreadScheduler();
 
-    virtual unsigned    getActiveThreadCount() const;
-    virtual void        notifyThreadFinalization();
-    virtual void        schedule(const Procedure* procedure);
+    virtual unsigned        getActiveThreadCount() const;
+    virtual void            notifyThreadFinalization();
+    virtual Schedulable&    schedule(const Procedure* procedure);
+    virtual void            waitForAll() const;
 
 private:
 
     unsigned threadCount;
+    std::deque<concurrent::Thread*> threads;
+
 } ;
 
 }

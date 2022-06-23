@@ -39,9 +39,7 @@ using namespace amanda::vm;
 
 LocklessDefaultAllocator::LocklessDefaultAllocator(MemoryManager& memoryManager)
 :
-super(memoryManager),
-freeNodeCount(0),
-nodeCount(0)
+super(memoryManager)
 {
 }
 
@@ -61,14 +59,13 @@ void LocklessDefaultAllocator::expandAddressSpace(size_t amount)
             memoryManager.allocateMemoryRegion(size, MemoryManager::WRITE | MemoryManager::READ);
 
     //DEBUG
-    LOGGER.trace("Attempted allocation of %u pages. Allocated at 0x%p (system page size 0x%x)", numberOfPages,
-            descriptor.pointer, memoryManager.querySystemPageSize());
+    LOGGER.trace("attempted allocation of %u pages. Allocated at 0x%p (system page size 0x%x)", numberOfPages,
+                 descriptor.pointer, memoryManager.querySystemPageSize());
 
     // Build the data structure partitioning the freshly allocated address space.
 
+
     // Increase the total number of nodes and the total free node count
-    freeNodeCount++;
-    nodeCount++;
 }
 
 const MemoryAllocator::AllocationHeader& LocklessDefaultAllocator::find(size_t size) const
@@ -86,7 +83,11 @@ const MemoryAllocator::AllocationHeader& LocklessDefaultAllocator::find(size_t s
 
 bool LocklessDefaultAllocator::hasFreeNodes() const
 {
-    return freeNodeCount != 0;
+
+}
+
+void LocklessDefaultAllocator::insert(uintptr_t address, size_t size)
+{
 }
 
 bool LocklessDefaultAllocator::isNeedingExpansion() const
@@ -95,27 +96,5 @@ bool LocklessDefaultAllocator::isNeedingExpansion() const
 }
 
 /* ========================= INNER CLASS ==================================== */
-
-
-LocklessDefaultAllocator::TreeNode::TreeNode(uintptr_t address, size_t size, TreeNode* root)
-:
-color(UNCOLORED),
-data(address, size),
-left(NULL),
-parent(NULL),
-right(NULL),
-root(root)
-{
-}
-
-LocklessDefaultAllocator::TreeNode* LocklessDefaultAllocator::TreeNode::rotateLeft()
-{
-    return this;
-}
-
-LocklessDefaultAllocator::TreeNode* LocklessDefaultAllocator::TreeNode::rotateRight()
-{
-    return this;
-}
 
 

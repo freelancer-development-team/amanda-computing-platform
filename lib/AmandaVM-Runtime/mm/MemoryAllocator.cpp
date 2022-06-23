@@ -56,17 +56,23 @@ size_t MemoryAllocator::align(size_t size, size_t alignment) const
 
 void* MemoryAllocator::allocate(size_t size)
 {
+    if (size == 0)
+    {
+        LOGGER.error("attempted allocation of a zero bit size block.");
+        throw InvalidAllocationError("requested allocation of a zero bit size block");
+    }
+
     // Align the address to word boundary
     size = align(size);
 
     //DEBUG, may remove later
-    LOGGER.trace("Attempting allocation of an %lluB bounded block.",
-            size);
+    LOGGER.trace("attempting allocation of an %lluB bounded block.",
+                 size);
 
     // Search for an available free block
     if (isNeedingExpansion())
     {
-        LOGGER.trace("Heap expansion needed, out of virtual memory.");
+        LOGGER.trace("heap expansion needed, out of virtual memory.");
 
         // Expand the heap by size * 2
         expandAddressSpace(size * 2);
@@ -79,7 +85,7 @@ void* MemoryAllocator::allocate(size_t size)
     const AllocationHeader& header = find(size);
     if (header.isNull() == false)
     {
-
+        return header.getAddressAsPointer();
     }
     return NULL;
 }

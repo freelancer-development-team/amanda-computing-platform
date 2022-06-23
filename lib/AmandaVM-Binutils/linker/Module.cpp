@@ -232,7 +232,19 @@ void Module::constructBinaryData()
     // Offset to the string table
     stringTableOffset = OFFSETOF_PROGRAM_HEADER
             + calculateSectionHeaderTableSize()
-            + calculateOffsetToSection(SECTION_HEADERS_STRINGS_NAME) - 1;
+            + calculateOffsetToSection(SECTION_HEADERS_STRINGS_NAME);
+
+    // Calculate the offset to every section
+    for (std::vector<Section*>::const_iterator it = sections.begin(),
+         end = sections.end(); it != end; ++it)
+    {
+        vm::vm_address_t offset = OFFSETOF_PROGRAM_HEADER
+                + calculateSectionHeaderTableSize()
+                + calculateOffsetToSection((*it)->getName());
+
+        // Set the corresponding offset
+        (*it)->setOffset(offset);
+    }
 }
 
 vm::vm_word_t Module::countSections() const
@@ -371,6 +383,10 @@ void Module::linkLocalSymbols()
                 Function* function = (Function*) symbol;
                 const std::deque<Instruction*> instructions = function->getInstructions();
 
+                // Symbol header
+                function->setValue(function->getSection()->getOffsetToSymbol(symbol));
+                function->setSize(function->getSize());
+
                 for (std::deque<Instruction*>::const_iterator it = instructions.begin(),
                      end = instructions.end(); it != end; ++it)
                 {
@@ -425,7 +441,7 @@ void Module::marshallImpl(io::OutputStream& stream) const
 {
     // Synchronize
     AMANDA_SYNCHRONIZED(lock);
-    
+
     /*
      * BINARY LAYOUT OF THE OBJECT/EXECUTABLE/LIBRARY FILE:
      *
@@ -444,7 +460,7 @@ void Module::marshallImpl(io::OutputStream& stream) const
 
     // Create the compiler message.
     vm::vm_byte_t message[88] = {0};
-    memcpy(message, compilerName.toCharArray(), compilerName.length() < 88 ? compilerName.length() : 88);
+    std::memcpy(message, compilerName.toCharArray(), compilerName.length() < 88 ? compilerName.length() : 88);
 
     // Write the magic number.
     stream.write(MAGIC_NUMBER, VM_BYTE_SIZE, 4);

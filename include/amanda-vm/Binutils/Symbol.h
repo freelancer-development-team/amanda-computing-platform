@@ -96,8 +96,9 @@ public:
      */
     static const vm::vm_dword_t Flag_Resolved =     0x1;
     static const vm::vm_dword_t Flag_Unresolved =   ~(Flag_Resolved);
-    
-    static const SymbolTableEntry& getNullSymbolTableEntry();
+
+    static const core::String       getTypeStringFromValue(int type);
+    static const SymbolTableEntry&  getNullSymbolTableEntry();
 
     Symbol(const core::String& name);
     virtual ~Symbol();
@@ -117,6 +118,7 @@ public:
     Symbol&                 setStringTableEntry(vm::vm_dword_t entry);
     Symbol&                 setSize(size_t size);
     Symbol&                 setType(vm::vm_byte_t type);
+    Symbol&                 setValue(vm::vm_address_t value);
     
 protected:
 

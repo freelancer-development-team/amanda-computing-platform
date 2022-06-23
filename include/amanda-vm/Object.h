@@ -44,11 +44,12 @@ namespace core
     public: \
         \
         static amanda::core::Class& getClass() { static amanda::core::Class _class(#Type, &BaseClassName::getClass()); return _class; } \
+        static size_t               getClassSizeStatic() { return sizeof(Type); } \
         \
         template <class __class> \
         __class& cast() \
         { \
-            return reinterpret_cast<__class&> (*this); \
+            return static_cast<__class&> (*this); \
         } \
         \
         virtual amanda::core::Class& getClassDynamically() const { return getClass(); } \
@@ -76,14 +77,16 @@ class Object : virtual public ReferenceCounted
 public:
 
     static Class& getClass();
+    static size_t getClassSizeStatic();
 
     Object();
     Object(const Object& original);
     virtual ~Object();
 
-    virtual Object*                 clone();
+    virtual Object*                 clone() const;
     virtual bool                    equals(const Object* object);
     virtual amanda::core::Class&    getClassDynamically() const;
+    virtual size_t                  getClassSize() const;
     virtual int                     hashCode();
     virtual bool                    is(const Class* type);
     virtual String                  toString() const;

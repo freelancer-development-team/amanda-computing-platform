@@ -53,22 +53,42 @@ vm::vm_qword_t StringTable::addString(const core::String& str)
     strings.push_back(str);
 
     // Update the last index count.
-    lastIndex += str.length() + 2;
+    lastIndex += str.length() + 1;
+
+    // Update the size
+    header->size = lastIndex;
 
     return result;
 }
 
-void StringTable::constructBinaryData()
+size_t StringTable::calculateSize() const
 {
+    size_t localSize = 0;
     for (std::vector<core::String>::const_iterator it = strings.begin(),
-            end = strings.end(); it != end; ++it)
+         end = strings.end(); it != end; ++it)
     {
         const core::String& str = *it;
-        Serializable::write(str.toCharArray(), VM_BYTE_SIZE, str.length() + 1);
-
-        header->size += (str.length() + 1);
+        localSize += (str.length() + 1);
     }
-    setSize(header->size);
+    return localSize;
+}
+
+void StringTable::constructBinaryData()
+{
+    AMANDA_SYNCHRONIZED(lock);
+    {
+        size_t localSize = 0;
+        for (std::vector<core::String>::const_iterator it = strings.begin(),
+             end = strings.end(); it != end; ++it)
+        {
+            const core::String& str = *it;
+            Serializable::write(str.toCharArray(), VM_BYTE_SIZE, str.length() + 1);
+
+            localSize += (str.length() + 1);
+        }
+        setSize(localSize);
+    }
+    AMANDA_DESYNCHRONIZED(lock);
 }
 
 StringTable::TablePair StringTable::get(const unsigned position) const

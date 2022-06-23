@@ -38,6 +38,11 @@ Class& Object::getClass()
     return _class;
 }
 
+size_t Object::getClassSizeStatic()
+{
+    return sizeof (Object);
+}
+
 Object::Object()
 {
 }
@@ -50,9 +55,12 @@ Object::~Object()
 {
 }
 
-Object* Object::clone()
+Object* Object::clone() const
 {
-    return new Object(*this);
+    char* memory = new char[getClassSize()];
+    std::memmove(memory, this, getClassSize());
+
+    return reinterpret_cast<Object*> (memory);
 }
 
 bool Object::equals(const Object* object)
@@ -61,6 +69,11 @@ bool Object::equals(const Object* object)
     unsigned long long rhsAddress = (unsigned long long) object;
 
     return thisAddress == rhsAddress;
+}
+
+size_t Object::getClassSize() const
+{
+    return getClassSizeStatic();
 }
 
 int Object::hashCode()

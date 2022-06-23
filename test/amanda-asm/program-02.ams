@@ -23,6 +23,7 @@
 
 # This is the main function for this test program.
 .def @@main?A_string@!l32
+	push	l32 $0x55aaffee
 	load	amanda::binutils::test::Fred::classname
 	ccall	puts
 	push	l32	$0xaabbccdd

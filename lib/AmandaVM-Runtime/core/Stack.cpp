@@ -23,6 +23,7 @@
  */
 
 #include <amanda-vm/Runtime/Stack.h>
+#include <amanda-vm/IO/Utility.h>
 
 // C++
 #include <cstdlib>
@@ -34,7 +35,7 @@ using namespace amanda::vm;
 Stack::Stack()
 :
 basePointer(0),
-stackArea((vm_byte_t*) std::malloc(0x1000)),
+stackArea((vm_byte_t*) std::calloc(0x1000, sizeof (vm::vm_byte_t))),
 stackPointer(0),
 stackSize(0x1000)
 {
@@ -53,22 +54,35 @@ bool Stack::isEmpty() const
 
 void Stack::pop(vm_byte_t* buffer, vm_size_t size)
 {
-    assert(stackPointer > 0 && "Invalid pop operation on empty stack.");
-    std::memcpy(buffer, (const void*) (stackArea + stackPointer), size);
+    AMANDA_SYNCHRONIZED(lock);
+    {
+        assert(stackPointer > 0 && "Invalid pop operation on empty stack.");
+        std::memcpy(buffer, (const void*) (stackArea + (stackPointer - size)), size);
 
-    // Reduce the stack pointer
-    stackPointer -= size;
+        // Reduce the stack pointer
+        stackPointer -= size;
+    }
+    AMANDA_DESYNCHRONIZED(lock);
 }
 
-void Stack::push(const vm_byte_t* data, vm_size_t size)
+void Stack::push(const vm_byte_t* data, vm_size_t size, bool convert)
 {
-    if (stackPointer + size > size)
+    AMANDA_SYNCHRONIZED(lock);
     {
-        resizeStack(size + (size * 0.5f));
-    }
+        if (stackPointer + size > size)
+        {
+            resizeStack(size + (size * 0.5f));
+        }
 
-    std::memcpy(stackArea + stackPointer, data, size);
-    stackPointer += size;
+        std::memcpy(stackArea + stackPointer, data, size);
+        if (!io::isMachineBigEndian() && convert)
+        {
+            io::swapEndianness(stackArea + stackPointer, size);
+        }
+
+        stackPointer += size;
+    }
+    AMANDA_DESYNCHRONIZED(lock);
 }
 
 void Stack::resizeStack(ptrdiff_t delta)
