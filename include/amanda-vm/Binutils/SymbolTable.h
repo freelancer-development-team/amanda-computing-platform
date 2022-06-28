@@ -60,7 +60,7 @@ protected:
     typedef std::vector<const Symbol*> SymbolVector;
 
     /// The symbols
-    SymbolVector    ordererSymbols;
+    SymbolVector    orderedSymbols;
     SymbolMap       symbols;
 } ;
 

@@ -28,6 +28,9 @@
 #include <amanda-vm/TypeSystem.h>
 #include <amanda-vm/Binutils/vm-types.h>
 
+// C++
+#include <stack>
+
 namespace amanda
 {
 namespace vm
@@ -51,9 +54,14 @@ public:
     Stack();
     virtual ~Stack();
 
-    bool    isEmpty() const;
-    void    pop(vm_byte_t* buffer, vm_size_t size);
-    void    push(const vm_byte_t* data, vm_size_t size, bool convert = true);
+    void*           allocl(size_t size);
+    sdk_ullong_t    countFrames() const;
+    sdk_ullong_t    getDepth();
+    bool            isEmpty() const;
+    void            pop(vm_byte_t* buffer, vm_size_t size);
+    void            popFrame();
+    void            push(const vm_byte_t* data, vm_size_t size, bool convert = true);
+    void            pushFrame();
 
     template <typename T>
     inline T pop()
@@ -72,7 +80,11 @@ public:
 
 private:
 
+    typedef std::stack<vm_address_t> FrameStack;
+
     vm_address_t    basePointer;
+    sdk_ullong_t    depth;
+    FrameStack      frames;
     vm_byte_t*      stackArea;
     vm_address_t    stackPointer;
     vm_size_t       stackSize;

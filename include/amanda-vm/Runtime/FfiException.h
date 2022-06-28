@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,50 +16,34 @@
  */
 
 /* 
- * File:   System.h
+ * File:   FfiException.h
  * Author: Javier Marrero
  *
- * Created on April 16, 2022, 6:07 PM
+ * Created on June 26, 2022, 10:51 AM
  */
 
-#ifndef _AMANDA_SYSTEM_H
-#define _AMANDA_SYSTEM_H
+#ifndef FFIEXCEPTION_H
+#define FFIEXCEPTION_H
 
 #include <amanda-vm/TypeSystem.h>
-#include <amanda-vm-c/sdk-types.h>
 
 namespace amanda
 {
-namespace core
+namespace vm
 {
 
-typedef enum OperatingSystem
+class FfiException : public core::Exception
 {
-    WINDOWS,
-    GNULINUX,
-    MACOS,
-    UNKNOWN
-} OperatingSystem;
+    AMANDA_OBJECT(FfiException, core::Exception)
+public:
 
-/**
- * Returns the operating system code.
- */
-OperatingSystem getOperatingSystem();
-
-/**
- * Returns the number of logical processors available to the process.
- * 
- * @return an unsigned long long with the count of available cores.
- */
-sdk_ullong_t getNumberOfAvailableCores();
-
-/**
- * Returns the name of the operating system.
- */
-core::String getOperatingSystemName();
+    FfiException(const core::String& message);
+    virtual ~FfiException() throw ();
+    
+} ;
 
 }
 }
 
-#endif /* SYSTEM_H */
+#endif /* FFIEXCEPTION_H */
 

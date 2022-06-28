@@ -46,6 +46,8 @@ static const int MATRIX_CONVERSION_BUFFER_LENGTH = 256;
 
 class String : public ReferenceCounted
 {
+    AMANDA_REFCOUNTED(String)
+
 public:
 
     static String makeFormattedStringWithArguments(const core::String& fmt, va_list va);

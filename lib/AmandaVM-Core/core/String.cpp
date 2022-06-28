@@ -1170,32 +1170,48 @@ unsigned String::count(const String& str) const
 
 std::vector<String> String::split(const String& delimiter, unsigned maxCount) const
 {
+    // Max-count parameter evaluation
+    if (maxCount == 0)
+    {
+        maxCount = UINT_MAX;
+    }
+
     // Vector initialization
     std::vector<String> result;
-    result.reserve(2);
 
     // Count initialization
-    unsigned count = 0;
-    unsigned startPosition = 0;
-    unsigned endPosition = find(delimiter) != String::NPOS ? find(delimiter) : length();
+    unsigned        count = 0;
+    unsigned        startPosition = 0;
+    unsigned        endPosition = find(delimiter) != String::NPOS ? find(delimiter) : length();
+    const unsigned  delimiterLength = delimiter.length();
 
-    do
+    if (endPosition == length())
     {
-        // Push the results
-        result.push_back(substring(startPosition, endPosition));
-
-        // Update position variables
-        startPosition = endPosition + delimiter.length();
-        endPosition = find(delimiter, startPosition);
+        result.push_back(*this);
     }
-    while ((count <= maxCount)
-           && (endPosition != String::NPOS)
-           && (endPosition <= length()));
-
-    if (endPosition == String::NPOS)
+    else
     {
-        result.push_back(substring(startPosition, length()));
-    }
+        do
+        {
+            // Substring the token & insert
+            const core::String token = substring(startPosition, endPosition);
+            result.push_back(token);
 
+            // Update the position variables
+            startPosition = endPosition + delimiterLength;
+            endPosition = find(delimiter, startPosition);
+
+            // Increase the count
+            ++count;
+        }
+        while ((count <= maxCount)
+               && (endPosition != String::NPOS));
+
+        if (endPosition == String::NPOS
+            || (count > maxCount))
+        {
+            result.push_back(substring(startPosition, length()));
+        }
+    }
     return result;
 }

@@ -28,6 +28,7 @@
 #include <amanda-vm/TypeSystem.h>
 #include <amanda-vm/Threading/Runnable.h>
 
+// C++
 #include <map>
 
 namespace amanda
@@ -41,6 +42,9 @@ class Thread : public Runnable
 
 public:
 
+    typedef unsigned long long tid_t;
+
+    static tid_t    currentThreadId();
     static void     sleep(unsigned long milliseconds);
     static void     wait(unsigned long long id);
 
@@ -69,6 +73,10 @@ public:
     virtual void        start();
 
 private:
+
+    typedef std::map<tid_t, Thread*> ThreadMap;
+
+    static ThreadMap                THREADS;
 
     volatile bool                   dead;
     void*                           nativeHandle;

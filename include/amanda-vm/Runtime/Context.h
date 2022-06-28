@@ -40,12 +40,17 @@
 
 // C++
 #include <map>
+#include <vector>
+
+// LibFFI
+#include <ffi.h>
 
 namespace amanda
 {
 namespace vm
 {
 
+class NativeProcedure;
 class Procedure;
 
 /**
@@ -70,9 +75,17 @@ class Context : public core::Object
 public:
 
     typedef std::map<const core::String, core::String, core::AlphabeticalOrderComparator> PropertiesMap;
+    //TODO: Add using libffi feature macro
+    typedef std::vector<ffi_type*>   NativeTypeList;
 
-    static const core::String OS_NAME_KEY;
-    static const core::String SDK_VERSION_KEY;
+    // Errors on invocation
+    static const int            ENOERR  = 0;
+    static const int            ENOPROC = 1;
+    static const int            ENOLANG = 2;
+    static const int            ENOSYM  = 4;
+
+    static const core::String   OS_NAME_KEY;
+    static const core::String   SDK_VERSION_KEY;
 
     static const logging::Logger& getLogger();
 
@@ -80,15 +93,21 @@ public:
             const core::String& path);
     virtual ~Context();
 
-    int                 callNative(const core::String& name, void* arguments, void* retval) const;
+    void                cacheProcedure(const core::String& name, Procedure* proc) const;
+    int                 callLocal(const core::String& name, Stack& stack) const;
+    int                 callNative(const core::String& name, Stack& stack) const;
+    const Procedure*    getCachedLocalProcedure(const core::String& name) const;
     const core::String& getProperty(const core::String& key) const;
+    bool                isCachedProcedure(const core::String& name) const;
     int                 loadAndExecute(const core::String& fullPath);
     void                loadLibrary(const core::String& fullPath);
     ExecutableModule*   loadModule(const core::String& fullPath);
+    NativeTypeList      parseFunctionArgumentTypes(const core::String& str) const;
     bool                putProperty(const core::String& key, const core::String& value);
     void                setMemoryAllocator(MemoryAllocator* memoryAllocator);
     void                setProperty(const core::String& key, const core::String& value);
     void                setScheduler(const ThreadScheduler* scheduler);
+    void                uncacheProcedure(const core::String& name) const;
 
 private:
 
@@ -100,24 +119,38 @@ private:
         AMANDA_OBJECT(NativeLibraryDescriptor, core::Object)
     public:
 
+        typedef void*   NativeHandle;
+
         NativeLibraryDescriptor(const core::String& name, const core::String& path);
         NativeLibraryDescriptor(const NativeLibraryDescriptor& rhs);
 
+        const NativeHandle  getHandle() const;
         const core::String& getName() const;
         const core::String& getPath() const;
+        void                setHandle(NativeHandle h);
+        void                unload() const;
 
     private:
 
-        core::String name;
-        core::String path;
+        NativeHandle                    handle;
+        core::String                    name;
+        core::String                    path;
+        std::vector<NativeProcedure*>   procedures;
     } ;
 
-    typedef std::map<const core::String, NativeLibraryDescriptor, core::AlphabeticalOrderComparator> LibraryMap;
+    typedef std::map<const core::String, NativeLibraryDescriptor, core::AlphabeticalOrderComparator>    LibraryMap;
+    typedef std::map<core::String, void*, core::AlphabeticalOrderComparator>                            NativeSymbolsCache;
+    typedef std::map<core::String, NativeProcedure*, core::AlphabeticalOrderComparator>                 NativeProceduresCache;
+    typedef std::map<core::String, Procedure*, core::AlphabeticalOrderComparator>                       ProceduresCache;
 
     static logging::ConsoleHandler              CONSOLE_HANDLER;
     static logging::GNUFormatter                FORMATTER;
     static logging::Logger&                     LOGGER;
 
+
+    mutable NativeProceduresCache               cachedNativeProcedures;
+    mutable ProceduresCache                     cachedProcedures;
+    mutable NativeSymbolsCache                  cachedSymbols;
     core::StrongReference<FileSystem>           fileSystem;
     core::StrongReference<logging::Formatter>   fileFormatter;
     core::StrongReference<logging::FileHandler> fileHandler;

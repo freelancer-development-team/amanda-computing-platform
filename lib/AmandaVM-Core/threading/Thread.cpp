@@ -41,6 +41,8 @@ using namespace amanda::concurrent;
 static std::queue<core::Exception*>     exceptionQueue;
 static std::deque<concurrent::Thread*>  actives;
 
+Thread::ThreadMap Thread::THREADS;
+
 static void internalThrow()
 {
     AMANDA_SYNCHRONIZED(lock);
@@ -78,6 +80,11 @@ void* internalRun(void* args)
 
     thread->setDead(true);
     return args;
+}
+
+Thread::tid_t Thread::currentThreadId()
+{
+    return (Thread::tid_t) pthread_self();
 }
 
 void Thread::sleep(unsigned long milliseconds)
@@ -154,6 +161,16 @@ Thread::~Thread()
             it->second = NULL;
         }
     }
+
+    AMANDA_SYNCHRONIZED(lock);
+    {
+        ThreadMap::iterator it = THREADS.find(this->getThreadId());
+        if (it != THREADS.end())
+        {
+            THREADS.erase(it);
+        }
+    }
+    AMANDA_DESYNCHRONIZED(lock);
 
     // Throw any exception
     internalThrow();
@@ -292,6 +309,8 @@ void Thread::start()
     {
         grab();
         actives.push_back(this);
+
+        THREADS.insert(std::make_pair(this->getThreadId(), this));
     }
     AMANDA_DESYNCHRONIZED(lock);
 }

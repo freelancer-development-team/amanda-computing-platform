@@ -61,6 +61,14 @@ size(0)
 
 ExecutableModule::~ExecutableModule()
 {
+    // Un-cache the procedures
+    for (std::map<core::String, Procedure*>::const_iterator it = cachedProcedures.begin(),
+         end = cachedProcedures.end(); it != end; ++it)
+    {
+        it->second->release();  // Release the reference
+    }
+
+    // Free the sections
     for (std::map<core::String, binutils::Section::SectionHeader>::const_iterator it = sections.begin(),
          end = sections.end(); it != end; ++it)
     {
@@ -68,9 +76,15 @@ ExecutableModule::~ExecutableModule()
     }
 }
 
-void ExecutableModule::addSection(const core::String name, const binutils::Section::SectionHeader& section)
+void ExecutableModule::addSection(const core::String& name, const binutils::Section::SectionHeader& section)
 {
     sections.insert(std::make_pair(name, section));
+}
+
+void ExecutableModule::cacheLocalProcedure(const core::String& name, Procedure* proc)
+{
+    proc->grab();
+    cachedProcedures.insert(std::make_pair(name, proc));
 }
 
 const ExecutableModule::ExecutableHeader& ExecutableModule::getHeader() const
@@ -98,18 +112,24 @@ const core::String ExecutableModule::findSymbolName(const vm::vm_qword_t offset)
 
 const binutils::Symbol::SymbolTableEntry* ExecutableModule::findSymbol(const core::String& name, int type) const
 {
+    volatile bool found = false;
     const Symbol::SymbolTableEntry* result = NULL;
     AMANDA_SYNCHRONIZED(lock);
     {
-        for (unsigned i = 0; i < getSymbolCount(); ++i)
+        for (unsigned i = 0, end = getSymbolCount(); i < end && !found; ++i)
         {
             const Symbol::SymbolTableEntry* local = findSymbol(i);
             if (local != NULL)
             {
-                if (local->type == type && findSymbolName(local->name) == name)
+                const core::String localName = findSymbolName(local->name);
+
+                bool typeMatch = local->type == type;
+                bool nameMatch = localName == name;
+
+                if (nameMatch && typeMatch)
                 {
                     result = local;
-                    break;
+                    found = true;
                 }
             }
         }
@@ -120,19 +140,40 @@ const binutils::Symbol::SymbolTableEntry* ExecutableModule::findSymbol(const cor
 
 const binutils::Symbol::SymbolTableEntry* ExecutableModule::findSymbol(const vm::vm_dword_t index) const
 {
-    vm::vm_address_t address = findSection(SYMBOL_TABLE_SECTION_NAME).address;
-    Symbol::SymbolTableEntry* entry = (Symbol::SymbolTableEntry*) (address + (index * sizeof (Symbol::SymbolTableEntry)));
-
-    if (!io::ConsistentInputStream::isBigEndian())
+    Symbol::SymbolTableEntry* entry = NULL;
+    AMANDA_SYNCHRONIZED(lock);
     {
-        swapEndianness(entry, sizeof (Symbol::SymbolTableEntry));
-    }
+        if (!hasCachedSymbol(index))
+        {
+            const vm::vm_address_t  address = findSection(SYMBOL_TABLE_SECTION_NAME).address;
 
+            if (index < getSymbolCount())
+            {
+                entry = (Symbol::SymbolTableEntry*) (address + (index * sizeof (Symbol::SymbolTableEntry)));
+                if (!io::ConsistentInputStream::isBigEndian())
+                {
+                    swapEndianness(entry, sizeof (Symbol::SymbolTableEntry));
+                }
+            }
+
+            symbols.insert(std::make_pair(index, entry));
+        }
+        else
+        {
+            entry = symbols.at(index);
+        }
+    }
+    AMANDA_DESYNCHRONIZED(lock);
     return entry;
 }
 
 const vm::vm_size_t ExecutableModule::getSymbolCount() const
 {
     return findSection(SYMBOL_TABLE_SECTION_NAME).size / sizeof (Symbol::SymbolTableEntry);
+}
+
+bool ExecutableModule::hasCachedSymbol(const vm::vm_dword_t index) const
+{
+    return symbols.find(index) != symbols.end();
 }
 

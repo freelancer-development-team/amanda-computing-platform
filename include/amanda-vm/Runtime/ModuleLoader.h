@@ -53,16 +53,24 @@ namespace vm
 class ModuleLoader : public core::Object
 {
     AMANDA_OBJECT(ModuleLoader, core::Object)
+private:
+
+    typedef std::map<const core::String, ExecutableModule*> ModuleMap;
+
 public:
+
+    typedef ModuleMap::const_iterator                       ModuleIterator;
 
     ModuleLoader(MemoryAllocator& allocator);
     virtual ~ModuleLoader();
 
-    ExecutableModule* load(const core::String& identifier, io::InputStream* stream);
+    ExecutableModule*   get(const core::String& identifier) const;
+    ModuleIterator      getIterator() const;
+    ModuleIterator      getIteratorEnd() const;
+    ExecutableModule*   load(const core::String& identifier, io::InputStream* stream);
+    bool                isLoaded(const core::String& identifier) const;
 
 private:
-
-    typedef std::map<const core::String, ExecutableModule*> ModuleMap;
 
     static logging::Logger& LOGGER;
 

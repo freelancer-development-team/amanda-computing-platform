@@ -158,6 +158,12 @@ void Section::addSymbol(const Symbol* symbol)
 
     // Update the size.
     // setSize(calculateSize());
+
+    // Update the addresses of local symbols
+    if (!symbol->isExternalSymbol())
+    {
+        const_cast<Symbol*> (symbol)->setValue(getOffsetToSymbol(symbol));
+    }
 }
 
 void Section::constructBinaryData()
@@ -237,34 +243,26 @@ size_t Section::getOffsetToSymbol(const Symbol* symbol) const
     assert(symbol != NULL && "Null pointer exception");
 
     size_t offset = 0;
-    size_t definitionIndex = 0;
-
-    // Find in which position is the symbol located
-    bool found;
-    for (std::vector<Symbol*>::const_iterator it = symbols.begin(), end = symbols.end();
-         it != end && !found; ++it)
+    bool found = false;
+    for (std::vector<Symbol*>::const_iterator it = symbols.begin(),
+         end = symbols.end(); it != end && !found; ++it)
     {
-        if ((*it) == symbol)
+        Symbol* evaluated = *it;
+        if (evaluated->equals(symbol))
         {
             found = true;
         }
         else
         {
-            definitionIndex++;
+            offset += evaluated->getSize();
         }
     }
 
-    if (found)
+    if (!found)
     {
-        for (size_t i = 0; i < definitionIndex; ++i)
-        {
-            Symbol* k = symbols.at(i);
-            offset += k->getSize();
-        }
-    }
-    else
-    {
-        throw LinkException("undefined symbol reference when querying offset.", *symbol);
+        throw LinkException(core::String::makeFormattedString("undefined symbol when querying for offset within section: %s+%s",
+                                                              name.toCharArray(), symbol->getName().toCharArray()),
+                            symbol->getConstReference());
     }
     return offset;
 }

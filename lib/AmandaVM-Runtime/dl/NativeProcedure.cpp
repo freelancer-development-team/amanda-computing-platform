@@ -27,4 +27,23 @@
 using namespace amanda;
 using namespace amanda::vm;
 
+const core::String& NativeProcedure::FFI_TYPE_INT8              = "i8";
+const core::String& NativeProcedure::FFI_TYPE_INT16             = "i16";
+const core::String& NativeProcedure::FFI_TYPE_INT32             = "i32";
+const core::String& NativeProcedure::FFI_TYPE_INT64             = "i64";
+const core::String& NativeProcedure::FFI_TYPE_NATIVE_POINTER    = "p";
+const core::String& NativeProcedure::FFI_TYPE_NONE              = "nil";
+
+NativeProcedure::NativeProcedure(fpointer_t address, const core::String& name)
+:
+functionHandle(address),
+name(name)
+{
+    assert(address != NULL && "Null pointer exception");
+}
+
+const core::String& NativeProcedure::getName() const
+{
+    return name;
+}
 

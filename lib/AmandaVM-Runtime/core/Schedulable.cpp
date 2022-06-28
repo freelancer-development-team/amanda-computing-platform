@@ -82,10 +82,11 @@ void Schedulable::run()
     assert(stack.isNotNull() && "Null pointer exception");
 
     // Apply the stack to the current procedure and begin executing
-    currentProcedure->applyStack(stack);
     try
     {
-        currentProcedure->execute();
+        //stack->pushFrame();
+        currentProcedure->execute(stack->getReference());
+        //stack->popFrame();
     }
     catch (core::Exception& ex)
     {

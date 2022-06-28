@@ -83,7 +83,7 @@ const MemoryAllocator::AllocationHeader& LocklessDefaultAllocator::find(size_t s
 
 bool LocklessDefaultAllocator::hasFreeNodes() const
 {
-
+    return false;
 }
 
 void LocklessDefaultAllocator::insert(uintptr_t address, size_t size)

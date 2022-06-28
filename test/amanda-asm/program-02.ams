@@ -19,14 +19,19 @@
 .section ".code"
 
 # Reference the native method puts
-.native puts
+.native $c!!puts@i32@p
+.native $c!!putchar@i32@i32
 
 # This is the main function for this test program.
 .def @@main?A_string@!l32
-	push	l32 $0x55aaffee
-	load	amanda::binutils::test::Fred::classname
-	ccall	puts
-	push	l32	$0xaabbccdd
+	invoke	$f1
+	push	l32	$5
+	sub		l32
+	ret		l32
+.endef
+
+.def $f1
+	push	l32 $5
 	ret		l32
 .endef
 

@@ -26,6 +26,7 @@
 #define NATIVEPROCEDURE_H
 
 #include <amanda-vm/TypeSystem.h>
+#include <amanda-vm/Runtime/Stack.h>
 
 namespace amanda
 {
@@ -48,10 +49,24 @@ class NativeProcedure : public core::Object
     AMANDA_OBJECT(NativeProcedure, core::Object)
 public:
 
-    virtual void    addArgument(const void* __restrict__ argument) = 0;
-    virtual void    call() = 0;
-    virtual void*   getReturnValue() const = 0;
+    typedef const void* fpointer_t;
 
+    static const core::String& FFI_TYPE_INT8;
+    static const core::String& FFI_TYPE_INT16;
+    static const core::String& FFI_TYPE_INT32;
+    static const core::String& FFI_TYPE_INT64;
+    static const core::String& FFI_TYPE_NATIVE_POINTER;
+    static const core::String& FFI_TYPE_NONE;
+
+    NativeProcedure(fpointer_t address, const core::String& name);
+
+    virtual void        call(Stack& stack) = 0;
+    const core::String& getName() const;
+
+protected:
+
+    fpointer_t                  functionHandle;
+    core::String                name;
 } ;
 
 }

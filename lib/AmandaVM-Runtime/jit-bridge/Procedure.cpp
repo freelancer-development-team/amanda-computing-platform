@@ -30,11 +30,16 @@
 #include <amanda-vm/Threading/Runnable.h>
 #include <amanda-vm/Threading/Thread.h>
 #include <amanda-vm/Binutils/vm-opcodes.h>
+#include <amanda-vm/Threading/Thread.h>
 #include <amanda-vm/System.h>
 
 // C/C++
 #include <ck_spinlock.h>
 #include <csignal>
+
+// Foreign function interface
+#include <ffi.h>
+#include <ffitarget.h>
 
 using namespace amanda;
 using namespace amanda::vm;
@@ -73,11 +78,6 @@ void Procedure::addOptimizationCriteria(const AdaptiveOptimizationCondition* cri
     optimizationCritera.push_back(criteria);
 }
 
-void Procedure::applyStack(Stack * const stack)
-{
-    this->stack = stack;
-}
-
 bool Procedure::equals(const Object* object)
 {
     bool result = false;
@@ -91,8 +91,13 @@ bool Procedure::equals(const Object* object)
     return result;
 }
 
-void Procedure::execute()
+void Procedure::execute(Stack& stack)
 {
+    LOGGER.debug("executing subroutine at 0x%llx, with stack depth %llu (on thread %llu).",
+                 symbol->value, stack.getDepth(),
+                 concurrent::Thread::currentThreadId());
+    stack.pushFrame();  // Build a new frame
+    
     if (isOptimized())
     {
         /* Run the 'jitted' code. */
@@ -101,7 +106,7 @@ void Procedure::execute()
     else
     {
         /* Interpret the code */
-        executeInterpreted();
+        executeInterpreted(stack);
     }
 
     // Check if needs optimization
@@ -111,11 +116,17 @@ void Procedure::execute()
     }
 
     // Increment the count of executions
-    ++executionCount;
+    AMANDA_SYNCHRONIZED(lock);
+    {
+        ++executionCount;
+    }
+    AMANDA_DESYNCHRONIZED(lock);
 }
 
-void Procedure::executeInterpreted()
+void Procedure::executeInterpreted(Stack& stack)
 {
+#define BYTEPOINTER(x)  ((vm::vm_byte_t*) (&(x)))
+
     vm::vm_byte_t   rflag = 0;
     while ((ip < symbol->size) && (rflag == 0))
     {
@@ -130,11 +141,50 @@ void Procedure::executeInterpreted()
                 vm::vm_byte_t operand2 = 0;
                 vm::vm_byte_t result = 0;
 
-                stack->pop(&operand1, VM_BYTE_SIZE);
-                stack->pop(&operand2, VM_BYTE_SIZE);
+                stack.pop(&operand1, VM_BYTE_SIZE);
+                stack.pop(&operand2, VM_BYTE_SIZE);
                 result = operand1 + operand2;
 
-                stack->push(&result, VM_BYTE_SIZE, false);
+                stack.push(&result, VM_BYTE_SIZE, false);
+                break;
+            }
+            case I_ADDW:
+            {
+                vm::vm_word_t operand1 = 0;
+                vm::vm_word_t operand2 = 0;
+                vm::vm_word_t result = 0;
+
+                stack.pop(BYTEPOINTER(operand1), VM_WORD_SIZE);
+                stack.pop(BYTEPOINTER(operand2), VM_WORD_SIZE);
+                result = operand1 + operand2;
+
+                stack.push(BYTEPOINTER(result), VM_WORD_SIZE);
+                break;
+            }
+            case I_ADDL:
+            {
+                vm::vm_dword_t operand1 = 0;
+                vm::vm_dword_t operand2 = 0;
+                vm::vm_dword_t result = 0;
+
+                stack.pop(BYTEPOINTER(operand1), VM_DWORD_SIZE);
+                stack.pop(BYTEPOINTER(operand2), VM_DWORD_SIZE);
+                result = operand1 + operand2;
+
+                stack.push(BYTEPOINTER(result), VM_DWORD_SIZE);
+                break;
+            }
+            case I_ADDQ:
+            {
+                vm::vm_qword_t operand1 = 0;
+                vm::vm_qword_t operand2 = 0;
+                vm::vm_qword_t result = 0;
+
+                stack.pop(BYTEPOINTER(operand1), VM_QWORD_SIZE);
+                stack.pop(BYTEPOINTER(operand2), VM_QWORD_SIZE);
+                result = operand1 + operand2;
+
+                stack.push(BYTEPOINTER(result), VM_QWORD_SIZE);
                 break;
             }
             case I_CCALL:
@@ -162,9 +212,14 @@ void Procedure::executeInterpreted()
                     LOGGER.debug("identified target of native call (function '%s')",
                                  symbolName.toCharArray());
 
-                    // Get the arguments and the result value
+                    // Allocate enough space for containing the arguments and
+                    // the return value
 
                     // Call the method
+                    if (context.callNative(symbolName, stack.getReference()) != FFI_OK)
+                    {
+                        throw IllegalStateException("invalid native call result.");
+                    }
                 }
                 else
                 {
@@ -173,42 +228,118 @@ void Procedure::executeInterpreted()
                 }
                 break;
             }
+            case I_INVOKE:
+            {
+                vm::vm_address_t jumpTarget = 0;
+                std::memmove(&jumpTarget, (pool + ip), VM_ADDRESS_SIZE);
+                if (!io::isMachineBigEndian())
+                {
+                    io::swapEndianness(&jumpTarget, VM_ADDRESS_SIZE);
+                }
+                ip += VM_ADDRESS_SIZE;
+
+                // Trace the request for local invocation
+                LOGGER.debug("requesting local call to symbol with index 0x%llx.", jumpTarget);
+                if (jumpTarget > executableModule->getSymbolCount())
+                {
+                    LOGGER.error("illegal call to local method, index out of bounds (%llu)", jumpTarget);
+                    throw IllegalStateException("illegal local call, symbol index out of bounds");
+                }
+                const binutils::Symbol::SymbolTableEntry* symbol = executableModule->findSymbol(jumpTarget);
+                const core::String symbolName = executableModule->findSymbolName(symbol->name);
+
+                if ((symbol->type == binutils::Symbol::Type_Function)
+                     || (symbol->bind == binutils::Symbol::Bind_Extern))
+                {
+                    LOGGER.debug("identified target of local call (function '%s')", symbolName.toCharArray());
+
+                    if (context.callLocal(symbolName, stack) != Context::ENOERR)
+                    {
+                        throw IllegalStateException("invalid local call result.");
+                    }
+                }
+                else
+                {
+                    LOGGER.error("attempted call to non-executable object (%s).", symbolName.toCharArray());
+                    throw IllegalStateException("attempted call to data object.");
+                }
+                break;
+            }
+            case I_JF:
+            {
+                vm::vm_qword_t address = *((vm::vm_qword_t*) pool + ip);
+                ip += VM_ADDRESS_SIZE;
+
+                if (!isZeroFlagSet())
+                {
+                    jumpToLocalAddress(address);
+                }
+                break;
+            }
+            case I_JMP:
+            {
+                vm::vm_qword_t address = *((vm::vm_qword_t*) pool + ip);
+                ip += VM_ADDRESS_SIZE;
+
+                jumpToLocalAddress(address);
+                break;
+            }
+            case I_JT:
+            {
+                vm::vm_qword_t address = *((vm::vm_qword_t*) pool + ip);
+                ip += VM_ADDRESS_SIZE;
+
+                if (isZeroFlagSet())
+                {
+                    jumpToLocalAddress(address);
+                }
+                break;
+            }
             case I_LOAD:
             {
+                vm::vm_address_t address = *((vm::vm_qword_t*) pool + ip);
                 ip += VM_QWORD_SIZE;
+
+                // Switch endianness
+                if (!io::isMachineBigEndian())
+                {
+                    io::swapEndianness(&address, VM_QWORD_SIZE);
+                }
+
+                LOGGER.debug("requesting load from address 0x%llx", address);
                 break;
             }
             case I_PUSHA:
             {
-                stack->push(pool + ip, VM_ADDRESS_SIZE);
+                stack.push(pool + ip, VM_ADDRESS_SIZE);
                 ip += VM_ADDRESS_SIZE;
 
                 break;
             }
             case I_PUSHB:
             {
-                stack->push(pool + ip, VM_BYTE_SIZE);
+                stack.push(pool + ip, VM_BYTE_SIZE);
                 ip += VM_BYTE_SIZE;
 
                 break;
             }
             case I_PUSHW:
             {
-                stack->push(pool + ip, VM_WORD_SIZE);
+                stack.push(pool + ip, VM_WORD_SIZE);
                 ip += VM_WORD_SIZE;
 
                 break;
             }
             case I_PUSHL:
             {
-                stack->push(pool + ip, VM_DWORD_SIZE);
+                stack.push(pool + ip, VM_DWORD_SIZE);
                 ip += VM_DWORD_SIZE;
 
                 break;
             }
             case I_PUSHQ:
             {
-                stack->push(pool + ip, VM_QWORD_SIZE);
+                stack.push(pool + ip, VM_QWORD_SIZE);
                 ip += VM_QWORD_SIZE;
 
                 break;
@@ -216,6 +347,12 @@ void Procedure::executeInterpreted()
             case I_RETB:
             {
                 returnValueSize = VM_BYTE_SIZE;
+                rflag = 1;
+                break;
+            }
+            case I_RETW:
+            {
+                returnValueSize = VM_WORD_SIZE;
                 rflag = 1;
                 break;
             }
@@ -228,39 +365,98 @@ void Procedure::executeInterpreted()
                 rflag = 1;
                 break;
             }
+            case I_RETQ:
+            {
+                returnValueSize = VM_QWORD_SIZE;
+                rflag = 1;
+                break;
+            }
+#define SUBSTRACTION(type, size) \
+            type substractor = 0; \
+            type substrahend = 0; \
+            type result = 0; \
+            \
+            stack.pop(BYTEPOINTER(substractor), size); \
+            stack.pop(BYTEPOINTER(substrahend), size); \
+            result = substrahend - substractor; \
+            \
+            stack.push(BYTEPOINTER(result), size); \
+            break
+
+            case I_SUBB:
+            {
+                SUBSTRACTION(vm::vm_byte_t, VM_BYTE_SIZE);
+            }
+            case I_SUBW:
+            {
+                SUBSTRACTION(vm::vm_word_t, VM_WORD_SIZE);
+            }
+            case I_SUBL:
+            {
+                vm::vm_dword_t substractor = 0;
+                vm::vm_dword_t substrahend = 0;
+                vm::vm_dword_t result = 0;
+
+                stack.pop((vm::vm_byte_t*) (&substractor), VM_DWORD_SIZE);
+                stack.pop((vm::vm_byte_t*) (&substrahend), VM_DWORD_SIZE);
+                result = substrahend - substractor;
+
+                stack.push((vm::vm_byte_t*) (&result), VM_DWORD_SIZE, false);
+                break;
+            }
+            case I_SUBQ:
+            {
+                SUBSTRACTION(vm::vm_qword_t, VM_QWORD_SIZE);
+            }
+#undef SUBSTRACTION
                 // Conversion operations
             case I_W2Q:
             {
                 vm::vm_word_t   operand = 0;
                 vm::vm_qword_t  result = 0;
 
-                stack->pop((vm::vm_byte_t*) & operand, VM_WORD_SIZE);
+                stack.pop((vm::vm_byte_t*) & operand, VM_WORD_SIZE);
                 result = operand;
-                stack->push(result);
+                stack.push(result);
 
                 break;
             }
                 // Comparison operators
+#define COMPARE_EQUALS(type) \
+            type operand1 = 0; \
+            type operand2 = 0; \
+            \
+            operand1 = stack.pop<type>(); \
+            operand2 = stack.pop<type>(); \
+            eflags.m_zf = (operand1 == operand2) ? ONE : ZERO; \
+            \
+            break
+
+            case I_CEQB:
+            {
+                COMPARE_EQUALS(vm::vm_byte_t);
+            }
+            case I_CEQW:
+            {
+                COMPARE_EQUALS(vm::vm_word_t);
+            }
+            case I_CEQL:
+            {
+                COMPARE_EQUALS(vm::vm_dword_t);
+            }
             case I_CEQQ:
             {
                 vm::vm_qword_t  operand1 = 0;
                 vm::vm_qword_t  operand2 = 0;
-                vm::vm_byte_t   result = 0;
 
                 // Pop the two operands, compare and set the CPU flag
-                operand1    = stack->pop<vm::vm_qword_t>();
-                operand2    = stack->pop<vm::vm_qword_t>();
-                result      = operand1 == operand2;
+                operand1    = stack.pop<vm::vm_qword_t>();
+                operand2    = stack.pop<vm::vm_qword_t>();
+                eflags.m_zf = (operand1 == operand2) ? ONE : ZERO;
 
                 break;
             }
-                // Flow control
-            case I_INVOKE:
-            {
-
-
-                break;
-            }
+#undef COMPARE_EQUALS
             default:
             {
                 LOGGER.error("the virtual machine attempted to execute an invalid operation <0x%x> (pc: 0x%llx)", opcode, ip);
@@ -268,6 +464,8 @@ void Procedure::executeInterpreted()
             }
         }
     }
+
+#undef BYTEPOINTER
 }
 
 void Procedure::executeOptimized()
@@ -305,6 +503,16 @@ bool Procedure::isOptimized() const
     AMANDA_DESYNCHRONIZED(lock);
 
     return result;
+}
+
+const bool Procedure::isZeroFlagSet() const
+{
+    return eflags.m_zf == ONE;
+}
+
+void Procedure::jumpToLocalAddress(const vm::vm_address_t offset) const
+{
+    ip = offset;
 }
 
 void Procedure::optimize()

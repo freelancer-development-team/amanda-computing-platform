@@ -28,10 +28,14 @@
 // Runtime Library
 #include <amanda-vm/Runtime/AdaptiveOptimizationCondition.h>
 #include <amanda-vm/Runtime/Context.h>
+#include <amanda-vm/Runtime/ExecutableModule.h>
 #include <amanda-vm/Runtime/FileSystem.h>
+#include <amanda-vm/Runtime/IllegalInstructionException.h>
+#include <amanda-vm/Runtime/IllegalStateException.h>
 #include <amanda-vm/Runtime/InvalidAllocationError.h>
 #include <amanda-vm/Runtime/InvalidResourceIdentifierException.h>
 #include <amanda-vm/Runtime/JitContext.h>
+#include <amanda-vm/Runtime/LinkageError.h>
 #include <amanda-vm/Runtime/LocklessDefaultAllocator.h>
 #include <amanda-vm/Runtime/MemoryAllocator.h>
 #include <amanda-vm/Runtime/MemoryManager.h>
@@ -48,6 +52,7 @@
 #include <amanda-vm/Runtime/SegmentationFault.h>
 #include <amanda-vm/Runtime/Stack.h>
 #include <amanda-vm/Runtime/ThreadScheduler.h>
+#include <amanda-vm/Runtime/UnschedulableException.h>
 
 // The Amanda Core Libraries
 #include <AmandaSDK.h>

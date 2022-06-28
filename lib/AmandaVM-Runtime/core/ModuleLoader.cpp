@@ -52,6 +52,21 @@ ModuleLoader::~ModuleLoader()
     }
 }
 
+ExecutableModule* ModuleLoader::get(const core::String& identifier) const
+{
+    return modules.find(identifier)->second;
+}
+
+ModuleLoader::ModuleIterator ModuleLoader::getIterator() const
+{
+    return modules.begin();
+}
+
+ModuleLoader::ModuleIterator ModuleLoader::getIteratorEnd() const
+{
+    return modules.end();
+}
+
 ExecutableModule* ModuleLoader::load(const core::String& identifier, io::InputStream* stream)
 {
     assert(stream != NULL && "Null pointer exception");
@@ -155,7 +170,6 @@ ExecutableModule* ModuleLoader::load(const core::String& identifier, io::InputSt
                 }
 
                 result->addSection(sectionName, sectionHeader);
-
                 LOGGER.trace("section: <%s> (%s)\n"
                              "  - section size      : 0x%llx\n"
                              "  - section offset    : 0x%llx\n"
@@ -168,10 +182,11 @@ ExecutableModule* ModuleLoader::load(const core::String& identifier, io::InputSt
                              sectionHeader.address);
             }
 
-            // Link external symbols
+            // Link local symbols
 
             // We've linked symbols, now produce a log output with every symbol
             // just for us to know
+            AMANDA_SYNCHRONIZED(lock1);
             {
                 core::String symbols = core::String::makeFormattedString("last loaded module ('%s') available symbols are (%llu results):\n",
                                                                          result->name.toCharArray(),
@@ -179,14 +194,17 @@ ExecutableModule* ModuleLoader::load(const core::String& identifier, io::InputSt
                 for (size_t index = 0, endIndex = result->getSymbolCount(); index < endIndex; ++index)
                 {
                     const binutils::Symbol::SymbolTableEntry* sy = result->findSymbol(index);
-                    core::String tableEntry = core::String::makeFormattedString("\tNAME: %-50s | INDEX: 0x%-16llx | TYPE: %-10s\n",
+                    core::String tableEntry = core::String::makeFormattedString("\tNAME: %-50s | INDEX: 0x%-16llx | TYPE: %-12s | OFFSET: 0x%-16llx | BIND: %-10s\n",
                                                                                 result->findSymbolName(sy->name).toCharArray(),
                                                                                 index,
-                                                                                binutils::Symbol::getTypeStringFromValue(sy->type).toCharArray());
+                                                                                binutils::Symbol::getTypeStringFromValue(sy->type).toCharArray(),
+                                                                                sy->value,
+                                                                                binutils::Symbol::getBindStringFromValue(sy->bind).toCharArray());
                     symbols.append(tableEntry);
                 }
                 LOGGER.debug(symbols);
             }
+            AMANDA_DESYNCHRONIZED(lock1);
         }
 
         // Add to the module map & grab a reference
@@ -197,4 +215,8 @@ ExecutableModule* ModuleLoader::load(const core::String& identifier, io::InputSt
     return result;
 }
 
+bool ModuleLoader::isLoaded(const core::String& identifier) const
+{
+    return modules.find(identifier) != modules.end();
+}
 

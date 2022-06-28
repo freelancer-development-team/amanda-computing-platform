@@ -64,7 +64,8 @@ public:
     ExecutableModule(const core::String& name);
     virtual ~ExecutableModule();
 
-    void                                        addSection(const core::String name, const binutils::Section::SectionHeader& section);
+    void                                        addSection(const core::String& name, const binutils::Section::SectionHeader& section);
+    void                                        cacheLocalProcedure(const core::String& name, Procedure* proc);
     const binutils::Section::SectionHeader&     findSection(const core::String& name) const;
     const core::String                          findSymbolName(const vm::vm_qword_t offset) const;
     const binutils::Symbol::SymbolTableEntry*   findSymbol(const core::String& name, int type) const;
@@ -75,15 +76,20 @@ public:
 
 private:
 
+    typedef std::map<const vm::vm_dword_t, binutils::Symbol::SymbolTableEntry*> SymbolCache;
+
     static logging::Logger& LOGGER;
 
     static void swapEndianness(void* buffer, size_t size);
 
-    std::map<const core::String, Procedure*>                    cachedProcedures;
-    ExecutableHeader                                            header;
-    core::String                                                name;
-    std::map<core::String, binutils::Section::SectionHeader>    sections;
-    vm::vm_size_t                                               size;
+    std::map<const core::String, Procedure*>                            cachedProcedures;
+    ExecutableHeader                                                    header;
+    core::String                                                        name;
+    std::map<core::String, binutils::Section::SectionHeader>            sections;
+    vm::vm_size_t                                                       size;
+    mutable SymbolCache                                                 symbols;
+
+    bool    hasCachedSymbol(const vm::vm_dword_t index) const;
 
 } ;
 

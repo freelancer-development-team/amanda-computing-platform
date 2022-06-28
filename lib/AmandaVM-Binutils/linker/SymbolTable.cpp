@@ -36,7 +36,7 @@ Section(name)
     setType(Type_SymbolTable);
 
     // Reserve space
-    ordererSymbols.reserve(25);
+    orderedSymbols.reserve(25);
 }
 
 SymbolTable::~SymbolTable()
@@ -60,7 +60,7 @@ void SymbolTable::addSymbol(const Symbol* symbol)
 
     // Add the symbol.
     symbols.insert(std::make_pair(symbol->getName(), symbol));
-    ordererSymbols.push_back(symbol);
+    orderedSymbols.push_back(symbol);
 
     // Increase the size
     setSize(symbols.size() * sizeof (Symbol::SymbolTableEntry));
@@ -68,7 +68,7 @@ void SymbolTable::addSymbol(const Symbol* symbol)
 
 void SymbolTable::constructBinaryData()
 {
-    for (SymbolVector::const_iterator it = ordererSymbols.begin(), end = ordererSymbols.end();
+    for (SymbolVector::const_iterator it = orderedSymbols.begin(), end = orderedSymbols.end();
          it != end; ++it)
     {
         const Symbol* symbol =  (*it);
@@ -90,7 +90,7 @@ unsigned SymbolTable::getIndexToSymbol(const core::String& name) const
         const Symbol* object = getSymbol(name);
 
         bool found = false;
-        for (SymbolVector::const_iterator it = ordererSymbols.begin(), end = ordererSymbols.end();
+        for (SymbolVector::const_iterator it = orderedSymbols.begin(), end = orderedSymbols.end();
              it != end && !found; ++it)
         {
             if ((*it) == object)

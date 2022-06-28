@@ -16,44 +16,26 @@
  */
 
 /* 
- * File:   NativeLibrary.cpp
+ * File:   FfiException.cpp
  * Author: Javier Marrero
  * 
- * Created on June 23, 2022, 2:03 AM
+ * Created on June 26, 2022, 10:51 AM
  */
 
-#include <amanda-vm/Runtime/NativeLibrary.h>
-#include <amanda-vm/Runtime/LinkageError.h>
-#include <amanda-vm-c/sdk-definitions.h>
-
-// Windows
-#ifdef _W32
-#    include <windows.h>
-#endif
+#include <amanda-vm/Runtime/FfiException.h>
 
 using namespace amanda;
 using namespace amanda::vm;
 
-NativeLibrary::NativeLibrary(const core::String& path)
+FfiException::FfiException(const core::String& message)
 :
-handle(NULL),
-name(path)
+core::Exception(message)
 {
-#ifdef _W32
-    handle = LoadLibrary(path.toCharArray());
-    if (!handle)
-    {
-        throw LinkageError(core::String::makeFormattedString("unable to load dynamic link library (%s).",
-                                                             path.toCharArray()));
-    }
-#endif
 }
 
-NativeLibrary::~NativeLibrary()
+FfiException::~FfiException() throw ()
 {
-#ifdef _W32
-    FreeLibrary((HMODULE) handle);
-#endif
 }
+
 
 

@@ -57,19 +57,33 @@ class Procedure : public core::Object
     AMANDA_OBJECT(Procedure, core::Object)
 public:
 
+    static const int ZERO = 0;
+    static const int ONE = 1;
+
+    /**
+     * Represents a set of processor flags used to control the execution of
+     * a procedure within the virtual machine.
+     */
+    struct ProcessorFlags
+    {
+        vm::vm_byte_t   m_zf : 1;
+    } __attribute__((packed));
+    typedef struct ProcessorFlags ProcessorFlags;
+
     Procedure(const Context& context, const core::String& name, const binutils::Symbol::SymbolTableEntry* symbol);
     virtual ~Procedure();
 
     void                addOptimizationCriteria(const AdaptiveOptimizationCondition* criteria);
-    void                applyStack(Stack * const stack);
     virtual bool        equals(const Object* object);
-    void                execute();
-    void                executeInterpreted();
+    void                execute(Stack& stack);
+    void                executeInterpreted(Stack& stack);
     void                executeOptimized();
     const core::String& getName() const;
     logging::Logger&    getLoggerInstance() const;
     const size_t        getReturnValueSize() const;
     bool                isOptimized() const;
+    const bool          isZeroFlagSet() const;
+    void                jumpToLocalAddress(const vm::vm_address_t offset) const;
     void                optimize();
     void                setExecutableModule(ExecutableModule& module);
     bool                shouldOptimize() const;
@@ -97,6 +111,7 @@ protected:
     static logging::Logger& LOGGER;
 
     const Context&                                      context;
+    ProcessorFlags                                      eflags;
     sdk_ullong_t                                        executionCount;
     core::WeakReference<ExecutableModule>               executableModule;
     mutable vm::vm_qword_t                              ip;
@@ -104,7 +119,6 @@ protected:
     std::deque<const AdaptiveOptimizationCondition*>    optimizationCritera;
     bool                                                optimized;
     size_t                                              returnValueSize;
-    core::WeakReference<Stack>                          stack;
     const binutils::Symbol::SymbolTableEntry*           symbol;
 
     vm::vm_byte_t   fetch() const;

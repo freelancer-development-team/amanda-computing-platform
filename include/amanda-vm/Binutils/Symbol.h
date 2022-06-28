@@ -45,6 +45,7 @@ class Section;
  */
 class Symbol : public Serializable
 {
+
     AMANDA_OBJECT(Symbol, Serializable)
 public:
 
@@ -76,7 +77,7 @@ public:
         Bind_Native = 4,
         Bind_LoProc = 13,   /// Reserved
         Bind_HiProc = 15    /// Reserved
-    };
+    } ;
 
     /*
      * Symbol types.
@@ -89,7 +90,7 @@ public:
         Type_Section = 3,   /// Section (sections are symbols... so it seems)
         Type_LoProc = 13,   /// Reserved
         Type_HiProc = 15,   /// Reserved
-    };
+    } ;
 
     /*
      * Symbol flags
@@ -97,12 +98,15 @@ public:
     static const vm::vm_dword_t Flag_Resolved =     0x1;
     static const vm::vm_dword_t Flag_Unresolved =   ~(Flag_Resolved);
 
+    static const core::String       getBindStringFromValue(int bind);
     static const core::String       getTypeStringFromValue(int type);
     static const SymbolTableEntry&  getNullSymbolTableEntry();
 
     Symbol(const core::String& name);
     virtual ~Symbol();
 
+
+    virtual bool            equals(const Object* object);
     const SymbolTableEntry& getEntry() const;
     const Module*           getModule() const;
     const core::String&     getName() const;
@@ -119,7 +123,7 @@ public:
     Symbol&                 setSize(size_t size);
     Symbol&                 setType(vm::vm_byte_t type);
     Symbol&                 setValue(vm::vm_address_t value);
-    
+
 protected:
 
     SymbolTableEntry    entry;

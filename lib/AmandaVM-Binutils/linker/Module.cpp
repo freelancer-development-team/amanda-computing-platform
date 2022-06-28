@@ -140,6 +140,8 @@ void Module::addSymbol(Symbol& symbol, Section& section)
     // Add the reference
     symbol.setModule(this);
     symbol.setSection(&section);
+    symbol.setValue(section.getOffsetToSymbol(&symbol));
+
 }
 
 void Module::addSection(Section* section)
@@ -421,6 +423,13 @@ void Module::linkLocalSymbols()
                     }
                 }
             }
+
+            // Link
+            if (!symbol->isExternalSymbol())
+            {
+                // 0xffddeecc00000000
+                symbol->setValue(symbol->getSection()->getOffsetToSymbol(symbol));
+            }
         }
     }
 }
@@ -435,6 +444,9 @@ void Module::mergeExternalModule(Module& external)
     }
 
     // Recalculate header parameters
+
+    // Link local symbols
+    linkLocalSymbols();
 }
 
 void Module::marshallImpl(io::OutputStream& stream) const

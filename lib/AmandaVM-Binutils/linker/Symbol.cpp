@@ -30,9 +30,33 @@
 using namespace amanda;
 using namespace amanda::binutils;
 
+const core::String Symbol::getBindStringFromValue(int bind)
+{
+    core::String result("UNKNOWN");
+    switch (bind)
+    {
+        case Bind_Extern:
+            result = "EXTERN";
+            break;
+        case Bind_Global:
+            result = "GLOBAL";
+            break;
+        case Bind_Local:
+            result = "LOCAL";
+            break;
+        case Bind_Native:
+            result = "NATIVE";
+            break;
+        case Bind_Weak:
+            result = "WEAK";
+            break;
+    }
+    return result;
+}
+
 const core::String Symbol::getTypeStringFromValue(int type)
 {
-    core::String result("UNKNOWN TYPE");
+    core::String result("UNKNOWN");
     switch (type)
     {
         case Type_Function:
@@ -79,6 +103,23 @@ name(name)
 
 Symbol::~Symbol()
 {
+}
+
+bool Symbol::equals(const Object* object)
+{
+    bool result = false;
+    if (object != NULL && object->is<Symbol>())
+    {
+        const Symbol* symbol = static_cast<const Symbol*> (object);
+        result = (symbol->getName() == this->getName())
+                && (symbol->getEntry().bind == this->getEntry().bind)
+                && (symbol->getEntry().type == this->getEntry().type);
+    }
+    else
+    {
+        result = (this == object);
+    }
+    return result;
 }
 
 const Symbol::SymbolTableEntry& Symbol::getEntry() const

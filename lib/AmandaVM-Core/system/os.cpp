@@ -15,45 +15,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* 
- * File:   NativeLibrary.h
- * Author: Javier Marrero
- *
- * Created on June 23, 2022, 2:03 AM
- */
-
-#ifndef NATIVELIBRARY_H
-#define NATIVELIBRARY_H
-
 #include <amanda-vm/TypeSystem.h>
+#include <amanda-vm/System.h>
 
-namespace amanda
+using namespace amanda;
+using namespace amanda::core;
+
+OperatingSystem amanda::core::getOperatingSystem()
 {
-namespace vm
-{
-
-class NativeLibrary : public core::Object
-{
-    AMANDA_OBJECT(NativeLibrary, core::Object)
-public:
-
-    /**
-     * This is an opaque data-type representing a native handle to an open
-     * DLL.
-     */
-    typedef void* NativeLibraryHandle;
-
-    NativeLibrary(const core::String& path);
-    virtual ~NativeLibrary();
-
-private:
-
-    NativeLibraryHandle handle;
-    core::String        name;
-} ;
-
-}
+    OperatingSystem result = UNKNOWN;
+#ifdef _W32
+    result = WINDOWS;
+#endif
+    return result;
 }
 
-#endif /* NATIVELIBRARY_H */
+core::String amanda::core::getOperatingSystemName()
+{
+    core::String name;
+    switch (getOperatingSystem())
+    {
+        case WINDOWS:
+            name = "Microsoft Windows";
+            break;
+        default:
+            name = "Undefined";
+            break;
+    }
+    return name;
+}
 
