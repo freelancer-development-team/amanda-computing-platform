@@ -54,7 +54,6 @@ executionCount(0),
 ip(0),
 name(name),
 optimized(false),
-returnValueSize(0),
 symbol(symbol)
 {
 }
@@ -91,23 +90,38 @@ bool Procedure::equals(const Object* object)
     return result;
 }
 
-void Procedure::execute(Stack& stack)
+vm::vm_qword_t Procedure::execute(Stack& stack)
 {
     LOGGER.debug("executing subroutine at 0x%llx, with stack depth %llu (on thread %llu).",
                  symbol->value, stack.getDepth(),
                  concurrent::Thread::currentThreadId());
-    stack.pushFrame();  // Build a new frame
-    
+
+    // Push a new stack frame
+    stack.pushFrame();
+
+    // Initial variables
+    vm::vm_qword_t rvsize = 0;
+
+    // Optimization conditions
     if (isOptimized())
     {
         /* Run the 'jitted' code. */
-        executeOptimized();
+        rvsize = executeOptimized();
     }
     else
     {
         /* Interpret the code */
-        executeInterpreted(stack);
+        rvsize = executeInterpreted(stack);
     }
+
+    //
+    vm_qword_t result = 0;
+    stack.peek((vm_byte_t*) &result, rvsize);
+    LOGGER.info("function returned %llu bytes (most significant quad word 0x%llx)",
+                rvsize, result);
+
+    // Pop the frame
+    stack.popFrame(rvsize);
 
     // Check if needs optimization
     if (!isOptimized() && shouldOptimize())
@@ -121,13 +135,17 @@ void Procedure::execute(Stack& stack)
         ++executionCount;
     }
     AMANDA_DESYNCHRONIZED(lock);
+
+    return rvsize;
 }
 
-void Procedure::executeInterpreted(Stack& stack)
+vm::vm_qword_t Procedure::executeInterpreted(Stack& stack)
 {
 #define BYTEPOINTER(x)  ((vm::vm_byte_t*) (&(x)))
 
+    vm::vm_size_t   rvsize = 0;
     vm::vm_byte_t   rflag = 0;
+    
     while ((ip < symbol->size) && (rflag == 0))
     {
         vm::vm_byte_t*  pool = (vm::vm_byte_t*) (executableModule->findSection(CODE_SECTION_NAME).address + symbol->value);
@@ -346,20 +364,20 @@ void Procedure::executeInterpreted(Stack& stack)
             }
             case I_RETB:
             {
-                returnValueSize = VM_BYTE_SIZE;
+                rvsize = VM_BYTE_SIZE;
                 rflag = 1;
                 break;
             }
             case I_RETW:
             {
-                returnValueSize = VM_WORD_SIZE;
+                rvsize = VM_WORD_SIZE;
                 rflag = 1;
                 break;
             }
             case I_RETL:
             {
                 // Set the return value size
-                returnValueSize = VM_DWORD_SIZE;
+                rvsize = VM_DWORD_SIZE;
 
                 // Set the return flag
                 rflag = 1;
@@ -367,7 +385,7 @@ void Procedure::executeInterpreted(Stack& stack)
             }
             case I_RETQ:
             {
-                returnValueSize = VM_QWORD_SIZE;
+                rvsize = VM_QWORD_SIZE;
                 rflag = 1;
                 break;
             }
@@ -465,11 +483,15 @@ void Procedure::executeInterpreted(Stack& stack)
         }
     }
 
+    LOGGER.trace("function returning %llu bytes.", rvsize);
+    return rvsize;
+
 #undef BYTEPOINTER
 }
 
-void Procedure::executeOptimized()
+vm::vm_qword_t Procedure::executeOptimized()
 {
+    return 0;
 }
 
 vm::vm_byte_t Procedure::fetch() const
@@ -486,11 +508,6 @@ const core::String& Procedure::getName() const
 logging::Logger& Procedure::getLoggerInstance() const
 {
     return LOGGER;
-}
-
-const size_t Procedure::getReturnValueSize() const
-{
-    return returnValueSize;
 }
 
 bool Procedure::isOptimized() const

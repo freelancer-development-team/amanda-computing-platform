@@ -27,6 +27,7 @@
 
 // C++
 #include <cerrno>
+#include <csignal>
 
 using namespace amanda;
 using namespace amanda::vm;
@@ -38,13 +39,17 @@ Schedulable::Schedulable(const Schedulable* parent,
 context(context),
 currentProcedure(init),
 parent(parent),
-returnValue(0),
+returnValue(NULL),
 stack(new Stack())
 {
 }
 
 Schedulable::~Schedulable()
 {
+    if (returnValue != NULL)
+    {
+        std::free(returnValue);
+    }
 }
 
 const Context& Schedulable::getContext() const
@@ -60,9 +65,14 @@ const Context& Schedulable::getContext() const
     return result;
 }
 
-vm::vm_qword_t Schedulable::getReturnValue() const
+vm::vm_dword_t Schedulable::getReturnValueAsLong() const
 {
-    return returnValue;
+    return *((vm::vm_dword_t*) returnValue);
+}
+
+vm::vm_qword_t Schedulable::getReturnValueAsQuad() const
+{
+    return *((vm::vm_qword_t*) returnValue);
 }
 
 bool Schedulable::hasParent() const
@@ -81,35 +91,28 @@ void Schedulable::run()
     assert(currentProcedure.isNotNull() && "Null pointer exception");
     assert(stack.isNotNull() && "Null pointer exception");
 
+    // Set the signal handlers
+    std::signal(SIGSEGV, Context::handleSigsegv);
+
     // Apply the stack to the current procedure and begin executing
+    vm::vm_size_t rvsize = 0;
     try
     {
         //stack->pushFrame();
-        currentProcedure->execute(stack->getReference());
+        rvsize = currentProcedure->execute(stack->getReference());
         //stack->popFrame();
     }
     catch (core::Exception& ex)
     {
-        returnValue = -1;
+        returnValue = NULL;
         throw ex;
     }
 
     // The last value in the stack is the return value
     // the trouble is how to know which data is the adequate
-    AMANDA_SYNCHRONIZED(lock);
+    if (rvsize > 0)
     {
-        const size_t returnValueSize = currentProcedure->getReturnValueSize();
-        if (returnValueSize > 0)
-        {
-            vm::vm_dword_t returnValueBuffer = 0;
-            stack->pop((vm::vm_byte_t*) (&returnValueBuffer), returnValueSize);
-
-            AMANDA_SYNCHRONIZED(valueLock);
-            {
-                returnValue = returnValueBuffer;
-            }
-            AMANDA_DESYNCHRONIZED(valueLock);
-        }
+        returnValue = (vm_byte_t*) std::calloc(rvsize, VM_BYTE_SIZE);
+        stack->pop(returnValue, rvsize);
     }
-    AMANDA_DESYNCHRONIZED(lock);
 }

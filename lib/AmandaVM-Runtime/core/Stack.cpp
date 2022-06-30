@@ -28,13 +28,15 @@
 // C++
 #include <cstdlib>
 #include <cstring>
+#include <setjmp.h>
 
 using namespace amanda;
 using namespace amanda::vm;
 
+const logging::Logger& Stack::LOGGER = logging::Logger::getLogger("amanda.vm.Stack")->getConstReference();
+
 Stack::Stack()
 :
-basePointer(0),
 depth(0),
 stackArea((vm_byte_t*) std::calloc(0x1000, sizeof (vm::vm_byte_t))),
 stackPointer(0),
@@ -66,7 +68,12 @@ void* Stack::allocl(size_t size)
 
 sdk_ullong_t Stack::countFrames() const
 {
-    return frames.size();
+    return frameStack.size();
+}
+
+vm_address_t Stack::getBasePointer() const
+{
+    return frameStack.top();
 }
 
 sdk_ullong_t Stack::getDepth()
@@ -79,62 +86,94 @@ bool Stack::isEmpty() const
     return stackPointer == 0;
 }
 
-void Stack::pop(vm_byte_t* buffer, vm_size_t size)
+void Stack::peek(vm_byte_t* buffer, vm_size_t size)
 {
-    AMANDA_SYNCHRONIZED(lock);
-    {
-        assert(stackPointer > 0 && "Invalid pop operation on empty stack.");
-        std::memcpy(buffer, (const void*) (stackArea + (stackPointer - size)), size);
-
-        // Reduce the stack pointer
-        std::memset((void*) (stackArea + (stackPointer - size)), 0, size);
-        stackPointer -= size;
-        --depth;
-    }
-    AMANDA_DESYNCHRONIZED(lock);
+    std::memcpy(buffer, (const void*) (stackArea + (stackPointer - size)), size);
 }
 
-void Stack::popFrame()
+void Stack::pop(vm_byte_t* buffer, vm_size_t size)
 {
-    // Clear from the stack pointer to the previous frame
-    vm_address_t ebp        = frames.top();
-    vm_size_t frame_size    = ((vm_address_t) (stackArea + stackPointer)) - ebp;
+    //    AMANDA_SYNCHRONIZED(lock);
+    //    {
+    assert((stackPointer - size) >= 0ul && "Invalid pop operation on empty stack.");
+    peek(buffer, size);
 
-    std::memset((void*) (ebp), 0, frame_size);
-    stackPointer = ebp;
+    // Reduce the stack pointer
+    std::memset((void*) (stackArea + (stackPointer - size)), 0, size);
+    stackPointer -= size;
+    --depth;
+    //    }
+    //    AMANDA_DESYNCHRONIZED(lock);
+}
+
+void Stack::popFrame(ptrdiff_t rvsize)
+{
+    assert(rvsize > 0 && "Passed a negative return value size");
+
+    // Set the variables
+    const vm_address_t basePointer  = getBasePointer();
+    const vm_address_t frameSize    = stackPointer - basePointer;
+    depth = depthStack.top();
 
     // Pop the stack frame
-    frames.pop();
+    frameStack.pop();
+    depthStack.pop();
+
+    // Set the stack pointer
+    // Allocate enough space for returning a value, pop it, and
+    // push it back on the stack, after resetting the frame pointer.
+    vm_byte_t* buffer = NULL;
+    if (rvsize > 0)
+    {
+        buffer = (vm_byte_t*) std::calloc(rvsize, VM_BYTE_SIZE);
+        assert(buffer != NULL && "Null pointer exception");
+
+        peek(buffer, rvsize);
+    }
+
+    // Set the stack pointer
+    std::memset(stackArea + (basePointer), 0, frameSize);
+    stackPointer = basePointer;
+
+    // Push the stored result
+    if (rvsize > 0 && buffer != NULL)
+    {
+        // Push the value back to the stack
+        push(buffer, rvsize, false);
+    }
+
+    // Log the frame pop
+    LOGGER.info("popping stack frame with offset 0x%llx (depth %llu)", basePointer, depth);
 }
 
 void Stack::push(const vm_byte_t* data, vm_size_t size, bool convert)
 {
-    AMANDA_SYNCHRONIZED(lock);
+    //    AMANDA_SYNCHRONIZED(lock);
+    //    {
+    if (stackPointer + size > stackSize)
     {
-        if (stackPointer + size > stackSize)
-        {
-            resizeStack(size + (stackSize * 0.5f));
-        }
-
-        std::memcpy(stackArea + stackPointer, data, size);
-        if (!io::isMachineBigEndian() && convert)
-        {
-            io::swapEndianness(stackArea + stackPointer, size);
-        }
-
-        stackPointer += size;
-        ++depth;
+        resizeStack(size + (stackSize * 0.5f));
     }
-    AMANDA_DESYNCHRONIZED(lock);
+
+    std::memcpy(stackArea + stackPointer, data, size);
+    if (!io::isMachineBigEndian() && convert)
+    {
+        io::swapEndianness(stackArea + stackPointer, size);
+    }
+
+    stackPointer += size;
+    ++depth;
+    //    }
+    //    AMANDA_DESYNCHRONIZED(lock);
 }
 
 void Stack::pushFrame()
 {
-    // Set the stack base pointer to the beginning of the frame
-    basePointer = stackPointer;
+    // Push a new frame into the return stack
+    frameStack.push(stackPointer);
+    depthStack.push(depth);
 
-    // Push the frame context into the stack of contexts
-    frames.push((vm_address_t) (stackArea + stackPointer));
+    LOGGER.info("pushing stack frame with offset 0x%llx (depth %llu).", getBasePointer(), depth);
 }
 
 void Stack::resizeStack(ptrdiff_t delta)

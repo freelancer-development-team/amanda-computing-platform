@@ -75,12 +75,11 @@ public:
 
     void                addOptimizationCriteria(const AdaptiveOptimizationCondition* criteria);
     virtual bool        equals(const Object* object);
-    void                execute(Stack& stack);
-    void                executeInterpreted(Stack& stack);
-    void                executeOptimized();
+    vm::vm_qword_t      execute(Stack& stack);
+    vm::vm_qword_t      executeInterpreted(Stack& stack);
+    vm::vm_qword_t      executeOptimized();
     const core::String& getName() const;
     logging::Logger&    getLoggerInstance() const;
-    const size_t        getReturnValueSize() const;
     bool                isOptimized() const;
     const bool          isZeroFlagSet() const;
     void                jumpToLocalAddress(const vm::vm_address_t offset) const;
@@ -117,8 +116,7 @@ protected:
     mutable vm::vm_qword_t                              ip;
     core::String                                        name;
     std::deque<const AdaptiveOptimizationCondition*>    optimizationCritera;
-    bool                                                optimized;
-    size_t                                              returnValueSize;
+    volatile bool                                       optimized;
     const binutils::Symbol::SymbolTableEntry*           symbol;
 
     vm::vm_byte_t   fetch() const;

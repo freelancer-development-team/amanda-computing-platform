@@ -58,7 +58,8 @@ public:
     virtual ~Schedulable();
 
     const Context&  getContext() const;
-    vm::vm_qword_t  getReturnValue() const;
+    vm::vm_dword_t  getReturnValueAsLong() const;
+    vm::vm_qword_t  getReturnValueAsQuad() const;
     bool            hasParent() const;
     bool            isRoot() const;
     virtual void    run();
@@ -68,7 +69,7 @@ private:
     const Context&                              context;
     core::StrongReference<Procedure>            currentProcedure;
     core::StrongReference<const Schedulable>    parent;
-    vm::vm_qword_t                              returnValue;
+    vm::vm_byte_t*                              returnValue;
     core::StrongReference<Stack>                stack;
 
 } ;

@@ -47,10 +47,8 @@
 #endif
 
 //**************************** SIGNAL HANDLERS ********************************/
-extern "C"
-{
 
-static void handleSigsegv(int signum)
+void amanda::vm::Context::handleSigsegv(int signum)
 {
     amanda::vm::Context::getLogger().fatal("segmentation failure (signal %d).", signum);
 #if _W32
@@ -64,7 +62,6 @@ static void handleSigsegv(int signum)
     std::abort();
 }
 
-}
 //****************************************************************************//
 
 using namespace amanda;
@@ -422,7 +419,8 @@ int Context::loadAndExecute(const core::String& fullPath)
         std::time_t localtime = std::time(NULL);
         char*   localCTime = std::ctime(&localtime);
         char    strLocalTime[128] = {0};
-        std::strncpy(strLocalTime, localCTime, strlen(localCTime) - 1);
+        size_t  localCTimeSize = strlen(localCTime) - 1;
+        std::strncpy(strLocalTime, localCTime, localCTimeSize);
 
         LOGGER.info("execution started (local date & time: %s)", strLocalTime);
         core::StrongReference<const Schedulable> mainSchedulable = scheduler->schedule(mainProcedure).getSelfPointer();
@@ -431,7 +429,7 @@ int Context::loadAndExecute(const core::String& fullPath)
         scheduler->waitForAll();
 
         // Collect the execution result
-        result = (int) mainSchedulable->getReturnValue();
+        result = (int) mainSchedulable->getReturnValueAsLong();
         LOGGER.info("execution finished, return value: %d", result);
     }
     return result;

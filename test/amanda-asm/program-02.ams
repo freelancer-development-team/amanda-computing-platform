@@ -24,14 +24,19 @@
 
 # This is the main function for this test program.
 .def @@main?A_string@!l32
-	invoke	$f1
-	push	l32	$5
-	sub		l32
+	push	l32 $0x41
+	ccall	$c!!putchar@i32@i32
+	invoke	print_nl
+	push	l32 $0
 	ret		l32
 .endef
 
-.def $f1
-	push	l32 $5
+.def print_nl
+	push	l32	$0x0a
+	ccall	$c!!putchar@i32@i32
+	push	l32 $0x0d
+	ccall	$c!!putchar@i32@i32
+	push	l32 $0
 	ret		l32
 .endef
 

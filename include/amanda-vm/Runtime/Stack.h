@@ -26,6 +26,7 @@
 #define STACK_H
 
 #include <amanda-vm/TypeSystem.h>
+#include <amanda-vm/Logging/Logger.h>
 #include <amanda-vm/Binutils/vm-types.h>
 
 // C++
@@ -56,10 +57,12 @@ public:
 
     void*           allocl(size_t size);
     sdk_ullong_t    countFrames() const;
+    vm_address_t    getBasePointer() const;
     sdk_ullong_t    getDepth();
     bool            isEmpty() const;
+    void            peek(vm_byte_t* buffer, vm_size_t size);
     void            pop(vm_byte_t* buffer, vm_size_t size);
-    void            popFrame();
+    void            popFrame(ptrdiff_t rvsize);
     void            push(const vm_byte_t* data, vm_size_t size, bool convert = true);
     void            pushFrame();
 
@@ -80,11 +83,14 @@ public:
 
 private:
 
-    typedef std::stack<vm_address_t> FrameStack;
+    typedef std::stack<vm_address_t>    FrameStack;
+    typedef std::stack<vm_size_t>       DepthStack;
 
-    vm_address_t    basePointer;
+    static const logging::Logger& LOGGER;
+
     sdk_ullong_t    depth;
-    FrameStack      frames;
+    DepthStack      depthStack;
+    FrameStack      frameStack;
     vm_byte_t*      stackArea;
     vm_address_t    stackPointer;
     vm_size_t       stackSize;

@@ -89,6 +89,8 @@ public:
 
     static const logging::Logger& getLogger();
 
+    static void handleSigsegv(int signum);
+
     Context(MemoryAllocator* memoryAllocator,
             const core::String& path);
     virtual ~Context();

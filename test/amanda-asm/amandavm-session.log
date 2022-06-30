@@ -1,4 +1,4 @@
-amanda-vm: info: creating virtual machine context object (0x0000020d7e506c50)
+amanda-vm: info: creating virtual machine context object (0x0000018d635e9970)
 amanda-vm: info: loading runtime descriptor for the standard C library.
 amanda-vm: info: attempting load of native library: msvcrt
 amanda-vm: info: module 'msvcrt' loaded successfully as a native library. Handle at 0x00007ffacede0000
@@ -6,7 +6,7 @@ amanda-vm: trace: accessing resource with id <vfs://program-02.ax>
 amanda-vm: trace: loading module: vfs://program-02.ax (scheme: vfs)
 amanda-vm: trace: read program header for module <program-02.ax>:
   - magic number    : 0x7F404158
-  - entry address   : 0x0000000000000301
+  - entry address   : 0x0000000000000306
   - section table   : 0x000000000000014c
   - section count   : 0x00000006
   - stab offset     : 0x0000000000000080
@@ -15,63 +15,94 @@ amanda-vm: trace: read program header for module <program-02.ax>:
 amanda-vm: trace: section: <.sh-strings> (STRING TABLE)
   - section size      : 0x33
   - section offset    : 0x14c
-  - section address   : 0x20d7e4dd610
+  - section address   : 0x18d635ed910
       -- end of section data --
 amanda-vm: trace: section: <.strings> (STRING TABLE)
-  - section size      : 0x136
+  - section size      : 0x13b
   - section offset    : 0x17f
-  - section address   : 0x20d7e4debe0
+  - section address   : 0x18d635eece0
       -- end of section data --
 amanda-vm: trace: section: <.symbols> (SYMBOL TABLE)
   - section size      : 0x198
-  - section offset    : 0x2b5
-  - section address   : 0x20d7e4deda0
+  - section offset    : 0x2ba
+  - section address   : 0x18d6361aab0
       -- end of section data --
 amanda-vm: trace: section: <.code> (PROGRAM BITS)
-  - section size      : 0x4b
-  - section offset    : 0x44d
-  - section address   : 0x20d7e4dc930
+  - section size      : 0x74
+  - section offset    : 0x452
+  - section address   : 0x18d635eef30
       -- end of section data --
 amanda-vm: trace: section: <.data> (PROGRAM BITS)
   - section size      : 0x0
-  - section offset    : 0x498
+  - section offset    : 0x4c6
   - section address   : 0x0
       -- end of section data --
 amanda-vm: trace: section: <.rodata> (PROGRAM BITS)
   - section size      : 0x0
-  - section offset    : 0x498
+  - section offset    : 0x4c6
   - section address   : 0x0
       -- end of section data --
 amanda-vm: debug: last loaded module ('program-02.ax') available symbols are (12 results):
 	NAME: $c!!puts@i32@p                                     | INDEX: 0x0                | TYPE: DATA OBJECT  | OFFSET: 0x0                | BIND: NATIVE    
 	NAME: $c!!putchar@i32@i32                                | INDEX: 0x1                | TYPE: DATA OBJECT  | OFFSET: 0x0                | BIND: NATIVE    
 	NAME: @@main?A_string@!l32                               | INDEX: 0x2                | TYPE: FUNCTION     | OFFSET: 0x0                | BIND: GLOBAL    
-	NAME: $f1                                                | INDEX: 0x3                | TYPE: FUNCTION     | OFFSET: 0x10               | BIND: GLOBAL    
+	NAME: print_nl                                           | INDEX: 0x3                | TYPE: FUNCTION     | OFFSET: 0x1d               | BIND: GLOBAL    
 	NAME: amanda::binutils::test::Fred                       | INDEX: 0x4                | TYPE: DATA OBJECT  | OFFSET: 0x0                | BIND: GLOBAL    
 	NAME: amanda::binutils::test::Fred::self                 | INDEX: 0x5                | TYPE: DATA OBJECT  | OFFSET: 0x0                | BIND: WEAK      
 	NAME: amanda::binutils::test::Fred::refcount             | INDEX: 0x6                | TYPE: DATA OBJECT  | OFFSET: 0x0                | BIND: WEAK      
 	NAME: amanda::binutils::test::Fred::size                 | INDEX: 0x7                | TYPE: DATA OBJECT  | OFFSET: 0x0                | BIND: WEAK      
 	NAME: amanda::binutils::test::Fred::classname            | INDEX: 0x8                | TYPE: DATA OBJECT  | OFFSET: 0x0                | BIND: WEAK      
 	NAME: amanda::binutils::test::Fred::name                 | INDEX: 0x9                | TYPE: DATA OBJECT  | OFFSET: 0x0                | BIND: WEAK      
-	NAME: @@help?l64@l64@!b8                                 | INDEX: 0xa                | TYPE: FUNCTION     | OFFSET: 0x16               | BIND: GLOBAL    
-	NAME: @@labels?nil!q64                                   | INDEX: 0xb                | TYPE: FUNCTION     | OFFSET: 0x2d               | BIND: GLOBAL    
+	NAME: @@help?l64@l64@!b8                                 | INDEX: 0xa                | TYPE: FUNCTION     | OFFSET: 0x3f               | BIND: GLOBAL    
+	NAME: @@labels?nil!q64                                   | INDEX: 0xb                | TYPE: FUNCTION     | OFFSET: 0x56               | BIND: GLOBAL    
 
 amanda-vm: trace: entry symbol <@@main?A_string@!l32>
   - symbol address    : 0x0
   - symbol type       : FUNCTION
-  - symbol size       : 16B
+  - symbol size       : 29B
       -- end of symbol data --
-amanda-vm: info: execution started (local date & time: Tue Jun 28 10:29:03 2022)
+amanda-vm: info: execution started (local date & time: Thu Jun 30 14:09:38 2022)
 amanda-vm: debug: executing subroutine at 0x0, with stack depth 0 (on thread 2).
+amanda-vm: info: pushing stack frame with offset 0x0 (depth 0).
+amanda-vm: debug: requesting native call to symbol with index 0x1.
+amanda-vm: debug: identified target of native call (function '$c!!putchar@i32@i32')
+amanda-vm: info: attempting call to native function named <$c!!putchar@i32@i32> (local stack: 0x0000018d635ed240)
+amanda-vm: trace: looking for symbol 'putchar' at library 'msvcrt'
+amanda-vm: info: created native procedure handle to process at 0x00007ffacee27790, with name 'putchar', and with 1 arguments.
+amanda-vm: trace: allocated 4B-sized block of memory (argument 1 of 1)
+amanda-vm: debug: transferring control to native-defined procedure <putchar>.
+amanda-vm: debug: success on native call.
 amanda-vm: debug: requesting local call to symbol with index 0x3.
-amanda-vm: debug: identified target of local call (function '$f1')
-amanda-vm: trace: symbol '$f1' is un-cached, lazy-binding symbol and caching search results.
-amanda-vm: debug: made local jump to local subroutine '$f1' with local stack at 0x0000020d7e4dc510.
-amanda-vm: debug: executing subroutine at 0x10, with stack depth 0 (on thread 2).
+amanda-vm: debug: identified target of local call (function 'print_nl')
+amanda-vm: trace: symbol 'print_nl' is un-cached, lazy-binding symbol and caching search results.
+amanda-vm: debug: made local jump to local subroutine 'print_nl' with local stack at 0x0000018d635ed240.
+amanda-vm: debug: executing subroutine at 0x1d, with stack depth 0 (on thread 2).
+amanda-vm: info: pushing stack frame with offset 0x0 (depth 0).
+amanda-vm: debug: requesting native call to symbol with index 0x1.
+amanda-vm: debug: identified target of native call (function '$c!!putchar@i32@i32')
+amanda-vm: info: attempting call to native function named <$c!!putchar@i32@i32> (local stack: 0x0000018d635ed240)
+amanda-vm: trace: the method '$c!!putchar@i32@i32' is already cached and ready to execute (local stack: 0x0000018d635ed240)
+amanda-vm: trace: allocated 4B-sized block of memory (argument 1 of 1)
+amanda-vm: debug: transferring control to native-defined procedure <putchar>.
+amanda-vm: debug: success on native call.
+amanda-vm: debug: requesting native call to symbol with index 0x1.
+amanda-vm: debug: identified target of native call (function '$c!!putchar@i32@i32')
+amanda-vm: info: attempting call to native function named <$c!!putchar@i32@i32> (local stack: 0x0000018d635ed240)
+amanda-vm: trace: the method '$c!!putchar@i32@i32' is already cached and ready to execute (local stack: 0x0000018d635ed240)
+amanda-vm: trace: allocated 4B-sized block of memory (argument 1 of 1)
+amanda-vm: debug: transferring control to native-defined procedure <putchar>.
+amanda-vm: debug: success on native call.
+amanda-vm: trace: function returning 4 bytes.
+amanda-vm: info: function returned 4 bytes (most significant quad word 0x0)
+amanda-vm: info: popping stack frame with offset 0x0 (depth 1)
+amanda-vm: trace: function returning 4 bytes.
+amanda-vm: info: function returned 4 bytes (most significant quad word 0x0)
+amanda-vm: info: popping stack frame with offset 0x0 (depth 1)
 amanda-vm: info: execution finished, return value: 0
-amanda-vm: info: destroying virtual machine context @ 0x0000020d7e506c50.
+amanda-vm: info: destroying virtual machine context @ 0x0000018d635e9970.
 amanda-vm: info: unloading dynamic link library 'msvcrt'.
-amanda-vm: trace: un-caching local symbol '$f1'.
+amanda-vm: trace: un-caching native symbol 'putchar'.
 amanda-vm: trace: un-caching local symbol '@@main?A_string@!l32'.
+amanda-vm: trace: un-caching local symbol 'print_nl'.
 amanda-vm: info: 	-- EXEC FINISHED --
 
