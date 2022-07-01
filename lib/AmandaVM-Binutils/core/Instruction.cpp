@@ -58,6 +58,9 @@ unsigned Instruction::getInstructionNumericSuffix(char suffix)
         case 'A':
             return 6u;
             break;
+        case 'V':
+            return 7u;
+            break;
         default:
             return 0u;
             break;

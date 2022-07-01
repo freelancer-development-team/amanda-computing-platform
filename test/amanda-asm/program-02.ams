@@ -24,6 +24,7 @@
 
 # This is the main function for this test program.
 .def @@main?A_string@!l32
+	alloc	$0x4
 	push	l32 $0x41
 	ccall	$c!!putchar@i32@i32
 	invoke	print_nl
@@ -36,8 +37,7 @@
 	ccall	$c!!putchar@i32@i32
 	push	l32 $0x0d
 	ccall	$c!!putchar@i32@i32
-	push	l32 $0
-	ret		l32
+	ret		v0
 .endef
 
 .section ".data"

@@ -29,6 +29,7 @@
 #include <amanda-vm/Threading/Runnable.h>
 #include <amanda-vm/Runtime/Stack.h>
 #include <amanda-vm/Runtime/Schedulable.h>
+#include <amanda-vm/Runtime/Procedure.h>
 #include <amanda-vm/Binutils/vm-types.h>
 
 #include "Procedure.h"
@@ -68,6 +69,7 @@ private:
 
     const Context&                              context;
     core::StrongReference<Procedure>            currentProcedure;
+    Procedure::ProcessorFlags                   eflags;
     core::StrongReference<const Schedulable>    parent;
     vm::vm_byte_t*                              returnValue;
     core::StrongReference<Stack>                stack;

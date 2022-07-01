@@ -152,6 +152,14 @@ typedef enum VM_Opcodes
     I_POPD,
     I_POPA,
 
+    I_DUPB,
+    I_DUPW,
+    I_DUPL,
+    I_DUPQ,
+    I_DUPF,
+    I_DUPD,
+    I_DUPA,
+
     // Comparison
     I_CEQB,
     I_CEQW,
@@ -185,10 +193,14 @@ typedef enum VM_Opcodes
     I_RETQ,
     I_RETF,
     I_RETD,
+    I_RETA,
+    I_RETV,
 
     // Memory access
-    I_ALLOC,
+    I_ALLOCA,
+    I_MALLOC,
     I_DELLOC,
+
     I_LOAD,
 
     I_STOREB,

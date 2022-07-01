@@ -52,6 +52,7 @@ namespace vm
 
 class NativeProcedure;
 class Procedure;
+struct ProcesorFlags;
 
 /**
  * The context class represents a running virtual machine. It holds all the
@@ -96,7 +97,7 @@ public:
     virtual ~Context();
 
     void                cacheProcedure(const core::String& name, Procedure* proc) const;
-    int                 callLocal(const core::String& name, Stack& stack) const;
+    int                 callLocal(const core::String& name, Stack& stack, Procedure::ProcessorFlags& eflags) const;
     int                 callNative(const core::String& name, Stack& stack) const;
     const Procedure*    getCachedLocalProcedure(const core::String& name) const;
     const core::String& getProperty(const core::String& key) const;

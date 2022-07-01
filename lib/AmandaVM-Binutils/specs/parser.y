@@ -157,15 +157,16 @@ void yyerror(YYLTYPE* location, void* scanner, void** module, void* state, char 
 // Instructions
 %token
     ADD         "add instruction"
-    ALLOC       "allocation instruction"
+    ALLOCA      "stack allocation instruction"
     CCALL       "native call instruction"
-    DELLOC      "deallocation instruction"
+    DELLOC      "heap deallocation instruction"
     DIV         "div instruction"
     INVOKE      "call instruction"
     JF          "jump-if-false instruction"
     JUMP        "jump instruction"
     JT          "jump-if-true instruction"
     LOAD        "load instruction"
+    MALLOC      "heap allocation instruction"
     MOD         "mod instruction"
     MUL         "mul instruction"
     POP         "pop instruction"
@@ -371,8 +372,8 @@ unary_instruction
     // Stack
     | PUSH INSTRUCTION_SUFFIX argument      { $$ = as::createUnaryInstruction(AMANDA_VM_INSN_FAMILY(PUSH), $2); $$->setOperand($3); }
     // Memory management
-    | ALLOC INTEGER_LITERAL                 {
-                                                $$ = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(ALLOC), VM_QWORD_SIZE);
+    | ALLOCA INTEGER_LITERAL                {
+                                                $$ = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(ALLOCA), VM_QWORD_SIZE);
                                                 Operand* operand = new Operand($2); $$->setOperand(operand);
                                             }
     | DELLOC INTEGER_LITERAL                {

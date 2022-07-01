@@ -113,8 +113,9 @@ Quad        q64
 Float       f32
 Double      d64
 Pointer     a64
+Nil         v0
 
-InstructionSuffix   ({Byte}|{Word}|{Long}|{Quad}|{Float}|{Double}|{Pointer})
+InstructionSuffix   ({Byte}|{Word}|{Long}|{Quad}|{Float}|{Double}|{Pointer}|{Nil})
 
 DecimalInteger  "-"?({Digit})+
 HexadecimalInt  ({HexDigit})+
@@ -230,7 +231,8 @@ Address         {IntegerLiteral}
 "invoke"                    { return T_INVOKE; }
 "ccall"                     { return T_CCALL; }
 
-"alloc"                     { return T_ALLOC; }
+"alloc"                     { return T_ALLOCA; }
+"malloc"                    { return T_MALLOC; }
 "delloc"                    { return T_DELLOC; }
 "load"                      { return T_LOAD; }
 "store"                     { return T_STORE; }
@@ -296,3 +298,4 @@ unsigned long long amanda::binutils::as::parseIntegerLiteral(const char* literal
 {
     return core::UBigLong(literal).get();
 }
+

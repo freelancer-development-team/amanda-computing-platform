@@ -99,7 +99,7 @@ void Schedulable::run()
     try
     {
         //stack->pushFrame();
-        rvsize = currentProcedure->execute(stack->getReference());
+        rvsize = currentProcedure->execute(stack->getReference(), eflags);
         //stack->popFrame();
     }
     catch (core::Exception& ex)

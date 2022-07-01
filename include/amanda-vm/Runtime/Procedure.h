@@ -75,13 +75,13 @@ public:
 
     void                addOptimizationCriteria(const AdaptiveOptimizationCondition* criteria);
     virtual bool        equals(const Object* object);
-    vm::vm_qword_t      execute(Stack& stack);
-    vm::vm_qword_t      executeInterpreted(Stack& stack);
+    vm::vm_qword_t      execute(Stack& stack, ProcessorFlags& eflags);
+    vm::vm_qword_t      executeInterpreted(Stack& stack, ProcessorFlags& eflags);
     vm::vm_qword_t      executeOptimized();
     const core::String& getName() const;
     logging::Logger&    getLoggerInstance() const;
     bool                isOptimized() const;
-    const bool          isZeroFlagSet() const;
+    const bool          isZeroFlagSet(ProcessorFlags& eflags) const;
     void                jumpToLocalAddress(const vm::vm_address_t offset) const;
     void                optimize();
     void                setExecutableModule(ExecutableModule& module);
@@ -110,7 +110,6 @@ protected:
     static logging::Logger& LOGGER;
 
     const Context&                                      context;
-    ProcessorFlags                                      eflags;
     sdk_ullong_t                                        executionCount;
     core::WeakReference<ExecutableModule>               executableModule;
     mutable vm::vm_qword_t                              ip;

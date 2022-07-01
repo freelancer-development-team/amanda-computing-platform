@@ -26,11 +26,12 @@
 #include <amanda-vm/Runtime/NativeProcedure.h>
 #include <amanda-vm/Runtime/NativeCProcedure.h>
 #include <amanda-vm/Runtime/LinkageError.h>
+#include <amanda-vm/Runtime/Procedure.h>
+#include <amanda-vm/Runtime/IllegalStateException.h>
 #include <amanda-vm/Binutils/package.hxx>
 #include <amanda-vm-c/sdk-version.h>
 #include <amanda-vm/NIO/IOException.h>
 #include <amanda-vm/NIO/NoSuchFileException.h>
-#include <amanda-vm/Runtime/IllegalStateException.h>
 #include <amanda-vm/IllegalArgumentException.h>
 #include <amanda-vm/System.h>
 
@@ -192,7 +193,7 @@ void Context::cacheProcedure(const core::String& name, Procedure* proc) const
     AMANDA_DESYNCHRONIZED(lock);
 }
 
-int Context::callLocal(const core::String& name, Stack& stack) const
+int Context::callLocal(const core::String& name, Stack& stack, Procedure::ProcessorFlags& eflags) const
 {
     int result = ENOERR;
     Procedure* subroutine = NULL;
@@ -247,7 +248,7 @@ int Context::callLocal(const core::String& name, Stack& stack) const
     {
         LOGGER.debug("made local jump to local subroutine '%s' with local stack at 0x%p.",
                      name.toCharArray(), stack.getSelfPointer());
-        subroutine->execute(stack);
+        subroutine->execute(stack, eflags);
     }
     // Return our final execution result
     return result;

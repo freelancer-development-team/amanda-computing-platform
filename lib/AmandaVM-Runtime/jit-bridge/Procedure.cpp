@@ -90,7 +90,7 @@ bool Procedure::equals(const Object* object)
     return result;
 }
 
-vm::vm_qword_t Procedure::execute(Stack& stack)
+vm::vm_qword_t Procedure::execute(Stack& stack, ProcessorFlags& eflags)
 {
     LOGGER.debug("executing subroutine at 0x%llx, with stack depth %llu (on thread %llu).",
                  symbol->value, stack.getDepth(),
@@ -111,7 +111,7 @@ vm::vm_qword_t Procedure::execute(Stack& stack)
     else
     {
         /* Interpret the code */
-        rvsize = executeInterpreted(stack);
+        rvsize = executeInterpreted(stack, eflags);
     }
 
     //
@@ -139,7 +139,7 @@ vm::vm_qword_t Procedure::execute(Stack& stack)
     return rvsize;
 }
 
-vm::vm_qword_t Procedure::executeInterpreted(Stack& stack)
+vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflags)
 {
 #define BYTEPOINTER(x)  ((vm::vm_byte_t*) (&(x)))
 
@@ -271,7 +271,7 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack)
                 {
                     LOGGER.debug("identified target of local call (function '%s')", symbolName.toCharArray());
 
-                    if (context.callLocal(symbolName, stack) != Context::ENOERR)
+                    if (context.callLocal(symbolName, stack, eflags) != Context::ENOERR)
                     {
                         throw IllegalStateException("invalid local call result.");
                     }
@@ -288,7 +288,7 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack)
                 vm::vm_qword_t address = *((vm::vm_qword_t*) pool + ip);
                 ip += VM_ADDRESS_SIZE;
 
-                if (!isZeroFlagSet())
+                if (!isZeroFlagSet(eflags))
                 {
                     jumpToLocalAddress(address);
                 }
@@ -307,7 +307,7 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack)
                 vm::vm_qword_t address = *((vm::vm_qword_t*) pool + ip);
                 ip += VM_ADDRESS_SIZE;
 
-                if (isZeroFlagSet())
+                if (isZeroFlagSet(eflags))
                 {
                     jumpToLocalAddress(address);
                 }
@@ -475,6 +475,29 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack)
                 break;
             }
 #undef COMPARE_EQUALS
+                // Memory operations
+            case I_ALLOCA:
+            {
+                vm::vm_size_t size = *((vm::vm_size_t*) pool + ip);
+                ip += sizeof (vm_size_t);
+
+                if (!io::isMachineBigEndian())
+                {
+                    io::swapEndianness((vm::vm_byte_t*) &size, sizeof(vm::vm_size_t));
+                }
+
+                LOGGER.trace("requested stack allocation for 0x%llx bytes.", size);
+                stack.allocl(size);
+                break;
+            }
+            case I_MALLOC:
+            {
+                break;
+            }
+            case I_DELLOC:
+            {
+                break;
+            }
             default:
             {
                 LOGGER.error("the virtual machine attempted to execute an invalid operation <0x%x> (pc: 0x%llx)", opcode, ip);
@@ -522,7 +545,7 @@ bool Procedure::isOptimized() const
     return result;
 }
 
-const bool Procedure::isZeroFlagSet() const
+const bool Procedure::isZeroFlagSet(ProcessorFlags& eflags) const
 {
     return eflags.m_zf == ONE;
 }

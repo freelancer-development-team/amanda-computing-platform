@@ -72,44 +72,45 @@ extern int yydebug;
     T_DOUBLE = 273,                /* "double pseudo-operator"  */
     T_UNICODE = 274,               /* "unicode pseudo-operator"  */
     T_ADD = 275,                   /* "add instruction"  */
-    T_ALLOC = 276,                 /* "allocation instruction"  */
+    T_ALLOCA = 276,                /* "stack allocation instruction"  */
     T_CCALL = 277,                 /* "native call instruction"  */
-    T_DELLOC = 278,                /* "deallocation instruction"  */
+    T_DELLOC = 278,                /* "heap deallocation instruction"  */
     T_DIV = 279,                   /* "div instruction"  */
     T_INVOKE = 280,                /* "call instruction"  */
     T_JF = 281,                    /* "jump-if-false instruction"  */
     T_JUMP = 282,                  /* "jump instruction"  */
     T_JT = 283,                    /* "jump-if-true instruction"  */
     T_LOAD = 284,                  /* "load instruction"  */
-    T_MOD = 285,                   /* "mod instruction"  */
-    T_MUL = 286,                   /* "mul instruction"  */
-    T_POP = 287,                   /* "pop instruction"  */
-    T_PUSH = 288,                  /* "push instruction"  */
-    T_RET = 289,                   /* "return instruction"  */
-    T_SUB = 290,                   /* "sub instruction"  */
-    T_STORE = 291,                 /* "store instruction"  */
-    T_B2W = 292,                   /* "byte-to-word instruction"  */
-    T_B2L = 293,                   /* B2L  */
-    T_B2Q = 294,                   /* B2Q  */
-    T_B2F = 295,                   /* B2F  */
-    T_B2D = 296,                   /* B2D  */
-    T_W2L = 297,                   /* W2L  */
-    T_W2Q = 298,                   /* "word-to-quad instruction"  */
-    T_W2F = 299,                   /* W2F  */
-    T_W2D = 300,                   /* W2D  */
-    T_L2Q = 301,                   /* L2Q  */
-    T_L2F = 302,                   /* L2F  */
-    T_L2D = 303,                   /* L2D  */
-    T_Q2F = 304,                   /* Q2F  */
-    T_Q2D = 305,                   /* Q2D  */
-    T_CEQ = 306,                   /* "compare-equals instruction"  */
-    T_CNE = 307,                   /* "compare-non-equals instruction"  */
-    T_IDENTIFIER = 308,            /* "identifier"  */
-    T_INSTRUCTION_SUFFIX = 309,    /* "instruction suffix"  */
-    T_STRING_LITERAL = 310,        /* "string literal"  */
-    T_INTEGER_LITERAL = 311,       /* "integer literal"  */
-    T_FP_LITERAL = 312,            /* "floating point literal"  */
-    T_ADDRESS_CONSTANT = 313       /* "address constant"  */
+    T_MALLOC = 285,                /* "heap allocation instruction"  */
+    T_MOD = 286,                   /* "mod instruction"  */
+    T_MUL = 287,                   /* "mul instruction"  */
+    T_POP = 288,                   /* "pop instruction"  */
+    T_PUSH = 289,                  /* "push instruction"  */
+    T_RET = 290,                   /* "return instruction"  */
+    T_SUB = 291,                   /* "sub instruction"  */
+    T_STORE = 292,                 /* "store instruction"  */
+    T_B2W = 293,                   /* "byte-to-word instruction"  */
+    T_B2L = 294,                   /* B2L  */
+    T_B2Q = 295,                   /* B2Q  */
+    T_B2F = 296,                   /* B2F  */
+    T_B2D = 297,                   /* B2D  */
+    T_W2L = 298,                   /* W2L  */
+    T_W2Q = 299,                   /* "word-to-quad instruction"  */
+    T_W2F = 300,                   /* W2F  */
+    T_W2D = 301,                   /* W2D  */
+    T_L2Q = 302,                   /* L2Q  */
+    T_L2F = 303,                   /* L2F  */
+    T_L2D = 304,                   /* L2D  */
+    T_Q2F = 305,                   /* Q2F  */
+    T_Q2D = 306,                   /* Q2D  */
+    T_CEQ = 307,                   /* "compare-equals instruction"  */
+    T_CNE = 308,                   /* "compare-non-equals instruction"  */
+    T_IDENTIFIER = 309,            /* "identifier"  */
+    T_INSTRUCTION_SUFFIX = 310,    /* "instruction suffix"  */
+    T_STRING_LITERAL = 311,        /* "string literal"  */
+    T_INTEGER_LITERAL = 312,       /* "integer literal"  */
+    T_FP_LITERAL = 313,            /* "floating point literal"  */
+    T_ADDRESS_CONSTANT = 314       /* "address constant"  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -128,7 +129,7 @@ union YYSTYPE
     amanda::binutils::Instruction*                  insn;
     amanda::binutils::Operand*                      operand;
 
-#line 132 "assembler/AssemblerParser-Inc.h"
+#line 133 "assembler/AssemblerParser-Inc.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -163,6 +164,6 @@ int yyparse (void* scanner, void** module, void* state);
     // C++
     #include <vector>
 
-#line 167 "assembler/AssemblerParser-Inc.h"
+#line 168 "assembler/AssemblerParser-Inc.h"
 
 #endif /* !YY_YY_ASSEMBLER_ASSEMBLERPARSER_INC_H_INCLUDED  */
