@@ -113,8 +113,9 @@ Quad        q64
 Float       f32
 Double      d64
 Pointer     a64
+Nil         v0
 
-InstructionSuffix   ({Byte}|{Word}|{Long}|{Quad}|{Float}|{Double}|{Pointer})
+InstructionSuffix   ({Byte}|{Word}|{Long}|{Quad}|{Float}|{Double}|{Pointer}|{Nil})
 
 DecimalInteger  "-"?({Digit})+
 HexadecimalInt  ({HexDigit})+
@@ -129,7 +130,7 @@ Address         {IntegerLiteral}
 %x STRING
 
 %%
-                            char* string_buf_ptr;
+                            char* string_buf_ptr = NULL;
 
  /* Ignore */
 {WhiteSpace}
@@ -172,6 +173,7 @@ Address         {IntegerLiteral}
                             }
 <STRING>\\[0-9]+            { throw SyntaxError(as::makeLocation(yylloc), "bad escape sequence in string literal."); }
 <STRING>\\n                 { *string_buf_ptr++ = '\n'; }
+<STRING>\\t                 { *string_buf_ptr++ = '\t'; }
 
 <STRING>\\(.|\n)            { *string_buf_ptr++ = yytext[1]; }
 <STRING>[^\\\n\"]+          {
@@ -230,14 +232,25 @@ Address         {IntegerLiteral}
 "invoke"                    { return T_INVOKE; }
 "ccall"                     { return T_CCALL; }
 
-"alloc"                     { return T_ALLOC; }
+"alloc"                     { return T_ALLOCA; }
+"malloc"                    { return T_MALLOC; }
 "delloc"                    { return T_DELLOC; }
+"iload"                     { return T_ILOAD; }
+"load"                      { return T_LOAD; }
+"sload"                     { return T_SLOAD; }
+"store"                     { return T_STORE; }
+"sstore"                    { return T_SSTORE; }
 
 "ceq"                       { return T_CEQ; }
 "cne"                       { return T_CNE; }
+"cgt"                       { return T_CGT; }
+"clt"                       { return T_CLT; }
+"cge"                       { return T_CGE; }
+"cle"                       { return T_CLE; }
 
 "pop"                       { return T_POP; }
 "push"                      { return T_PUSH; }
+"dup"                       { return T_DUP; }
 
 "jmp"                       { return T_JUMP; }
 "jt"                        { return T_JT; }
@@ -294,3 +307,4 @@ unsigned long long amanda::binutils::as::parseIntegerLiteral(const char* literal
 {
     return core::UBigLong(literal).get();
 }
+

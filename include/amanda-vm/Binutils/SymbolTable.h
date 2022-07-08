@@ -30,6 +30,7 @@
 
 // C++ STL
 #include <map>
+#include <vector>
 
 namespace amanda
 {
@@ -52,13 +53,15 @@ public:
     virtual unsigned    getIndexToSymbol(const core::String& name) const;
     virtual Symbol*     getSymbol(const core::String& name) const;
     virtual bool        hasSymbol(const core::String& name) const;
-    
+
 protected:
 
     typedef std::map<core::String, const Symbol*, core::AlphabeticalOrderComparator> SymbolMap;
+    typedef std::vector<const Symbol*> SymbolVector;
 
     /// The symbols
-    SymbolMap symbols;
+    SymbolVector    orderedSymbols;
+    SymbolMap       symbols;
 } ;
 
 }

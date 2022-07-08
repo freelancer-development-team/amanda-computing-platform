@@ -25,6 +25,7 @@
 #ifndef _AMANDA_SYSTEM_H
 #define _AMANDA_SYSTEM_H
 
+#include <amanda-vm/TypeSystem.h>
 #include <amanda-vm-c/sdk-types.h>
 
 namespace amanda
@@ -32,12 +33,30 @@ namespace amanda
 namespace core
 {
 
+typedef enum OperatingSystem
+{
+    WINDOWS,
+    GNULINUX,
+    MACOS,
+    UNKNOWN
+} OperatingSystem;
+
+/**
+ * Returns the operating system code.
+ */
+OperatingSystem getOperatingSystem();
+
 /**
  * Returns the number of logical processors available to the process.
  * 
  * @return an unsigned long long with the count of available cores.
  */
 sdk_ullong_t getNumberOfAvailableCores();
+
+/**
+ * Returns the name of the operating system.
+ */
+core::String getOperatingSystemName();
 
 }
 }

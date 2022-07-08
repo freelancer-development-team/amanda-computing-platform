@@ -131,6 +131,9 @@ void Function::emit(Instruction* insn)
 
         // Grab a reference to the object. The reference is owned by the function.
         insn->grab();
+
+        // Update the function size
+        setSize(getSize());
     }
     else
     {

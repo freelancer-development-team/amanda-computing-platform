@@ -44,29 +44,49 @@ namespace core
     public: \
         \
         static amanda::core::Class& getClass() { static amanda::core::Class _class(#Type, &BaseClassName::getClass()); return _class; } \
+        static size_t               getClassSizeStatic() { return sizeof(Type); } \
         \
         template <class __class> \
         __class& cast() \
         { \
-            return reinterpret_cast<__class&> (*this); \
+            return static_cast<__class&> (*this); \
         } \
         \
         virtual amanda::core::Class& getClassDynamically() const { return getClass(); } \
-    private:
+        \
+        inline Type&                getReference() { return *this; }\
+        inline const Type&          getConstReference() const { return *this; } \
+        inline const Type* const    getSelfPointer() const { return this; } \
+        \
+        AMANDA_REFCOUNTED(ClassName) \
+        \
+        private:
 
+/**
+ * The <code>Object</code> class is the base class for all the Amanda Framework
+ * types. It provides several utilities, including runtime type information
+ * and reference counting (via the <code>ReferenceCounted</code>) class.
+ * <p>
+ * This mechanism ensures any object can be casted to and from an <code>Object</code>
+ * reference. It also provides a way to clone an object.
+ *
+ * @author J. Marrero
+ */
 class Object : virtual public ReferenceCounted
 {
 public:
 
     static Class& getClass();
+    static size_t getClassSizeStatic();
 
     Object();
     Object(const Object& original);
     virtual ~Object();
 
-    virtual Object*                 clone();
+    virtual Object*                 clone() const;
     virtual bool                    equals(const Object* object);
     virtual amanda::core::Class&    getClassDynamically() const;
+    virtual size_t                  getClassSize() const;
     virtual int                     hashCode();
     virtual bool                    is(const Class* type);
     virtual String                  toString() const;

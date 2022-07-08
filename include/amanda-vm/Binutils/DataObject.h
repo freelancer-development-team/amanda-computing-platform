@@ -50,9 +50,10 @@ public:
     DataObject(const core::String& name, vm::vm_byte_t visibility = Bind_Global);
     ~DataObject();
 
-    virtual void addData(const void* data, size_t size);
-    virtual void addUtf8Data(const char* data, size_t size);
-    virtual void constructBinaryData();
+    virtual void    addData(const void* data, size_t size);
+    virtual void    addUtf8Data(const char* data, size_t size);
+    virtual void    constructBinaryData();
+    virtual size_t  getSize() const;
 
 protected:
 
@@ -64,10 +65,11 @@ protected:
         char*   buffer;
         size_t  size;
         bool    utf8;
-        
     } TaggedData;
 
     std::vector<TaggedData*> data;
+
+    virtual size_t  calculateSize() const;
 
     /// Create a new <code>TaggedData</code> struct with the specified size.
     TaggedData* makeTag(size_t size) const;

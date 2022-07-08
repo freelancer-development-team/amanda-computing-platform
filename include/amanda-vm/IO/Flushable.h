@@ -34,7 +34,7 @@ namespace io
 
 class Flushable : extends core::Interface
 {
-    AMANDA_OBJECT(Closeable, core::Interface)
+    AMANDA_OBJECT(Flushable, core::Interface)
 
 public:
 

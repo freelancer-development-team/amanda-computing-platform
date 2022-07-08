@@ -54,7 +54,7 @@ CCADMIN=CCadmin
 build: .build-post
 
 .build-pre:
-# Add your pre 'build' code here...
+	utils/build-libck.sh
 
 .build-post: .build-impl
 # Add your post 'build' code here...

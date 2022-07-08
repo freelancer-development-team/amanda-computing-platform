@@ -28,6 +28,7 @@
 #include <amanda-vm/TypeSystem.h>
 #include <amanda-vm/Threading/Runnable.h>
 
+// C++
 #include <map>
 
 namespace amanda
@@ -38,8 +39,14 @@ namespace concurrent
 class Thread : public Runnable
 {
     AMANDA_OBJECT(Thread, Runnable)
-    
+
 public:
+
+    typedef unsigned long long tid_t;
+
+    static tid_t    currentThreadId();
+    static void     sleep(unsigned long milliseconds);
+    static void     wait(unsigned long long id);
 
     /**
      * Enumerates all the possible thread priorities.
@@ -50,25 +57,39 @@ public:
     } ThreadPriority;
 
     Thread();
+    Thread(Runnable& runnable);
     virtual ~Thread();
 
-    void            exit();
-    bool            isJoinable() const;
-    bool            isRunning() const;
-    bool            isStarted() const;
-    virtual void    join();
-    void            setJoinable(bool joinable);
-    virtual void    start();
+    void                exit();
+    unsigned long long  getThreadId() const;
+    bool                isDead() const;
+    bool                isJoinable() const;
+    bool                isRunning() const;
+    bool                isStarted() const;
+    virtual void        join(unsigned long long id);
+    virtual void        run();
+    void                setJoinable(bool joinable);
+    void                setDead(bool dead);
+    virtual void        start();
 
 private:
 
+    typedef std::map<tid_t, Thread*> ThreadMap;
+
+    static ThreadMap                THREADS;
+
+    volatile bool                   dead;
     void*                           nativeHandle;
     std::map<const char*, void*>    handles;
     volatile unsigned long long     id;
     volatile bool                   joinable;
+    core::StrongReference<Runnable> runnable;
     volatile bool                   running;
     volatile bool                   started;
-    
+
+    bool            hasRunnable() const;
+    void            initializeState();
+
 } ;
 
 }

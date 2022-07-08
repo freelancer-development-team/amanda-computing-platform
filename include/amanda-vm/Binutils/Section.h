@@ -38,6 +38,7 @@ namespace binutils
 {
 
 class Module;
+class SectionReader;
 
 #define CODE_SECTION_NAME               ".code"
 #define DATA_SECTION_NAME               ".data"
@@ -53,6 +54,9 @@ class Module;
 class Section : public Serializable
 {
 public:
+
+    // Friends
+    friend class SectionReader;
 
     /**
      * Represents a section header.
@@ -95,18 +99,21 @@ public:
 
     static const float RESIZE_FACTOR = 1.1f;
 
-    static Section* makeCodeSection();
-    static Section* makeDataSection();
-    static Section* makeReadOnlyDataSection();
-    static Section* makeDebugSection();
-    static Section* makeSectionHeaderStringTableSection();
-    static Section* makeStringTableSection();
-    static Section* makeSymbolTableSection();
+    static Section*     makeCodeSection();
+    static Section*     makeDataSection();
+    static Section*     makeReadOnlyDataSection();
+    static Section*     makeDebugSection();
+    static Section*     makeSectionHeaderStringTableSection();
+    static Section*     makeStringTableSection();
+    static Section*     makeSymbolTableSection();
+
+    static core::String sectionTypeToString(unsigned type);
 
     Section(const core::String& name);
     virtual ~Section();
 
     virtual void                addSymbol(const Symbol* symbol);
+    virtual size_t              calculateSize() const;
     virtual void                constructBinaryData();
     bool                        canExecute() const;
     bool                        canWrite() const;
@@ -121,7 +128,9 @@ public:
     virtual void                merge(const Section* section);
     void                        setAttributes(unsigned attributes);
     void                        setNameIndex(const vm::vm_qword_t index);
+    void                        setOffset(vm::vm_qword_t offset);
     void                        setOwningModule(Module* module);
+    virtual void                setSize(size_t size);
     void                        setType(unsigned type);
 
     bool operator== (const Section* section) const;
@@ -139,11 +148,6 @@ public:
     }
 
 protected:
-
-    virtual size_t  calculateSize() const;
-    virtual void    setSize(size_t size);
-
-private:
 
     SectionHeader*              header;
     core::String                name;

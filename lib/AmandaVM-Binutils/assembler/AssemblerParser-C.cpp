@@ -152,66 +152,77 @@ enum yysymbol_kind_t
   S_DOUBLE = 18,                           /* "double pseudo-operator"  */
   S_UNICODE = 19,                          /* "unicode pseudo-operator"  */
   S_ADD = 20,                              /* "add instruction"  */
-  S_ALLOC = 21,                            /* "allocation instruction"  */
+  S_ALLOCA = 21,                           /* "stack allocation instruction"  */
   S_CCALL = 22,                            /* "native call instruction"  */
-  S_DELLOC = 23,                           /* "deallocation instruction"  */
+  S_DELLOC = 23,                           /* "heap deallocation instruction"  */
   S_DIV = 24,                              /* "div instruction"  */
-  S_INVOKE = 25,                           /* "call instruction"  */
-  S_JF = 26,                               /* "jump-if-false instruction"  */
-  S_JUMP = 27,                             /* "jump instruction"  */
-  S_JT = 28,                               /* "jump-if-true instruction"  */
-  S_MOD = 29,                              /* "mod instruction"  */
-  S_MUL = 30,                              /* "mul instruction"  */
-  S_POP = 31,                              /* "pop instruction"  */
-  S_PUSH = 32,                             /* "push instruction"  */
-  S_RET = 33,                              /* "return instruction"  */
-  S_SUB = 34,                              /* "sub instruction"  */
-  S_B2W = 35,                              /* "byte-to-word instruction"  */
-  S_B2L = 36,                              /* B2L  */
-  S_B2Q = 37,                              /* B2Q  */
-  S_B2F = 38,                              /* B2F  */
-  S_B2D = 39,                              /* B2D  */
-  S_W2L = 40,                              /* W2L  */
-  S_W2Q = 41,                              /* "word-to-quad instruction"  */
-  S_W2F = 42,                              /* W2F  */
-  S_W2D = 43,                              /* W2D  */
-  S_L2Q = 44,                              /* L2Q  */
-  S_L2F = 45,                              /* L2F  */
-  S_L2D = 46,                              /* L2D  */
-  S_Q2F = 47,                              /* Q2F  */
-  S_Q2D = 48,                              /* Q2D  */
-  S_CEQ = 49,                              /* "compare-equals instruction"  */
-  S_CNE = 50,                              /* "compare-non-equals instruction"  */
-  S_51_semicolon_delimiter_ = 51,          /* "semicolon delimiter"  */
-  S_IDENTIFIER = 52,                       /* "identifier"  */
-  S_INSTRUCTION_SUFFIX = 53,               /* "instruction suffix"  */
-  S_STRING_LITERAL = 54,                   /* "string literal"  */
-  S_INTEGER_LITERAL = 55,                  /* "integer literal"  */
-  S_FP_LITERAL = 56,                       /* "floating point literal"  */
-  S_ADDRESS_CONSTANT = 57,                 /* "address constant"  */
-  S_58_ = 58,                              /* ':'  */
-  S_59_ = 59,                              /* '['  */
-  S_60_ = 60,                              /* ']'  */
-  S_YYACCEPT = 61,                         /* $accept  */
-  S_compilation_unit = 62,                 /* compilation_unit  */
-  S_declarations = 63,                     /* declarations  */
-  S_declaration = 64,                      /* declaration  */
-  S_section_declaration = 65,              /* section_declaration  */
-  S_function_declaration = 66,             /* function_declaration  */
-  S_symbol_declaration = 67,               /* symbol_declaration  */
-  S_native_symbol_declaration = 68,        /* native_symbol_declaration  */
-  S_optional_attributes = 69,              /* optional_attributes  */
-  S_attributes_declaration = 70,           /* attributes_declaration  */
-  S_constant_declaration = 71,             /* constant_declaration  */
-  S_instruction_sequence = 72,             /* instruction_sequence  */
-  S_instruction = 73,                      /* instruction  */
-  S_zeroed_instruction = 74,               /* zeroed_instruction  */
-  S_unary_instruction = 75,                /* unary_instruction  */
-  S_label_declaration = 76,                /* label_declaration  */
-  S_argument = 77,                         /* argument  */
-  S_branch_target = 78,                    /* branch_target  */
-  S_address_constant = 79,                 /* address_constant  */
-  S_delimiter = 80                         /* delimiter  */
+  S_DUP = 25,                              /* "dup instruction"  */
+  S_INVOKE = 26,                           /* "call instruction"  */
+  S_JF = 27,                               /* "jump-if-false instruction"  */
+  S_JUMP = 28,                             /* "jump instruction"  */
+  S_JT = 29,                               /* "jump-if-true instruction"  */
+  S_LOAD = 30,                             /* "load instruction"  */
+  S_ILOAD = 31,                            /* "load-by-index instruction"  */
+  S_MALLOC = 32,                           /* "heap allocation instruction"  */
+  S_MOD = 33,                              /* "mod instruction"  */
+  S_MUL = 34,                              /* "mul instruction"  */
+  S_POP = 35,                              /* "pop instruction"  */
+  S_PUSH = 36,                             /* "push instruction"  */
+  S_RET = 37,                              /* "return instruction"  */
+  S_SLOAD = 38,                            /* "stack memory load instruction"  */
+  S_SUB = 39,                              /* "sub instruction"  */
+  S_STORE = 40,                            /* "store instruction"  */
+  S_SSTORE = 41,                           /* "stack write instruction"  */
+  S_B2W = 42,                              /* "byte-to-word instruction"  */
+  S_B2L = 43,                              /* B2L  */
+  S_B2Q = 44,                              /* B2Q  */
+  S_B2F = 45,                              /* B2F  */
+  S_B2D = 46,                              /* B2D  */
+  S_W2L = 47,                              /* W2L  */
+  S_W2Q = 48,                              /* "word-to-quad instruction"  */
+  S_W2F = 49,                              /* W2F  */
+  S_W2D = 50,                              /* W2D  */
+  S_L2Q = 51,                              /* L2Q  */
+  S_L2F = 52,                              /* L2F  */
+  S_L2D = 53,                              /* L2D  */
+  S_Q2F = 54,                              /* Q2F  */
+  S_Q2D = 55,                              /* Q2D  */
+  S_CEQ = 56,                              /* "compare-equals instruction"  */
+  S_CNE = 57,                              /* "compare-non-equals instruction"  */
+  S_CGT = 58,                              /* "compare-greater instruction"  */
+  S_CLT = 59,                              /* "compare-lesser instruction"  */
+  S_CGE = 60,                              /* "compare-greater-equals instruction"  */
+  S_CLE = 61,                              /* "compare-lesser-equals instruction"  */
+  S_62_semicolon_delimiter_ = 62,          /* "semicolon delimiter"  */
+  S_IDENTIFIER = 63,                       /* "identifier"  */
+  S_INSTRUCTION_SUFFIX = 64,               /* "instruction suffix"  */
+  S_STRING_LITERAL = 65,                   /* "string literal"  */
+  S_INTEGER_LITERAL = 66,                  /* "integer literal"  */
+  S_FP_LITERAL = 67,                       /* "floating point literal"  */
+  S_ADDRESS_CONSTANT = 68,                 /* "address constant"  */
+  S_69_ = 69,                              /* ':'  */
+  S_70_ = 70,                              /* '['  */
+  S_71_ = 71,                              /* ']'  */
+  S_YYACCEPT = 72,                         /* $accept  */
+  S_compilation_unit = 73,                 /* compilation_unit  */
+  S_declarations = 74,                     /* declarations  */
+  S_declaration = 75,                      /* declaration  */
+  S_section_declaration = 76,              /* section_declaration  */
+  S_function_declaration = 77,             /* function_declaration  */
+  S_symbol_declaration = 78,               /* symbol_declaration  */
+  S_native_symbol_declaration = 79,        /* native_symbol_declaration  */
+  S_optional_attributes = 80,              /* optional_attributes  */
+  S_attributes_declaration = 81,           /* attributes_declaration  */
+  S_constant_declaration = 82,             /* constant_declaration  */
+  S_instruction_sequence = 83,             /* instruction_sequence  */
+  S_instruction = 84,                      /* instruction  */
+  S_zeroed_instruction = 85,               /* zeroed_instruction  */
+  S_unary_instruction = 86,                /* unary_instruction  */
+  S_label_declaration = 87,                /* label_declaration  */
+  S_argument = 88,                         /* argument  */
+  S_branch_target = 89,                    /* branch_target  */
+  S_address_constant = 90,                 /* address_constant  */
+  S_delimiter = 91                         /* delimiter  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -262,7 +273,7 @@ typedef enum yysymbol_kind_t yysymbol_kind_t;
         }
     }
 
-#line 266 "assembler/AssemblerParser-C.cpp"
+#line 277 "assembler/AssemblerParser-C.cpp"
 
 #ifdef short
 # undef short
@@ -559,19 +570,19 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  31
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   105
+#define YYLAST   140
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  61
+#define YYNTOKENS  72
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  20
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  61
+#define YYNRULES  71
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  102
+#define YYNSTATES  123
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   311
+#define YYMAXUTOK   322
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -590,11 +601,11 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,    58,    51,
+       2,     2,     2,     2,     2,     2,     2,     2,    69,    62,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,    59,     2,    60,     2,     2,     2,     2,     2,     2,
+       2,    70,     2,    71,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -615,21 +626,23 @@ static const yytype_int8 yytranslate[] =
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
       35,    36,    37,    38,    39,    40,    41,    42,    43,    44,
-      45,    46,    47,    48,    49,    50,    52,    53,    54,    55,
-      56,    57
+      45,    46,    47,    48,    49,    50,    51,    52,    53,    54,
+      55,    56,    57,    58,    59,    60,    61,    63,    64,    65,
+      66,    67,    68
 };
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,   219,   219,   223,   224,   228,   229,   230,   231,   232,
-     237,   255,   284,   285,   286,   287,   294,   302,   303,   307,
-     315,   316,   317,   318,   323,   324,   325,   329,   330,   331,
-     335,   336,   337,   338,   339,   340,   341,   343,   344,   345,
-     346,   347,   348,   352,   353,   354,   365,   366,   368,   370,
-     372,   376,   383,   388,   389,   390,   391,   395,   396,   400,
-     405,   406
+       0,   230,   230,   234,   235,   239,   240,   241,   242,   243,
+     248,   266,   295,   296,   297,   298,   305,   313,   314,   318,
+     326,   327,   328,   329,   334,   335,   336,   340,   341,   342,
+     346,   347,   348,   349,   350,   351,   352,   353,   354,   355,
+     356,   357,   359,   360,   361,   362,   363,   364,   368,   369,
+     370,   381,   382,   384,   386,   388,   392,   396,   402,   407,
+     411,   415,   422,   427,   428,   429,   430,   434,   435,   439,
+     444,   445
 };
 #endif
 
@@ -654,15 +667,21 @@ yysymbol_name (yysymbol_kind_t yysymbol)
   "address pseudo-operator", "byte pseudo-operator",
   "word pseudo-operator", "long pseudo-operator", "quad pseudo-operator",
   "float pseudo-operator", "double pseudo-operator",
-  "unicode pseudo-operator", "add instruction", "allocation instruction",
-  "native call instruction", "deallocation instruction", "div instruction",
+  "unicode pseudo-operator", "add instruction",
+  "stack allocation instruction", "native call instruction",
+  "heap deallocation instruction", "div instruction", "dup instruction",
   "call instruction", "jump-if-false instruction", "jump instruction",
-  "jump-if-true instruction", "mod instruction", "mul instruction",
-  "pop instruction", "push instruction", "return instruction",
-  "sub instruction", "byte-to-word instruction", "B2L", "B2Q", "B2F",
-  "B2D", "W2L", "word-to-quad instruction", "W2F", "W2D", "L2Q", "L2F",
-  "L2D", "Q2F", "Q2D", "compare-equals instruction",
-  "compare-non-equals instruction", "semicolon delimiter", "identifier",
+  "jump-if-true instruction", "load instruction",
+  "load-by-index instruction", "heap allocation instruction",
+  "mod instruction", "mul instruction", "pop instruction",
+  "push instruction", "return instruction",
+  "stack memory load instruction", "sub instruction", "store instruction",
+  "stack write instruction", "byte-to-word instruction", "B2L", "B2Q",
+  "B2F", "B2D", "W2L", "word-to-quad instruction", "W2F", "W2D", "L2Q",
+  "L2F", "L2D", "Q2F", "Q2D", "compare-equals instruction",
+  "compare-non-equals instruction", "compare-greater instruction",
+  "compare-lesser instruction", "compare-greater-equals instruction",
+  "compare-lesser-equals instruction", "semicolon delimiter", "identifier",
   "instruction suffix", "string literal", "integer literal",
   "floating point literal", "address constant", "':'", "'['", "']'",
   "$accept", "compilation_unit", "declarations", "declaration",
@@ -687,12 +706,13 @@ static const yytype_int16 yytoknum[] =
      275,   276,   277,   278,   279,   280,   281,   282,   283,   284,
      285,   286,   287,   288,   289,   290,   291,   292,   293,   294,
      295,   296,   297,   298,   299,   300,   301,   302,   303,   304,
-     305,    59,   306,   307,   308,   309,   310,   311,    58,    91,
-      93
+     305,   306,   307,   308,   309,   310,   311,   312,   313,   314,
+     315,   316,    59,   317,   318,   319,   320,   321,   322,    58,
+      91,    93
 };
 #endif
 
-#define YYPACT_NINF (-56)
+#define YYPACT_NINF (-68)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -706,17 +726,19 @@ static const yytype_int16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      75,   -50,   -44,   -41,   -28,   -27,   -18,   -14,   -42,   -13,
-     -12,    -8,    57,    75,   -56,   -56,   -56,   -56,   -56,   -56,
-      28,    55,     8,     9,    12,   -56,   -56,   -56,   -56,   -56,
-     -56,   -56,   -56,    18,    19,    21,    20,    23,    36,   -45,
-     -19,   -45,    39,    40,    42,    43,   -56,   -56,   -56,   -56,
-     -56,   -56,    44,    45,    31,    -5,   -56,    48,    48,    48,
-      46,    48,   -56,   -56,   -56,   -56,   -56,   -56,   -56,   -56,
-     -56,   -56,   -56,    47,   -56,   -56,   -56,   -56,   -56,   -56,
-     -47,   -56,   -56,   -56,   -56,   -56,   -56,   -56,   -56,   -56,
-     -56,   -56,    48,   -56,    41,   -56,   -56,   -56,   -56,   -56,
-     -56,   -56
+     100,   -55,   -56,   -52,   -51,   -50,   -49,   -35,   -39,   -37,
+     -17,   -21,    50,   100,   -68,   -68,   -68,   -68,   -68,   -68,
+      42,    56,    -9,     5,     6,   -68,   -68,   -68,   -68,   -68,
+     -68,   -68,   -68,    12,    21,    25,    26,    27,    30,    32,
+     -23,   -22,   -23,    33,    34,    49,    53,    54,    48,    57,
+      58,    59,   -68,   -68,   -68,   -68,   -68,   -68,    60,    62,
+      63,    64,    65,    66,    51,    -5,   -68,    61,    61,    61,
+      67,    61,   -68,   -68,   -68,   -68,   -68,   -68,   -68,   -68,
+     -68,   -68,   -68,   -68,    68,   -68,   -68,   -68,   -68,   -68,
+     -68,   -68,   -68,   -60,   -68,   -68,   -68,   -60,   -68,   -68,
+     -68,   -68,   -68,   -68,   -68,   -68,   -68,   -68,   -68,   -68,
+     -68,   -68,    61,   -68,    69,   -68,   -68,   -68,   -68,   -68,
+     -68,   -68,   -68
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -728,27 +750,29 @@ static const yytype_int8 yydefact[] =
        0,     0,     0,     2,     3,     5,     6,     7,     8,     9,
       26,    18,     0,     0,     0,    16,    15,    20,    22,    23,
       21,     1,     4,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,    37,    38,    39,    40,
-      41,    42,     0,     0,     0,     0,    24,    61,    61,    61,
-       0,    61,    17,    12,    14,    13,    30,    50,    43,    51,
-      33,    48,    58,     0,    46,    57,    45,    44,    47,    34,
-       0,    35,    36,    31,    32,    52,    11,    25,    60,    27,
-      28,    29,    61,    10,     0,    53,    54,    55,    49,    56,
-      19,    59
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,    42,    43,    44,    45,    46,    47,     0,     0,
+       0,     0,     0,     0,     0,     0,    24,    71,    71,    71,
+       0,    71,    17,    12,    14,    13,    30,    55,    48,    56,
+      37,    38,    53,    68,     0,    51,    67,    50,    49,    52,
+      57,    58,    39,     0,    40,    59,    41,     0,    61,    31,
+      32,    33,    34,    35,    36,    62,    11,    25,    70,    27,
+      28,    29,    71,    10,     0,    63,    64,    65,    54,    66,
+      60,    19,    69
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -56,   -56,   -56,    90,   -56,   -56,   -56,   -56,   -56,   -56,
-     -56,   -56,    49,   -56,   -56,   -56,   -56,    64,   -39,   -55
+     -68,   -68,   -68,   118,   -68,   -68,   -68,   -68,   -68,   -68,
+     -68,   -68,    70,   -68,   -68,   -68,    36,    94,   -36,   -67
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,    12,    13,    14,    15,    16,    17,    18,    61,    62,
-      19,    55,    56,    57,    58,    59,    98,    74,    75,    89
+       0,    12,    13,    14,    15,    16,    17,    18,    71,    72,
+      19,    65,    66,    67,    68,    69,   118,    85,    86,   109
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -756,32 +780,40 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      86,    77,    20,    90,    91,    95,    93,    72,    96,    97,
-      21,    22,    73,    27,    73,    33,    34,    35,    36,    37,
-      38,    39,    40,    41,    23,    24,    42,    43,    44,    45,
-      46,    47,    48,    76,    25,    49,    50,   100,    26,    51,
-      73,    99,    28,    29,    52,    53,    30,    54,    33,    34,
-      35,    36,    37,    38,    39,    40,    41,    31,    60,    42,
-      43,    44,    45,    46,    47,    48,    63,    64,    49,    50,
-      65,    66,    51,    68,    67,    69,    70,    52,    53,     1,
-      54,     2,     3,     4,     5,     6,     7,     8,    71,    85,
-       9,    10,    79,    80,    11,    81,    82,    83,    84,    88,
-      92,   101,    94,    32,    87,    78
+     106,   110,   111,   115,   113,    88,   116,   117,    20,    21,
+      84,    22,    23,    24,    25,    33,    34,    35,    36,    37,
+      38,    39,    40,    41,    42,    43,    44,    27,    26,    28,
+      45,    46,    47,    48,    49,    50,    51,    52,    53,    54,
+      83,    87,    55,    56,    30,   121,    57,    84,    84,    29,
+      31,    58,    59,    60,    61,    62,    63,   119,    64,    70,
+      73,   119,    33,    34,    35,    36,    37,    38,    39,    40,
+      41,    42,    43,    44,    74,    75,    76,    45,    46,    47,
+      48,    49,    50,    51,    52,    53,    54,    77,    78,    55,
+      56,    80,    79,    57,    81,    82,    90,    91,    58,    59,
+      60,    61,    62,    63,     1,    64,     2,     3,     4,     5,
+       6,     7,     8,    92,    95,     9,    10,    93,    94,    11,
+     105,    96,    97,   108,    99,    98,   100,   101,   102,   103,
+     104,    32,   112,   120,   114,   107,    89,     0,     0,     0,
+     122
 };
 
 static const yytype_int8 yycheck[] =
 {
-       5,    40,    52,    58,    59,    52,    61,    52,    55,    56,
-      54,    52,    59,    55,    59,    20,    21,    22,    23,    24,
-      25,    26,    27,    28,    52,    52,    31,    32,    33,    34,
-      35,    36,    37,    52,    52,    40,    41,    92,    52,    44,
-      59,    80,    55,    55,    49,    50,    54,    52,    20,    21,
-      22,    23,    24,    25,    26,    27,    28,     0,     3,    31,
-      32,    33,    34,    35,    36,    37,    58,    58,    40,    41,
-      58,    53,    44,    52,    55,    55,    53,    49,    50,     4,
-      52,     6,     7,     8,     9,    10,    11,    12,    52,    58,
-      15,    16,    53,    53,    19,    53,    53,    53,    53,    51,
-      54,    60,    55,    13,    55,    41
+       5,    68,    69,    63,    71,    41,    66,    67,    63,    65,
+      70,    63,    63,    63,    63,    20,    21,    22,    23,    24,
+      25,    26,    27,    28,    29,    30,    31,    66,    63,    66,
+      35,    36,    37,    38,    39,    40,    41,    42,    43,    44,
+      63,    63,    47,    48,    65,   112,    51,    70,    70,    66,
+       0,    56,    57,    58,    59,    60,    61,    93,    63,     3,
+      69,    97,    20,    21,    22,    23,    24,    25,    26,    27,
+      28,    29,    30,    31,    69,    69,    64,    35,    36,    37,
+      38,    39,    40,    41,    42,    43,    44,    66,    63,    47,
+      48,    64,    66,    51,    64,    63,    63,    63,    56,    57,
+      58,    59,    60,    61,     4,    63,     6,     7,     8,     9,
+      10,    11,    12,    64,    66,    15,    16,    64,    64,    19,
+      69,    64,    64,    62,    64,    66,    64,    64,    64,    64,
+      64,    13,    65,    97,    66,    65,    42,    -1,    -1,    -1,
+      71
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -789,28 +821,31 @@ static const yytype_int8 yycheck[] =
 static const yytype_int8 yystos[] =
 {
        0,     4,     6,     7,     8,     9,    10,    11,    12,    15,
-      16,    19,    62,    63,    64,    65,    66,    67,    68,    71,
-      52,    54,    52,    52,    52,    52,    52,    55,    55,    55,
-      54,     0,    64,    20,    21,    22,    23,    24,    25,    26,
-      27,    28,    31,    32,    33,    34,    35,    36,    37,    40,
-      41,    44,    49,    50,    52,    72,    73,    74,    75,    76,
-       3,    69,    70,    58,    58,    58,    53,    55,    52,    55,
-      53,    52,    52,    59,    78,    79,    52,    79,    78,    53,
-      53,    53,    53,    53,    53,    58,     5,    73,    51,    80,
-      80,    80,    54,    80,    55,    52,    55,    56,    77,    79,
-      80,    60
+      16,    19,    73,    74,    75,    76,    77,    78,    79,    82,
+      63,    65,    63,    63,    63,    63,    63,    66,    66,    66,
+      65,     0,    75,    20,    21,    22,    23,    24,    25,    26,
+      27,    28,    29,    30,    31,    35,    36,    37,    38,    39,
+      40,    41,    42,    43,    44,    47,    48,    51,    56,    57,
+      58,    59,    60,    61,    63,    83,    84,    85,    86,    87,
+       3,    80,    81,    69,    69,    69,    64,    66,    63,    66,
+      64,    64,    63,    63,    70,    89,    90,    63,    90,    89,
+      63,    63,    64,    64,    64,    66,    64,    64,    66,    64,
+      64,    64,    64,    64,    64,    69,     5,    84,    62,    91,
+      91,    91,    65,    91,    66,    63,    66,    67,    88,    90,
+      88,    91,    71
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    61,    62,    63,    63,    64,    64,    64,    64,    64,
-      65,    66,    67,    67,    67,    67,    68,    69,    69,    70,
-      71,    71,    71,    71,    72,    72,    72,    73,    73,    73,
-      74,    74,    74,    74,    74,    74,    74,    74,    74,    74,
-      74,    74,    74,    75,    75,    75,    75,    75,    75,    75,
-      75,    75,    76,    77,    77,    77,    77,    78,    78,    79,
-      80,    80
+       0,    72,    73,    74,    74,    75,    75,    75,    75,    75,
+      76,    77,    78,    78,    78,    78,    79,    80,    80,    81,
+      82,    82,    82,    82,    83,    83,    83,    84,    84,    84,
+      85,    85,    85,    85,    85,    85,    85,    85,    85,    85,
+      85,    85,    85,    85,    85,    85,    85,    85,    86,    86,
+      86,    86,    86,    86,    86,    86,    86,    86,    86,    86,
+      86,    86,    87,    88,    88,    88,    88,    89,    89,    90,
+      91,    91
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
@@ -819,9 +854,10 @@ static const yytype_int8 yyr2[] =
        0,     2,     1,     1,     2,     1,     1,     1,     1,     1,
        4,     4,     3,     3,     3,     2,     2,     1,     0,     3,
        2,     2,     2,     2,     1,     2,     0,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     1,     1,     1,
-       1,     1,     1,     2,     2,     2,     2,     2,     2,     3,
-       2,     2,     2,     1,     1,     1,     1,     1,     1,     3,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     1,     1,     1,     1,     1,     1,     2,     2,
+       2,     2,     2,     2,     3,     2,     2,     2,     2,     2,
+       3,     2,     2,     1,     1,     1,     1,     1,     1,     3,
        1,     0
 };
 
@@ -1576,61 +1612,61 @@ yydestruct (const char *yymsg,
     case S_IDENTIFIER: /* "identifier"  */
 #line 130 "specs/parser.y"
             { ((*yyvaluep).string)->release(); }
-#line 1580 "assembler/AssemblerParser-C.cpp"
+#line 1616 "assembler/AssemblerParser-C.cpp"
         break;
 
     case S_STRING_LITERAL: /* "string literal"  */
 #line 130 "specs/parser.y"
             { ((*yyvaluep).string)->release(); }
-#line 1586 "assembler/AssemblerParser-C.cpp"
+#line 1622 "assembler/AssemblerParser-C.cpp"
         break;
 
     case S_instruction_sequence: /* instruction_sequence  */
 #line 131 "specs/parser.y"
             { delete (((*yyvaluep).instruction_list));   }
-#line 1592 "assembler/AssemblerParser-C.cpp"
+#line 1628 "assembler/AssemblerParser-C.cpp"
         break;
 
     case S_instruction: /* instruction  */
 #line 128 "specs/parser.y"
             { ((*yyvaluep).insn)->release(); }
-#line 1598 "assembler/AssemblerParser-C.cpp"
+#line 1634 "assembler/AssemblerParser-C.cpp"
         break;
 
     case S_zeroed_instruction: /* zeroed_instruction  */
 #line 128 "specs/parser.y"
             { ((*yyvaluep).insn)->release(); }
-#line 1604 "assembler/AssemblerParser-C.cpp"
+#line 1640 "assembler/AssemblerParser-C.cpp"
         break;
 
     case S_unary_instruction: /* unary_instruction  */
 #line 128 "specs/parser.y"
             { ((*yyvaluep).insn)->release(); }
-#line 1610 "assembler/AssemblerParser-C.cpp"
+#line 1646 "assembler/AssemblerParser-C.cpp"
         break;
 
     case S_label_declaration: /* label_declaration  */
 #line 128 "specs/parser.y"
             { ((*yyvaluep).insn)->release(); }
-#line 1616 "assembler/AssemblerParser-C.cpp"
+#line 1652 "assembler/AssemblerParser-C.cpp"
         break;
 
     case S_argument: /* argument  */
 #line 129 "specs/parser.y"
             { ((*yyvaluep).operand)->release(); }
-#line 1622 "assembler/AssemblerParser-C.cpp"
+#line 1658 "assembler/AssemblerParser-C.cpp"
         break;
 
     case S_branch_target: /* branch_target  */
 #line 129 "specs/parser.y"
             { ((*yyvaluep).operand)->release(); }
-#line 1628 "assembler/AssemblerParser-C.cpp"
+#line 1664 "assembler/AssemblerParser-C.cpp"
         break;
 
     case S_address_constant: /* address_constant  */
 #line 129 "specs/parser.y"
             { ((*yyvaluep).operand)->release(); }
-#line 1634 "assembler/AssemblerParser-C.cpp"
+#line 1670 "assembler/AssemblerParser-C.cpp"
         break;
 
       default:
@@ -1945,13 +1981,13 @@ yyreduce:
     switch (yyn)
       {
   case 7: /* declaration: symbol_declaration  */
-#line 230 "specs/parser.y"
+#line 241 "specs/parser.y"
                                                 { MODULE(*module)->addSymbol(*(STATE(state)->currentObject), *(STATE(state)->currentSection)); }
-#line 1951 "assembler/AssemblerParser-C.cpp"
+#line 1987 "assembler/AssemblerParser-C.cpp"
     break;
 
   case 10: /* section_declaration: "section directive" "string literal" optional_attributes delimiter  */
-#line 238 "specs/parser.y"
+#line 249 "specs/parser.y"
                                                 {
                                                     // Create a new section object
                                                     core::String sectionName((yyvsp[-2].string)->toCharArray());
@@ -1966,11 +2002,11 @@ yyreduce:
                                                     // Clean up
                                                     delete (yyvsp[-2].string);
                                                 }
-#line 1970 "assembler/AssemblerParser-C.cpp"
+#line 2006 "assembler/AssemblerParser-C.cpp"
     break;
 
   case 11: /* function_declaration: "subroutine definition keyword" "identifier" instruction_sequence "end of subroutine"  */
-#line 256 "specs/parser.y"
+#line 267 "specs/parser.y"
                                                 {
                                                     // Create a new function object
                                                     Function* function = new Function(*(yyvsp[-2].string));
@@ -1997,188 +2033,218 @@ yyreduce:
                                                     // Reset the offset
                                                     STATE(state)->localOffset = 0;
                                                 }
-#line 2001 "assembler/AssemblerParser-C.cpp"
+#line 2037 "assembler/AssemblerParser-C.cpp"
     break;
 
   case 12: /* symbol_declaration: "global symbol declaration" "identifier" ':'  */
-#line 284 "specs/parser.y"
+#line 295 "specs/parser.y"
                             { STATE(state)->currentObject = new DataObject(*(yyvsp[-1].string), Symbol::Bind_Global); delete (yyvsp[-1].string); }
-#line 2007 "assembler/AssemblerParser-C.cpp"
+#line 2043 "assembler/AssemblerParser-C.cpp"
     break;
 
   case 13: /* symbol_declaration: "weak symbol declaration" "identifier" ':'  */
-#line 285 "specs/parser.y"
+#line 296 "specs/parser.y"
                             { STATE(state)->currentObject = new DataObject(*(yyvsp[-1].string), Symbol::Bind_Weak); delete (yyvsp[-1].string); }
-#line 2013 "assembler/AssemblerParser-C.cpp"
+#line 2049 "assembler/AssemblerParser-C.cpp"
     break;
 
   case 14: /* symbol_declaration: "local symbol declaration" "identifier" ':'  */
-#line 286 "specs/parser.y"
+#line 297 "specs/parser.y"
                             { STATE(state)->currentObject = new DataObject(*(yyvsp[-1].string), Symbol::Bind_Local); delete (yyvsp[-1].string); }
-#line 2019 "assembler/AssemblerParser-C.cpp"
+#line 2055 "assembler/AssemblerParser-C.cpp"
     break;
 
   case 15: /* symbol_declaration: "extern symbol declaration" "identifier"  */
-#line 287 "specs/parser.y"
+#line 298 "specs/parser.y"
                             {
                                 DataObject* externSymbol = new DataObject(*(yyvsp[0].string), Symbol::Bind_Extern); delete (yyvsp[0].string);
                                 MODULE(*module)->addSymbol(*externSymbol, *(STATE(state)->currentSection));
                             }
-#line 2028 "assembler/AssemblerParser-C.cpp"
+#line 2064 "assembler/AssemblerParser-C.cpp"
     break;
 
   case 16: /* native_symbol_declaration: "native symbol declaration" "identifier"  */
-#line 294 "specs/parser.y"
+#line 305 "specs/parser.y"
                             {
                                 DataObject* nativeSymbol = new DataObject(*(yyvsp[0].string), Symbol::Bind_Native); delete (yyvsp[0].string);
                                 MODULE(*module)->addSymbol(*nativeSymbol, *(STATE(state)->currentSection));
                             }
-#line 2037 "assembler/AssemblerParser-C.cpp"
+#line 2073 "assembler/AssemblerParser-C.cpp"
     break;
 
   case 19: /* attributes_declaration: "attribute directive" "string literal" delimiter  */
-#line 308 "specs/parser.y"
+#line 319 "specs/parser.y"
                                                 {
                                                     // Clean up
                                                     delete (yyvsp[-1].string);
                                                 }
-#line 2046 "assembler/AssemblerParser-C.cpp"
-    break;
-
-  case 20: /* constant_declaration: "address pseudo-operator" "integer literal"  */
-#line 315 "specs/parser.y"
-                                            { STATE(state)->currentObject->addData(&((yyvsp[0].integer)), VM_ADDRESS_SIZE);  }
-#line 2052 "assembler/AssemblerParser-C.cpp"
-    break;
-
-  case 21: /* constant_declaration: "unicode pseudo-operator" "string literal"  */
-#line 316 "specs/parser.y"
-                                            { STATE(state)->currentObject->addUtf8Data((yyvsp[0].string)->toCharArray(), (yyvsp[0].string)->length()); }
-#line 2058 "assembler/AssemblerParser-C.cpp"
-    break;
-
-  case 22: /* constant_declaration: "long pseudo-operator" "integer literal"  */
-#line 317 "specs/parser.y"
-                                            { STATE(state)->currentObject->addData(&((yyvsp[0].integer)), VM_DWORD_SIZE); }
-#line 2064 "assembler/AssemblerParser-C.cpp"
-    break;
-
-  case 23: /* constant_declaration: "quad pseudo-operator" "integer literal"  */
-#line 318 "specs/parser.y"
-                                            { STATE(state)->currentObject->addData(&((yyvsp[0].integer)), VM_QWORD_SIZE); }
-#line 2070 "assembler/AssemblerParser-C.cpp"
-    break;
-
-  case 24: /* instruction_sequence: instruction  */
-#line 323 "specs/parser.y"
-                                            { (yyval.instruction_list) = new std::vector<amanda::binutils::Instruction*>(); (yyval.instruction_list)->push_back((yyvsp[0].insn)); if (!((yyvsp[0].insn)->is<Label>())) STATE(state)->localOffset++; }
-#line 2076 "assembler/AssemblerParser-C.cpp"
-    break;
-
-  case 25: /* instruction_sequence: instruction_sequence instruction  */
-#line 324 "specs/parser.y"
-                                            { (yyval.instruction_list) = (yyvsp[-1].instruction_list); (yyval.instruction_list)->push_back((yyvsp[0].insn)); if (!((yyvsp[0].insn)->is<Label>())) STATE(state)->localOffset++; }
 #line 2082 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 26: /* instruction_sequence: %empty  */
-#line 325 "specs/parser.y"
-                                            { (yyval.instruction_list) = new std::vector<amanda::binutils::Instruction*>(); }
+  case 20: /* constant_declaration: "address pseudo-operator" "integer literal"  */
+#line 326 "specs/parser.y"
+                                            { STATE(state)->currentObject->addData(&((yyvsp[0].integer)), VM_ADDRESS_SIZE);  }
 #line 2088 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 30: /* zeroed_instruction: "add instruction" "instruction suffix"  */
-#line 335 "specs/parser.y"
-                                            { (yyval.insn) = new Instruction(AMANDA_VM_INSN_FAMILY(ADD) + Instruction::getInstructionNumericSuffix((yyvsp[0].character)), 0); }
+  case 21: /* constant_declaration: "unicode pseudo-operator" "string literal"  */
+#line 327 "specs/parser.y"
+                                            { STATE(state)->currentObject->addUtf8Data((yyvsp[0].string)->toCharArray(), (yyvsp[0].string)->length() + 1); }
 #line 2094 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 31: /* zeroed_instruction: "compare-equals instruction" "instruction suffix"  */
-#line 336 "specs/parser.y"
-                                            { (yyval.insn) = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(CEQ), (yyvsp[0].character)); }
+  case 22: /* constant_declaration: "long pseudo-operator" "integer literal"  */
+#line 328 "specs/parser.y"
+                                            { STATE(state)->currentObject->addData(&((yyvsp[0].integer)), VM_DWORD_SIZE); }
 #line 2100 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 32: /* zeroed_instruction: "compare-non-equals instruction" "instruction suffix"  */
-#line 337 "specs/parser.y"
-                                            { (yyval.insn) = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(CNE), (yyvsp[0].character)); }
+  case 23: /* constant_declaration: "quad pseudo-operator" "integer literal"  */
+#line 329 "specs/parser.y"
+                                            { STATE(state)->currentObject->addData(&((yyvsp[0].integer)), VM_QWORD_SIZE); }
 #line 2106 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 33: /* zeroed_instruction: "div instruction" "instruction suffix"  */
-#line 338 "specs/parser.y"
-                                            { (yyval.insn) = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(DIV), (yyvsp[0].character)); }
+  case 24: /* instruction_sequence: instruction  */
+#line 334 "specs/parser.y"
+                                            { (yyval.instruction_list) = new std::vector<amanda::binutils::Instruction*>(); (yyval.instruction_list)->push_back((yyvsp[0].insn)); if (!((yyvsp[0].insn)->is<Label>())) STATE(state)->localOffset += (yyvsp[0].insn)->getSize(); }
 #line 2112 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 34: /* zeroed_instruction: "pop instruction" "instruction suffix"  */
-#line 339 "specs/parser.y"
-                                            { (yyval.insn) = new Instruction(AMANDA_VM_INSN_FAMILY(POP) + Instruction::getInstructionNumericSuffix((yyvsp[0].character)), 0); }
+  case 25: /* instruction_sequence: instruction_sequence instruction  */
+#line 335 "specs/parser.y"
+                                            { (yyval.instruction_list) = (yyvsp[-1].instruction_list); (yyval.instruction_list)->push_back((yyvsp[0].insn)); if (!((yyvsp[0].insn)->is<Label>())) STATE(state)->localOffset += (yyvsp[0].insn)->getSize(); }
 #line 2118 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 35: /* zeroed_instruction: "return instruction" "instruction suffix"  */
-#line 340 "specs/parser.y"
-                                            { (yyval.insn) = new Instruction(AMANDA_VM_INSN_FAMILY(RET) + Instruction::getInstructionNumericSuffix((yyvsp[0].character)), 0); }
+  case 26: /* instruction_sequence: %empty  */
+#line 336 "specs/parser.y"
+                                            { (yyval.instruction_list) = new std::vector<amanda::binutils::Instruction*>(); }
 #line 2124 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 36: /* zeroed_instruction: "sub instruction" "instruction suffix"  */
-#line 341 "specs/parser.y"
-                                            { (yyval.insn) = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(SUB), (yyvsp[0].character)); }
+  case 30: /* zeroed_instruction: "add instruction" "instruction suffix"  */
+#line 346 "specs/parser.y"
+                                            { (yyval.insn) = new Instruction(AMANDA_VM_INSN_FAMILY(ADD) + Instruction::getInstructionNumericSuffix((yyvsp[0].character)), 0); }
 #line 2130 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 37: /* zeroed_instruction: "byte-to-word instruction"  */
-#line 343 "specs/parser.y"
-                                            { (yyval.insn) = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(B2W)); }
+  case 31: /* zeroed_instruction: "compare-equals instruction" "instruction suffix"  */
+#line 347 "specs/parser.y"
+                                            { (yyval.insn) = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(CEQ), (yyvsp[0].character)); }
 #line 2136 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 38: /* zeroed_instruction: B2L  */
-#line 344 "specs/parser.y"
-                                            { (yyval.insn) = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(B2L)); }
+  case 32: /* zeroed_instruction: "compare-non-equals instruction" "instruction suffix"  */
+#line 348 "specs/parser.y"
+                                            { (yyval.insn) = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(CNE), (yyvsp[0].character)); }
 #line 2142 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 39: /* zeroed_instruction: B2Q  */
-#line 345 "specs/parser.y"
-                                            { (yyval.insn) = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(B2Q)); }
+  case 33: /* zeroed_instruction: "compare-greater instruction" "instruction suffix"  */
+#line 349 "specs/parser.y"
+                                            { (yyval.insn) = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(CGT), (yyvsp[0].character)); }
 #line 2148 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 40: /* zeroed_instruction: W2L  */
-#line 346 "specs/parser.y"
-                                            { (yyval.insn) = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(W2L)); }
+  case 34: /* zeroed_instruction: "compare-lesser instruction" "instruction suffix"  */
+#line 350 "specs/parser.y"
+                                            { (yyval.insn) = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(CLT), (yyvsp[0].character)); }
 #line 2154 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 41: /* zeroed_instruction: "word-to-quad instruction"  */
-#line 347 "specs/parser.y"
-                                            { (yyval.insn) = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(W2Q)); }
+  case 35: /* zeroed_instruction: "compare-greater-equals instruction" "instruction suffix"  */
+#line 351 "specs/parser.y"
+                                            { (yyval.insn) = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(CGE), (yyvsp[0].character)); }
 #line 2160 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 42: /* zeroed_instruction: L2Q  */
-#line 348 "specs/parser.y"
-                                            { (yyval.insn) = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(L2Q)); }
+  case 36: /* zeroed_instruction: "compare-lesser-equals instruction" "instruction suffix"  */
+#line 352 "specs/parser.y"
+                                            { (yyval.insn) = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(CLE), (yyvsp[0].character)); }
 #line 2166 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 43: /* unary_instruction: "native call instruction" "identifier"  */
-#line 352 "specs/parser.y"
-                                            { (yyval.insn) = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(CCALL)); Operand* operand = new Operand(*(yyvsp[0].string)); (yyval.insn)->setOperand(operand); delete (yyvsp[0].string); }
+  case 37: /* zeroed_instruction: "div instruction" "instruction suffix"  */
+#line 353 "specs/parser.y"
+                                            { (yyval.insn) = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(DIV), (yyvsp[0].character)); }
 #line 2172 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 44: /* unary_instruction: "jump instruction" address_constant  */
-#line 353 "specs/parser.y"
-                                            { (yyval.insn) = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(JMP)); (yyval.insn)->setOperand((yyvsp[0].operand)); }
+  case 38: /* zeroed_instruction: "dup instruction" "instruction suffix"  */
+#line 354 "specs/parser.y"
+                                            { (yyval.insn) = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(DUP), (yyvsp[0].character)); }
 #line 2178 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 45: /* unary_instruction: "jump instruction" "identifier"  */
-#line 354 "specs/parser.y"
+  case 39: /* zeroed_instruction: "pop instruction" "instruction suffix"  */
+#line 355 "specs/parser.y"
+                                            { (yyval.insn) = new Instruction(AMANDA_VM_INSN_FAMILY(POP) + Instruction::getInstructionNumericSuffix((yyvsp[0].character)), 0); }
+#line 2184 "assembler/AssemblerParser-C.cpp"
+    break;
+
+  case 40: /* zeroed_instruction: "return instruction" "instruction suffix"  */
+#line 356 "specs/parser.y"
+                                            { (yyval.insn) = new Instruction(AMANDA_VM_INSN_FAMILY(RET) + Instruction::getInstructionNumericSuffix((yyvsp[0].character)), 0); }
+#line 2190 "assembler/AssemblerParser-C.cpp"
+    break;
+
+  case 41: /* zeroed_instruction: "sub instruction" "instruction suffix"  */
+#line 357 "specs/parser.y"
+                                            { (yyval.insn) = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(SUB), (yyvsp[0].character)); }
+#line 2196 "assembler/AssemblerParser-C.cpp"
+    break;
+
+  case 42: /* zeroed_instruction: "byte-to-word instruction"  */
+#line 359 "specs/parser.y"
+                                            { (yyval.insn) = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(B2W)); }
+#line 2202 "assembler/AssemblerParser-C.cpp"
+    break;
+
+  case 43: /* zeroed_instruction: B2L  */
+#line 360 "specs/parser.y"
+                                            { (yyval.insn) = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(B2L)); }
+#line 2208 "assembler/AssemblerParser-C.cpp"
+    break;
+
+  case 44: /* zeroed_instruction: B2Q  */
+#line 361 "specs/parser.y"
+                                            { (yyval.insn) = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(B2Q)); }
+#line 2214 "assembler/AssemblerParser-C.cpp"
+    break;
+
+  case 45: /* zeroed_instruction: W2L  */
+#line 362 "specs/parser.y"
+                                            { (yyval.insn) = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(W2L)); }
+#line 2220 "assembler/AssemblerParser-C.cpp"
+    break;
+
+  case 46: /* zeroed_instruction: "word-to-quad instruction"  */
+#line 363 "specs/parser.y"
+                                            { (yyval.insn) = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(W2Q)); }
+#line 2226 "assembler/AssemblerParser-C.cpp"
+    break;
+
+  case 47: /* zeroed_instruction: L2Q  */
+#line 364 "specs/parser.y"
+                                            { (yyval.insn) = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(L2Q)); }
+#line 2232 "assembler/AssemblerParser-C.cpp"
+    break;
+
+  case 48: /* unary_instruction: "native call instruction" "identifier"  */
+#line 368 "specs/parser.y"
+                                            { (yyval.insn) = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(CCALL)); Operand* operand = new Operand(*(yyvsp[0].string)); (yyval.insn)->setOperand(operand); delete (yyvsp[0].string); }
+#line 2238 "assembler/AssemblerParser-C.cpp"
+    break;
+
+  case 49: /* unary_instruction: "jump instruction" address_constant  */
+#line 369 "specs/parser.y"
+                                            { (yyval.insn) = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(JMP)); (yyval.insn)->setOperand((yyvsp[0].operand)); }
+#line 2244 "assembler/AssemblerParser-C.cpp"
+    break;
+
+  case 50: /* unary_instruction: "jump instruction" "identifier"  */
+#line 370 "specs/parser.y"
                                             {
                                                 (yyval.insn) = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(JMP));
 
@@ -2189,89 +2255,137 @@ yyreduce:
                                                 // Clean up
                                                 delete (yyvsp[0].string);
                                             }
-#line 2193 "assembler/AssemblerParser-C.cpp"
+#line 2259 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 46: /* unary_instruction: "jump-if-false instruction" branch_target  */
-#line 365 "specs/parser.y"
+  case 51: /* unary_instruction: "jump-if-false instruction" branch_target  */
+#line 381 "specs/parser.y"
                                             { (yyval.insn) = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(JF)); (yyval.insn)->setOperand((yyvsp[0].operand)); }
-#line 2199 "assembler/AssemblerParser-C.cpp"
+#line 2265 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 47: /* unary_instruction: "jump-if-true instruction" branch_target  */
-#line 366 "specs/parser.y"
+  case 52: /* unary_instruction: "jump-if-true instruction" branch_target  */
+#line 382 "specs/parser.y"
                                             { (yyval.insn) = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(JT)); (yyval.insn)->setOperand((yyvsp[0].operand)); }
-#line 2205 "assembler/AssemblerParser-C.cpp"
+#line 2271 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 48: /* unary_instruction: "call instruction" "identifier"  */
-#line 368 "specs/parser.y"
+  case 53: /* unary_instruction: "call instruction" "identifier"  */
+#line 384 "specs/parser.y"
                                             { (yyval.insn) = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(INVOKE)); Operand* operand = new Operand(*(yyvsp[0].string)); (yyval.insn)->setOperand(operand); delete (yyvsp[0].string);}
-#line 2211 "assembler/AssemblerParser-C.cpp"
+#line 2277 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 49: /* unary_instruction: "push instruction" "instruction suffix" argument  */
-#line 370 "specs/parser.y"
+  case 54: /* unary_instruction: "push instruction" "instruction suffix" argument  */
+#line 386 "specs/parser.y"
                                             { (yyval.insn) = as::createUnaryInstruction(AMANDA_VM_INSN_FAMILY(PUSH), (yyvsp[-1].character)); (yyval.insn)->setOperand((yyvsp[0].operand)); }
-#line 2217 "assembler/AssemblerParser-C.cpp"
+#line 2283 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 50: /* unary_instruction: "allocation instruction" "integer literal"  */
-#line 372 "specs/parser.y"
+  case 55: /* unary_instruction: "stack allocation instruction" "integer literal"  */
+#line 388 "specs/parser.y"
                                             {
-                                                (yyval.insn) = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(ALLOC), VM_QWORD_SIZE);
+                                                (yyval.insn) = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(ALLOCA), VM_QWORD_SIZE);
                                                 Operand* operand = new Operand((yyvsp[0].integer)); (yyval.insn)->setOperand(operand);
                                             }
-#line 2226 "assembler/AssemblerParser-C.cpp"
+#line 2292 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 51: /* unary_instruction: "deallocation instruction" "integer literal"  */
-#line 376 "specs/parser.y"
+  case 56: /* unary_instruction: "heap deallocation instruction" "integer literal"  */
+#line 392 "specs/parser.y"
                                             {
                                                 (yyval.insn) = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(DELLOC), VM_QWORD_SIZE);
                                                 Operand* operand = new Operand((yyvsp[0].integer)); (yyval.insn)->setOperand(operand);
                                             }
-#line 2235 "assembler/AssemblerParser-C.cpp"
+#line 2301 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 52: /* label_declaration: "identifier" ':'  */
-#line 383 "specs/parser.y"
-                                            { (yyval.insn) = new Label(*(yyvsp[-1].string), STATE(state)->localOffset); delete (yyvsp[-1].string); }
-#line 2241 "assembler/AssemblerParser-C.cpp"
-    break;
-
-  case 53: /* argument: "identifier"  */
-#line 388 "specs/parser.y"
-                                            { (yyval.operand) = new Operand(*(yyvsp[0].string)); delete (yyvsp[0].string); }
-#line 2247 "assembler/AssemblerParser-C.cpp"
-    break;
-
-  case 54: /* argument: "integer literal"  */
-#line 389 "specs/parser.y"
-                                            { (yyval.operand) = new Operand((yyvsp[0].integer)); }
-#line 2253 "assembler/AssemblerParser-C.cpp"
-    break;
-
-  case 55: /* argument: "floating point literal"  */
-#line 390 "specs/parser.y"
-                                            { (yyval.operand) = NULL; }
-#line 2259 "assembler/AssemblerParser-C.cpp"
-    break;
-
-  case 58: /* branch_target: "identifier"  */
+  case 57: /* unary_instruction: "load instruction" "identifier"  */
 #line 396 "specs/parser.y"
+                                            {
+                                                (yyval.insn) = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(LOAD), VM_ADDRESS_SIZE);
+
+                                                Operand* operand = new Operand(*(yyvsp[0].string)); (yyval.insn)->setOperand(operand);
+                                                delete (yyvsp[0].string);
+                                            }
+#line 2312 "assembler/AssemblerParser-C.cpp"
+    break;
+
+  case 58: /* unary_instruction: "load-by-index instruction" "identifier"  */
+#line 402 "specs/parser.y"
+                                            {
+                                                (yyval.insn) = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(ILOAD), VM_ADDRESS_SIZE);
+                                                Operand* operand = new Operand(*(yyvsp[0].string)); (yyval.insn)->setOperand(operand);
+                                                delete (yyvsp[0].string);
+                                            }
+#line 2322 "assembler/AssemblerParser-C.cpp"
+    break;
+
+  case 59: /* unary_instruction: "stack memory load instruction" "integer literal"  */
+#line 407 "specs/parser.y"
+                                            {
+                                                (yyval.insn) = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(SLOAD), VM_ADDRESS_SIZE);
+                                                Operand* operand = new Operand((yyvsp[0].integer)); (yyval.insn)->setOperand(operand);
+                                            }
+#line 2331 "assembler/AssemblerParser-C.cpp"
+    break;
+
+  case 60: /* unary_instruction: "store instruction" "instruction suffix" argument  */
+#line 411 "specs/parser.y"
+                                            {
+                                                (yyval.insn) = as::createUnaryInstruction(AMANDA_VM_INSN_FAMILY(STORE), (yyvsp[-1].character));
+                                                (yyval.insn)->setOperand((yyvsp[0].operand)); 
+                                            }
+#line 2340 "assembler/AssemblerParser-C.cpp"
+    break;
+
+  case 61: /* unary_instruction: "stack write instruction" "integer literal"  */
+#line 415 "specs/parser.y"
+                                            {
+                                                (yyval.insn) = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(SSTORE), VM_ADDRESS_SIZE);
+                                                Operand* operand = new Operand((yyvsp[0].integer)); (yyval.insn)->setOperand(operand);
+                                            }
+#line 2349 "assembler/AssemblerParser-C.cpp"
+    break;
+
+  case 62: /* label_declaration: "identifier" ':'  */
+#line 422 "specs/parser.y"
+                                            { (yyval.insn) = new Label(*(yyvsp[-1].string), STATE(state)->localOffset); delete (yyvsp[-1].string); }
+#line 2355 "assembler/AssemblerParser-C.cpp"
+    break;
+
+  case 63: /* argument: "identifier"  */
+#line 427 "specs/parser.y"
                                             { (yyval.operand) = new Operand(*(yyvsp[0].string)); delete (yyvsp[0].string); }
-#line 2265 "assembler/AssemblerParser-C.cpp"
+#line 2361 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 59: /* address_constant: '[' "integer literal" ']'  */
-#line 400 "specs/parser.y"
+  case 64: /* argument: "integer literal"  */
+#line 428 "specs/parser.y"
+                                            { (yyval.operand) = new Operand((yyvsp[0].integer)); }
+#line 2367 "assembler/AssemblerParser-C.cpp"
+    break;
+
+  case 65: /* argument: "floating point literal"  */
+#line 429 "specs/parser.y"
+                                            { (yyval.operand) = NULL; }
+#line 2373 "assembler/AssemblerParser-C.cpp"
+    break;
+
+  case 68: /* branch_target: "identifier"  */
+#line 435 "specs/parser.y"
+                                            { (yyval.operand) = new Operand(*(yyvsp[0].string)); delete (yyvsp[0].string); }
+#line 2379 "assembler/AssemblerParser-C.cpp"
+    break;
+
+  case 69: /* address_constant: '[' "integer literal" ']'  */
+#line 439 "specs/parser.y"
                                             { (yyval.operand) = new Operand((yyvsp[-1].integer), VM_QWORD_SIZE); }
-#line 2271 "assembler/AssemblerParser-C.cpp"
+#line 2385 "assembler/AssemblerParser-C.cpp"
     break;
 
 
-#line 2275 "assembler/AssemblerParser-C.cpp"
+#line 2389 "assembler/AssemblerParser-C.cpp"
 
         default: break;
       }
@@ -2512,7 +2626,7 @@ yyreturn:
   return yyresult;
 }
 
-#line 409 "specs/parser.y"
+#line 448 "specs/parser.y"
 
 
 void yyerror(YYLTYPE* location, void* scanner, void** module, void* state, char const* message)

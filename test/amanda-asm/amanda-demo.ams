@@ -1,0 +1,78 @@
+/*
+ * Copyright (C) 2022 FreeLancer Development Team
+ * This file is part of the Amanda Computing Platform project.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+ 
+.section ".code"
+
+# References to the native methods
+.native $c!!puts@i32@p
+.native $c!!putchar@i32@i32
+.native $c!!getchar@i32@nil
+
+# Main method
+.def @@main?A_string@!l32
+
+	# Call the presentation function
+	invoke	print_presentation
+	invoke	pause
+	invoke	print_prologue
+	invoke	pause
+	
+	# Print a new line
+	invoke	print_nl
+
+	# Return zero
+	push	l32	$0
+	ret		l32
+.endef
+
+.def print_presentation
+	iload	helloStr
+	ccall	$c!!puts@i32@p
+	invoke	print_nl
+	ret		v0
+.endef
+
+.def print_prologue
+	iload	str1
+	ccall	$c!!puts@i32@p
+	invoke	pause
+	iload	str2
+	ccall	$c!!puts@i32@p
+	
+	ret		v0
+.endef
+
+.def print_nl
+	push	l32	$0x0a
+	ccall	$c!!putchar@i32@i32
+	push	l32 $0x0d
+	ccall	$c!!putchar@i32@i32
+	ret		v0
+.endef
+
+.def pause
+	ccall $c!!getchar@i32@nil
+	ret v0
+.endef
+
+.section ".data"
+
+# References to the C-strings
+.local helloStr: .unicode "Hola, Amy... :) Mi nombre es Amanda...\n"
+.local str1: .unicode "Naci en junio de 2022, aunque la idea de mi creacion se remonta a un tiempo atras.\nYo soy el resultado de mas de más de 50000 lineas de codigo."
+.local str2: .unicode "Fui programada originalmente por J. Marrero, quien me nombro asi por vos."

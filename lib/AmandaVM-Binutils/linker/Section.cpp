@@ -44,6 +44,7 @@ Section* Section::makeCodeSection()
 {
     Section* section = new Section(CODE_SECTION_NAME);
     section->header->flags = Attr_Alloc | Attr_Exec | Attr_Read;
+    section->header->type = Type_ProgramBits;
 
     return section;
 }
@@ -52,6 +53,7 @@ Section* Section::makeDataSection()
 {
     Section* section = new Section(DATA_SECTION_NAME);
     section->header->flags = Attr_Alloc | Attr_Read | Attr_Write;
+    section->header->type = Type_ProgramBits;
 
     return section;
 }
@@ -60,6 +62,7 @@ Section* Section::makeDebugSection()
 {
     Section* section = new Section(".debug-symbols");
     section->header->flags = Attr_Read;
+    section->header->type = Type_Debug;
 
     return section;
 }
@@ -68,6 +71,7 @@ Section* Section::makeReadOnlyDataSection()
 {
     Section* section = new Section(RODATA_SECTION_NAME);
     section->header->flags = Attr_Alloc | Attr_Read;
+    section->header->type = Type_ProgramBits;
 
     return section;
 }
@@ -91,12 +95,38 @@ Section* Section::makeSymbolTableSection()
     return new SymbolTable(SYMBOL_TABLE_SECTION_NAME);
 }
 
+core::String Section::sectionTypeToString(unsigned type)
+{
+    core::String result = "UNKNOWN";
+    switch (type)
+    {
+        case Type_SymbolTable:
+            result = "SYMBOL TABLE";
+            break;
+        case Type_StringTable:
+            result = "STRING TABLE";
+            break;
+        case Type_Debug:
+            result = "DEBUG INFO";
+            break;
+        case Type_Note:
+            result = "NOTES";
+            break;
+        case Type_ProgramBits:
+            result = "PROGRAM BITS";
+            break;
+    }
+
+    return result;
+}
+
 Section::Section(const core::String& name)
 :
-header(new SectionHeader()),
-name(name)
+header((SectionHeader*) std::malloc(sizeof (SectionHeader))),
+name(name),
+owner(NULL)
 {
-    memset(header, 0, sizeof(*header));
+    memset(header, 0, sizeof (*header));
 }
 
 Section::~Section()
@@ -105,7 +135,7 @@ Section::~Section()
     {
         symbols.at(i)->release();
     }
-    delete header;
+    std::free(header);
 
     // Release the weak reference to the module
     if (owner)
@@ -128,12 +158,18 @@ void Section::addSymbol(const Symbol* symbol)
 
     // Update the size.
     // setSize(calculateSize());
+
+    // Update the addresses of local symbols
+    if (!symbol->isExternalSymbol())
+    {
+        const_cast<Symbol*> (symbol)->setValue(getOffsetToSymbol(symbol));
+    }
 }
 
 void Section::constructBinaryData()
 {
     for (std::vector<Symbol*>::const_iterator it = symbols.begin(),
-            end = symbols.end(); it != end; ++it)
+         end = symbols.end(); it != end; ++it)
     {
         Symbol* symbol = (*it);
         assert(symbol != NULL && "Null pointer exception.");
@@ -145,7 +181,10 @@ void Section::constructBinaryData()
         const void*     serializedData = symbol->getBinaryData();
         const size_t    serializedSize = symbol->getBufferLength();
 
-        setSize(serializedSize);
+        // Correctly implement this field
+        header->size += serializedSize;
+
+        setSize(header->size);
         Serializable::write(serializedData, VM_BYTE_SIZE, serializedSize);
     }
 }
@@ -154,7 +193,7 @@ size_t Section::calculateSize() const
 {
     size_t result = 0;
     for (std::vector<Symbol*>::const_iterator it = symbols.begin(),
-            end = symbols.end(); it != end; ++it)
+         end = symbols.end(); it != end; ++it)
     {
         result += (*it)->getSize();
     }
@@ -204,34 +243,26 @@ size_t Section::getOffsetToSymbol(const Symbol* symbol) const
     assert(symbol != NULL && "Null pointer exception");
 
     size_t offset = 0;
-    size_t definitionIndex = 0;
-
-    // Find in which position is the symbol located
-    bool found;
-    for (std::vector<Symbol*>::const_iterator it = symbols.begin(), end = symbols.end();
-         it != end && !found; ++it)
+    bool found = false;
+    for (std::vector<Symbol*>::const_iterator it = symbols.begin(),
+         end = symbols.end(); it != end && !found; ++it)
     {
-        if ((*it) == symbol)
+        Symbol* evaluated = *it;
+        if (evaluated->equals(symbol))
         {
             found = true;
         }
         else
         {
-            definitionIndex++;
+            offset += evaluated->getSize();
         }
     }
-    
-    if (found)
+
+    if (!found)
     {
-        for (size_t i = 0; i < definitionIndex; ++i)
-        {
-            Symbol* k = symbols.at(i);
-            offset += k->getSize();
-        }
-    }
-    else
-    {
-        throw LinkException("undefined symbol reference when querying offset.", *symbol);
+        throw LinkException(core::String::makeFormattedString("undefined symbol when querying for offset within section: %s+%s",
+                                                              name.toCharArray(), symbol->getName().toCharArray()),
+                            symbol->getConstReference());
     }
     return offset;
 }
@@ -265,7 +296,7 @@ void Section::merge(const Section* section)
 
         // Transpose the symbols
         for (std::vector<Symbol*>::const_iterator it = section->symbols.begin(),
-                end = section->symbols.end(); it != end; ++it)
+             end = section->symbols.end(); it != end; ++it)
         {
             const Symbol* symbol = (*it);
 
@@ -297,7 +328,12 @@ void Section::merge(const Section* section)
 void Section::marshallImpl(io::OutputStream& stream) const
 {
     Section* self = (Section*) eliminateConstness(this);
-    stream.write(self->getBinaryData(), VM_BYTE_SIZE, getSize());
+
+    // Avoid heisenbug
+    const void* data = self->getBinaryData();
+    size_t size = getSize();
+
+    stream.write(data, VM_BYTE_SIZE, size);
 }
 
 void Section::setAttributes(unsigned attributes)
@@ -308,6 +344,11 @@ void Section::setAttributes(unsigned attributes)
 void Section::setNameIndex(const vm::vm_qword_t index)
 {
     header->name = (vm::vm_dword_t) index;
+}
+
+void Section::setOffset(vm::vm_qword_t offset)
+{
+    header->offset = (vm::vm_qword_t) offset;
 }
 
 void Section::setOwningModule(Module* module)

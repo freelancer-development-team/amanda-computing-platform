@@ -46,6 +46,8 @@ static const int MATRIX_CONVERSION_BUFFER_LENGTH = 256;
 
 class String : public ReferenceCounted
 {
+    AMANDA_REFCOUNTED(String)
+
 public:
 
     static String makeFormattedStringWithArguments(const core::String& fmt, va_list va);
@@ -544,7 +546,7 @@ struct NaturalOrderComparator
 {
     inline bool operator()(const String& s1, const String& s2) const
     {
-        return false;
+        return true;
     }
 };
 

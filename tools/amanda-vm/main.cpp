@@ -36,10 +36,11 @@ using namespace amanda;
 int main(int argc, char** argv)
 {
     cli::Options options;
-    adt::Array<core::String> arguments = cli::makeArgumentsArray(argc, argv);
-    core::StrongReference<cli::CommandLine> commandLine = vm::parseCommandLineArguments(arguments, options);
+    adt::Array<core::String> argumentsArray = cli::makeArgumentsArray(argc, argv);
+    core::StrongReference<cli::CommandLine> commandLine = vm::parseCommandLineArguments(argumentsArray, options);
 
     /* Parse the command line */
+    int finalResult = EXIT_SUCCESS;
     if (commandLine->hasOption('h'))
     {
         amanda::vm::printFormattedHelpMessage(options);
@@ -57,26 +58,51 @@ int main(int argc, char** argv)
         }
         if (commandLine->hasOption('L'))
         {
-            
+
         }
 
         const std::list<core::String>& arguments = commandLine->getArgumentList();
-        if (arguments.size() != 1)
+        if (arguments.size() < 1)
         {
             amanda::vm::printFormattedHelpMessage(options);
-            AMANDA_ERROR("no valid module passed (needs 1, passed %u).", arguments.size());
+            AMANDA_ERROR("no valid module passed (needs 1 at least, passed %u).", arguments.size());
             abort();
         }
 
-        core::StrongReference<io::File> file = new io::File(arguments.front(), io::File::BINARY | io::File::READ);
-        if (!file->open() || !file->isFile())
-        {
-            AMANDA_ERROR("unable to open file '%s'. %s.", file->getPath().toCharArray(), file->getLastErrorString().toCharArray());
-            abort();
-        }
+        /* Create the virtual machine context helpers. */
+        //TODO: Add the allocation limit
+        core::StrongReference<vm::MemoryManager> memoryManager = new vm::MemoryManager();
+        core::StrongReference<vm::MemoryAllocator> memoryAllocator = new vm::LocklessDefaultAllocator(memoryManager->getReference());
+
+        /* Create the virtual machine context. */
+        core::StrongReference<vm::Context> context =
+                new vm::Context(memoryAllocator,
+                                argv[1]);
+
+        /* Create & configure the scheduler */
+        core::StrongReference<vm::ThreadScheduler> scheduler = new vm::NativeThreadScheduler(context->getReference());
+        context->setScheduler(scheduler);
 
         /* Load the file and start executing. */
-
+        for (std::list<core::String>::const_iterator iter = arguments.begin(),
+             end = arguments.end(); iter != end; ++iter)
+        {
+            try
+            {
+                int partialResult = context->loadAndExecute(*iter);
+                if (((unsigned) partialResult) > ((unsigned) finalResult))
+                {
+                    // Exit with the highest exit code
+                    finalResult = partialResult;
+                }
+            }
+            catch (core::Exception& ex)
+            {
+                vm::Context::getLogger().fatal("%s: %s",
+                                               core::String(ex.getClassDynamically().getName()).toCharArray(),
+                                               ex.getMessage().toLower().toCharArray());
+            }
+        }
     }
-    return EXIT_SUCCESS;
+    return finalResult;
 }

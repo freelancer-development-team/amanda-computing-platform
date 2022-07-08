@@ -87,6 +87,7 @@ public:
     static const vm::vm_byte_t  MAGIC_NUMBER[4]; /// The magic number that must be present in every module.
     static const core::String   ENTRY_POINT_PROCEDURE_NAME;
     static const vm::vm_size_t  SIZEOF_PROGRAM_HEADER = 128;  /// The program header is 128 bits long.
+    static const vm::vm_size_t  OFFSETOF_PROGRAM_HEADER = 128; /// File offset of the program header
 
     static bool             checkMagicNumber(const io::InputStream& stream);
     static core::String     decodeVersionFromTriplet(const version_triplet& triplet);
@@ -97,8 +98,10 @@ public:
 
     void                    addSymbol(Symbol& symbol, Section& section);
     void                    addSection(Section* section);
-    vm::vm_qword_t          calculateOffsetToSection(const core::String& name);
+    vm::vm_qword_t          calculateOffsetToSection(const core::String& name) const;
+    size_t                  calculateSectionHeaderTableSize() const;
     size_t                  calculateSectionsSize() const;
+    virtual void            constructBinaryData();
     vm::vm_word_t           countSections() const;
     Symbol*                 findSymbol(const core::String& name) const;
     const version_triplet&  getBinaryFormatVersion() const;
@@ -111,6 +114,7 @@ public:
     vm::vm_qword_t          getSymbolIndex(const core::String& name) const;
     bool                    hasEntryPoint() const;
     bool                    hasProgramHeader() const;
+    bool                    hasSymbolDefined(const core::String& name) const;
     void                    linkLocalSymbols();
     void                    mergeExternalModule(Module& external);
     void                    setCompilerName(const core::String& name);
@@ -121,13 +125,13 @@ private:
     core::String            compilerName;
     vm::vm_qword_t          entryPointAddress;
     core::String            name;
-    vm::vm_qword_t          programHeaderOffset;
+    vm::vm_qword_t          stringTableOffset;
     vm::vm_word_t           sectionHeaderEntries;
     vm::vm_qword_t          sectionHeaderOffset;
     std::vector<Section*>   sections;
     version_triplet         version;
 
-    virtual void marshallImpl(io::OutputStream& stream) const;
+    virtual void            marshallImpl(io::OutputStream& stream) const;
 
 } ;
 

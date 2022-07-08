@@ -68,6 +68,7 @@ public:
     File(int descriptor, FileAccessMode accessMode);
     File(const core::String& name, FileAccessMode accessMode, bool inmediate = false);
     File(const Path& path, FileAccessMode accessMode, bool inmediate = false);
+    File(const File& file);
     ~File();
 
     bool                canExecute() const;

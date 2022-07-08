@@ -97,7 +97,7 @@ name(name)
 {
     // Initialize the rest of the fields
     entryPointAddress = 0;
-    programHeaderOffset = 0;
+    stringTableOffset = 0;
     sectionHeaderEntries = 0;
     sectionHeaderOffset = 0;
     memset(&version, 0, sizeof (version_triplet));
@@ -140,6 +140,8 @@ void Module::addSymbol(Symbol& symbol, Section& section)
     // Add the reference
     symbol.setModule(this);
     symbol.setSection(&section);
+    symbol.setValue(section.getOffsetToSymbol(&symbol));
+
 }
 
 void Module::addSection(Section* section)
@@ -187,7 +189,7 @@ void Module::addSection(Section* section)
     sectionHeaderEntries = sections.size();
 }
 
-vm::vm_qword_t Module::calculateOffsetToSection(const core::String& name)
+vm::vm_qword_t Module::calculateOffsetToSection(const core::String& name) const
 {
     vm::vm_qword_t result = 0;
 
@@ -207,6 +209,11 @@ vm::vm_qword_t Module::calculateOffsetToSection(const core::String& name)
     return result;
 }
 
+size_t Module::calculateSectionHeaderTableSize() const
+{
+    return sectionHeaderEntries * sizeof (Section::SectionHeader);
+}
+
 size_t Module::calculateSectionsSize() const
 {
     size_t result = 0;
@@ -216,6 +223,35 @@ size_t Module::calculateSectionsSize() const
         result += (*it)->getSize();
     }
     return result;
+}
+
+void Module::constructBinaryData()
+{
+    // Recalculate the data concerning sections
+    sectionHeaderEntries = countSections();
+    sectionHeaderOffset = OFFSETOF_PROGRAM_HEADER;
+
+    // Offset to the string table
+    stringTableOffset = OFFSETOF_PROGRAM_HEADER
+            + calculateSectionHeaderTableSize()
+            + calculateOffsetToSection(SECTION_HEADERS_STRINGS_NAME);
+
+    // Calculate the offset to every section
+    for (std::vector<Section*>::const_iterator it = sections.begin(),
+         end = sections.end(); it != end; ++it)
+    {
+        vm::vm_address_t offset = OFFSETOF_PROGRAM_HEADER
+                + calculateSectionHeaderTableSize()
+                + calculateOffsetToSection((*it)->getName());
+
+        // Set the corresponding offset
+        Section* section = *it;
+        section->setOffset(offset);
+        if (!section->is<StringTable>() && !section->is<SymbolTable>())
+        {
+            section->setSize(section->calculateSize());
+        }
+    }
 }
 
 vm::vm_word_t Module::countSections() const
@@ -303,7 +339,12 @@ bool Module::hasEntryPoint() const
 
 bool Module::hasProgramHeader() const
 {
-    return programHeaderOffset != 0;
+    return stringTableOffset != 0;
+}
+
+bool Module::hasSymbolDefined(const core::String& name) const
+{
+    return getSection(SYMBOL_TABLE_SECTION_NAME)->cast<SymbolTable>().hasSymbol(name);
 }
 
 void Module::linkLocalSymbols()
@@ -326,8 +367,9 @@ void Module::linkLocalSymbols()
     }
 
     // For each section, check & resolve as appropriate
+    unsigned sectionIdx = 0;
     for (std::vector<Section*>::const_iterator it = sections.begin(),
-         end = sections.end(); it != end; ++it)
+         end = sections.end(); it != end; ++it, ++sectionIdx)
     {
         Section* section = (*it);
         assert(section != NULL && "Null pointer exception");
@@ -349,6 +391,10 @@ void Module::linkLocalSymbols()
                 Function* function = (Function*) symbol;
                 const std::deque<Instruction*> instructions = function->getInstructions();
 
+                // Symbol header
+                function->setValue(function->getSection()->getOffsetToSymbol(symbol));
+                function->setSize(function->getSize());
+
                 for (std::deque<Instruction*>::const_iterator it = instructions.begin(),
                      end = instructions.end(); it != end; ++it)
                 {
@@ -357,7 +403,9 @@ void Module::linkLocalSymbols()
 
                     if (insn->equals(AMANDA_VM_INSN_SINGLE(INVOKE))
                         || insn->equals(AMANDA_VM_ENCODE_INSN(PUSH, A))
-                        || insn->equals(AMANDA_VM_INSN_SINGLE(CCALL)))
+                        || insn->equals(AMANDA_VM_INSN_SINGLE(CCALL))
+                        || insn->equals(AMANDA_VM_INSN_SINGLE(LOAD))
+                        || insn->equals(AMANDA_VM_INSN_SINGLE(ILOAD)))
                     {
                         if (insn->getOperand()->isSymbol() && !insn->getOperand()->isResolved())
                         {
@@ -382,6 +430,14 @@ void Module::linkLocalSymbols()
                     }
                 }
             }
+
+            // Link
+            if (!symbol->isExternalSymbol())
+            {
+                // 0xffddeecc00000000
+                symbol->setValue(symbol->getSection()->getOffsetToSymbol(symbol));
+                symbol->setSectionIndex(sectionIdx);
+            }
         }
     }
 }
@@ -396,10 +452,16 @@ void Module::mergeExternalModule(Module& external)
     }
 
     // Recalculate header parameters
+
+    // Link local symbols
+    linkLocalSymbols();
 }
 
 void Module::marshallImpl(io::OutputStream& stream) const
 {
+    // Synchronize
+    AMANDA_SYNCHRONIZED(lock);
+
     /*
      * BINARY LAYOUT OF THE OBJECT/EXECUTABLE/LIBRARY FILE:
      *
@@ -418,17 +480,25 @@ void Module::marshallImpl(io::OutputStream& stream) const
 
     // Create the compiler message.
     vm::vm_byte_t message[88] = {0};
-    memcpy(message, compilerName.toCharArray(), compilerName.length() < 88 ? compilerName.length() : 88);
+    std::memcpy(message, compilerName.toCharArray(), compilerName.length() < 88 ? compilerName.length() : 88);
 
     // Write the magic number.
     stream.write(MAGIC_NUMBER, VM_BYTE_SIZE, 4);
     stream.write(&entryPointAddress, VM_QWORD_SIZE);
-    stream.write(&programHeaderOffset, VM_QWORD_SIZE);
+    stream.write(&stringTableOffset, VM_QWORD_SIZE);
     stream.write(&sectionHeaderEntries, VM_WORD_SIZE);
     stream.write(&sectionHeaderOffset, VM_QWORD_SIZE);
     stream.write(&version, VM_QWORD_SIZE);
     stream.write(message, VM_BYTE_SIZE, 88);
-    stream.write("\x0d\0xa");
+    stream.write("\x0d\0x0a", VM_BYTE_SIZE, 2);
+
+    // Write the section table
+    for (std::vector<Section*>::const_iterator it = sections.begin(),
+         end = sections.end(); it != end; ++it)
+    {
+        const Section::SectionHeader* header = (*it)->getSectionHeader();
+        stream.write(header, sizeof (Section::SectionHeader));
+    }
 
     //stream.write("\nsections\n");   //TODO: COMMENT
     // Write every section.
@@ -447,13 +517,8 @@ void Module::marshallImpl(io::OutputStream& stream) const
     }
     //stream.write("\nend-sections\n");   //TODO: COMMENT
 
-    // Write the section table
-    for (std::vector<Section*>::const_iterator it = sections.begin(),
-         end = sections.end(); it != end; ++it)
-    {
-        const Section::SectionHeader* header = (*it)->getSectionHeader();
-        stream.write(header, sizeof (*header));
-    }
+    // Desynchronize
+    AMANDA_DESYNCHRONIZED(lock);
 }
 
 void Module::setBinaryFormatVersion(const core::String& version)

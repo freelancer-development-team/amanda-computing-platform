@@ -40,10 +40,11 @@ class FileInputStream : public InputStream
 public:
 
     FileInputStream(const File* file);
+    FileInputStream(const File& file);
     virtual ~FileInputStream();
 
     virtual void        close() const;
-    virtual void        read(void* buffer, size_t size, size_t count) const;
+    virtual int         read(void* buffer, size_t size, size_t count) const;
     virtual void        reset() const;
     virtual void        seek(uint64_t offset) const;
     virtual uint64_t    tell() const;
@@ -51,6 +52,7 @@ public:
 private:
 
     mutable const File* file;
+    bool                inHeap;
 } ;
 
 }

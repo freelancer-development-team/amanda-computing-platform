@@ -26,7 +26,12 @@
 #define MODULEREADER_H
 
 #include <amanda-vm/IO/ConsistentInputStream.h>
+#include <amanda-vm/IO/MemoryInputStream.h>
 #include <amanda-vm/Binutils/Module.h>
+#include <amanda-vm/Logging/Logger.h>
+
+// C/C++
+#include <stack>
 
 namespace amanda
 {
@@ -46,15 +51,25 @@ class ModuleReader : public io::ConsistentInputStream
     AMANDA_OBJECT(ModuleReader, io::ConsistentInputStream)
 public:
 
+    using super::read;
+
     ModuleReader(const core::String& name, io::InputStream& stream);
     virtual ~ModuleReader();
 
     const core::String& getName() const;
+    virtual int         read(void* buffer, size_t size, size_t count) const;
     virtual Module*     read() const;
 
 protected:
 
-    core::String name;
+    static const logging::Logger& LOGGER;
+
+    core::String                    name;
+    mutable std::stack<uint64_t>    records;
+
+    void                            mark() const;
+    uint64_t                        retrieve() const;
+
 } ;
 
 }

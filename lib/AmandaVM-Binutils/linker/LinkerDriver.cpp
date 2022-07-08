@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 
 #include <amanda-vm/Binutils/LinkerDriver.h>
 #include <amanda-vm/Binutils/Serializer.h>
+#include <amanda-vm/IO/ConsistentOutputStream.h>
 
 using namespace amanda;
 using namespace amanda::binutils;
@@ -88,7 +89,9 @@ void LinkerDriver::dump() const
     // Add the output handlers
     for (unsigned i = 0; i < outputStreams.size(); ++i)
     {
-        getMasterModule().addSerializationHandler(new Serializer(outputStreams.at(i)));
+        getMasterModule().addSerializationHandler(new
+                                                  Serializer(new
+                                                             io::ConsistentOutputStream(outputStreams.at(i)->getReference())));
     }
 
     // Output the linked module
@@ -136,6 +139,8 @@ void LinkerDriver::link()
 
     // Link against the libraries.
 
+    // We're done linking, not prepare the module for marshalling
+    master->constructBinaryData();
 }
 
 

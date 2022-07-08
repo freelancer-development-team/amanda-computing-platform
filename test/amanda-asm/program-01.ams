@@ -31,7 +31,7 @@
 .endef
 
 # This function tests labels & control flow
-.def @@labels?void
+.def @@labels?nil!q64
 	push	q64	$0xdeadc0de55aa
 	push	w16	$0xFF
 	w2q
@@ -46,4 +46,7 @@
 	ret		q64
 .endef
 
+.section ".data"
+
+.local symbol1: .unicode "hello"
 

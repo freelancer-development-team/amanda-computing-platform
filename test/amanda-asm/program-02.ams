@@ -19,14 +19,56 @@
 .section ".code"
 
 # Reference the native method puts
-.native puts
+.native $c!!puts@i32@p
+.native $c!!putchar@i32@i32
 
 # This is the main function for this test program.
 .def @@main?A_string@!l32
-	push	a64 amanda::binutils::test::Fred::classname
-	ccall	puts
-	push	l32	$0xaabbccdd
+	# Allocate the loop control variable
+	alloc	$0x4
+	
+	# Push the base letter A
+.L1:
+	push	l32 $0x41
+	
+	# Load the variable allocated on the stack
+	push	a64 $0x0
+	sload	$4
+	
+	# Add the two variables and print the character
+	add		l32
+	dup		l32
+	ccall	$c!!putchar@i32@i32
+	
+	# Add one to the character previously stored at 0x0
+	push	a64 $0x0
+	sload	$4
+	push	l32 $1
+	add		l32
+	
+	# Store the character
+	push	a64	$0x0
+	sstore	$4
+	
+	# If != 0x5b jump to the first label
+	push	l32 $0x5a
+	ceq		l32
+	jf		.L1	
+	
+	# Print the new line character
+	invoke	print_nl
+	
+	# Return 0
+	push	l32 $0
 	ret		l32
+.endef
+
+.def print_nl
+	push	l32	$0x0a
+	ccall	$c!!putchar@i32@i32
+	push	l32 $0x0d
+	ccall	$c!!putchar@i32@i32
+	ret		v0
 .endef
 
 .section ".data"

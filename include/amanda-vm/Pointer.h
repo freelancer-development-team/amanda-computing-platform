@@ -64,6 +64,11 @@ public:
         return *pointer;
     }
 
+    inline bool isNotNull() const
+    {
+        return pointer != NULL;
+    }
+
     inline bool    isNull() const
     {
         return pointer == NULL;

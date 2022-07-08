@@ -73,6 +73,12 @@ typedef sdk_utf8_char_t*    sdk_utf8_str_t;
 typedef sdk_utf16_char_t*   sdk_utf16_str_t;
 typedef sdk_utf32_char_t*   sdk_utf32_str_t;
 
+/* Fixed size integers */
+typedef uint8_t         sdk_u8_t;
+typedef uint16_t        sdk_u16_t;
+typedef uint32_t        sdk_u32_t;
+typedef uint64_t        sdk_u64_t;
+
 #ifdef __cplusplus
 }
 #endif

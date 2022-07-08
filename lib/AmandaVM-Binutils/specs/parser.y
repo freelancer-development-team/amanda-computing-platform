@@ -157,20 +157,27 @@ void yyerror(YYLTYPE* location, void* scanner, void** module, void* state, char 
 // Instructions
 %token
     ADD         "add instruction"
-    ALLOC       "allocation instruction"
+    ALLOCA      "stack allocation instruction"
     CCALL       "native call instruction"
-    DELLOC      "deallocation instruction"
+    DELLOC      "heap deallocation instruction"
     DIV         "div instruction"
+    DUP         "dup instruction"
     INVOKE      "call instruction"
     JF          "jump-if-false instruction"
     JUMP        "jump instruction"
     JT          "jump-if-true instruction"
+    LOAD        "load instruction"
+    ILOAD       "load-by-index instruction"
+    MALLOC      "heap allocation instruction"
     MOD         "mod instruction"
     MUL         "mul instruction"
     POP         "pop instruction"
     PUSH        "push instruction"
     RET         "return instruction"
+    SLOAD       "stack memory load instruction"
     SUB         "sub instruction"
+    STORE       "store instruction"
+    SSTORE      "stack write instruction"
     ;
 
 %token
@@ -193,10 +200,14 @@ void yyerror(YYLTYPE* location, void* scanner, void** module, void* state, char 
 %token
     CEQ         "compare-equals instruction"
     CNE         "compare-non-equals instruction"
+    CGT         "compare-greater instruction"
+    CLT         "compare-lesser instruction"
+    CGE         "compare-greater-equals instruction"
+    CLE         "compare-lesser-equals instruction"
     ;
 
 %token
-    ';'     "semicolon delimiter"
+    ';'         "semicolon delimiter"
     ;
 
 // Token with semantic values
@@ -313,15 +324,15 @@ attributes_declaration
 
 constant_declaration
     : ADDRESS INTEGER_LITERAL               { STATE(state)->currentObject->addData(&($2), VM_ADDRESS_SIZE);  }
-    | UNICODE STRING_LITERAL                { STATE(state)->currentObject->addUtf8Data($2->toCharArray(), $2->length()); }
+    | UNICODE STRING_LITERAL                { STATE(state)->currentObject->addUtf8Data($2->toCharArray(), $2->length() + 1); }
     | LONG INTEGER_LITERAL                  { STATE(state)->currentObject->addData(&($2), VM_DWORD_SIZE); }
     | QUAD INTEGER_LITERAL                  { STATE(state)->currentObject->addData(&($2), VM_QWORD_SIZE); }
     ;
 
 // Instructions
 instruction_sequence
-    : instruction                           { $$ = new std::vector<amanda::binutils::Instruction*>(); $$->push_back($1); if (!($1->is<Label>())) STATE(state)->localOffset++; }
-    | instruction_sequence instruction      { $$ = $1; $$->push_back($2); if (!($2->is<Label>())) STATE(state)->localOffset++; }
+    : instruction                           { $$ = new std::vector<amanda::binutils::Instruction*>(); $$->push_back($1); if (!($1->is<Label>())) STATE(state)->localOffset += $1->getSize(); }
+    | instruction_sequence instruction      { $$ = $1; $$->push_back($2); if (!($2->is<Label>())) STATE(state)->localOffset += $2->getSize(); }
     | %empty                                { $$ = new std::vector<amanda::binutils::Instruction*>(); }
     ;
 
@@ -335,7 +346,12 @@ zeroed_instruction
     : ADD INSTRUCTION_SUFFIX                { $$ = new Instruction(AMANDA_VM_INSN_FAMILY(ADD) + Instruction::getInstructionNumericSuffix($2), 0); }
     | CEQ INSTRUCTION_SUFFIX                { $$ = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(CEQ), $2); }
     | CNE INSTRUCTION_SUFFIX                { $$ = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(CNE), $2); }
+    | CGT INSTRUCTION_SUFFIX                { $$ = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(CGT), $2); }
+    | CLT INSTRUCTION_SUFFIX                { $$ = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(CLT), $2); }
+    | CGE INSTRUCTION_SUFFIX                { $$ = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(CGE), $2); }
+    | CLE INSTRUCTION_SUFFIX                { $$ = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(CLE), $2); }
     | DIV INSTRUCTION_SUFFIX                { $$ = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(DIV), $2); }
+    | DUP INSTRUCTION_SUFFIX                { $$ = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(DUP), $2); }
     | POP INSTRUCTION_SUFFIX                { $$ = new Instruction(AMANDA_VM_INSN_FAMILY(POP) + Instruction::getInstructionNumericSuffix($2), 0); }
     | RET INSTRUCTION_SUFFIX                { $$ = new Instruction(AMANDA_VM_INSN_FAMILY(RET) + Instruction::getInstructionNumericSuffix($2), 0); }
     | SUB INSTRUCTION_SUFFIX                { $$ = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(SUB), $2); }
@@ -369,12 +385,35 @@ unary_instruction
     // Stack
     | PUSH INSTRUCTION_SUFFIX argument      { $$ = as::createUnaryInstruction(AMANDA_VM_INSN_FAMILY(PUSH), $2); $$->setOperand($3); }
     // Memory management
-    | ALLOC INTEGER_LITERAL                 {
-                                                $$ = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(ALLOC), VM_QWORD_SIZE);
+    | ALLOCA INTEGER_LITERAL                {
+                                                $$ = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(ALLOCA), VM_QWORD_SIZE);
                                                 Operand* operand = new Operand($2); $$->setOperand(operand);
                                             }
     | DELLOC INTEGER_LITERAL                {
                                                 $$ = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(DELLOC), VM_QWORD_SIZE);
+                                                Operand* operand = new Operand($2); $$->setOperand(operand);
+                                            }
+    | LOAD IDENTIFIER                       {
+                                                $$ = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(LOAD), VM_ADDRESS_SIZE);
+
+                                                Operand* operand = new Operand(*$2); $$->setOperand(operand);
+                                                delete $2;
+                                            }
+    | ILOAD IDENTIFIER                      {
+                                                $$ = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(ILOAD), VM_ADDRESS_SIZE);
+                                                Operand* operand = new Operand(*$2); $$->setOperand(operand);
+                                                delete $2;
+                                            }
+    | SLOAD INTEGER_LITERAL                 {
+                                                $$ = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(SLOAD), VM_ADDRESS_SIZE);
+                                                Operand* operand = new Operand($2); $$->setOperand(operand);
+                                            }
+    | STORE INSTRUCTION_SUFFIX argument     {
+                                                $$ = as::createUnaryInstruction(AMANDA_VM_INSN_FAMILY(STORE), $2);
+                                                $$->setOperand($3); 
+                                            }
+    | SSTORE INTEGER_LITERAL                {
+                                                $$ = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(SSTORE), VM_ADDRESS_SIZE);
                                                 Operand* operand = new Operand($2); $$->setOperand(operand);
                                             }
     ;

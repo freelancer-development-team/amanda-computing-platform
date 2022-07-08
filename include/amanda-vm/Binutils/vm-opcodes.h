@@ -151,7 +151,15 @@ typedef enum VM_Opcodes
     I_POPF,
     I_POPD,
     I_POPA,
-            
+
+    I_DUPB,
+    I_DUPW,
+    I_DUPL,
+    I_DUPQ,
+    I_DUPF,
+    I_DUPD,
+    I_DUPA,
+
     // Comparison
     I_CEQB,
     I_CEQW,
@@ -159,6 +167,7 @@ typedef enum VM_Opcodes
     I_CEQQ,
     I_CEQF,
     I_CEQD,
+    I_CEQA,
 
     I_CNEB,
     I_CNEW,
@@ -166,11 +175,39 @@ typedef enum VM_Opcodes
     I_CNEQ,
     I_CNEF,
     I_CNED,
+    I_CNEA,
 
-    I_CGT,
-    I_CLT,
-    I_CGE,
-    I_CLE,
+    I_CGTB,
+    I_CGTW,
+    I_CGTL,
+    I_CGTQ,
+    I_CGTF,
+    I_CGTD,
+    I_CGTA,
+
+    I_CLTB,
+    I_CLTW,
+    I_CLTL,
+    I_CLTQ,
+    I_CLTF,
+    I_CLTD,
+    I_CLTA,
+
+    I_CGEB,
+    I_CGEW,
+    I_CGEL,
+    I_CGEQ,
+    I_CGEF,
+    I_CGED,
+    I_CGEA,
+
+    I_CLEB,
+    I_CLEW,
+    I_CLEL,
+    I_CLEQ,
+    I_CLEF,
+    I_CLED,
+    I_CLEA,
 
     // Flow control
     I_INVOKE,
@@ -185,12 +222,26 @@ typedef enum VM_Opcodes
     I_RETQ,
     I_RETF,
     I_RETD,
+    I_RETA,
+    I_RETV,
 
     // Memory access
-    I_ALLOC,
+    I_ALLOCA,
+    I_MALLOC,
     I_DELLOC,
-    I_STORE,
+
     I_LOAD,
+    I_ILOAD,
+    I_SLOAD,
+
+    I_STOREB,
+    I_STOREW,
+    I_STOREL,
+    I_STOREQ,
+    I_STOREF,
+    I_STORED,
+
+    I_SSTORE,
 
     // Reserved
     I_INVALID = 0xFF

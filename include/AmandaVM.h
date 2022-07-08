@@ -26,13 +26,33 @@
 #define AMANDAVM_H
 
 // Runtime Library
-#include <amanda-vm/Runtime/BaseExceptions.h>
+#include <amanda-vm/Runtime/AdaptiveOptimizationCondition.h>
+#include <amanda-vm/Runtime/Context.h>
+#include <amanda-vm/Runtime/ExecutableModule.h>
+#include <amanda-vm/Runtime/FileSystem.h>
+#include <amanda-vm/Runtime/IllegalInstructionException.h>
+#include <amanda-vm/Runtime/IllegalStateException.h>
+#include <amanda-vm/Runtime/InvalidAllocationError.h>
+#include <amanda-vm/Runtime/InvalidResourceIdentifierException.h>
 #include <amanda-vm/Runtime/JitContext.h>
+#include <amanda-vm/Runtime/LinkageError.h>
+#include <amanda-vm/Runtime/LocklessDefaultAllocator.h>
+#include <amanda-vm/Runtime/MemoryAllocator.h>
+#include <amanda-vm/Runtime/MemoryManager.h>
 #include <amanda-vm/Runtime/MirJitContext.h>
+#include <amanda-vm/Runtime/ModuleLoader.h>
+#include <amanda-vm/Runtime/NativeCProcedure.h>
+#include <amanda-vm/Runtime/NativeProcedure.h>
+#include <amanda-vm/Runtime/NativeThreadScheduler.h>
 #include <amanda-vm/Runtime/NullJitContext.h>
-#include <amanda-vm/Runtime/VMContext.h>
-#include <amanda-vm/Runtime/VMStack.h>
-#include <amanda-vm/Runtime/VMThreadContext.h>
+#include <amanda-vm/Runtime/OutOfMemoryError.h>
+#include <amanda-vm/Runtime/Procedure.h>
+#include <amanda-vm/Runtime/ResourceIdentifier.h>
+#include <amanda-vm/Runtime/Schedulable.h>
+#include <amanda-vm/Runtime/SegmentationFault.h>
+#include <amanda-vm/Runtime/Stack.h>
+#include <amanda-vm/Runtime/ThreadScheduler.h>
+#include <amanda-vm/Runtime/UnschedulableException.h>
 
 // The Amanda Core Libraries
 #include <AmandaSDK.h>
