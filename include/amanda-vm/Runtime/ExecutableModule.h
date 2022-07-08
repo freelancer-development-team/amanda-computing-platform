@@ -66,6 +66,7 @@ public:
 
     void                                        addSection(const core::String& name, const binutils::Section::SectionHeader& section);
     void                                        cacheLocalProcedure(const core::String& name, Procedure* proc);
+    const binutils::Section::SectionHeader&     findSection(const unsigned index) const;
     const binutils::Section::SectionHeader&     findSection(const core::String& name) const;
     const core::String                          findSymbolName(const vm::vm_qword_t offset) const;
     const binutils::Symbol::SymbolTableEntry*   findSymbol(const core::String& name, int type) const;
@@ -86,6 +87,7 @@ private:
     ExecutableHeader                                                    header;
     core::String                                                        name;
     std::map<core::String, binutils::Section::SectionHeader>            sections;
+    std::vector<binutils::Section::SectionHeader*>                      sectionsVector;
     vm::vm_size_t                                                       size;
     mutable SymbolCache                                                 symbols;
 

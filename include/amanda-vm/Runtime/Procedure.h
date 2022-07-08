@@ -66,6 +66,7 @@ public:
      */
     struct ProcessorFlags
     {
+        vm::vm_qword_t  m_pc : 48;
         vm::vm_byte_t   m_zf : 1;
     } __attribute__((packed));
     typedef struct ProcessorFlags ProcessorFlags;
@@ -74,6 +75,7 @@ public:
     virtual ~Procedure();
 
     void                addOptimizationCriteria(const AdaptiveOptimizationCondition* criteria);
+    void                augmentProgramCounter(vm::vm_qword_t& pc, const vm::vm_size_t size) const;
     virtual bool        equals(const Object* object);
     vm::vm_qword_t      execute(Stack& stack, ProcessorFlags& eflags);
     vm::vm_qword_t      executeInterpreted(Stack& stack, ProcessorFlags& eflags);
@@ -84,8 +86,18 @@ public:
     const bool          isZeroFlagSet(ProcessorFlags& eflags) const;
     void                jumpToLocalAddress(const vm::vm_address_t offset) const;
     void                optimize();
+    void                readFromPool(void* result, const void* pool, size_t& offset, const size_t size) const;
     void                setExecutableModule(ExecutableModule& module);
     bool                shouldOptimize() const;
+
+    template <typename T>
+    T                   readFromPool(const void* pool, size_t offset)
+    {
+        T result;
+        readFromPool(&result, pool, offset, sizeof (T));
+
+        return result;
+    }
 
 protected:
 

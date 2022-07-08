@@ -197,6 +197,13 @@ Symbol& Symbol::setSection(Section* section)
     return *this;
 }
 
+Symbol& Symbol::setSectionIndex(unsigned index)
+{
+    this->entry.shndx = index;
+
+    return *this;
+}
+
 Symbol& Symbol::setStringTableEntry(vm::vm_dword_t entry)
 {
     this->entry.name = entry;

@@ -366,6 +366,11 @@ const Procedure* Context::getCachedLocalProcedure(const core::String& name) cons
     return cachedProcedures.find(name)->second;
 }
 
+MemoryAllocator& Context::getMemoryAllocator() const
+{
+    return memoryAllocator->getReference();
+}
+
 const core::String& Context::getProperty(const core::String& key) const
 {
     return properties.at(key);
@@ -418,12 +423,9 @@ int Context::loadAndExecute(const core::String& fullPath)
 
         // Get the current time & date
         std::time_t localtime = std::time(NULL);
-        char*   localCTime = std::ctime(&localtime);
-        char    strLocalTime[128] = {0};
-        size_t  localCTimeSize = strlen(localCTime) - 1;
-        std::strncpy(strLocalTime, localCTime, localCTimeSize);
+        core::String strLocalTime(std::ctime(&localtime));
 
-        LOGGER.info("execution started (local date & time: %s)", strLocalTime);
+        LOGGER.info("execution started (local date & time: %s)", strLocalTime.substring(0, strLocalTime.length() - 1).toCharArray());
         core::StrongReference<const Schedulable> mainSchedulable = scheduler->schedule(mainProcedure).getSelfPointer();
 
         // Wait until this thread (and all the spawned threads) finishes executing

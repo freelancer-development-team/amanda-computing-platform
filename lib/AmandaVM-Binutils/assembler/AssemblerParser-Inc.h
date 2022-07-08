@@ -76,41 +76,49 @@ extern int yydebug;
     T_CCALL = 277,                 /* "native call instruction"  */
     T_DELLOC = 278,                /* "heap deallocation instruction"  */
     T_DIV = 279,                   /* "div instruction"  */
-    T_INVOKE = 280,                /* "call instruction"  */
-    T_JF = 281,                    /* "jump-if-false instruction"  */
-    T_JUMP = 282,                  /* "jump instruction"  */
-    T_JT = 283,                    /* "jump-if-true instruction"  */
-    T_LOAD = 284,                  /* "load instruction"  */
-    T_MALLOC = 285,                /* "heap allocation instruction"  */
-    T_MOD = 286,                   /* "mod instruction"  */
-    T_MUL = 287,                   /* "mul instruction"  */
-    T_POP = 288,                   /* "pop instruction"  */
-    T_PUSH = 289,                  /* "push instruction"  */
-    T_RET = 290,                   /* "return instruction"  */
-    T_SUB = 291,                   /* "sub instruction"  */
-    T_STORE = 292,                 /* "store instruction"  */
-    T_B2W = 293,                   /* "byte-to-word instruction"  */
-    T_B2L = 294,                   /* B2L  */
-    T_B2Q = 295,                   /* B2Q  */
-    T_B2F = 296,                   /* B2F  */
-    T_B2D = 297,                   /* B2D  */
-    T_W2L = 298,                   /* W2L  */
-    T_W2Q = 299,                   /* "word-to-quad instruction"  */
-    T_W2F = 300,                   /* W2F  */
-    T_W2D = 301,                   /* W2D  */
-    T_L2Q = 302,                   /* L2Q  */
-    T_L2F = 303,                   /* L2F  */
-    T_L2D = 304,                   /* L2D  */
-    T_Q2F = 305,                   /* Q2F  */
-    T_Q2D = 306,                   /* Q2D  */
-    T_CEQ = 307,                   /* "compare-equals instruction"  */
-    T_CNE = 308,                   /* "compare-non-equals instruction"  */
-    T_IDENTIFIER = 309,            /* "identifier"  */
-    T_INSTRUCTION_SUFFIX = 310,    /* "instruction suffix"  */
-    T_STRING_LITERAL = 311,        /* "string literal"  */
-    T_INTEGER_LITERAL = 312,       /* "integer literal"  */
-    T_FP_LITERAL = 313,            /* "floating point literal"  */
-    T_ADDRESS_CONSTANT = 314       /* "address constant"  */
+    T_DUP = 280,                   /* "dup instruction"  */
+    T_INVOKE = 281,                /* "call instruction"  */
+    T_JF = 282,                    /* "jump-if-false instruction"  */
+    T_JUMP = 283,                  /* "jump instruction"  */
+    T_JT = 284,                    /* "jump-if-true instruction"  */
+    T_LOAD = 285,                  /* "load instruction"  */
+    T_ILOAD = 286,                 /* "load-by-index instruction"  */
+    T_MALLOC = 287,                /* "heap allocation instruction"  */
+    T_MOD = 288,                   /* "mod instruction"  */
+    T_MUL = 289,                   /* "mul instruction"  */
+    T_POP = 290,                   /* "pop instruction"  */
+    T_PUSH = 291,                  /* "push instruction"  */
+    T_RET = 292,                   /* "return instruction"  */
+    T_SLOAD = 293,                 /* "stack memory load instruction"  */
+    T_SUB = 294,                   /* "sub instruction"  */
+    T_STORE = 295,                 /* "store instruction"  */
+    T_SSTORE = 296,                /* "stack write instruction"  */
+    T_B2W = 297,                   /* "byte-to-word instruction"  */
+    T_B2L = 298,                   /* B2L  */
+    T_B2Q = 299,                   /* B2Q  */
+    T_B2F = 300,                   /* B2F  */
+    T_B2D = 301,                   /* B2D  */
+    T_W2L = 302,                   /* W2L  */
+    T_W2Q = 303,                   /* "word-to-quad instruction"  */
+    T_W2F = 304,                   /* W2F  */
+    T_W2D = 305,                   /* W2D  */
+    T_L2Q = 306,                   /* L2Q  */
+    T_L2F = 307,                   /* L2F  */
+    T_L2D = 308,                   /* L2D  */
+    T_Q2F = 309,                   /* Q2F  */
+    T_Q2D = 310,                   /* Q2D  */
+    T_CEQ = 311,                   /* "compare-equals instruction"  */
+    T_CNE = 312,                   /* "compare-non-equals instruction"  */
+    T_CGT = 313,                   /* "compare-greater instruction"  */
+    T_CLT = 314,                   /* "compare-lesser instruction"  */
+    T_CGE = 315,                   /* "compare-greater-equals instruction"  */
+    T_CLE = 316,                   /* "compare-lesser-equals instruction"  */
+    T_IDENTIFIER = 317,            /* "identifier"  */
+    T_INSTRUCTION_SUFFIX = 318,    /* "instruction suffix"  */
+    T_STRING_LITERAL = 319,        /* "string literal"  */
+    T_INTEGER_LITERAL = 320,       /* "integer literal"  */
+    T_FP_LITERAL = 321,            /* "floating point literal"  */
+    T_ADDRESS_CONSTANT = 322       /* "address constant"  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -129,7 +137,7 @@ union YYSTYPE
     amanda::binutils::Instruction*                  insn;
     amanda::binutils::Operand*                      operand;
 
-#line 133 "assembler/AssemblerParser-Inc.h"
+#line 141 "assembler/AssemblerParser-Inc.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -164,6 +172,6 @@ int yyparse (void* scanner, void** module, void* state);
     // C++
     #include <vector>
 
-#line 168 "assembler/AssemblerParser-Inc.h"
+#line 176 "assembler/AssemblerParser-Inc.h"
 
 #endif /* !YY_YY_ASSEMBLER_ASSEMBLERPARSER_INC_H_INCLUDED  */

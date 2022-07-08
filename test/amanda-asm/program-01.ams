@@ -46,4 +46,7 @@
 	ret		q64
 .endef
 
+.section ".data"
+
+.local symbol1: .unicode "hello"
 

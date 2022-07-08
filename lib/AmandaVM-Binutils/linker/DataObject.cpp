@@ -23,6 +23,7 @@
  */
 
 #include <amanda-vm/Binutils/DataObject.h>
+#include <amanda-vm/Binutils/Symbol.h>
 
 // C++
 #include <cstdlib>
@@ -62,6 +63,9 @@ void DataObject::addData(const void* data, size_t size)
 
     // Append the pointer to the list of data
     this->data.push_back(tdata);
+
+    // Set the new size
+    setSize(calculateSize());
 }
 
 void DataObject::addUtf8Data(const char* data, size_t size)
@@ -72,6 +76,17 @@ void DataObject::addUtf8Data(const char* data, size_t size)
 
     // Set the UTF8 flag
     this->data.back()->utf8 = true;
+}
+
+size_t DataObject::calculateSize() const
+{
+    size_t result = 0;
+    for (std::vector<TaggedData*>::const_iterator it = data.begin(),
+         end = data.end(); it != end; ++it)
+    {
+        result += (*it)->size;
+    }
+    return result;
 }
 
 void DataObject::constructBinaryData()
@@ -88,6 +103,14 @@ void DataObject::constructBinaryData()
             write((*it)->buffer, (*it)->size, 1);
         }
     }
+
+    // Set the object size
+    entry.size = calculateSize();
+}
+
+size_t DataObject::getSize() const
+{
+    return entry.size;
 }
 
 DataObject::TaggedData* DataObject::makeTag(size_t size) const

@@ -119,6 +119,7 @@ public:
     Symbol&                 setModule(Module* module);
     Symbol&                 setResolved(bool resolved);
     Symbol&                 setSection(Section* section);
+    Symbol&                 setSectionIndex(unsigned index);
     Symbol&                 setStringTableEntry(vm::vm_dword_t entry);
     Symbol&                 setSize(size_t size);
     Symbol&                 setType(vm::vm_byte_t type);

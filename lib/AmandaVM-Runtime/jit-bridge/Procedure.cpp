@@ -36,10 +36,12 @@
 // C/C++
 #include <ck_spinlock.h>
 #include <csignal>
+#include <cstdlib>
 
 // Foreign function interface
 #include <ffi.h>
 #include <ffitarget.h>
+#include <stdlib.h>
 
 using namespace amanda;
 using namespace amanda::vm;
@@ -75,6 +77,11 @@ void Procedure::addOptimizationCriteria(const AdaptiveOptimizationCondition* cri
 
     // Push it into the list
     optimizationCritera.push_back(criteria);
+}
+
+void Procedure::augmentProgramCounter(vm::vm_qword_t& pc, const vm::vm_size_t size) const
+{
+    pc += size;
 }
 
 bool Procedure::equals(const Object* object)
@@ -176,7 +183,7 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
                 stack.pop(BYTEPOINTER(operand2), VM_WORD_SIZE);
                 result = operand1 + operand2;
 
-                stack.push(BYTEPOINTER(result), VM_WORD_SIZE);
+                stack.push(BYTEPOINTER(result), VM_WORD_SIZE, false);
                 break;
             }
             case I_ADDL:
@@ -189,7 +196,7 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
                 stack.pop(BYTEPOINTER(operand2), VM_DWORD_SIZE);
                 result = operand1 + operand2;
 
-                stack.push(BYTEPOINTER(result), VM_DWORD_SIZE);
+                stack.push(BYTEPOINTER(result), VM_DWORD_SIZE, false);
                 break;
             }
             case I_ADDQ:
@@ -202,7 +209,7 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
                 stack.pop(BYTEPOINTER(operand2), VM_QWORD_SIZE);
                 result = operand1 + operand2;
 
-                stack.push(BYTEPOINTER(result), VM_QWORD_SIZE);
+                stack.push(BYTEPOINTER(result), VM_QWORD_SIZE, false);
                 break;
             }
             case I_CCALL:
@@ -246,6 +253,35 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
                 }
                 break;
             }
+            
+#define DUPLICATE(T) \
+                T value = 0; \
+                stack.peek(BYTEPOINTER(value), sizeof(T)); \
+                stack.push(BYTEPOINTER(value), sizeof(T), false); \
+                break
+            
+            case I_DUPB:
+            {
+                DUPLICATE(vm::vm_byte_t);
+            }
+            case I_DUPW:
+            {
+                DUPLICATE(vm::vm_word_t);
+            }
+            case I_DUPL:
+            {
+                vm::vm_dword_t value = 0;
+                stack.peek(BYTEPOINTER(value), VM_DWORD_SIZE);
+                stack.push(BYTEPOINTER(value), VM_DWORD_SIZE, false);
+
+                //LOGGER.info("value: 0x%x", value);
+                break;
+            }
+            case I_DUPQ:
+            {
+                DUPLICATE(vm::vm_qword_t);
+            }
+#undef DUPLICATE
             case I_INVOKE:
             {
                 vm::vm_address_t jumpTarget = 0;
@@ -285,7 +321,7 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
             }
             case I_JF:
             {
-                vm::vm_qword_t address = *((vm::vm_qword_t*) pool + ip);
+                vm::vm_qword_t address = readFromPool<vm::vm_qword_t>(pool, ip);
                 ip += VM_ADDRESS_SIZE;
 
                 if (!isZeroFlagSet(eflags))
@@ -296,7 +332,7 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
             }
             case I_JMP:
             {
-                vm::vm_qword_t address = *((vm::vm_qword_t*) pool + ip);
+                vm::vm_qword_t address = readFromPool<vm::vm_qword_t>(pool, ip);
                 ip += VM_ADDRESS_SIZE;
 
                 jumpToLocalAddress(address);
@@ -304,7 +340,7 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
             }
             case I_JT:
             {
-                vm::vm_qword_t address = *((vm::vm_qword_t*) pool + ip);
+                vm::vm_qword_t address = readFromPool<vm::vm_qword_t>(pool, ip);
                 ip += VM_ADDRESS_SIZE;
 
                 if (isZeroFlagSet(eflags))
@@ -315,16 +351,12 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
             }
             case I_LOAD:
             {
-                vm::vm_address_t address = *((vm::vm_qword_t*) pool + ip);
+                vm::vm_address_t address = readFromPool<vm::vm_address_t>(pool, ip);
                 ip += VM_QWORD_SIZE;
 
-                // Switch endianness
-                if (!io::isMachineBigEndian())
-                {
-                    io::swapEndianness(&address, VM_QWORD_SIZE);
-                }
-
+                // Log the request
                 LOGGER.debug("requesting load from address 0x%llx", address);
+                
                 break;
             }
             case I_PUSHA:
@@ -389,6 +421,12 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
                 rflag = 1;
                 break;
             }
+            case I_RETV:
+            {
+                rvsize = 0;
+                rflag = 1;
+                break;
+            } 
 #define SUBSTRACTION(type, size) \
             type substractor = 0; \
             type substrahend = 0; \
@@ -398,7 +436,7 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
             stack.pop(BYTEPOINTER(substrahend), size); \
             result = substrahend - substractor; \
             \
-            stack.push(BYTEPOINTER(result), size); \
+            stack.push(BYTEPOINTER(result), size, false); \
             break
 
             case I_SUBB:
@@ -475,15 +513,151 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
                 break;
             }
 #undef COMPARE_EQUALS
+#define COMPARE_NOT_EQUALS(type) \
+            type operand1 = 0; \
+            type operand2 = 0; \
+            \
+            operand1 = stack.pop<type>(); \
+            operand2 = stack.pop<type>(); \
+            eflags.m_zf = (operand1 != operand2) ? ONE : ZERO; \
+            break
+
+            case I_CNEB:
+            {
+                COMPARE_NOT_EQUALS(vm::vm_byte_t);
+            }
+            case I_CNEW:
+            {
+                COMPARE_NOT_EQUALS(vm::vm_word_t);
+            }
+            case I_CNEL:
+            {
+                COMPARE_NOT_EQUALS(vm::vm_dword_t);
+            }
+            case I_CNEQ:
+            {
+                COMPARE_NOT_EQUALS(vm::vm_qword_t);
+            }
+
+#undef COMPARE_NOT_EQUALS
+#define COMPARE_LT(type) \
+            type operand1 = 0; \
+            type operand2 = 0; \
+            \
+            operand1 = stack.pop<type>(); \
+            operand2 = stack.pop<type>(); \
+            eflags.m_zf = (operand1 < operand2) ? ONE : ZERO; \
+            break
+
+            case I_CLTB:
+            {
+                COMPARE_LT(vm::vm_byte_t);
+            }
+            case I_CLTW:
+            {
+                COMPARE_LT(vm::vm_word_t);
+            }
+            case I_CLTL:
+            {
+                COMPARE_LT(vm::vm_dword_t);
+            }
+            case I_CLTQ:
+            {
+                COMPARE_LT(vm::vm_qword_t);
+            }
+
+#undef COMPARE_LT
+#define COMPARE_GT(type) \
+            type operand1 = 0; \
+            type operand2 = 0; \
+            \
+            operand1 = stack.pop<type>(); \
+            operand2 = stack.pop<type>(); \
+            eflags.m_zf = (operand1 > operand2) ? ONE : ZERO; \
+            break
+
+            case I_CGTB:
+            {
+                COMPARE_GT(vm::vm_byte_t);
+            }
+            case I_CGTW:
+            {
+                COMPARE_GT(vm::vm_word_t);
+            }
+            case I_CGTL:
+            {
+                COMPARE_GT(vm::vm_dword_t);
+            }
+            case I_CGTQ:
+            {
+                COMPARE_GT(vm::vm_qword_t);
+            }
+
+#undef COMPARE_GT
+#define COMPARE_GE(type) \
+            type operand1 = 0; \
+            type operand2 = 0; \
+            \
+            operand1 = stack.pop<type>(); \
+            operand2 = stack.pop<type>(); \
+            eflags.m_zf = (operand1 >= operand2) ? ONE : ZERO; \
+            break
+
+            case I_CGEB:
+            {
+                COMPARE_GE(vm::vm_byte_t);
+            }
+            case I_CGEW:
+            {
+                COMPARE_GE(vm::vm_word_t);
+            }
+            case I_CGEL:
+            {
+                COMPARE_GE(vm::vm_dword_t);
+            }
+            case I_CGEQ:
+            {
+                COMPARE_GE(vm::vm_qword_t);
+            }
+
+#undef COMPARE_GE
+#define COMPARE_LE(type) \
+            type operand1 = 0; \
+            type operand2 = 0; \
+            \
+            operand1 = stack.pop<type>(); \
+            operand2 = stack.pop<type>(); \
+            eflags.m_zf = (operand1 <= operand2) ? ONE : ZERO; \
+            break
+
+            case I_CLEB:
+            {
+                COMPARE_LE(vm::vm_byte_t);
+            }
+            case I_CLEW:
+            {
+                COMPARE_LE(vm::vm_word_t);
+            }
+            case I_CLEL:
+            {
+                COMPARE_LE(vm::vm_dword_t);
+            }
+            case I_CLEQ:
+            {
+                COMPARE_LE(vm::vm_qword_t);
+            }
+
+#undef COMPARE_LE
                 // Memory operations
             case I_ALLOCA:
             {
-                vm::vm_size_t size = *((vm::vm_size_t*) pool + ip);
-                ip += sizeof (vm_size_t);
+                vm::vm_qword_t size = 0;
+                std::memmove(&size, pool + ip, VM_QWORD_SIZE);
+                ip += VM_QWORD_SIZE;
 
                 if (!io::isMachineBigEndian())
                 {
-                    io::swapEndianness((vm::vm_byte_t*) &size, sizeof(vm::vm_size_t));
+                    io::swapEndianness((vm::vm_byte_t*) (&size), sizeof (vm::vm_size_t));
                 }
 
                 LOGGER.trace("requested stack allocation for 0x%llx bytes.", size);
@@ -498,6 +672,72 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
             {
                 break;
             }
+            case I_ILOAD:
+            {
+                // Find the symbol with that index in the symbol table
+                vm::vm_qword_t symbolIndex = readFromPool<vm::vm_qword_t>(pool, ip);
+                augmentProgramCounter(ip, VM_QWORD_SIZE);
+
+                LOGGER.info("requesting load by index: 0x%llx", symbolIndex);
+                if (symbolIndex > executableModule->getSymbolCount())
+                {
+                    LOGGER.error("illegal load-by-index, index out of bounds (%llu)", symbolIndex);
+                    throw IllegalStateException("illegal load-by-index, symbol index out of bounds.");
+                }
+                const binutils::Symbol::SymbolTableEntry* symbol = executableModule->findSymbol(symbolIndex);
+                //const core::String symbolName = executableModule->findSymbolName(symbol->name);
+
+                if (symbol->bind != binutils::Symbol::Bind_Extern)
+                {
+                    unsigned sectionIndex = symbol->shndx;
+                    const binutils::Section::SectionHeader& shdr = executableModule->findSection(sectionIndex);
+
+                    vm::vm_address_t totalAddress = shdr.address + symbol->value;
+                    stack.push(totalAddress);
+
+                    LOGGER.debug("loaded heap pointer into stack, calculated offset is 0x%llx", totalAddress);
+                }
+                else
+                {
+                    LOGGER.fatal("illegal load-by-index instruction.");
+                    std::raise(SIGSEGV);
+                }
+                break;
+            }
+            case I_SLOAD:
+            {
+                vm::vm_ptrdiff_t    offset = stack.pop<vm::vm_ptrdiff_t>();
+                vm::vm_qword_t      length = readFromPool<vm::vm_qword_t>(pool, ip);
+                augmentProgramCounter(ip, VM_QWORD_SIZE);
+
+                LOGGER.trace("requested stack load with offset 0x%llx and length %llu bytes.",
+                             offset, length);
+
+                // Read to the buffer
+                void* buffer = std::malloc(length);
+                stack.read(buffer, offset, length);
+
+                // Push the data into the buffer
+                stack.push((vm_byte_t*) buffer, length, false);
+
+                // Free the intermediate buffer
+                std::free(buffer);
+                break;
+            }
+            case I_SSTORE:
+            {
+                vm::vm_ptrdiff_t    offset = stack.pop<vm::vm_ptrdiff_t>();
+                vm::vm_qword_t      length = readFromPool<vm::vm_qword_t>(pool, ip);
+                augmentProgramCounter(ip, VM_QWORD_SIZE);
+
+                LOGGER.trace("required stack write with offset 0x%llx and length %llu bytes.",
+                             offset, length);
+
+                // Write the results into the requested area
+                stack.write(stack.dma(length), offset, length);
+                break;
+            }
+                // Default case (it is an error)
             default:
             {
                 LOGGER.error("the virtual machine attempted to execute an invalid operation <0x%x> (pc: 0x%llx)", opcode, ip);
@@ -506,7 +746,8 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
         }
     }
 
-    LOGGER.trace("function returning %llu bytes.", rvsize);
+    LOGGER.trace("function returning %llu bytes. Setting the instruction pointer to zero", rvsize);
+    ip = 0;
     return rvsize;
 
 #undef BYTEPOINTER
@@ -552,6 +793,7 @@ const bool Procedure::isZeroFlagSet(ProcessorFlags& eflags) const
 
 void Procedure::jumpToLocalAddress(const vm::vm_address_t offset) const
 {
+    LOGGER.trace("branched execution to local offset 0x%llx", offset);
     ip = offset;
 }
 
@@ -572,6 +814,15 @@ void Procedure::optimize()
     else
     {
         runnable.run();
+    }
+}
+
+void Procedure::readFromPool(void* result, const void* pool, size_t& offset, const size_t size) const
+{
+    std::memmove(result, ((char*) pool) + offset, size);
+    if (!io::isMachineBigEndian())
+    {
+        io::swapEndianness(result, size);
     }
 }
 

@@ -173,6 +173,7 @@ Address         {IntegerLiteral}
                             }
 <STRING>\\[0-9]+            { throw SyntaxError(as::makeLocation(yylloc), "bad escape sequence in string literal."); }
 <STRING>\\n                 { *string_buf_ptr++ = '\n'; }
+<STRING>\\t                 { *string_buf_ptr++ = '\t'; }
 
 <STRING>\\(.|\n)            { *string_buf_ptr++ = yytext[1]; }
 <STRING>[^\\\n\"]+          {
@@ -234,14 +235,22 @@ Address         {IntegerLiteral}
 "alloc"                     { return T_ALLOCA; }
 "malloc"                    { return T_MALLOC; }
 "delloc"                    { return T_DELLOC; }
+"iload"                     { return T_ILOAD; }
 "load"                      { return T_LOAD; }
+"sload"                     { return T_SLOAD; }
 "store"                     { return T_STORE; }
+"sstore"                    { return T_SSTORE; }
 
 "ceq"                       { return T_CEQ; }
 "cne"                       { return T_CNE; }
+"cgt"                       { return T_CGT; }
+"clt"                       { return T_CLT; }
+"cge"                       { return T_CGE; }
+"cle"                       { return T_CLE; }
 
 "pop"                       { return T_POP; }
 "push"                      { return T_PUSH; }
+"dup"                       { return T_DUP; }
 
 "jmp"                       { return T_JUMP; }
 "jt"                        { return T_JT; }

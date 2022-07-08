@@ -245,7 +245,12 @@ void Module::constructBinaryData()
                 + calculateOffsetToSection((*it)->getName());
 
         // Set the corresponding offset
-        (*it)->setOffset(offset);
+        Section* section = *it;
+        section->setOffset(offset);
+        if (!section->is<StringTable>() && !section->is<SymbolTable>())
+        {
+            section->setSize(section->calculateSize());
+        }
     }
 }
 
@@ -362,8 +367,9 @@ void Module::linkLocalSymbols()
     }
 
     // For each section, check & resolve as appropriate
+    unsigned sectionIdx = 0;
     for (std::vector<Section*>::const_iterator it = sections.begin(),
-         end = sections.end(); it != end; ++it)
+         end = sections.end(); it != end; ++it, ++sectionIdx)
     {
         Section* section = (*it);
         assert(section != NULL && "Null pointer exception");
@@ -398,7 +404,8 @@ void Module::linkLocalSymbols()
                     if (insn->equals(AMANDA_VM_INSN_SINGLE(INVOKE))
                         || insn->equals(AMANDA_VM_ENCODE_INSN(PUSH, A))
                         || insn->equals(AMANDA_VM_INSN_SINGLE(CCALL))
-                        || insn->equals(AMANDA_VM_INSN_SINGLE(LOAD)))
+                        || insn->equals(AMANDA_VM_INSN_SINGLE(LOAD))
+                        || insn->equals(AMANDA_VM_INSN_SINGLE(ILOAD)))
                     {
                         if (insn->getOperand()->isSymbol() && !insn->getOperand()->isResolved())
                         {
@@ -429,6 +436,7 @@ void Module::linkLocalSymbols()
             {
                 // 0xffddeecc00000000
                 symbol->setValue(symbol->getSection()->getOffsetToSymbol(symbol));
+                symbol->setSectionIndex(sectionIdx);
             }
         }
     }

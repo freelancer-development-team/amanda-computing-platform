@@ -23,12 +23,15 @@
  */
 
 #include <amanda-vm/Runtime/Stack.h>
+#include <amanda-vm/Runtime/InvalidAllocationError.h>
 #include <amanda-vm/IO/Utility.h>
 
 // C++
 #include <cstdlib>
 #include <cstring>
 #include <setjmp.h>
+#include <wchar.h>
+#include <math.h>
 
 using namespace amanda;
 using namespace amanda::vm;
@@ -52,23 +55,40 @@ Stack::~Stack()
 
 void* Stack::allocl(size_t size)
 {
-    if (stackPointer + size > stackSize)
+    void* result = NULL;
+    if (size >= ULONG_MAX)
     {
-        resizeStack(size + (stackSize * 0.5f));
+        throw InvalidAllocationError(core::String::makeFormattedString("requested a stack allocation over 0x%llx bytes.", ULONG_MAX).toCharArray());
     }
+    else
+    {
+        if (stackPointer + size > stackSize)
+        {
+            resizeStack(size + (stackSize * 0.5f));
+        }
 
-    // Create the result pointer, point that to the stack pointer and
-    // move the stack pointer 'size' bytes ahead
-    void* result = (void*) stackPointer;
-    stackPointer += size;
-    ++depth;
-
+        // Create the result pointer, point that to the stack pointer and
+        // move the stack pointer 'size' bytes ahead
+        result = (void*) stackPointer;
+        stackPointer += size;
+        ++depth;
+    }
     return result;
 }
 
 sdk_ullong_t Stack::countFrames() const
 {
     return frameStack.size();
+}
+
+const void* Stack::dma(ptrdiff_t offset)
+{
+    assert(stackArea != NULL && "Attempted direct memory access to uninitialized stack");
+    assert(stackPointer >= ((vm_address_t) offset) && "Attempted direct memory access with negative offset.");
+
+    // Performs direct memory access to the stack area
+    // The data returned is unmodifiable
+    return (const void*) (stackArea + (stackPointer - offset));
 }
 
 vm_address_t Stack::getBasePointer() const
@@ -86,7 +106,7 @@ bool Stack::isEmpty() const
     return stackPointer == 0;
 }
 
-void Stack::peek(vm_byte_t* buffer, vm_size_t size)
+void Stack::peek(vm_byte_t* buffer, vm_size_t size) const
 {
     std::memcpy(buffer, (const void*) (stackArea + (stackPointer - size)), size);
 }
@@ -108,7 +128,7 @@ void Stack::pop(vm_byte_t* buffer, vm_size_t size)
 
 void Stack::popFrame(ptrdiff_t rvsize)
 {
-    assert(rvsize > 0 && "Passed a negative return value size");
+    assert(rvsize >= 0ul && "Passed a negative return value size");
 
     // Set the variables
     const vm_address_t basePointer  = getBasePointer();
@@ -176,6 +196,15 @@ void Stack::pushFrame()
     LOGGER.info("pushing stack frame with offset 0x%llx (depth %llu).", getBasePointer(), depth);
 }
 
+void* Stack::read(void* result, ptrdiff_t offset, vm_size_t length) const
+{
+    assert(result != NULL && "Null pointer exception.");
+    assert(offset < ((ptrdiff_t) stackSize) && "Attempted read outside stack boundaries. (superior bound)");
+
+    std::memmove(result, stackArea + (((ptrdiff_t) getBasePointer()) + offset), length);
+    return result;
+}
+
 void Stack::resizeStack(ptrdiff_t delta)
 {
     // Increase or decrease the stack size
@@ -186,4 +215,20 @@ void Stack::resizeStack(ptrdiff_t delta)
 
     // Post-conditions
     assert(stackArea != NULL && "Null pointer exception");
+}
+
+bool Stack::write(const void* data, ptrdiff_t offset, vm_size_t length)
+{
+    void* target = (void*) (stackArea + ((ptrdiff_t) getBasePointer() + offset));
+    assert(data != NULL && "Attempted to write null data.");
+    assert(target >= stackArea && "Attempted to write outside of the stack (inferior bound).");
+    assert(target <= (stackArea + stackSize) && "Attempted to write outside of the stack (superior bound).");
+
+    // Write
+    bool result = (std::memmove(target, data, length) == target);
+
+    // Reduce the stack pointer by n-units
+    stackPointer -= length;
+
+    return result;
 }

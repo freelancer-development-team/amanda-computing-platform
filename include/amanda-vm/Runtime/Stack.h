@@ -55,16 +55,19 @@ public:
     Stack();
     virtual ~Stack();
 
-    void*           allocl(size_t size);
-    sdk_ullong_t    countFrames() const;
-    vm_address_t    getBasePointer() const;
-    sdk_ullong_t    getDepth();
-    bool            isEmpty() const;
-    void            peek(vm_byte_t* buffer, vm_size_t size);
-    void            pop(vm_byte_t* buffer, vm_size_t size);
-    void            popFrame(ptrdiff_t rvsize);
-    void            push(const vm_byte_t* data, vm_size_t size, bool convert = true);
-    void            pushFrame();
+    void*           allocl(size_t size);                                                /// Allocates memory on the stack
+    const void*     dma(ptrdiff_t offset);                                              /// Performs direct memory access to the stack memory, offset from the stack pointer
+    sdk_ullong_t    countFrames() const;                                                /// Counts how many frames have been allocated
+    vm_address_t    getBasePointer() const;                                             /// Gets the address of the base pointer of the current stack frame
+    sdk_ullong_t    getDepth();                                                         /// Gets the depth of the stack (in units)
+    bool            isEmpty() const;                                                    /// Is this stack empty?
+    void            peek(vm_byte_t* buffer, vm_size_t size) const;                      /// Reads the top value of the stack but does not moves the stack pointer
+    void            pop(vm_byte_t* buffer, vm_size_t size);                             /// Reads and moves the stack pointer backwards
+    void            popFrame(ptrdiff_t rvsize);                                         /// Pops the last allocated stack frame
+    void            push(const vm_byte_t* data, vm_size_t size, bool convert = true);   /// Pushes a value onto the stack
+    void            pushFrame();                                                        /// Allocates and pushes a new stack frame
+    void*           read(void* result, ptrdiff_t offset, vm_size_t length) const;       /// Read from an arbitrary position within the stack
+    bool            write(const void* data, ptrdiff_t offset, vm_size_t length);        /// Writes data to the stack
 
     template <typename T>
     inline T pop()

@@ -100,6 +100,7 @@ public:
     int                 callLocal(const core::String& name, Stack& stack, Procedure::ProcessorFlags& eflags) const;
     int                 callNative(const core::String& name, Stack& stack) const;
     const Procedure*    getCachedLocalProcedure(const core::String& name) const;
+    MemoryAllocator&    getMemoryAllocator() const;
     const core::String& getProperty(const core::String& key) const;
     bool                isCachedProcedure(const core::String& name) const;
     int                 loadAndExecute(const core::String& fullPath);

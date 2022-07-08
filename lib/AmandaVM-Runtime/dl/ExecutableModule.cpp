@@ -79,6 +79,7 @@ ExecutableModule::~ExecutableModule()
 void ExecutableModule::addSection(const core::String& name, const binutils::Section::SectionHeader& section)
 {
     sections.insert(std::make_pair(name, section));
+    sectionsVector.push_back(&(sections.at(name)));
 }
 
 void ExecutableModule::cacheLocalProcedure(const core::String& name, Procedure* proc)
@@ -95,6 +96,11 @@ const ExecutableModule::ExecutableHeader& ExecutableModule::getHeader() const
 const vm::vm_size_t ExecutableModule::getSize() const
 {
     return size;
+}
+
+const binutils::Section::SectionHeader& ExecutableModule::findSection(const unsigned index) const
+{
+    return *sectionsVector.at(index);
 }
 
 const binutils::Section::SectionHeader& ExecutableModule::findSection(const core::String& name) const

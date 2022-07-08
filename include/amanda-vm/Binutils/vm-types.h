@@ -51,6 +51,7 @@ typedef uint64_t    vm_pointer_t;
 typedef uint64_t    vm_size_t;
 typedef uint64_t    vm_index_t;
 typedef uint64_t    vm_address_t;
+typedef int64_t     vm_ptrdiff_t;
 
 #define VM_ADDRESS_SIZE sizeof(amanda::vm::vm_address_t)
 

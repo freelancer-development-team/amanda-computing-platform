@@ -113,6 +113,7 @@ public:
     virtual ~Section();
 
     virtual void                addSymbol(const Symbol* symbol);
+    virtual size_t              calculateSize() const;
     virtual void                constructBinaryData();
     bool                        canExecute() const;
     bool                        canWrite() const;
@@ -129,6 +130,7 @@ public:
     void                        setNameIndex(const vm::vm_qword_t index);
     void                        setOffset(vm::vm_qword_t offset);
     void                        setOwningModule(Module* module);
+    virtual void                setSize(size_t size);
     void                        setType(unsigned type);
 
     bool operator== (const Section* section) const;
@@ -152,9 +154,7 @@ protected:
     Module*                     owner;
     std::vector<Symbol*>        symbols;
 
-    virtual size_t  calculateSize() const;
     virtual void    marshallImpl(io::OutputStream& stream) const;
-    virtual void    setSize(size_t size);
 
 } ;
 
