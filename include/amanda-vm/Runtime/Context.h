@@ -96,7 +96,8 @@ public:
     Context(MemoryAllocator* memoryAllocator,
             const core::String& path);
     virtual ~Context();
-
+    
+    void                addGlobalOptimizationCriteria(AdaptiveOptimizationCondition* condition);
     void                cacheProcedure(const core::String& name, Procedure* proc) const;
     int                 callLocal(const core::String& name, Stack& stack, Procedure::ProcessorFlags& eflags) const;
     int                 callNative(const core::String& name, Stack& stack) const;
@@ -147,6 +148,7 @@ private:
     typedef std::map<core::String, void*, core::AlphabeticalOrderComparator>                            NativeSymbolsCache;
     typedef std::map<core::String, NativeProcedure*, core::AlphabeticalOrderComparator>                 NativeProceduresCache;
     typedef std::map<core::String, Procedure*, core::AlphabeticalOrderComparator>                       ProceduresCache;
+    typedef std::deque<AdaptiveOptimizationCondition*>                                                  AdaptiveOptimizationQueue;
 
     static logging::ConsoleHandler              CONSOLE_HANDLER;
     static logging::GNUFormatter                FORMATTER;
@@ -159,6 +161,7 @@ private:
     core::StrongReference<FileSystem>           fileSystem;
     core::StrongReference<logging::Formatter>   fileFormatter;
     core::StrongReference<logging::FileHandler> fileHandler;
+    mutable AdaptiveOptimizationQueue           globalOptimizationCriteria;
     core::StrongReference<io::File>             loggingFile;
     core::StrongReference<MemoryAllocator>      memoryAllocator;
     core::StrongReference<MemoryManager>        memoryManager;

@@ -90,10 +90,11 @@ public:
     } ;
 
     MemoryAllocator(MemoryManager& memoryManager);
+    virtual ~MemoryAllocator();
 
     virtual void*           allocate(size_t size);
     virtual void*           allocateAligned(size_t size, size_t alignment);
-    virtual void            deallocate(size_t size);
+    virtual void            deallocate(void* elem);
     const MemoryManager&    getMemoryManager() const;
 
 protected:
@@ -101,6 +102,7 @@ protected:
     static const logging::Logger&   LOGGER;
 
     MemoryManager&                  memoryManager;
+    std::vector<void*>              trackedAllocations;
 
     virtual size_t                  align(size_t size) const;                                                       /// Aligns to the default machine word
     size_t                          align(size_t size, size_t alignment) const;                                     /// Aligns to some specific value

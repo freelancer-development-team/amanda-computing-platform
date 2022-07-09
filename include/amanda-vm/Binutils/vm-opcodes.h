@@ -68,6 +68,7 @@ typedef enum VM_Opcodes
     // Reserved
     I_NOP = 0,
     I_HALT,
+    I_BRK,
 
     // Data type conversion
     I_B2W,

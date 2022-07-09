@@ -16,52 +16,20 @@
  */
 
 /* 
- * File:   DefaultPoolAllocator.cpp
+ * File:   NullOptimizationCriteria.cpp
  * Author: Javier Marrero
  * 
- * Created on July 5, 2022, 2:46 PM
+ * Created on July 9, 2022, 9:42 AM
  */
 
-#include <amanda-vm/Runtime/DefaultPoolAllocator.h>
+#include <amanda-vm/Runtime/Optimization/NullOptimizationCriteria.h>
 
 using namespace amanda;
 using namespace amanda::vm;
 
-DefaultPoolAllocator::DefaultPoolAllocator(MemoryManager& memoryManager)
-:
-MemoryAllocator(memoryManager)
-{
-}
-
-DefaultPoolAllocator::~DefaultPoolAllocator()
-{
-}
-
-void* DefaultPoolAllocator::allocate(size_t size)
-{
-    return std::calloc(size, sizeof (char));
-}
-
-void DefaultPoolAllocator::deallocate(void* elem)
-{
-    std::free(elem);
-    elem = NULL;    // Set the element as NULL
-}
-
-void DefaultPoolAllocator::expandAddressSpace(size_t amount)
-{
-}
-
-const MemoryAllocator::AllocationHeader& DefaultPoolAllocator::find(size_t size) const
-{
-    return AllocationHeader::INVALID_ALLOCATION;
-}
-
-bool DefaultPoolAllocator::isNeedingExpansion() const
+bool NullOptimizationCriteria::eval() const
 {
     return false;
 }
-
-
 
 

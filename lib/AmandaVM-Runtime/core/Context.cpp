@@ -28,6 +28,7 @@
 #include <amanda-vm/Runtime/LinkageError.h>
 #include <amanda-vm/Runtime/Procedure.h>
 #include <amanda-vm/Runtime/IllegalStateException.h>
+#include <amanda-vm/Runtime/Optimization/NullOptimizationCriteria.h>
 #include <amanda-vm/Binutils/package.hxx>
 #include <amanda-vm-c/sdk-version.h>
 #include <amanda-vm/NIO/IOException.h>
@@ -144,6 +145,23 @@ moduleLoader(new ModuleLoader(memoryAllocator->getReference()))
     // Amanda-VM uses UTF8 encoding and utf8 locale
     // TODO: Complete UTF8 locale request
     std::setlocale(LC_ALL, "");
+
+    // Add the null optimization criteria if we're building without optimization
+#ifdef NO_JIT_COMPILATION
+    addGlobalOptimizationCriteria(new NullOptimizationCriteria());
+#endif
+
+    // Prepare the console to display ANSI escape codes if on Windows
+    //TODO: Finish this
+#if _W32
+
+#endif
+
+    // If we are in release mode
+    // set the logging level to info
+#ifndef DEBUG
+    LOGGER.setLevel(logging::Logger::INFO);
+#endif
 }
 
 Context::~Context()
@@ -163,18 +181,29 @@ Context::~Context()
     for (NativeProceduresCache::const_iterator it = cachedNativeProcedures.begin(),
          end = cachedNativeProcedures.end(); it != end; ++it)
     {
-        LOGGER.trace("un-caching native symbol '%s'.", it->second->getName().toCharArray());
+        LOGGER.info("un-caching native symbol '%s'.", it->second->getName().toCharArray());
         it->second->release();
     }
     for (ProceduresCache::const_iterator it = cachedProcedures.begin(),
          end = cachedProcedures.end(); it != end; ++it)
     {
-        LOGGER.trace("un-caching local symbol '%s'.", it->second->getName().toCharArray());
+        LOGGER.info("un-caching local symbol '%s'.", it->second->getName().toCharArray());
         it->second->release();
+    }
+    for (unsigned i = 0; i < globalOptimizationCriteria.size(); ++i)
+    {
+        LOGGER.info("deleting global optimization criteria of class '%s'", globalOptimizationCriteria.at(i)->getClassDynamically().getName());
+        globalOptimizationCriteria.at(i)->release();
     }
 
     // We've destroyed the objects
     LOGGER.info("\t-- EXEC FINISHED --\n");
+}
+
+void Context::addGlobalOptimizationCriteria(AdaptiveOptimizationCondition* condition)
+{
+    condition->grab();
+    globalOptimizationCriteria.push_back(condition);
 }
 
 void Context::initializeSystemProperties()
@@ -253,6 +282,11 @@ int Context::callLocal(const core::String& name, Stack& stack, Procedure::Proces
     if (subroutine == NULL) result = ENOPROC;
     if (result == ENOERR && subroutine != NULL)
     {
+        for (unsigned i = 0; i < globalOptimizationCriteria.size(); ++i)
+        {
+            subroutine->addOptimizationCriteria(globalOptimizationCriteria.at(i));
+        }
+
         LOGGER.debug("made local jump to local subroutine '%s' with local stack at 0x%p.",
                      name.toCharArray(), stack.getSelfPointer());
         subroutine->execute(stack, eflags);
@@ -264,7 +298,7 @@ int Context::callLocal(const core::String& name, Stack& stack, Procedure::Proces
 int Context::callNative(const core::String& name, Stack& stack) const
 {
     // Log the attempt
-    LOGGER.info("attempting call to native function named <%s> (local stack: 0x%p)",
+    LOGGER.debug("attempting call to native function named <%s> (local stack: 0x%p)",
                 name.toCharArray(), stack.getSelfPointer());
 
     // Set the default result to OK

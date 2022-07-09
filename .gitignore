@@ -6,6 +6,7 @@
 *.res
 *.a
 *.dll
+*.ax
 
 # Sensitive files used by NetBeans
 nbproject

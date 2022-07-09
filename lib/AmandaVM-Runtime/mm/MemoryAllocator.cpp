@@ -37,6 +37,19 @@ MemoryAllocator::MemoryAllocator(MemoryManager& memoryManager)
 :
 memoryManager(memoryManager)
 {
+    // Reserve space for 100 allocations
+    trackedAllocations.reserve(100);
+}
+
+MemoryAllocator::~MemoryAllocator()
+{
+    for (unsigned i = 0; i < trackedAllocations.size(); ++i)
+    {
+        if (trackedAllocations.at(i) != NULL)
+        {
+            deallocate(trackedAllocations.at(i));
+        }
+    }
 }
 
 const MemoryManager& MemoryAllocator::getMemoryManager() const
@@ -109,7 +122,7 @@ MemoryAllocator::AllocationHeader MemoryAllocator::coalesce(const AllocationHead
     return header;
 }
 
-void MemoryAllocator::deallocate(size_t size)
+void MemoryAllocator::deallocate(void* elem)
 {
 }
 

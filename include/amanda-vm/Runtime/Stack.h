@@ -57,6 +57,7 @@ public:
 
     void*           allocl(size_t size);                                                /// Allocates memory on the stack
     const void*     dma(ptrdiff_t offset);                                              /// Performs direct memory access to the stack memory, offset from the stack pointer
+    void            discard(size_t size);                                               /// Discard the last 'size' bytes from the stack pointer
     sdk_ullong_t    countFrames() const;                                                /// Counts how many frames have been allocated
     vm_address_t    getBasePointer() const;                                             /// Gets the address of the base pointer of the current stack frame
     sdk_ullong_t    getDepth();                                                         /// Gets the depth of the stack (in units)

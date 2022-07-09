@@ -125,7 +125,7 @@ void NativeCProcedure::call(Stack& stack)
     stack.push((vm::vm_byte_t*) rc, getArgumentSize(returnType), false);
 
     // Return
-    LOGGER.debug("success on native call (last quad-word of return value 0x%llx)", *((vm::vm_qword_t*) (rc)));
+    LOGGER.debug("success on native call (last register-size word of return value 0x%llx)", *((uintptr_t*) (rc)));
     std::free(rc);
 }
 
@@ -219,6 +219,11 @@ ffi_type* NativeCProcedure::parseSingleFfiType(const core::String& type) const
     CASE(FFI_TYPE_INT32)
     {
         result = &ffi_type_sint;
+    }
+
+    CASE(FFI_TYPE_INT64)
+    {
+        result = &ffi_type_sint64;
     }
 
     CASE(FFI_TYPE_NATIVE_POINTER)

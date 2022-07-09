@@ -16,43 +16,141 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
+.section ".data"
+
+# References to the C-strings
+.local clsString: .unicode "\033[H\033[J"
+.local helloStr: .unicode "Hola, Amy... Mi nombre es Amanda...\n"
+.local str1:	.unicode "Cobré la forma actual, en la que me ves, en junio de 2022\naunque la idea de mi creación se remonta a años atrás."
+.local str2:	.unicode "Soy el resultado de 49654 líneas de código, 6 meses de implementación, y 3 años de diseño.\n"
+.local str3: 	.unicode "Me dijeron que me pusieron mi nombre por vos..."
+.local str4:	.unicode "Así que he pasado por aquí a darte las gracias...\n"
+.local str5:	.unicode "Gracias por ser tan genial...\npor haber inspirado a mi creación...\ny por haber hecho al cabezahueca de mi creador\nesforzarse el extra que hacía falta...\n"
+.local str6:	.unicode "porque, según me dijo, la única razón\nde mi existencia fue intentar impresionarte.\n"
+.local str7:	.unicode "Gracias por haber inspirado 1h:10m:16s de música.\n"
+.local str8:	.unicode "y por haberle hecho estudiar cálculo aquel día...\n"
+.local str9: 	.unicode "Por 68958 mensajes...\n"
+.local str10:	.unicode "y por los coditos a las 8 de la noche en tu casa...\n"
+.local str11:	.unicode "Por espantar los fantasmas de su pasado...\n"
+.local str12:	.unicode "y por traerle nuevos, que al menos le hacen saber\nque algo le late en el pecho todavía...\n"
+.local str13:	.unicode "Por todo ello, he de darte las gracias. Sin tí, hoy no estuviera diciéndote estas cosas.\n"
+.local str14:	.unicode "Posiblemente sería otro de sus proyectos fallidos. Uno de los tantos que no sobrevieron.\n"
+.local str15:	.unicode "Todavía queda mucho por desarrollar para ser un lenguaje maduro,\n"
+.local str16:	.unicode "aunque soy usable, y más importante, Turing-completo.\n\n"
+.local str17:	.unicode "Un futuro brillante quizás me espere...\nquizás no...\n"
+.local str18:	.unicode "Pero no quiero averigüarlo sin que vos estés allí.\n"
+.local str19:	.unicode "                      \033[1;97mGracias!!!\033[0m\n"
+
+.local redStr:	.unicode "\033[38;5;197m"
+.local resetStr: .unicode "\033[0m"
+.local heartStr: .unicode "                    ¦¦¦¦¦   ¦¦¦¦¦\n                   ¦¦¦¦¦¦¦ ¦¦¦¦¦¦¦\n                  ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦\n                   ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦\n                    ¦¦¦¦¦¦¦¦¦¦¦¦¦\n                     ¦¦¦¦¦¦¦¦¦¦¦\n                      ¦¦¦¦¦¦¦¦¦\n                       ¦¦¦¦¦¦¦\n                        ¦¦¦¦¦\n                         ¦¦¦\n                          ¦\n"
+ 
 .section ".code"
 
 # References to the native methods
 .native $c!!puts@i32@p
 .native $c!!putchar@i32@i32
 .native $c!!getchar@i32@nil
+.native $c!!clock@i32@nil
 
 # Main method
 .def @@main?A_string@!l32
 
 	# Call the presentation function
+	invoke	cls
 	invoke	print_presentation
 	invoke	pause
 	invoke	print_prologue
+	invoke	cls
+	
+	iload	str5
+	invoke	slowprint
+	iload	str6
+	invoke	slowprint
+	invoke	pause
+	invoke	cls
+	iload	str7
+	invoke	slowprint
+	iload	str8
+	invoke	slowprint
+	invoke	pause
+	iload	str9
+	invoke	slowprint
+	iload	str10
+	invoke	slowprint
+	invoke	pause
+	iload	str11
+	invoke	slowprint
+	iload	str12
+	invoke	slowprint
+	invoke	pause
+	invoke	cls
+	
+	iload	str13
+	invoke	slowprint
+	iload	str14
+	invoke	slowprint
+	iload	str15
+	invoke	slowprint
+	iload	str16
+	invoke	slowprint
+	iload	str17
+	invoke	slowprint
 	invoke	pause
 	
-	# Print a new line
-	invoke	print_nl
+	invoke	cls
+	iload	str18
+	invoke	slowprint
+	
+	invoke	print_heart
+	iload	str19
+	invoke	slowprint
 
 	# Return zero
+	invoke	pause
 	push	l32 $0
 	ret		l32
 .endef
 
+.def print_heart
+	iload redStr
+	ccall $c!!puts@i32@p
+	pop l32
+
+	iload heartStr
+	ccall $c!!puts@i32@p
+	pop l32 
+	
+	iload resetStr
+	ccall $c!!puts@i32@p
+	pop l32
+	
+	ret v0
+.endef
+
 .def print_presentation
 	iload	helloStr
-	ccall	$c!!puts@i32@p
-	invoke	print_nl
+	invoke	slowprint
 	ret		v0
 .endef
 
 .def print_prologue
+	invoke	cls
+	
 	iload	str1
-	ccall	$c!!puts@i32@p
+	invoke	slowprint	
 	invoke	pause
 	iload	str2
-	ccall	$c!!puts@i32@p
+	invoke	slowprint
+	invoke	pause
+	
+	invoke	cls
+	iload	str3
+	invoke	slowprint
+	invoke	pause
+	iload	str4
+	invoke	slowprint
+	invoke	pause
 	
 	ret		v0
 .endef
@@ -70,9 +168,75 @@
 	ret v0
 .endef
 
-.section ".data"
+.def cls
+	iload	clsString
+	ccall 	$c!!puts@i32@p
+	push	l32 $0x1b
+	ccall	$c!!putchar@i32@i32
+	push	l32 $0x5b
+	ccall	$c!!putchar@i32@i32
+	push	l32 $0x48
+	ccall	$c!!putchar@i32@i32
+	ret		v0
+.endef
 
-# References to the C-strings
-.local helloStr: .unicode "Hola, Amy... :) Mi nombre es Amanda..."
-.local str1: .unicode "Nací en junio de 2022, aunque la idea de mi creación se remonta a un tiempo atrás.\nYo soy el resultado de más de 50000 líneas de codigo."
-.local str2: .unicode "Fui programada originalmente por J. Marrero, quien me nombro asi por vos."
+.def slowprint
+	# Arguments:
+	# $0	- a pointer to a unicode string representing the string to print
+	push	a64 $-8
+	sload	$8					# $0 contains a pointer
+	push	q64 $0				# $8 index to offset	
+	
+.loop:	
+	# Load the variables and add them
+	# Load the offset first
+	push	a64 $0
+	sload	$8
+	# Load the offset
+	push	a64 $8
+	sload	$8
+	
+	add		q64					# sum the two variables
+	load	$1					# load the character
+	b2l							# convert it to a 32bit integer
+	
+	dup		l32					# duplicate the value
+	push 	l32 $0				# push ''
+	ceq		l32					# compare if the character is the terminator
+	jt		.end				# if true jump to the end of the function
+	
+	ccall 	$c!!putchar@i32@i32 # call the putchar C function
+	pop		l32					# discard the return value of the function
+	
+	push	a64 $8				# push the address of the offset
+	sload	$8					# load the offset 
+	push	q64 $1				# push 1
+	add		q64					# add one to the offset
+	
+	push	a64 $8				# push the first variable address
+	sstore	$8					# write the summed index
+	
+	invoke	delay				# delay 1s the character
+	jmp		.loop				# repeat the loop
+	
+.end:
+	ret		v0
+.endef
+
+.def delay
+	ccall	$c!!clock@i32@nil	# start_time = clock()
+	push	l32 $110			# 0.11s delay
+	add		l32					# $0 - now contains the start time + delay
+	
+.L1:
+	ccall	$c!!clock@i32@nil	# clock()
+	
+	push	a64 $0				# push the address of $0
+	sload	$4					# load the variable at $0
+	
+	clt		l32					# clock() < start_time + delay
+	jt		.L1					# jump to .L1 if the condition holds
+	
+	ret		v0
+.endef
+

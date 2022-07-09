@@ -124,23 +124,24 @@ vm::vm_qword_t Procedure::execute(Stack& stack, ProcessorFlags& eflags)
     //
     vm_qword_t result = 0;
     stack.peek((vm_byte_t*) &result, rvsize);
-    LOGGER.info("function returned %llu bytes (most significant quad word 0x%llx)",
+    LOGGER.debug("function returned %llu bytes (most significant quad word 0x%llx)",
                 rvsize, result);
 
     // Pop the frame
     stack.popFrame(rvsize);
 
     // Check if needs optimization
-    if (!isOptimized() && shouldOptimize())
-    {
-        LOGGER.debug("optimizing procedure '%s' (jit-compiling)", name.toCharArray());
-        optimize();
-    }
-
-    // Increment the count of executions
     AMANDA_SYNCHRONIZED(lock);
     {
+        if (!isOptimized() && shouldOptimize())
+        {
+            LOGGER.debug("optimizing procedure '%s' (jit-compiling)", name.toCharArray());
+            optimize();
+        }
+
+        // Increment the count of executions
         ++executionCount;
+        LOGGER.trace("tracing execution count for adaptive optimization application: %llu", executionCount);
     }
     AMANDA_DESYNCHRONIZED(lock);
 
@@ -196,6 +197,8 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
                 stack.pop(BYTEPOINTER(operand1), VM_DWORD_SIZE);
                 stack.pop(BYTEPOINTER(operand2), VM_DWORD_SIZE);
                 result = operand1 + operand2;
+
+                // LOGGER.trace("integer addition: 0x%x", result);
 
                 stack.push(BYTEPOINTER(result), VM_DWORD_SIZE, false);
                 break;
@@ -275,7 +278,7 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
                 stack.peek(BYTEPOINTER(value), VM_DWORD_SIZE);
                 stack.push(BYTEPOINTER(value), VM_DWORD_SIZE, false);
 
-                //LOGGER.info("value: 0x%x", value);
+                LOGGER.trace("duplicating long value: 0x%x", value);
                 break;
             }
             case I_DUPQ:
@@ -352,12 +355,30 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
             }
             case I_LOAD:
             {
-                vm::vm_address_t address = readFromPool<vm::vm_address_t>(pool, ip);
+                vm::vm_address_t address = stack.pop<vm::vm_address_t>();
+                vm::vm_size_t size = readFromPool<vm::vm_address_t>(pool, ip);
                 ip += VM_QWORD_SIZE;
 
                 // Log the request
-                LOGGER.debug("requesting load from address 0x%llx", address);
-                
+                LOGGER.debug("requesting load from address 0x%llx and length %llu bytes.", address, size);
+
+                // Load into the stack the requested value
+                void* target = stack.allocl(size);
+                if (target == NULL)
+                {
+                    LOGGER.error("unable to allocate space in the stack to receive the load.");
+                    std::raise(SIGSEGV);
+                }
+                else
+                {
+                    LOGGER.trace("moving data to address 0x%p", target);
+                    std::memmove(target, (const void*) address, size);
+                }
+                break;
+            }
+            case I_POPL:
+            {
+                stack.discard(VM_DWORD_SIZE);
                 break;
             }
             case I_PUSHA:
@@ -545,8 +566,9 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
             type operand1 = 0; \
             type operand2 = 0; \
             \
-            operand1 = stack.pop<type>(); \
             operand2 = stack.pop<type>(); \
+            operand1 = stack.pop<type>(); \
+            \
             eflags.m_zf = (operand1 < operand2) ? ONE : ZERO; \
             break
 
@@ -572,8 +594,8 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
             type operand1 = 0; \
             type operand2 = 0; \
             \
-            operand1 = stack.pop<type>(); \
             operand2 = stack.pop<type>(); \
+            operand1 = stack.pop<type>(); \
             eflags.m_zf = (operand1 > operand2) ? ONE : ZERO; \
             break
 
@@ -599,8 +621,8 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
             type operand1 = 0; \
             type operand2 = 0; \
             \
-            operand1 = stack.pop<type>(); \
             operand2 = stack.pop<type>(); \
+            operand1 = stack.pop<type>(); \
             eflags.m_zf = (operand1 >= operand2) ? ONE : ZERO; \
             break
 
@@ -626,8 +648,8 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
             type operand1 = 0; \
             type operand2 = 0; \
             \
-            operand1 = stack.pop<type>(); \
             operand2 = stack.pop<type>(); \
+            operand1 = stack.pop<type>(); \
             eflags.m_zf = (operand1 <= operand2) ? ONE : ZERO; \
             break
 
@@ -679,12 +701,26 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
                 }
                 else
                 {
+                    LOGGER.trace("allocated %llu bytes on the heap at address 0x%llx",
+                                 size, result);
                     stack.push<vm::vm_address_t>(result);
                 }
                 break;
             }
             case I_DELLOC:
             {
+                vm::vm_address_t address = readFromPool<vm::vm_address_t>(pool, ip);
+                augmentProgramCounter(ip, VM_ADDRESS_SIZE);
+
+                try
+                {
+                    context.getMemoryAllocator().deallocate((void*) address);
+                }
+                catch (core::Exception& ex)
+                {
+                    LOGGER.error("invalid heap deallocation request.");
+                    raise(SIGSEGV);
+                }
                 break;
             }
             case I_ILOAD:
@@ -702,7 +738,8 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
                 const binutils::Symbol::SymbolTableEntry* symbol = executableModule->findSymbol(symbolIndex);
                 //const core::String symbolName = executableModule->findSymbolName(symbol->name);
 
-                if (symbol->bind != binutils::Symbol::Bind_Extern)
+                if (symbol->bind != binutils::Symbol::Bind_Extern
+                    && symbol->bind != binutils::Symbol::Bind_Native)
                 {
                     unsigned sectionIndex = symbol->shndx;
                     const binutils::Section::SectionHeader& shdr = executableModule->findSection(sectionIndex);
@@ -725,8 +762,10 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
                 vm::vm_qword_t      length = readFromPool<vm::vm_qword_t>(pool, ip);
                 augmentProgramCounter(ip, VM_QWORD_SIZE);
 
-                LOGGER.trace("requested stack load with offset 0x%llx and length %llu bytes.",
-                             offset, length);
+                LOGGER.trace("requested stack load with offset %s%llx and length %llu bytes.",
+                             offset < 0 ? "-0x" : "0x",
+                             offset < 0 ? -(vm::vm_address_t)offset : offset,
+                             length);
 
                 // Read to the buffer
                 void* buffer = std::malloc(length);
@@ -752,6 +791,16 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
                 stack.write(stack.dma(length), offset, length);
                 break;
             }
+                // Conversion operators
+            case I_B2L:
+            {
+                vm::vm_byte_t   byte    = stack.pop<vm::vm_byte_t>();
+                vm::vm_dword_t  dword   = byte;
+                stack.push(dword);
+
+                LOGGER.trace("converting byte to double word, result: 0x%x", dword);
+                break;
+            }
                 // Default case (it is an error)
             default:
             {
@@ -761,8 +810,9 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
         }
     }
 
-    LOGGER.trace("function returning %llu bytes. Setting the instruction pointer to zero", rvsize);
+    LOGGER.trace("function returning %llu bytes. Setting the instruction pointer to zero and resetting eflags.", rvsize);
     ip = 0;
+    std::memset(&eflags, 0, sizeof (ProcessorFlags));
     return rvsize;
 
 #undef BYTEPOINTER
@@ -861,11 +911,15 @@ void Procedure::setOptimized(bool optimized)
 bool Procedure::shouldOptimize() const
 {
     bool result = true;
-    for (std::deque<const AdaptiveOptimizationCondition*>::const_iterator it = optimizationCritera.begin(),
-         end = optimizationCritera.end(); it != end; ++it)
+    AMANDA_SYNCHRONIZED(lock);
     {
-        result = result && (*it)->eval();
+        for (std::deque<const AdaptiveOptimizationCondition*>::const_iterator it = optimizationCritera.begin(),
+             end = optimizationCritera.end(); it != end; ++it)
+        {
+            result = result && (*it)->eval();
+        }
     }
+    AMANDA_DESYNCHRONIZED(lock);
     return result && (executionCount > 2);
 }
 
