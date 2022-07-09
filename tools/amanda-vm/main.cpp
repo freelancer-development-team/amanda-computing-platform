@@ -72,7 +72,12 @@ int main(int argc, char** argv)
         /* Create the virtual machine context helpers. */
         //TODO: Add the allocation limit
         core::StrongReference<vm::MemoryManager> memoryManager = new vm::MemoryManager();
+
+#ifndef USE_MALLOC_ALLOCATOR
         core::StrongReference<vm::MemoryAllocator> memoryAllocator = new vm::LocklessDefaultAllocator(memoryManager->getReference());
+#else
+        core::StrongReference<vm::MemoryAllocator> memoryAllocator = new vm::DefaultPoolAllocator(memoryManager->getReference());
+#endif
 
         /* Create the virtual machine context. */
         core::StrongReference<vm::Context> context =

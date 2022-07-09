@@ -570,16 +570,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  31
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   140
+#define YYLAST   142
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  72
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  20
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  71
+#define YYNRULES  72
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  123
+#define YYNSTATES  124
 
 /* YYMAXUTOK -- Last valid token kind.  */
 #define YYMAXUTOK   322
@@ -640,9 +640,9 @@ static const yytype_int16 yyrline[] =
      326,   327,   328,   329,   334,   335,   336,   340,   341,   342,
      346,   347,   348,   349,   350,   351,   352,   353,   354,   355,
      356,   357,   359,   360,   361,   362,   363,   364,   368,   369,
-     370,   381,   382,   384,   386,   388,   392,   396,   402,   407,
-     411,   415,   422,   427,   428,   429,   430,   434,   435,   439,
-     444,   445
+     370,   381,   382,   384,   386,   388,   392,   395,   399,   403,
+     408,   412,   416,   423,   428,   429,   430,   431,   435,   436,
+     440,   445,   446
 };
 #endif
 
@@ -712,7 +712,7 @@ static const yytype_int16 yytoknum[] =
 };
 #endif
 
-#define YYPACT_NINF (-68)
+#define YYPACT_NINF (-65)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -726,19 +726,19 @@ static const yytype_int16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-     100,   -55,   -56,   -52,   -51,   -50,   -49,   -35,   -39,   -37,
-     -17,   -21,    50,   100,   -68,   -68,   -68,   -68,   -68,   -68,
-      42,    56,    -9,     5,     6,   -68,   -68,   -68,   -68,   -68,
-     -68,   -68,   -68,    12,    21,    25,    26,    27,    30,    32,
-     -23,   -22,   -23,    33,    34,    49,    53,    54,    48,    57,
-      58,    59,   -68,   -68,   -68,   -68,   -68,   -68,    60,    62,
-      63,    64,    65,    66,    51,    -5,   -68,    61,    61,    61,
-      67,    61,   -68,   -68,   -68,   -68,   -68,   -68,   -68,   -68,
-     -68,   -68,   -68,   -68,    68,   -68,   -68,   -68,   -68,   -68,
-     -68,   -68,   -68,   -60,   -68,   -68,   -68,   -60,   -68,   -68,
-     -68,   -68,   -68,   -68,   -68,   -68,   -68,   -68,   -68,   -68,
-     -68,   -68,    61,   -68,    69,   -68,   -68,   -68,   -68,   -68,
-     -68,   -68,   -68
+     100,   -62,   -53,   -60,   -50,   -35,   -34,   -22,   -21,   -18,
+     -16,    -6,    44,   100,   -65,   -65,   -65,   -65,   -65,   -65,
+      42,    57,     6,     7,    18,   -65,   -65,   -65,   -65,   -65,
+     -65,   -65,   -65,    24,    25,    29,   -65,    30,    31,    33,
+     -61,   -23,   -61,    47,    34,    48,    53,    54,    56,    55,
+      58,    59,    60,   -65,   -65,   -65,   -65,   -65,   -65,    61,
+      63,    64,    65,    66,    67,    68,    -5,   -65,    62,    62,
+      62,    69,    62,   -65,   -65,   -65,   -65,   -65,   -65,   -65,
+     -65,   -65,   -65,   -65,    70,   -65,   -65,   -65,   -65,   -65,
+     -65,   -65,   -65,   -65,   -56,   -65,   -65,   -65,   -56,   -65,
+     -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,
+     -65,   -65,   -65,    62,   -65,    71,   -65,   -65,   -65,   -65,
+     -65,   -65,   -65,   -65
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -749,30 +749,30 @@ static const yytype_int8 yydefact[] =
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
        0,     0,     0,     2,     3,     5,     6,     7,     8,     9,
       26,    18,     0,     0,     0,    16,    15,    20,    22,    23,
-      21,     1,     4,     0,     0,     0,     0,     0,     0,     0,
+      21,     1,     4,     0,     0,     0,    56,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,    42,    43,    44,    45,    46,    47,     0,     0,
-       0,     0,     0,     0,     0,     0,    24,    71,    71,    71,
-       0,    71,    17,    12,    14,    13,    30,    55,    48,    56,
-      37,    38,    53,    68,     0,    51,    67,    50,    49,    52,
-      57,    58,    39,     0,    40,    59,    41,     0,    61,    31,
-      32,    33,    34,    35,    36,    62,    11,    25,    70,    27,
-      28,    29,    71,    10,     0,    63,    64,    65,    54,    66,
-      60,    19,    69
+       0,     0,     0,    42,    43,    44,    45,    46,    47,     0,
+       0,     0,     0,     0,     0,     0,     0,    24,    72,    72,
+      72,     0,    72,    17,    12,    14,    13,    30,    55,    48,
+      37,    38,    53,    69,     0,    51,    68,    50,    49,    52,
+      58,    59,    57,    39,     0,    40,    60,    41,     0,    62,
+      31,    32,    33,    34,    35,    36,    63,    11,    25,    71,
+      27,    28,    29,    72,    10,     0,    64,    65,    66,    54,
+      67,    61,    19,    70
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -68,   -68,   -68,   118,   -68,   -68,   -68,   -68,   -68,   -68,
-     -68,   -68,    70,   -68,   -68,   -68,    36,    94,   -36,   -67
+     -65,   -65,   -65,   119,   -65,   -65,   -65,   -65,   -65,   -65,
+     -65,   -65,    72,   -65,   -65,   -65,    35,    93,   -37,   -64
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,    12,    13,    14,    15,    16,    17,    18,    71,    72,
-      19,    65,    66,    67,    68,    69,   118,    85,    86,   109
+       0,    12,    13,    14,    15,    16,    17,    18,    72,    73,
+      19,    66,    67,    68,    69,    70,   119,    85,    86,   110
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -780,40 +780,40 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-     106,   110,   111,   115,   113,    88,   116,   117,    20,    21,
-      84,    22,    23,    24,    25,    33,    34,    35,    36,    37,
-      38,    39,    40,    41,    42,    43,    44,    27,    26,    28,
-      45,    46,    47,    48,    49,    50,    51,    52,    53,    54,
-      83,    87,    55,    56,    30,   121,    57,    84,    84,    29,
-      31,    58,    59,    60,    61,    62,    63,   119,    64,    70,
-      73,   119,    33,    34,    35,    36,    37,    38,    39,    40,
-      41,    42,    43,    44,    74,    75,    76,    45,    46,    47,
-      48,    49,    50,    51,    52,    53,    54,    77,    78,    55,
-      56,    80,    79,    57,    81,    82,    90,    91,    58,    59,
-      60,    61,    62,    63,     1,    64,     2,     3,     4,     5,
-       6,     7,     8,    92,    95,     9,    10,    93,    94,    11,
-     105,    96,    97,   108,    99,    98,   100,   101,   102,   103,
-     104,    32,   112,   120,   114,   107,    89,     0,     0,     0,
-     122
+     107,    20,    83,    22,    88,   111,   112,   116,   114,    84,
+     117,   118,    21,    23,    84,    33,    34,    35,    36,    37,
+      38,    39,    40,    41,    42,    43,    44,    45,    24,    25,
+      46,    47,    48,    49,    50,    51,    52,    53,    54,    55,
+      87,    26,    56,    57,    31,    27,    58,    84,    28,   122,
+      29,    59,    60,    61,    62,    63,    64,   120,    65,    30,
+      71,   120,    33,    34,    35,    36,    37,    38,    39,    40,
+      41,    42,    43,    44,    45,    74,    75,    46,    47,    48,
+      49,    50,    51,    52,    53,    54,    55,    76,    77,    56,
+      57,    78,    79,    58,    80,    81,    82,    91,    59,    60,
+      61,    62,    63,    64,     1,    65,     2,     3,     4,     5,
+       6,     7,     8,    90,    92,     9,    10,    93,    94,    11,
+      95,    96,    97,    98,   109,   100,    99,   101,   102,   103,
+     104,   105,    32,   121,   113,    89,   115,   106,   108,     0,
+       0,     0,   123
 };
 
 static const yytype_int8 yycheck[] =
 {
-       5,    68,    69,    63,    71,    41,    66,    67,    63,    65,
-      70,    63,    63,    63,    63,    20,    21,    22,    23,    24,
-      25,    26,    27,    28,    29,    30,    31,    66,    63,    66,
+       5,    63,    63,    63,    41,    69,    70,    63,    72,    70,
+      66,    67,    65,    63,    70,    20,    21,    22,    23,    24,
+      25,    26,    27,    28,    29,    30,    31,    32,    63,    63,
       35,    36,    37,    38,    39,    40,    41,    42,    43,    44,
-      63,    63,    47,    48,    65,   112,    51,    70,    70,    66,
-       0,    56,    57,    58,    59,    60,    61,    93,    63,     3,
-      69,    97,    20,    21,    22,    23,    24,    25,    26,    27,
-      28,    29,    30,    31,    69,    69,    64,    35,    36,    37,
-      38,    39,    40,    41,    42,    43,    44,    66,    63,    47,
-      48,    64,    66,    51,    64,    63,    63,    63,    56,    57,
+      63,    63,    47,    48,     0,    66,    51,    70,    66,   113,
+      66,    56,    57,    58,    59,    60,    61,    94,    63,    65,
+       3,    98,    20,    21,    22,    23,    24,    25,    26,    27,
+      28,    29,    30,    31,    32,    69,    69,    35,    36,    37,
+      38,    39,    40,    41,    42,    43,    44,    69,    64,    47,
+      48,    66,    63,    51,    64,    64,    63,    63,    56,    57,
       58,    59,    60,    61,     4,    63,     6,     7,     8,     9,
-      10,    11,    12,    64,    66,    15,    16,    64,    64,    19,
-      69,    64,    64,    62,    64,    66,    64,    64,    64,    64,
-      64,    13,    65,    97,    66,    65,    42,    -1,    -1,    -1,
-      71
+      10,    11,    12,    66,    66,    15,    16,    64,    64,    19,
+      64,    66,    64,    64,    62,    64,    66,    64,    64,    64,
+      64,    64,    13,    98,    65,    42,    66,    69,    66,    -1,
+      -1,    -1,    71
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -824,15 +824,15 @@ static const yytype_int8 yystos[] =
       16,    19,    73,    74,    75,    76,    77,    78,    79,    82,
       63,    65,    63,    63,    63,    63,    63,    66,    66,    66,
       65,     0,    75,    20,    21,    22,    23,    24,    25,    26,
-      27,    28,    29,    30,    31,    35,    36,    37,    38,    39,
-      40,    41,    42,    43,    44,    47,    48,    51,    56,    57,
-      58,    59,    60,    61,    63,    83,    84,    85,    86,    87,
-       3,    80,    81,    69,    69,    69,    64,    66,    63,    66,
+      27,    28,    29,    30,    31,    32,    35,    36,    37,    38,
+      39,    40,    41,    42,    43,    44,    47,    48,    51,    56,
+      57,    58,    59,    60,    61,    63,    83,    84,    85,    86,
+      87,     3,    80,    81,    69,    69,    69,    64,    66,    63,
       64,    64,    63,    63,    70,    89,    90,    63,    90,    89,
-      63,    63,    64,    64,    64,    66,    64,    64,    66,    64,
-      64,    64,    64,    64,    64,    69,     5,    84,    62,    91,
-      91,    91,    65,    91,    66,    63,    66,    67,    88,    90,
-      88,    91,    71
+      66,    63,    66,    64,    64,    64,    66,    64,    64,    66,
+      64,    64,    64,    64,    64,    64,    69,     5,    84,    62,
+      91,    91,    91,    65,    91,    66,    63,    66,    67,    88,
+      90,    88,    91,    71
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
@@ -844,8 +844,8 @@ static const yytype_int8 yyr1[] =
       85,    85,    85,    85,    85,    85,    85,    85,    85,    85,
       85,    85,    85,    85,    85,    85,    85,    85,    86,    86,
       86,    86,    86,    86,    86,    86,    86,    86,    86,    86,
-      86,    86,    87,    88,    88,    88,    88,    89,    89,    90,
-      91,    91
+      86,    86,    86,    87,    88,    88,    88,    88,    89,    89,
+      90,    91,    91
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
@@ -856,9 +856,9 @@ static const yytype_int8 yyr2[] =
        2,     2,     2,     2,     1,     2,     0,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     1,     1,     1,     1,     1,     1,     2,     2,
-       2,     2,     2,     2,     3,     2,     2,     2,     2,     2,
-       3,     2,     2,     1,     1,     1,     1,     1,     1,     3,
-       1,     0
+       2,     2,     2,     2,     3,     2,     1,     2,     2,     2,
+       2,     3,     2,     2,     1,     1,     1,     1,     1,     1,
+       3,     1,     0
 };
 
 
@@ -2291,101 +2291,107 @@ yyreduce:
 #line 2292 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 56: /* unary_instruction: "heap deallocation instruction" "integer literal"  */
+  case 56: /* unary_instruction: "heap deallocation instruction"  */
 #line 392 "specs/parser.y"
                                             {
-                                                (yyval.insn) = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(DELLOC), VM_QWORD_SIZE);
+                                                (yyval.insn) = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(DELLOC));
+                                            }
+#line 2300 "assembler/AssemblerParser-C.cpp"
+    break;
+
+  case 57: /* unary_instruction: "heap allocation instruction" "integer literal"  */
+#line 395 "specs/parser.y"
+                                            {
+                                                (yyval.insn) = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(MALLOC), VM_QWORD_SIZE);
                                                 Operand* operand = new Operand((yyvsp[0].integer)); (yyval.insn)->setOperand(operand);
                                             }
-#line 2301 "assembler/AssemblerParser-C.cpp"
+#line 2309 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 57: /* unary_instruction: "load instruction" "identifier"  */
-#line 396 "specs/parser.y"
+  case 58: /* unary_instruction: "load instruction" "integer literal"  */
+#line 399 "specs/parser.y"
                                             {
-                                                (yyval.insn) = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(LOAD), VM_ADDRESS_SIZE);
-
-                                                Operand* operand = new Operand(*(yyvsp[0].string)); (yyval.insn)->setOperand(operand);
-                                                delete (yyvsp[0].string);
+                                                (yyval.insn) = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(LOAD), VM_QWORD_SIZE);
+                                                Operand* operand = new Operand((yyvsp[0].integer)); (yyval.insn)->setOperand(operand);
                                             }
-#line 2312 "assembler/AssemblerParser-C.cpp"
+#line 2318 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 58: /* unary_instruction: "load-by-index instruction" "identifier"  */
-#line 402 "specs/parser.y"
+  case 59: /* unary_instruction: "load-by-index instruction" "identifier"  */
+#line 403 "specs/parser.y"
                                             {
                                                 (yyval.insn) = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(ILOAD), VM_ADDRESS_SIZE);
                                                 Operand* operand = new Operand(*(yyvsp[0].string)); (yyval.insn)->setOperand(operand);
                                                 delete (yyvsp[0].string);
                                             }
-#line 2322 "assembler/AssemblerParser-C.cpp"
+#line 2328 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 59: /* unary_instruction: "stack memory load instruction" "integer literal"  */
-#line 407 "specs/parser.y"
+  case 60: /* unary_instruction: "stack memory load instruction" "integer literal"  */
+#line 408 "specs/parser.y"
                                             {
                                                 (yyval.insn) = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(SLOAD), VM_ADDRESS_SIZE);
                                                 Operand* operand = new Operand((yyvsp[0].integer)); (yyval.insn)->setOperand(operand);
                                             }
-#line 2331 "assembler/AssemblerParser-C.cpp"
+#line 2337 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 60: /* unary_instruction: "store instruction" "instruction suffix" argument  */
-#line 411 "specs/parser.y"
+  case 61: /* unary_instruction: "store instruction" "instruction suffix" argument  */
+#line 412 "specs/parser.y"
                                             {
                                                 (yyval.insn) = as::createUnaryInstruction(AMANDA_VM_INSN_FAMILY(STORE), (yyvsp[-1].character));
                                                 (yyval.insn)->setOperand((yyvsp[0].operand)); 
                                             }
-#line 2340 "assembler/AssemblerParser-C.cpp"
+#line 2346 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 61: /* unary_instruction: "stack write instruction" "integer literal"  */
-#line 415 "specs/parser.y"
+  case 62: /* unary_instruction: "stack write instruction" "integer literal"  */
+#line 416 "specs/parser.y"
                                             {
                                                 (yyval.insn) = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(SSTORE), VM_ADDRESS_SIZE);
                                                 Operand* operand = new Operand((yyvsp[0].integer)); (yyval.insn)->setOperand(operand);
                                             }
-#line 2349 "assembler/AssemblerParser-C.cpp"
-    break;
-
-  case 62: /* label_declaration: "identifier" ':'  */
-#line 422 "specs/parser.y"
-                                            { (yyval.insn) = new Label(*(yyvsp[-1].string), STATE(state)->localOffset); delete (yyvsp[-1].string); }
 #line 2355 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 63: /* argument: "identifier"  */
-#line 427 "specs/parser.y"
-                                            { (yyval.operand) = new Operand(*(yyvsp[0].string)); delete (yyvsp[0].string); }
+  case 63: /* label_declaration: "identifier" ':'  */
+#line 423 "specs/parser.y"
+                                            { (yyval.insn) = new Label(*(yyvsp[-1].string), STATE(state)->localOffset); delete (yyvsp[-1].string); }
 #line 2361 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 64: /* argument: "integer literal"  */
+  case 64: /* argument: "identifier"  */
 #line 428 "specs/parser.y"
-                                            { (yyval.operand) = new Operand((yyvsp[0].integer)); }
+                                            { (yyval.operand) = new Operand(*(yyvsp[0].string)); delete (yyvsp[0].string); }
 #line 2367 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 65: /* argument: "floating point literal"  */
+  case 65: /* argument: "integer literal"  */
 #line 429 "specs/parser.y"
-                                            { (yyval.operand) = NULL; }
+                                            { (yyval.operand) = new Operand((yyvsp[0].integer)); }
 #line 2373 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 68: /* branch_target: "identifier"  */
-#line 435 "specs/parser.y"
-                                            { (yyval.operand) = new Operand(*(yyvsp[0].string)); delete (yyvsp[0].string); }
+  case 66: /* argument: "floating point literal"  */
+#line 430 "specs/parser.y"
+                                            { (yyval.operand) = NULL; }
 #line 2379 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 69: /* address_constant: '[' "integer literal" ']'  */
-#line 439 "specs/parser.y"
-                                            { (yyval.operand) = new Operand((yyvsp[-1].integer), VM_QWORD_SIZE); }
+  case 69: /* branch_target: "identifier"  */
+#line 436 "specs/parser.y"
+                                            { (yyval.operand) = new Operand(*(yyvsp[0].string)); delete (yyvsp[0].string); }
 #line 2385 "assembler/AssemblerParser-C.cpp"
     break;
 
+  case 70: /* address_constant: '[' "integer literal" ']'  */
+#line 440 "specs/parser.y"
+                                            { (yyval.operand) = new Operand((yyvsp[-1].integer), VM_QWORD_SIZE); }
+#line 2391 "assembler/AssemblerParser-C.cpp"
+    break;
 
-#line 2389 "assembler/AssemblerParser-C.cpp"
+
+#line 2395 "assembler/AssemblerParser-C.cpp"
 
         default: break;
       }
@@ -2626,7 +2632,7 @@ yyreturn:
   return yyresult;
 }
 
-#line 448 "specs/parser.y"
+#line 449 "specs/parser.y"
 
 
 void yyerror(YYLTYPE* location, void* scanner, void** module, void* state, char const* message)

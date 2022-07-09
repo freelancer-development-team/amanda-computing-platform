@@ -171,6 +171,16 @@ Address         {IntegerLiteral}
 
                                 *string_buf_ptr++ = result;
                             }
+<STRING>\\0x[0-9A-Fa-f]{1,2} {
+                                // Hexadecimal escape sequence
+                                int result = ' ';
+                                sscanf(yytext + 1, "%x", &result);
+                                if (result > 0xFF)
+                                {
+                                    throw SyntaxError(as::makeLocation(yylloc), "bad hexadecimal escape sequence.");
+                                }
+                                *string_buf_ptr++ = result;
+                            }
 <STRING>\\[0-9]+            { throw SyntaxError(as::makeLocation(yylloc), "bad escape sequence in string literal."); }
 <STRING>\\n                 { *string_buf_ptr++ = '\n'; }
 <STRING>\\t                 { *string_buf_ptr++ = '\t'; }

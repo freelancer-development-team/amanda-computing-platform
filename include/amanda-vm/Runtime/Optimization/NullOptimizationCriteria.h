@@ -16,16 +16,16 @@
  */
 
 /* 
- * File:   DefaultPoolAllocator.h
+ * File:   NullOptimizationCriteria.h
  * Author: Javier Marrero
  *
- * Created on July 5, 2022, 2:46 PM
+ * Created on July 9, 2022, 9:42 AM
  */
 
-#ifndef DEFAULTPOOLALLOCATOR_H
-#define DEFAULTPOOLALLOCATOR_H
+#ifndef NULLOPTIMIZATIONCRITERIA_H
+#define NULLOPTIMIZATIONCRITERIA_H
 
-#include <amanda-vm/Runtime/MemoryAllocator.h>
+#include <amanda-vm/Runtime/AdaptiveOptimizationCondition.h>
 
 namespace amanda
 {
@@ -33,32 +33,23 @@ namespace vm
 {
 
 /**
- * This namespace is a placeholder memory allocator that used standard malloc,
- * calloc and free.
+ * This criteria forces the virtual machine to never ´perform jit compilation
+ * of a piece of code. This inhibits all previous or further optimizations to
+ * the code. It essentially turns the virtual machine into a big-interpreter.
  *
- * @param memoryManager
+ * @return
  */
-class DefaultPoolAllocator : public MemoryAllocator
+class NullOptimizationCriteria : public AdaptiveOptimizationCondition
 {
+    AMANDA_OBJECT(NullOptimizationCriteria, AdaptiveOptimizationCondition)
 public:
 
-    DefaultPoolAllocator(MemoryManager& memoryManager);
-    virtual ~DefaultPoolAllocator();
-
-    virtual void* allocate(size_t size);
-    virtual void deallocate(void* elem);
-
-protected:
-
-
-    virtual void expandAddressSpace(size_t amount);
-    virtual const MemoryAllocator::AllocationHeader& find(size_t size) const;
-    virtual bool isNeedingExpansion() const;
+    virtual bool eval() const;
 
 } ;
 
 }
 }
 
-#endif /* DEFAULTPOOLALLOCATOR_H */
+#endif /* NULLOPTIMIZATIONCRITERIA_H */
 

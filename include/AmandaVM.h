@@ -28,7 +28,9 @@
 // Runtime Library
 #include <amanda-vm/Runtime/AdaptiveOptimizationCondition.h>
 #include <amanda-vm/Runtime/Context.h>
+#include <amanda-vm/Runtime/DefaultPoolAllocator.h>
 #include <amanda-vm/Runtime/ExecutableModule.h>
+#include <amanda-vm/Runtime/FfiException.h>
 #include <amanda-vm/Runtime/FileSystem.h>
 #include <amanda-vm/Runtime/IllegalInstructionException.h>
 #include <amanda-vm/Runtime/IllegalStateException.h>
@@ -53,6 +55,10 @@
 #include <amanda-vm/Runtime/Stack.h>
 #include <amanda-vm/Runtime/ThreadScheduler.h>
 #include <amanda-vm/Runtime/UnschedulableException.h>
+
+#include <amanda-vm/Runtime/Optimization/NullOptimizationCriteria.h>
+
+#include <amanda-vm/Runtime/Types/Object.h>
 
 // The Amanda Core Libraries
 #include <AmandaSDK.h>

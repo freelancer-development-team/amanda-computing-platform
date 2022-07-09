@@ -69,7 +69,7 @@ void* Stack::allocl(size_t size)
 
         // Create the result pointer, point that to the stack pointer and
         // move the stack pointer 'size' bytes ahead
-        result = (void*) stackPointer;
+        result = (void*) (stackArea + stackPointer);
         stackPointer += size;
         ++depth;
     }
@@ -89,6 +89,16 @@ const void* Stack::dma(ptrdiff_t offset)
     // Performs direct memory access to the stack area
     // The data returned is unmodifiable
     return (const void*) (stackArea + (stackPointer - offset));
+}
+
+void Stack::discard(size_t size)
+{
+    assert((stackPointer - size) >= 0ul && "Invalid pop operation on empty stack.");
+
+    // Discard the 'size' bytes
+    std::memset((void*) (stackArea + (stackPointer - size)), 0, size);
+    stackPointer -= size;
+    --depth;
 }
 
 vm_address_t Stack::getBasePointer() const
@@ -119,9 +129,10 @@ void Stack::pop(vm_byte_t* buffer, vm_size_t size)
     peek(buffer, size);
 
     // Reduce the stack pointer
-    std::memset((void*) (stackArea + (stackPointer - size)), 0, size);
-    stackPointer -= size;
-    --depth;
+    //    std::memset((void*) (stackArea + (stackPointer - size)), 0, size);
+    //    stackPointer -= size;
+    //    --depth;
+    discard(size);
     //    }
     //    AMANDA_DESYNCHRONIZED(lock);
 }
@@ -163,7 +174,7 @@ void Stack::popFrame(ptrdiff_t rvsize)
     }
 
     // Log the frame pop
-    LOGGER.info("popping stack frame with offset 0x%llx (depth %llu)", basePointer, depth);
+    LOGGER.debug("popping stack frame with offset 0x%llx (depth %llu)", basePointer, depth);
 }
 
 void Stack::push(const vm_byte_t* data, vm_size_t size, bool convert)
@@ -193,7 +204,7 @@ void Stack::pushFrame()
     frameStack.push(stackPointer);
     depthStack.push(depth);
 
-    LOGGER.info("pushing stack frame with offset 0x%llx (depth %llu).", getBasePointer(), depth);
+    LOGGER.debug("pushing stack frame with offset 0x%llx (depth %llu).", getBasePointer(), depth);
 }
 
 void* Stack::read(void* result, ptrdiff_t offset, vm_size_t length) const

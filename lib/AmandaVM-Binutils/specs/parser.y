@@ -389,15 +389,16 @@ unary_instruction
                                                 $$ = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(ALLOCA), VM_QWORD_SIZE);
                                                 Operand* operand = new Operand($2); $$->setOperand(operand);
                                             }
-    | DELLOC INTEGER_LITERAL                {
-                                                $$ = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(DELLOC), VM_QWORD_SIZE);
+    | DELLOC                                {
+                                                $$ = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(DELLOC));
+                                            }
+    | MALLOC INTEGER_LITERAL                {
+                                                $$ = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(MALLOC), VM_QWORD_SIZE);
                                                 Operand* operand = new Operand($2); $$->setOperand(operand);
                                             }
-    | LOAD IDENTIFIER                       {
-                                                $$ = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(LOAD), VM_ADDRESS_SIZE);
-
-                                                Operand* operand = new Operand(*$2); $$->setOperand(operand);
-                                                delete $2;
+    | LOAD INTEGER_LITERAL                  {
+                                                $$ = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(LOAD), VM_QWORD_SIZE);
+                                                Operand* operand = new Operand($2); $$->setOperand(operand);
                                             }
     | ILOAD IDENTIFIER                      {
                                                 $$ = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(ILOAD), VM_ADDRESS_SIZE);
