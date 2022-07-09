@@ -25,6 +25,7 @@
 #include <cstdlib>
 #include <vector>
 #include <deque>
+#include <streambuf>
 
 /* Internal API */
 #include <amanda-as/initialization.h>
@@ -34,6 +35,16 @@ using namespace amanda;
 
 int main(int argc, char** argv)
 {
+    /* Set locale */
+    std::setlocale(LC_ALL, "");
+    try
+    {
+        std::locale utf8_locale("en_US.UTF-8");
+        std::locale::global(utf8_locale);
+    }
+    catch (std::exception& ex)
+    { /* Its a no-op */ }
+
     /* The logger formatter. */
     logging::GNUFormatter formatter("amanda-as", true);
     binutils::setFormatterForPackage(formatter);

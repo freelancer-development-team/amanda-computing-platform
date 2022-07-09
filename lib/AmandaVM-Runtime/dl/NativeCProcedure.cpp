@@ -28,6 +28,9 @@
 // C++
 #include <ffi.h>
 #include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <ffitarget.h>
 
 // Define syntactic-sugar for comparing strings
 #define SWITCH_CASE(s)  if (type == (s))
@@ -99,17 +102,31 @@ void NativeCProcedure::call(Stack& stack)
     prepareArguments(values, stack);
 
     // Prepare the return-value pointer
-    ffi_arg rc;
+    size_t rsize = getArgumentSize(returnType);
+    if (rsize < sizeof (uintptr_t))
+    {
+        rsize = sizeof (uintptr_t);
+    }
+    LOGGER.debug("allocated %llu bytes for return value (register size %llu bytes, 'ffi_arg' size %llu).",
+                 rsize, sizeof (uintptr_t), sizeof (ffi_arg));
+
+    void*   rc = std::calloc(1, rsize);
+    assert(rc != NULL && "Null pointer exception");
 
     // Call
     LOGGER.debug("transferring control to native-defined procedure <%s>.", name.toCharArray());
-    ffi_call(&cif, FFI_FN(functionHandle), &rc, values.empty() ? NULL : values.data());
+    ffi_call(&cif, FFI_FN(functionHandle), rc, values.empty() ? NULL : values.data());
 
     // Delete the values
     unprepareArguments(values);
 
+    // Push the return value on the stack
+    // and clean the allocated resource
+    stack.push((vm::vm_byte_t*) rc, getArgumentSize(returnType), false);
+
     // Return
-    LOGGER.debug("success on native call.");
+    LOGGER.debug("success on native call (last quad-word of return value 0x%llx)", *((vm::vm_qword_t*) (rc)));
+    std::free(rc);
 }
 
 size_t NativeCProcedure::getArgumentSize(ffi_type* type) const
@@ -181,7 +198,11 @@ void NativeCProcedure::parseArgumentsString(const core::String& arguments)
     for (std::vector<core::String>::const_iterator it = argumentsList.begin(),
          end = argumentsList.end(); it != end; ++it)
     {
-        this->argumentTypes.push_back(parseSingleFfiType((*it)));
+        ffi_type* type = parseSingleFfiType((*it));
+        if (type != &ffi_type_void)
+        {
+            this->argumentTypes.push_back(type);
+        }
     }
 }
 
@@ -205,9 +226,14 @@ ffi_type* NativeCProcedure::parseSingleFfiType(const core::String& type) const
         result = &ffi_type_pointer;
     }
 
+    CASE(FFI_TYPE_NONE)
+    {
+        result = &ffi_type_void;
+    }
+
     DEFAULT()
     {
-        LOGGER.error("invalid parameter passed to ffi-type argument function: %s.", type);
+        LOGGER.error("invalid parameter passed to ffi-type argument function: %s.", type.toCharArray());
         throw FfiException("invalid type passed to parsing function.");
     }
 

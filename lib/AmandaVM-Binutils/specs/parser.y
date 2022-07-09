@@ -393,6 +393,10 @@ unary_instruction
                                                 $$ = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(DELLOC), VM_QWORD_SIZE);
                                                 Operand* operand = new Operand($2); $$->setOperand(operand);
                                             }
+    | MALLOC INTEGER_LITERAL                {
+                                                $$ = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(MALLOC), VM_QWORD_SIZE);
+                                                Operand* operand = new Operand($2); $$->setOperand(operand);
+                                            }
     | LOAD IDENTIFIER                       {
                                                 $$ = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(LOAD), VM_ADDRESS_SIZE);
 

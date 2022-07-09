@@ -36,7 +36,7 @@
 	invoke	print_nl
 
 	# Return zero
-	push	l32	$0
+	push	l32 $0
 	ret		l32
 .endef
 
@@ -73,6 +73,6 @@
 .section ".data"
 
 # References to the C-strings
-.local helloStr: .unicode "Hola, Amy... :) Mi nombre es Amanda...\n"
-.local str1: .unicode "Naci en junio de 2022, aunque la idea de mi creacion se remonta a un tiempo atras.\nYo soy el resultado de mas de mÃ¡s de 50000 lineas de codigo."
+.local helloStr: .unicode "Hola, Amy... :) Mi nombre es Amanda..."
+.local str1: .unicode "Nací en junio de 2022, aunque la idea de mi creación se remonta a un tiempo atrás.\nYo soy el resultado de más de 50000 líneas de codigo."
 .local str2: .unicode "Fui programada originalmente por J. Marrero, quien me nombro asi por vos."

@@ -42,6 +42,8 @@
 #include <cerrno>
 #include <ctime>
 #include <csignal>
+#include <clocale>
+#include <streambuf>
 
 #if _W32
 #    include <windows.h>
@@ -137,6 +139,11 @@ moduleLoader(new ModuleLoader(memoryAllocator->getReference()))
     LOGGER.info("loading runtime descriptor for the standard C library.");
     loadLibrary(core::getOperatingSystem() == core::WINDOWS ?
                 "msvcrt" : "c");
+
+    // Set the locale
+    // Amanda-VM uses UTF8 encoding and utf8 locale
+    // TODO: Complete UTF8 locale request
+    std::setlocale(LC_ALL, "");
 }
 
 Context::~Context()

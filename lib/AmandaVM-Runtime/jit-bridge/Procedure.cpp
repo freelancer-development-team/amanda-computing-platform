@@ -133,6 +133,7 @@ vm::vm_qword_t Procedure::execute(Stack& stack, ProcessorFlags& eflags)
     // Check if needs optimization
     if (!isOptimized() && shouldOptimize())
     {
+        LOGGER.debug("optimizing procedure '%s' (jit-compiling)", name.toCharArray());
         optimize();
     }
 
@@ -666,6 +667,20 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
             }
             case I_MALLOC:
             {
+                vm::vm_size_t size = readFromPool<vm::vm_size_t>(pool, ip);
+                augmentProgramCounter(ip, sizeof (vm::vm_size_t));
+
+                vm::vm_address_t result = (vm::vm_address_t) context.getMemoryAllocator().allocate(size);
+                if (result == 0UL)
+                {
+                    // Allocated null memory region
+                    //TODO: Switch this for exception handling
+                    raise(SIGSEGV);
+                }
+                else
+                {
+                    stack.push<vm::vm_address_t>(result);
+                }
                 break;
             }
             case I_DELLOC:
@@ -810,6 +825,9 @@ void Procedure::optimize()
     {
         concurrent::Thread thread(runnable);
         thread.start();
+
+        // Wait for the thread to finish processing
+        concurrent::Thread::wait(thread.getThreadId());
     }
     else
     {

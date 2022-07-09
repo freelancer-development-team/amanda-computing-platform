@@ -1,4 +1,4 @@
-amanda-vm: info: creating virtual machine context object (0x000001b65e6e9990)
+amanda-vm: info: creating virtual machine context object (0x0000021b97609990)
 amanda-vm: info: loading runtime descriptor for the standard C library.
 amanda-vm: info: attempting load of native library: msvcrt
 amanda-vm: info: module 'msvcrt' loaded successfully as a native library. Handle at 0x00007ffc1e6e0000
@@ -15,31 +15,31 @@ amanda-vm: trace: read program header for module <amanda-demo.ax>:
 amanda-vm: trace: section: <.sh-strings> (STRING TABLE)
   - section size      : 0x33
   - section offset    : 0x14c
-  - section address   : 0x1b65e6ee8c0
+  - section address   : 0x21b97758080
       -- end of section data --
 amanda-vm: trace: section: <.strings> (STRING TABLE)
   - section size      : 0x91
   - section offset    : 0x17f
-  - section address   : 0x1b65e6eed00
+  - section address   : 0x21b9760ec10
       -- end of section data --
 amanda-vm: trace: section: <.symbols> (SYMBOL TABLE)
   - section size      : 0x176
   - section offset    : 0x210
-  - section address   : 0x1b65e6eee20
+  - section address   : 0x21b9760ed30
       -- end of section data --
 amanda-vm: trace: section: <.code> (PROGRAM BITS)
   - section size      : 0xa4
   - section offset    : 0x386
-  - section address   : 0x1b65e7177b0
+  - section address   : 0x21b9775b3f0
       -- end of section data --
 amanda-vm: trace: section: <.data> (PROGRAM BITS)
-  - section size      : 0x102
+  - section size      : 0xfa
   - section offset    : 0x42a
-  - section address   : 0x1b65e717ce0
+  - section address   : 0x21b9775c4b0
       -- end of section data --
 amanda-vm: trace: section: <.rodata> (PROGRAM BITS)
   - section size      : 0x0
-  - section offset    : 0x52c
+  - section offset    : 0x524
   - section address   : 0x0
       -- end of section data --
 amanda-vm: debug: last loaded module ('amanda-demo.ax') available symbols are (11 results):
@@ -53,68 +53,178 @@ amanda-vm: debug: last loaded module ('amanda-demo.ax') available symbols are (1
 	NAME: pause                                              | INDEX: 0x7                | TYPE: FUNCTION     | OFFSET: 0x9a               | BIND: GLOBAL    
 	NAME: helloStr                                           | INDEX: 0x8                | TYPE: DATA OBJECT  | OFFSET: 0x0                | BIND: LOCAL     
 	NAME: str1                                               | INDEX: 0x9                | TYPE: DATA OBJECT  | OFFSET: 0x27               | BIND: LOCAL     
-	NAME: str2                                               | INDEX: 0xa                | TYPE: DATA OBJECT  | OFFSET: 0xb8               | BIND: LOCAL     
+	NAME: str2                                               | INDEX: 0xa                | TYPE: DATA OBJECT  | OFFSET: 0xb0               | BIND: LOCAL     
 
 amanda-vm: trace: entry symbol <@@main?A_string@!l32>
   - symbol address    : 0x0
   - symbol type       : FUNCTION
   - symbol size       : 51B
       -- end of symbol data --
-amanda-vm: info: execution started (local date & time: Thu Jul 07 23:55:17 2022)
+amanda-vm: info: execution started (local date & time: Fri Jul 08 20:05:16 2022)
 amanda-vm: debug: executing subroutine at 0x0, with stack depth 0 (on thread 2).
 amanda-vm: info: pushing stack frame with offset 0x0 (depth 0).
 amanda-vm: debug: requesting local call to symbol with index 0x4.
 amanda-vm: debug: identified target of local call (function 'print_presentation')
 amanda-vm: trace: symbol 'print_presentation' is un-cached, lazy-binding symbol and caching search results.
-amanda-vm: debug: made local jump to local subroutine 'print_presentation' with local stack at 0x000001b65e717ef0.
+amanda-vm: debug: made local jump to local subroutine 'print_presentation' with local stack at 0x0000021b9760dd60.
 amanda-vm: debug: executing subroutine at 0x33, with stack depth 0 (on thread 2).
 amanda-vm: info: pushing stack frame with offset 0x0 (depth 0).
 amanda-vm: info: requesting load by index: 0x8
-amanda-vm: debug: loaded heap pointer into stack, calculated offset is 0x1b65e717ce0
+amanda-vm: debug: loaded heap pointer into stack, calculated offset is 0x21b9775c4b0
 amanda-vm: debug: requesting native call to symbol with index 0x0.
 amanda-vm: debug: identified target of native call (function '$c!!puts@i32@p')
-amanda-vm: info: attempting call to native function named <$c!!puts@i32@p> (local stack: 0x000001b65e717ef0)
+amanda-vm: info: attempting call to native function named <$c!!puts@i32@p> (local stack: 0x0000021b9760dd60)
 amanda-vm: trace: looking for symbol 'puts' at library 'msvcrt'
 amanda-vm: info: created native procedure handle to process at 0x00007ffc1e72e620, with name 'puts', and with 1 arguments.
 amanda-vm: trace: allocated 8B-sized block of memory (argument 1 of 1)
+amanda-vm: debug: allocated 8 bytes for return value (register size 8 bytes, 'ffi_arg' size 8).
 amanda-vm: debug: transferring control to native-defined procedure <puts>.
-amanda-vm: debug: success on native call.
+amanda-vm: debug: success on native call (last quad-word of return value 0x0)
 amanda-vm: debug: requesting local call to symbol with index 0x6.
 amanda-vm: debug: identified target of local call (function 'print_nl')
 amanda-vm: trace: symbol 'print_nl' is un-cached, lazy-binding symbol and caching search results.
-amanda-vm: debug: made local jump to local subroutine 'print_nl' with local stack at 0x000001b65e717ef0.
-amanda-vm: debug: executing subroutine at 0x7d, with stack depth 0 (on thread 2).
-amanda-vm: info: pushing stack frame with offset 0x0 (depth 0).
+amanda-vm: debug: made local jump to local subroutine 'print_nl' with local stack at 0x0000021b9760dd60.
+amanda-vm: debug: executing subroutine at 0x7d, with stack depth 1 (on thread 2).
+amanda-vm: info: pushing stack frame with offset 0x4 (depth 1).
 amanda-vm: debug: requesting native call to symbol with index 0x1.
 amanda-vm: debug: identified target of native call (function '$c!!putchar@i32@i32')
-amanda-vm: info: attempting call to native function named <$c!!putchar@i32@i32> (local stack: 0x000001b65e717ef0)
+amanda-vm: info: attempting call to native function named <$c!!putchar@i32@i32> (local stack: 0x0000021b9760dd60)
 amanda-vm: trace: looking for symbol 'putchar' at library 'msvcrt'
 amanda-vm: info: created native procedure handle to process at 0x00007ffc1e727790, with name 'putchar', and with 1 arguments.
 amanda-vm: trace: allocated 4B-sized block of memory (argument 1 of 1)
+amanda-vm: debug: allocated 8 bytes for return value (register size 8 bytes, 'ffi_arg' size 8).
 amanda-vm: debug: transferring control to native-defined procedure <putchar>.
-amanda-vm: debug: success on native call.
+amanda-vm: debug: success on native call (last quad-word of return value 0xa)
 amanda-vm: debug: requesting native call to symbol with index 0x1.
 amanda-vm: debug: identified target of native call (function '$c!!putchar@i32@i32')
-amanda-vm: info: attempting call to native function named <$c!!putchar@i32@i32> (local stack: 0x000001b65e717ef0)
-amanda-vm: trace: the method '$c!!putchar@i32@i32' is already cached and ready to execute (local stack: 0x000001b65e717ef0)
+amanda-vm: info: attempting call to native function named <$c!!putchar@i32@i32> (local stack: 0x0000021b9760dd60)
+amanda-vm: trace: the method '$c!!putchar@i32@i32' is already cached and ready to execute (local stack: 0x0000021b9760dd60)
 amanda-vm: trace: allocated 4B-sized block of memory (argument 1 of 1)
+amanda-vm: debug: allocated 8 bytes for return value (register size 8 bytes, 'ffi_arg' size 8).
 amanda-vm: debug: transferring control to native-defined procedure <putchar>.
-amanda-vm: debug: success on native call.
+amanda-vm: debug: success on native call (last quad-word of return value 0xd)
 amanda-vm: trace: function returning 0 bytes. Setting the instruction pointer to zero
 amanda-vm: info: function returned 0 bytes (most significant quad word 0x0)
-amanda-vm: info: popping stack frame with offset 0x0 (depth 0)
+amanda-vm: info: popping stack frame with offset 0x4 (depth 1)
 amanda-vm: trace: function returning 0 bytes. Setting the instruction pointer to zero
 amanda-vm: info: function returned 0 bytes (most significant quad word 0x0)
 amanda-vm: info: popping stack frame with offset 0x0 (depth 0)
 amanda-vm: debug: requesting local call to symbol with index 0x7.
 amanda-vm: debug: identified target of local call (function 'pause')
 amanda-vm: trace: symbol 'pause' is un-cached, lazy-binding symbol and caching search results.
-amanda-vm: debug: made local jump to local subroutine 'pause' with local stack at 0x000001b65e717ef0.
+amanda-vm: debug: made local jump to local subroutine 'pause' with local stack at 0x0000021b9760dd60.
 amanda-vm: debug: executing subroutine at 0x9a, with stack depth 0 (on thread 2).
 amanda-vm: info: pushing stack frame with offset 0x0 (depth 0).
 amanda-vm: debug: requesting native call to symbol with index 0x2.
 amanda-vm: debug: identified target of native call (function '$c!!getchar@i32@nil')
-amanda-vm: info: attempting call to native function named <$c!!getchar@i32@nil> (local stack: 0x000001b65e717ef0)
+amanda-vm: info: attempting call to native function named <$c!!getchar@i32@nil> (local stack: 0x0000021b9760dd60)
 amanda-vm: trace: looking for symbol 'getchar' at library 'msvcrt'
-amanda-vm: error: invalid parameter passed to ffi-type argument function: °éÉû.
-amanda-vm: fatal error: segmentation failure (signal 11).
+amanda-vm: info: created native procedure handle to process at 0x00007ffc1e726fd0, with name 'getchar', and with 0 arguments.
+amanda-vm: debug: allocated 8 bytes for return value (register size 8 bytes, 'ffi_arg' size 8).
+amanda-vm: debug: transferring control to native-defined procedure <getchar>.
+amanda-vm: debug: success on native call (last quad-word of return value 0x41)
+amanda-vm: trace: function returning 0 bytes. Setting the instruction pointer to zero
+amanda-vm: info: function returned 0 bytes (most significant quad word 0x0)
+amanda-vm: info: popping stack frame with offset 0x0 (depth 0)
+amanda-vm: debug: requesting local call to symbol with index 0x5.
+amanda-vm: debug: identified target of local call (function 'print_prologue')
+amanda-vm: trace: symbol 'print_prologue' is un-cached, lazy-binding symbol and caching search results.
+amanda-vm: debug: made local jump to local subroutine 'print_prologue' with local stack at 0x0000021b9760dd60.
+amanda-vm: debug: executing subroutine at 0x4f, with stack depth 0 (on thread 2).
+amanda-vm: info: pushing stack frame with offset 0x0 (depth 0).
+amanda-vm: info: requesting load by index: 0x9
+amanda-vm: debug: loaded heap pointer into stack, calculated offset is 0x21b9775c4d7
+amanda-vm: debug: requesting native call to symbol with index 0x0.
+amanda-vm: debug: identified target of native call (function '$c!!puts@i32@p')
+amanda-vm: info: attempting call to native function named <$c!!puts@i32@p> (local stack: 0x0000021b9760dd60)
+amanda-vm: trace: the method '$c!!puts@i32@p' is already cached and ready to execute (local stack: 0x0000021b9760dd60)
+amanda-vm: trace: allocated 8B-sized block of memory (argument 1 of 1)
+amanda-vm: debug: allocated 8 bytes for return value (register size 8 bytes, 'ffi_arg' size 8).
+amanda-vm: debug: transferring control to native-defined procedure <puts>.
+amanda-vm: debug: success on native call (last quad-word of return value 0x0)
+amanda-vm: debug: requesting local call to symbol with index 0x7.
+amanda-vm: debug: identified target of local call (function 'pause')
+amanda-vm: trace: the procedure 'pause' is cached, executing (local stack: 0x0000021b9760dd60).
+amanda-vm: debug: made local jump to local subroutine 'pause' with local stack at 0x0000021b9760dd60.
+amanda-vm: debug: executing subroutine at 0x9a, with stack depth 1 (on thread 2).
+amanda-vm: info: pushing stack frame with offset 0x4 (depth 1).
+amanda-vm: debug: requesting native call to symbol with index 0x2.
+amanda-vm: debug: identified target of native call (function '$c!!getchar@i32@nil')
+amanda-vm: info: attempting call to native function named <$c!!getchar@i32@nil> (local stack: 0x0000021b9760dd60)
+amanda-vm: trace: the method '$c!!getchar@i32@nil' is already cached and ready to execute (local stack: 0x0000021b9760dd60)
+amanda-vm: debug: allocated 8 bytes for return value (register size 8 bytes, 'ffi_arg' size 8).
+amanda-vm: debug: transferring control to native-defined procedure <getchar>.
+amanda-vm: debug: success on native call (last quad-word of return value 0xa)
+amanda-vm: trace: function returning 0 bytes. Setting the instruction pointer to zero
+amanda-vm: info: function returned 0 bytes (most significant quad word 0x0)
+amanda-vm: info: popping stack frame with offset 0x4 (depth 1)
+amanda-vm: info: requesting load by index: 0xa
+amanda-vm: debug: loaded heap pointer into stack, calculated offset is 0x21b9775c560
+amanda-vm: debug: requesting native call to symbol with index 0x0.
+amanda-vm: debug: identified target of native call (function '$c!!puts@i32@p')
+amanda-vm: info: attempting call to native function named <$c!!puts@i32@p> (local stack: 0x0000021b9760dd60)
+amanda-vm: trace: the method '$c!!puts@i32@p' is already cached and ready to execute (local stack: 0x0000021b9760dd60)
+amanda-vm: trace: allocated 8B-sized block of memory (argument 1 of 1)
+amanda-vm: debug: allocated 8 bytes for return value (register size 8 bytes, 'ffi_arg' size 8).
+amanda-vm: debug: transferring control to native-defined procedure <puts>.
+amanda-vm: debug: success on native call (last quad-word of return value 0x0)
+amanda-vm: trace: function returning 0 bytes. Setting the instruction pointer to zero
+amanda-vm: info: function returned 0 bytes (most significant quad word 0x0)
+amanda-vm: info: popping stack frame with offset 0x0 (depth 0)
+amanda-vm: debug: requesting local call to symbol with index 0x7.
+amanda-vm: debug: identified target of local call (function 'pause')
+amanda-vm: trace: the procedure 'pause' is cached, executing (local stack: 0x0000021b9760dd60).
+amanda-vm: debug: made local jump to local subroutine 'pause' with local stack at 0x0000021b9760dd60.
+amanda-vm: debug: executing subroutine at 0x9a, with stack depth 0 (on thread 2).
+amanda-vm: info: pushing stack frame with offset 0x0 (depth 0).
+amanda-vm: debug: requesting native call to symbol with index 0x2.
+amanda-vm: debug: identified target of native call (function '$c!!getchar@i32@nil')
+amanda-vm: info: attempting call to native function named <$c!!getchar@i32@nil> (local stack: 0x0000021b9760dd60)
+amanda-vm: trace: the method '$c!!getchar@i32@nil' is already cached and ready to execute (local stack: 0x0000021b9760dd60)
+amanda-vm: debug: allocated 8 bytes for return value (register size 8 bytes, 'ffi_arg' size 8).
+amanda-vm: debug: transferring control to native-defined procedure <getchar>.
+amanda-vm: debug: success on native call (last quad-word of return value 0x42)
+amanda-vm: trace: function returning 0 bytes. Setting the instruction pointer to zero
+amanda-vm: info: function returned 0 bytes (most significant quad word 0x0)
+amanda-vm: info: popping stack frame with offset 0x0 (depth 0)
+amanda-vm: debug: requesting local call to symbol with index 0x6.
+amanda-vm: debug: identified target of local call (function 'print_nl')
+amanda-vm: trace: the procedure 'print_nl' is cached, executing (local stack: 0x0000021b9760dd60).
+amanda-vm: debug: made local jump to local subroutine 'print_nl' with local stack at 0x0000021b9760dd60.
+amanda-vm: debug: executing subroutine at 0x7d, with stack depth 0 (on thread 2).
+amanda-vm: info: pushing stack frame with offset 0x0 (depth 0).
+amanda-vm: debug: requesting native call to symbol with index 0x1.
+amanda-vm: debug: identified target of native call (function '$c!!putchar@i32@i32')
+amanda-vm: info: attempting call to native function named <$c!!putchar@i32@i32> (local stack: 0x0000021b9760dd60)
+amanda-vm: trace: the method '$c!!putchar@i32@i32' is already cached and ready to execute (local stack: 0x0000021b9760dd60)
+amanda-vm: trace: allocated 4B-sized block of memory (argument 1 of 1)
+amanda-vm: debug: allocated 8 bytes for return value (register size 8 bytes, 'ffi_arg' size 8).
+amanda-vm: debug: transferring control to native-defined procedure <putchar>.
+amanda-vm: debug: success on native call (last quad-word of return value 0xa)
+amanda-vm: debug: requesting native call to symbol with index 0x1.
+amanda-vm: debug: identified target of native call (function '$c!!putchar@i32@i32')
+amanda-vm: info: attempting call to native function named <$c!!putchar@i32@i32> (local stack: 0x0000021b9760dd60)
+amanda-vm: trace: the method '$c!!putchar@i32@i32' is already cached and ready to execute (local stack: 0x0000021b9760dd60)
+amanda-vm: trace: allocated 4B-sized block of memory (argument 1 of 1)
+amanda-vm: debug: allocated 8 bytes for return value (register size 8 bytes, 'ffi_arg' size 8).
+amanda-vm: debug: transferring control to native-defined procedure <putchar>.
+amanda-vm: debug: success on native call (last quad-word of return value 0xd)
+amanda-vm: trace: function returning 0 bytes. Setting the instruction pointer to zero
+amanda-vm: info: function returned 0 bytes (most significant quad word 0x0)
+amanda-vm: info: popping stack frame with offset 0x0 (depth 0)
+amanda-vm: trace: function returning 4 bytes. Setting the instruction pointer to zero
+amanda-vm: info: function returned 4 bytes (most significant quad word 0x0)
+amanda-vm: info: popping stack frame with offset 0x0 (depth 1)
+amanda-vm: info: execution finished, return value: 0
+amanda-vm: info: destroying virtual machine context @ 0x0000021b97609990.
+amanda-vm: info: unloading dynamic link library 'msvcrt'.
+amanda-vm: trace: un-caching native symbol 'getchar'.
+amanda-vm: trace: un-caching native symbol 'putchar'.
+amanda-vm: trace: un-caching native symbol 'puts'.
+amanda-vm: trace: un-caching local symbol '@@main?A_string@!l32'.
+amanda-vm: trace: un-caching local symbol 'pause'.
+amanda-vm: trace: un-caching local symbol 'print_nl'.
+amanda-vm: trace: un-caching local symbol 'print_presentation'.
+amanda-vm: trace: un-caching local symbol 'print_prologue'.
+amanda-vm: info: 	-- EXEC FINISHED --
+

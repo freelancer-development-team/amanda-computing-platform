@@ -39,6 +39,7 @@
 #include <amanda-vm/Runtime/ExecutableModule.h>
 
 // C++
+#include <clocale>
 #include <map>
 #include <vector>
 
