@@ -280,6 +280,11 @@ void Thread::setDead(bool dead)
     }
 }
 
+void Thread::setPriority(ThreadPriority priority)
+{
+    throw ThreadingException("unsupported operation exception");
+}
+
 void Thread::start()
 {
     int result = pthread_create(PTHREAD_HANDLE(nativeHandle), PTHREAD_ATTRIBUTE(handles[PTHREAD_ATTRIBUTE_NAME]), &internalRun, static_cast<void*> (this));

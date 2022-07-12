@@ -50,24 +50,28 @@ class Handler;
  */
 class Logger : public core::Object
 {
+
     AMANDA_OBJECT(Logger, core::Object)
-    
+
 public:
-    
+
     /**
      * This is a enumerated list of logging levels.
      */
     typedef enum Level
     {
-        NONE = INT_MIN,
-        OFF = INT_MIN + 1,
-        FATAL = -1000,
-        ERROR = -500,
-        WARN = -250,
-        INFO = 0,
-        DEBUG = 250,
-        TRACE = 500,
-        ALL = INT_MAX
+        L_NONE = INT_MIN,
+        L_OFF = INT_MIN + 1,
+        L_FATAL = -1000,
+        L_ERROR = -500,
+        L_WARN = -250,
+        L_INFO = 0,
+        L_FINE = 25,
+        L_FINER = 100,
+        L_FINEST = 200,
+        L_DEBUG = 250,
+        L_TRACE = 500,
+        L_ALL = INT_MAX
     } Level;
 
     static Logger root;
@@ -81,8 +85,11 @@ public:
     void                        addHandler(Handler& handler);
     void                        debug(const core::String& fmt, ...) const;
     void                        error(const core::String& fmt, ...) const;
+    void                        fine(const core::String& fmt, ...) const;
+    void                        finer(const core::String& fmt, ...) const;
+    void                        finest(const core::String& fmt, ...) const;
     void                        fatal(const core::String& fmt, ...) const;
-    const std::deque<Handler*>& getHandlers();
+    const std::deque<Handler*>& getHandlers() const;
     int                         getLevel() const;
     const core::String&         getName() const;
     Logger*                     getParent() const;
@@ -102,7 +109,7 @@ protected:
 
     Logger(const core::String& name);
 
-    void                        logp(int level, const core::String& fmt, va_list va) const;
+    void                        logp(int level, const core::String& fmt, va_list& va) const;
 
 private:
 

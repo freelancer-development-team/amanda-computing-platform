@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,11 @@
 #include <wchar.h>
 #include <math.h>
 
+static inline size_t _align(size_t size, size_t alignment)
+{
+    return (size + alignment - 1) & ~(alignment - 1);
+}
+
 using namespace amanda;
 using namespace amanda::vm;
 
@@ -64,7 +69,9 @@ void* Stack::allocl(size_t size)
     {
         if (stackPointer + size > stackSize)
         {
-            resizeStack(size + (stackSize * 0.5f));
+            size_t dS = _align(size + (stackSize * 0.4f), 0x1000);
+            LOGGER.warn("resizing stack from %llu-bytes to %llu-bytes", stackSize, stackSize + dS);
+            resizeStack(dS);
         }
 
         // Create the result pointer, point that to the stack pointer and
@@ -171,6 +178,7 @@ void Stack::popFrame(ptrdiff_t rvsize)
     {
         // Push the value back to the stack
         push(buffer, rvsize, false);
+        std::free(buffer);  // THIS FIXED A MEMORY LEAK. I WONDER WHERE ELSE???
     }
 
     // Log the frame pop
@@ -183,10 +191,12 @@ void Stack::push(const vm_byte_t* data, vm_size_t size, bool convert)
     //    {
     if (stackPointer + size > stackSize)
     {
-        resizeStack(size + (stackSize * 0.5f));
+        size_t dS = _align(size + (stackSize * 0.4f), 0x1000);
+        LOGGER.warn("resizing stack from %llu-bytes to %llu-bytes", stackSize, stackSize + dS);
+        resizeStack(dS);
     }
 
-    std::memcpy(stackArea + stackPointer, data, size);
+    std::memmove(stackArea + stackPointer, data, size);
     if (!io::isMachineBigEndian() && convert)
     {
         io::swapEndianness(stackArea + stackPointer, size);
@@ -240,6 +250,7 @@ bool Stack::write(const void* data, ptrdiff_t offset, vm_size_t length)
 
     // Reduce the stack pointer by n-units
     stackPointer -= length;
+    --depth;
 
     return result;
 }

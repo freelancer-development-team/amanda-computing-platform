@@ -32,29 +32,24 @@ namespace amanda
 namespace concurrent
 {
 
-class SynchronizationLock;
-class SynchronizationLockWrapper : public core::Object
+class SynchronizationLock : public core::Object
 {
-    AMANDA_OBJECT(SynchronizationLockWrapper, core::Object)
+    AMANDA_OBJECT(SynchronizationLock, core::Object)
 public:
 
-    SynchronizationLockWrapper();
-    SynchronizationLockWrapper(SynchronizationLock* lock);
-    SynchronizationLockWrapper(const SynchronizationLockWrapper& rhs);
-    virtual ~SynchronizationLockWrapper();
+    SynchronizationLock();
+    virtual ~SynchronizationLock();
 
-    SynchronizationLock* getLock();
+    void unlock();
 
 private:
 
-    SynchronizationLock* lock;
-};
+    bool    disposed;
+    char    nativeLock[16];
+} ;
 
-SynchronizationLock*    synchronized();
-void                    unlock(SynchronizationLock* lock);
-
-#define AMANDA_SYNCHRONIZED(name)   amanda::concurrent::SynchronizationLockWrapper name
-#define AMANDA_DESYNCHRONIZED(name)  amanda::concurrent::unlock(name.getLock())
+#define AMANDA_SYNCHRONIZED(name)       amanda::concurrent::SynchronizationLock name
+#define AMANDA_DESYNCHRONIZED(name)     name.unlock()
 
 }
 }

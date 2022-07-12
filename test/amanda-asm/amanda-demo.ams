@@ -220,6 +220,7 @@
 	jmp		.loop				# repeat the loop
 	
 .end:
+	pop		q64					# clear the argument
 	ret		v0
 .endef
 
@@ -236,7 +237,7 @@
 	
 	clt		l32					# clock() < start_time + delay
 	jt		.L1					# jump to .L1 if the condition holds
-	
+		
 	ret		v0
 .endef
 

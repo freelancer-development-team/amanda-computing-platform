@@ -235,6 +235,7 @@ typedef enum VM_Opcodes
     I_ILOAD,
     I_SLOAD,
 
+    I_STORE,
     I_STOREB,
     I_STOREW,
     I_STOREL,

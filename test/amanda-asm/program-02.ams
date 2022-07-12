@@ -18,81 +18,152 @@
   
 .section ".code"
 
-# Reference the native method puts
+# References to the native methods
 .native $c!!puts@i32@p
 .native $c!!putchar@i32@i32
+.native $c!!getchar@i32@nil
+.native $c!!clock@i32@nil
 
 # This is the main function for this test program.
 .def @@main?A_string@!l32
-	# Allocate the loop control variable
-	alloc	$0x4
+	alloc	$4
 	
-	# Push the base letter A
-.L1:
-	push	l32 $0x41
+.fl:
+	# invoke	pause
+
+	# push	a64 $0
+	# sload	$4
+	# push	l32 $2
+	# add		l32
+	# invoke	simple_loop
 	
-	# Load the variable allocated on the stack
-	push	a64 $0x0
-	sload	$4
-	
-	# Add the two variables and print the character
-	add		l32
-	dup		l32
-	ccall	$c!!putchar@i32@i32
-	
-	# Add one to the character previously stored at 0x0
-	push	a64 $0x0
+	push	a64 $0
 	sload	$4
 	push	l32 $1
 	add		l32
+	dup		l32
 	
-	# Store the character
-	push	a64	$0x0
+	push	a64 $0
 	sstore	$4
 	
-	# If != 0x5b jump to the first label
-	push	l32 $0x5a
-	ceq		l32
-	jf		.L1	
+	push	l32 $100
+	clt		l32
+	jt		.fl
 	
-	# Print the new line character
-	invoke	print_nl
+	iload	str1
+	invoke	slowprint
 	
-	# Return 0
+	# Pause and return
+	invoke	pause
 	push	l32 $0
 	ret		l32
 .endef
 
-.def print_nl
-	push	l32	$0x0a
-	ccall	$c!!putchar@i32@i32
-	push	l32 $0x0d
-	ccall	$c!!putchar@i32@i32
+.def factorial
+	dup		l32
+	push	l32 $2
+	clt		l32
+	jt		.end
+	dup		l32
+	push	l32 $1
+	sub		l32
+	invoke	factorial
+	mul		l32
+.end:
+	ret		l32
+.endef
+
+.def simple_loop
+	push	l32 $0
+.loop:
+	push	a64 $0
+	sload	$4
+	push	l32 $1
+	add		l32
+	
+	dup		l32
+	push	l32 $1000
+	clt		l32
+	jf		.end
+	
+	push	a64 $0
+	sstore	$4
+	
+	jmp		.loop
+.end:
+	ret 	v0
+.endef
+
+.def just_return
+	ret v0
+.endef
+
+.def pause
+	ccall	$c!!getchar@i32@nil
+	ret		v0
+.endef
+
+.def slowprint
+	# Arguments:
+	# $0	- a pointer to a unicode string representing the string to print
+	push	a64 $-8
+	sload	$8					# $0 contains a pointer
+	push	q64 $0				# $8 index to offset	
+	
+.loop:	
+	# Load the variables and add them
+	# Load the offset first
+	push	a64 $0
+	sload	$8
+	# Load the offset
+	push	a64 $8
+	sload	$8
+	
+	add		q64					# sum the two variables
+	load	$1					# load the character
+	b2l							# convert it to a 32bit integer
+	
+	dup		l32					# duplicate the value
+	push 	l32 $0				# push ''
+	ceq		l32					# compare if the character is the terminator
+	jt		.end				# if true jump to the end of the function
+	
+	ccall 	$c!!putchar@i32@i32 # call the putchar C function
+	pop		l32					# discard the return value of the function
+	
+	push	a64 $8				# push the address of the offset
+	sload	$8					# load the offset 
+	push	q64 $1				# push 1
+	add		q64					# add one to the offset
+	
+	push	a64 $8				# push the first variable address
+	sstore	$8					# write the summed index
+	
+	invoke	delay				# delay 1s the character
+	jmp		.loop				# repeat the loop
+	
+.end:
+	pop		q64					# clear the argument
+	ret		v0
+.endef
+
+.def delay
+	ccall	$c!!clock@i32@nil	# start_time = clock()
+	push	l32 $110			# 0.11s delay
+	add		l32					# $0 - now contains the start time + delay
+	
+.L1:
+	ccall	$c!!clock@i32@nil	# clock()
+	
+	push	a64 $0				# push the address of $0
+	sload	$4					# load the variable at $0
+	
+	clt		l32					# clock() < start_time + delay
+	jt		.L1					# jump to .L1 if the condition holds
+		
 	ret		v0
 .endef
 
 .section ".data"
 
-# This data object represents the class:
-#
-# 		amanda::binutils::test::Fred
-#
-# This memory region is used as a template for when creating Fred objects.
-# The memory region must follow the object model layout in order to be compatible
-# amongst compilers & implementations.
-#
-.global amanda::binutils::test::Fred:
-# HEADER
-.long $0x0B1EC7
-.weak amanda::binutils::test::Fred::self:		.address	$0								# This pointer
-.weak amanda::binutils::test::Fred::refcount:	.quad		$0								# Reference count
-.weak amanda::binutils::test::Fred::size:		.quad		$0x8							# Object size
-.weak amanda::binutils::test::Fred::classname:	.unicode	"amanda::binutils::test::Fred"	# Class name
-# VTABLE
-
-# VPOINTER
-
-# PUBLIC DATA:
-.weak amanda::binutils::test::Fred::name:		.address	$0								# Pointer to Fred's name
-
-
+.local str1: .unicode "Hola Tachiri, te están quemando!!\n"

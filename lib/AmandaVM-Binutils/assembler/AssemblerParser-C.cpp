@@ -577,9 +577,9 @@ union yyalloc
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  20
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  72
+#define YYNRULES  73
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  124
+#define YYNSTATES  126
 
 /* YYMAXUTOK -- Last valid token kind.  */
 #define YYMAXUTOK   322
@@ -639,10 +639,10 @@ static const yytype_int16 yyrline[] =
      248,   266,   295,   296,   297,   298,   305,   313,   314,   318,
      326,   327,   328,   329,   334,   335,   336,   340,   341,   342,
      346,   347,   348,   349,   350,   351,   352,   353,   354,   355,
-     356,   357,   359,   360,   361,   362,   363,   364,   368,   369,
-     370,   381,   382,   384,   386,   388,   392,   395,   399,   403,
-     408,   412,   416,   423,   428,   429,   430,   431,   435,   436,
-     440,   445,   446
+     356,   357,   358,   360,   361,   362,   363,   364,   365,   369,
+     370,   371,   382,   383,   385,   387,   389,   393,   396,   400,
+     404,   409,   413,   417,   424,   429,   430,   431,   432,   436,
+     437,   441,   446,   447
 };
 #endif
 
@@ -712,7 +712,7 @@ static const yytype_int16 yytoknum[] =
 };
 #endif
 
-#define YYPACT_NINF (-65)
+#define YYPACT_NINF (-66)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -726,19 +726,19 @@ static const yytype_int16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-     100,   -62,   -53,   -60,   -50,   -35,   -34,   -22,   -21,   -18,
-     -16,    -6,    44,   100,   -65,   -65,   -65,   -65,   -65,   -65,
-      42,    57,     6,     7,    18,   -65,   -65,   -65,   -65,   -65,
-     -65,   -65,   -65,    24,    25,    29,   -65,    30,    31,    33,
-     -61,   -23,   -61,    47,    34,    48,    53,    54,    56,    55,
-      58,    59,    60,   -65,   -65,   -65,   -65,   -65,   -65,    61,
-      63,    64,    65,    66,    67,    68,    -5,   -65,    62,    62,
-      62,    69,    62,   -65,   -65,   -65,   -65,   -65,   -65,   -65,
-     -65,   -65,   -65,   -65,    70,   -65,   -65,   -65,   -65,   -65,
-     -65,   -65,   -65,   -65,   -56,   -65,   -65,   -65,   -56,   -65,
-     -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,
-     -65,   -65,   -65,    62,   -65,    71,   -65,   -65,   -65,   -65,
-     -65,   -65,   -65,   -65
+     107,   -62,   -63,   -60,   -48,   -46,   -45,   -44,   -43,   -42,
+     -28,   -14,    20,   107,   -66,   -66,   -66,   -66,   -66,   -66,
+      49,    18,   -47,   -15,   -12,   -66,   -66,   -66,   -66,   -66,
+     -66,   -66,   -66,    -6,     1,    -3,   -66,    30,    31,    19,
+     -59,   -56,   -59,    32,    36,    35,    38,    39,    40,    56,
+      55,    60,    61,    62,   -66,   -66,   -66,   -66,   -66,   -66,
+      63,    65,    66,    67,    68,    69,    70,     5,   -66,    72,
+      72,    72,    71,    72,   -66,   -66,   -66,   -66,   -66,   -66,
+     -66,   -66,   -66,   -66,   -66,    74,   -66,   -66,   -66,   -66,
+     -66,   -66,   -66,   -66,   -66,   -66,   -54,   -66,   -66,   -66,
+     -54,   -66,   -66,   -66,   -66,   -66,   -66,   -66,   -66,   -66,
+     -66,   -66,   -66,   -66,   -66,    72,   -66,    64,   -66,   -66,
+     -66,   -66,   -66,   -66,   -66,   -66
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -749,30 +749,30 @@ static const yytype_int8 yydefact[] =
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
        0,     0,     0,     2,     3,     5,     6,     7,     8,     9,
       26,    18,     0,     0,     0,    16,    15,    20,    22,    23,
-      21,     1,     4,     0,     0,     0,    56,     0,     0,     0,
+      21,     1,     4,     0,     0,     0,    57,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,    42,    43,    44,    45,    46,    47,     0,
-       0,     0,     0,     0,     0,     0,     0,    24,    72,    72,
-      72,     0,    72,    17,    12,    14,    13,    30,    55,    48,
-      37,    38,    53,    69,     0,    51,    68,    50,    49,    52,
-      58,    59,    57,    39,     0,    40,    60,    41,     0,    62,
-      31,    32,    33,    34,    35,    36,    63,    11,    25,    71,
-      27,    28,    29,    72,    10,     0,    64,    65,    66,    54,
-      67,    61,    19,    70
+       0,     0,     0,     0,    43,    44,    45,    46,    47,    48,
+       0,     0,     0,     0,     0,     0,     0,     0,    24,    73,
+      73,    73,     0,    73,    17,    12,    14,    13,    30,    56,
+      49,    37,    38,    54,    70,     0,    52,    69,    51,    50,
+      53,    59,    60,    58,    39,    40,     0,    41,    61,    42,
+       0,    63,    31,    32,    33,    34,    35,    36,    64,    11,
+      25,    72,    27,    28,    29,    73,    10,     0,    65,    66,
+      67,    55,    68,    62,    19,    71
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -65,   -65,   -65,   119,   -65,   -65,   -65,   -65,   -65,   -65,
-     -65,   -65,    72,   -65,   -65,   -65,    35,    93,   -37,   -64
+     -66,   -66,   -66,   124,   -66,   -66,   -66,   -66,   -66,   -66,
+     -66,   -66,    75,   -66,   -66,   -66,    41,    96,   -41,   -65
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,    12,    13,    14,    15,    16,    17,    18,    72,    73,
-      19,    66,    67,    68,    69,    70,   119,    85,    86,   110
+       0,    12,    13,    14,    15,    16,    17,    18,    73,    74,
+      19,    67,    68,    69,    70,    71,   121,    86,    87,   112
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -780,40 +780,40 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-     107,    20,    83,    22,    88,   111,   112,   116,   114,    84,
-     117,   118,    21,    23,    84,    33,    34,    35,    36,    37,
-      38,    39,    40,    41,    42,    43,    44,    45,    24,    25,
-      46,    47,    48,    49,    50,    51,    52,    53,    54,    55,
-      87,    26,    56,    57,    31,    27,    58,    84,    28,   122,
-      29,    59,    60,    61,    62,    63,    64,   120,    65,    30,
-      71,   120,    33,    34,    35,    36,    37,    38,    39,    40,
-      41,    42,    43,    44,    45,    74,    75,    46,    47,    48,
-      49,    50,    51,    52,    53,    54,    55,    76,    77,    56,
-      57,    78,    79,    58,    80,    81,    82,    91,    59,    60,
-      61,    62,    63,    64,     1,    65,     2,     3,     4,     5,
-       6,     7,     8,    90,    92,     9,    10,    93,    94,    11,
-      95,    96,    97,    98,   109,   100,    99,   101,   102,   103,
-     104,   105,    32,   121,   113,    89,   115,   106,   108,     0,
-       0,     0,   123
+      89,    20,    21,    22,    84,   113,   114,    88,   116,   118,
+     109,    85,   119,   120,    85,    23,    85,    24,    25,    26,
+      31,    72,    75,    27,    28,    33,    34,    35,    36,    37,
+      38,    39,    40,    41,    42,    43,    44,    45,    29,    46,
+      47,    48,    49,    50,    51,    52,    53,    54,    55,    56,
+     124,    30,    57,    58,    76,   122,    59,    77,    78,   122,
+      80,    60,    61,    62,    63,    64,    65,    79,    66,    33,
+      34,    35,    36,    37,    38,    39,    40,    41,    42,    43,
+      44,    45,    83,    46,    47,    48,    49,    50,    51,    52,
+      53,    54,    55,    56,    81,    82,    57,    58,    91,    92,
+      59,    93,    94,    95,    96,    60,    61,    62,    63,    64,
+      65,     1,    66,     2,     3,     4,     5,     6,     7,     8,
+      97,    98,     9,    10,    99,   100,    11,   102,   101,   103,
+     104,   105,   106,   107,   111,   125,   115,    32,    90,   108,
+     117,   123,   110
 };
 
 static const yytype_int8 yycheck[] =
 {
-       5,    63,    63,    63,    41,    69,    70,    63,    72,    70,
-      66,    67,    65,    63,    70,    20,    21,    22,    23,    24,
-      25,    26,    27,    28,    29,    30,    31,    32,    63,    63,
+      41,    63,    65,    63,    63,    70,    71,    63,    73,    63,
+       5,    70,    66,    67,    70,    63,    70,    63,    63,    63,
+       0,     3,    69,    66,    66,    20,    21,    22,    23,    24,
+      25,    26,    27,    28,    29,    30,    31,    32,    66,    34,
       35,    36,    37,    38,    39,    40,    41,    42,    43,    44,
-      63,    63,    47,    48,     0,    66,    51,    70,    66,   113,
-      66,    56,    57,    58,    59,    60,    61,    94,    63,    65,
-       3,    98,    20,    21,    22,    23,    24,    25,    26,    27,
-      28,    29,    30,    31,    32,    69,    69,    35,    36,    37,
-      38,    39,    40,    41,    42,    43,    44,    69,    64,    47,
-      48,    66,    63,    51,    64,    64,    63,    63,    56,    57,
-      58,    59,    60,    61,     4,    63,     6,     7,     8,     9,
-      10,    11,    12,    66,    66,    15,    16,    64,    64,    19,
-      64,    66,    64,    64,    62,    64,    66,    64,    64,    64,
-      64,    64,    13,    98,    65,    42,    66,    69,    66,    -1,
-      -1,    -1,    71
+     115,    65,    47,    48,    69,    96,    51,    69,    64,   100,
+      63,    56,    57,    58,    59,    60,    61,    66,    63,    20,
+      21,    22,    23,    24,    25,    26,    27,    28,    29,    30,
+      31,    32,    63,    34,    35,    36,    37,    38,    39,    40,
+      41,    42,    43,    44,    64,    64,    47,    48,    66,    63,
+      51,    66,    64,    64,    64,    56,    57,    58,    59,    60,
+      61,     4,    63,     6,     7,     8,     9,    10,    11,    12,
+      64,    66,    15,    16,    64,    64,    19,    64,    66,    64,
+      64,    64,    64,    64,    62,    71,    65,    13,    42,    69,
+      66,   100,    67
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -824,15 +824,15 @@ static const yytype_int8 yystos[] =
       16,    19,    73,    74,    75,    76,    77,    78,    79,    82,
       63,    65,    63,    63,    63,    63,    63,    66,    66,    66,
       65,     0,    75,    20,    21,    22,    23,    24,    25,    26,
-      27,    28,    29,    30,    31,    32,    35,    36,    37,    38,
-      39,    40,    41,    42,    43,    44,    47,    48,    51,    56,
-      57,    58,    59,    60,    61,    63,    83,    84,    85,    86,
-      87,     3,    80,    81,    69,    69,    69,    64,    66,    63,
-      64,    64,    63,    63,    70,    89,    90,    63,    90,    89,
-      66,    63,    66,    64,    64,    64,    66,    64,    64,    66,
-      64,    64,    64,    64,    64,    64,    69,     5,    84,    62,
-      91,    91,    91,    65,    91,    66,    63,    66,    67,    88,
-      90,    88,    91,    71
+      27,    28,    29,    30,    31,    32,    34,    35,    36,    37,
+      38,    39,    40,    41,    42,    43,    44,    47,    48,    51,
+      56,    57,    58,    59,    60,    61,    63,    83,    84,    85,
+      86,    87,     3,    80,    81,    69,    69,    69,    64,    66,
+      63,    64,    64,    63,    63,    70,    89,    90,    63,    90,
+      89,    66,    63,    66,    64,    64,    64,    64,    66,    64,
+      64,    66,    64,    64,    64,    64,    64,    64,    69,     5,
+      84,    62,    91,    91,    91,    65,    91,    66,    63,    66,
+      67,    88,    90,    88,    91,    71
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
@@ -842,10 +842,10 @@ static const yytype_int8 yyr1[] =
       76,    77,    78,    78,    78,    78,    79,    80,    80,    81,
       82,    82,    82,    82,    83,    83,    83,    84,    84,    84,
       85,    85,    85,    85,    85,    85,    85,    85,    85,    85,
-      85,    85,    85,    85,    85,    85,    85,    85,    86,    86,
+      85,    85,    85,    85,    85,    85,    85,    85,    85,    86,
       86,    86,    86,    86,    86,    86,    86,    86,    86,    86,
-      86,    86,    86,    87,    88,    88,    88,    88,    89,    89,
-      90,    91,    91
+      86,    86,    86,    86,    87,    88,    88,    88,    88,    89,
+      89,    90,    91,    91
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
@@ -855,10 +855,10 @@ static const yytype_int8 yyr2[] =
        4,     4,     3,     3,     3,     2,     2,     1,     0,     3,
        2,     2,     2,     2,     1,     2,     0,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     1,     1,     1,     1,     1,     1,     2,     2,
-       2,     2,     2,     2,     3,     2,     1,     2,     2,     2,
-       2,     3,     2,     2,     1,     1,     1,     1,     1,     1,
-       3,     1,     0
+       2,     2,     2,     1,     1,     1,     1,     1,     1,     2,
+       2,     2,     2,     2,     2,     3,     2,     1,     2,     2,
+       2,     2,     3,     2,     2,     1,     1,     1,     1,     1,
+       1,     3,     1,     0
 };
 
 
@@ -2177,74 +2177,80 @@ yyreduce:
 #line 2178 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 39: /* zeroed_instruction: "pop instruction" "instruction suffix"  */
+  case 39: /* zeroed_instruction: "mul instruction" "instruction suffix"  */
 #line 355 "specs/parser.y"
-                                            { (yyval.insn) = new Instruction(AMANDA_VM_INSN_FAMILY(POP) + Instruction::getInstructionNumericSuffix((yyvsp[0].character)), 0); }
+                                            { (yyval.insn) = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(MUL), (yyvsp[0].character)); }
 #line 2184 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 40: /* zeroed_instruction: "return instruction" "instruction suffix"  */
+  case 40: /* zeroed_instruction: "pop instruction" "instruction suffix"  */
 #line 356 "specs/parser.y"
-                                            { (yyval.insn) = new Instruction(AMANDA_VM_INSN_FAMILY(RET) + Instruction::getInstructionNumericSuffix((yyvsp[0].character)), 0); }
+                                            { (yyval.insn) = new Instruction(AMANDA_VM_INSN_FAMILY(POP) + Instruction::getInstructionNumericSuffix((yyvsp[0].character)), 0); }
 #line 2190 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 41: /* zeroed_instruction: "sub instruction" "instruction suffix"  */
+  case 41: /* zeroed_instruction: "return instruction" "instruction suffix"  */
 #line 357 "specs/parser.y"
-                                            { (yyval.insn) = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(SUB), (yyvsp[0].character)); }
+                                            { (yyval.insn) = new Instruction(AMANDA_VM_INSN_FAMILY(RET) + Instruction::getInstructionNumericSuffix((yyvsp[0].character)), 0); }
 #line 2196 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 42: /* zeroed_instruction: "byte-to-word instruction"  */
-#line 359 "specs/parser.y"
-                                            { (yyval.insn) = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(B2W)); }
+  case 42: /* zeroed_instruction: "sub instruction" "instruction suffix"  */
+#line 358 "specs/parser.y"
+                                            { (yyval.insn) = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(SUB), (yyvsp[0].character)); }
 #line 2202 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 43: /* zeroed_instruction: B2L  */
+  case 43: /* zeroed_instruction: "byte-to-word instruction"  */
 #line 360 "specs/parser.y"
-                                            { (yyval.insn) = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(B2L)); }
+                                            { (yyval.insn) = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(B2W)); }
 #line 2208 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 44: /* zeroed_instruction: B2Q  */
+  case 44: /* zeroed_instruction: B2L  */
 #line 361 "specs/parser.y"
-                                            { (yyval.insn) = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(B2Q)); }
+                                            { (yyval.insn) = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(B2L)); }
 #line 2214 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 45: /* zeroed_instruction: W2L  */
+  case 45: /* zeroed_instruction: B2Q  */
 #line 362 "specs/parser.y"
-                                            { (yyval.insn) = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(W2L)); }
+                                            { (yyval.insn) = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(B2Q)); }
 #line 2220 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 46: /* zeroed_instruction: "word-to-quad instruction"  */
+  case 46: /* zeroed_instruction: W2L  */
 #line 363 "specs/parser.y"
-                                            { (yyval.insn) = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(W2Q)); }
+                                            { (yyval.insn) = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(W2L)); }
 #line 2226 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 47: /* zeroed_instruction: L2Q  */
+  case 47: /* zeroed_instruction: "word-to-quad instruction"  */
 #line 364 "specs/parser.y"
-                                            { (yyval.insn) = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(L2Q)); }
+                                            { (yyval.insn) = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(W2Q)); }
 #line 2232 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 48: /* unary_instruction: "native call instruction" "identifier"  */
-#line 368 "specs/parser.y"
-                                            { (yyval.insn) = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(CCALL)); Operand* operand = new Operand(*(yyvsp[0].string)); (yyval.insn)->setOperand(operand); delete (yyvsp[0].string); }
+  case 48: /* zeroed_instruction: L2Q  */
+#line 365 "specs/parser.y"
+                                            { (yyval.insn) = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(L2Q)); }
 #line 2238 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 49: /* unary_instruction: "jump instruction" address_constant  */
+  case 49: /* unary_instruction: "native call instruction" "identifier"  */
 #line 369 "specs/parser.y"
-                                            { (yyval.insn) = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(JMP)); (yyval.insn)->setOperand((yyvsp[0].operand)); }
+                                            { (yyval.insn) = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(CCALL)); Operand* operand = new Operand(*(yyvsp[0].string)); (yyval.insn)->setOperand(operand); delete (yyvsp[0].string); }
 #line 2244 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 50: /* unary_instruction: "jump instruction" "identifier"  */
+  case 50: /* unary_instruction: "jump instruction" address_constant  */
 #line 370 "specs/parser.y"
+                                            { (yyval.insn) = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(JMP)); (yyval.insn)->setOperand((yyvsp[0].operand)); }
+#line 2250 "assembler/AssemblerParser-C.cpp"
+    break;
+
+  case 51: /* unary_instruction: "jump instruction" "identifier"  */
+#line 371 "specs/parser.y"
                                             {
                                                 (yyval.insn) = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(JMP));
 
@@ -2255,143 +2261,143 @@ yyreduce:
                                                 // Clean up
                                                 delete (yyvsp[0].string);
                                             }
-#line 2259 "assembler/AssemblerParser-C.cpp"
-    break;
-
-  case 51: /* unary_instruction: "jump-if-false instruction" branch_target  */
-#line 381 "specs/parser.y"
-                                            { (yyval.insn) = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(JF)); (yyval.insn)->setOperand((yyvsp[0].operand)); }
 #line 2265 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 52: /* unary_instruction: "jump-if-true instruction" branch_target  */
+  case 52: /* unary_instruction: "jump-if-false instruction" branch_target  */
 #line 382 "specs/parser.y"
-                                            { (yyval.insn) = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(JT)); (yyval.insn)->setOperand((yyvsp[0].operand)); }
+                                            { (yyval.insn) = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(JF)); (yyval.insn)->setOperand((yyvsp[0].operand)); }
 #line 2271 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 53: /* unary_instruction: "call instruction" "identifier"  */
-#line 384 "specs/parser.y"
-                                            { (yyval.insn) = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(INVOKE)); Operand* operand = new Operand(*(yyvsp[0].string)); (yyval.insn)->setOperand(operand); delete (yyvsp[0].string);}
+  case 53: /* unary_instruction: "jump-if-true instruction" branch_target  */
+#line 383 "specs/parser.y"
+                                            { (yyval.insn) = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(JT)); (yyval.insn)->setOperand((yyvsp[0].operand)); }
 #line 2277 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 54: /* unary_instruction: "push instruction" "instruction suffix" argument  */
-#line 386 "specs/parser.y"
-                                            { (yyval.insn) = as::createUnaryInstruction(AMANDA_VM_INSN_FAMILY(PUSH), (yyvsp[-1].character)); (yyval.insn)->setOperand((yyvsp[0].operand)); }
+  case 54: /* unary_instruction: "call instruction" "identifier"  */
+#line 385 "specs/parser.y"
+                                            { (yyval.insn) = as::createBranchInstruction(AMANDA_VM_INSN_SINGLE(INVOKE)); Operand* operand = new Operand(*(yyvsp[0].string)); (yyval.insn)->setOperand(operand); delete (yyvsp[0].string);}
 #line 2283 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 55: /* unary_instruction: "stack allocation instruction" "integer literal"  */
-#line 388 "specs/parser.y"
+  case 55: /* unary_instruction: "push instruction" "instruction suffix" argument  */
+#line 387 "specs/parser.y"
+                                            { (yyval.insn) = as::createUnaryInstruction(AMANDA_VM_INSN_FAMILY(PUSH), (yyvsp[-1].character)); (yyval.insn)->setOperand((yyvsp[0].operand)); }
+#line 2289 "assembler/AssemblerParser-C.cpp"
+    break;
+
+  case 56: /* unary_instruction: "stack allocation instruction" "integer literal"  */
+#line 389 "specs/parser.y"
                                             {
                                                 (yyval.insn) = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(ALLOCA), VM_QWORD_SIZE);
                                                 Operand* operand = new Operand((yyvsp[0].integer)); (yyval.insn)->setOperand(operand);
                                             }
-#line 2292 "assembler/AssemblerParser-C.cpp"
+#line 2298 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 56: /* unary_instruction: "heap deallocation instruction"  */
-#line 392 "specs/parser.y"
+  case 57: /* unary_instruction: "heap deallocation instruction"  */
+#line 393 "specs/parser.y"
                                             {
                                                 (yyval.insn) = as::createZeroOpNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(DELLOC));
                                             }
-#line 2300 "assembler/AssemblerParser-C.cpp"
+#line 2306 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 57: /* unary_instruction: "heap allocation instruction" "integer literal"  */
-#line 395 "specs/parser.y"
+  case 58: /* unary_instruction: "heap allocation instruction" "integer literal"  */
+#line 396 "specs/parser.y"
                                             {
                                                 (yyval.insn) = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(MALLOC), VM_QWORD_SIZE);
                                                 Operand* operand = new Operand((yyvsp[0].integer)); (yyval.insn)->setOperand(operand);
                                             }
-#line 2309 "assembler/AssemblerParser-C.cpp"
+#line 2315 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 58: /* unary_instruction: "load instruction" "integer literal"  */
-#line 399 "specs/parser.y"
+  case 59: /* unary_instruction: "load instruction" "integer literal"  */
+#line 400 "specs/parser.y"
                                             {
                                                 (yyval.insn) = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(LOAD), VM_QWORD_SIZE);
                                                 Operand* operand = new Operand((yyvsp[0].integer)); (yyval.insn)->setOperand(operand);
                                             }
-#line 2318 "assembler/AssemblerParser-C.cpp"
+#line 2324 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 59: /* unary_instruction: "load-by-index instruction" "identifier"  */
-#line 403 "specs/parser.y"
+  case 60: /* unary_instruction: "load-by-index instruction" "identifier"  */
+#line 404 "specs/parser.y"
                                             {
                                                 (yyval.insn) = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(ILOAD), VM_ADDRESS_SIZE);
                                                 Operand* operand = new Operand(*(yyvsp[0].string)); (yyval.insn)->setOperand(operand);
                                                 delete (yyvsp[0].string);
                                             }
-#line 2328 "assembler/AssemblerParser-C.cpp"
+#line 2334 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 60: /* unary_instruction: "stack memory load instruction" "integer literal"  */
-#line 408 "specs/parser.y"
+  case 61: /* unary_instruction: "stack memory load instruction" "integer literal"  */
+#line 409 "specs/parser.y"
                                             {
                                                 (yyval.insn) = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(SLOAD), VM_ADDRESS_SIZE);
                                                 Operand* operand = new Operand((yyvsp[0].integer)); (yyval.insn)->setOperand(operand);
                                             }
-#line 2337 "assembler/AssemblerParser-C.cpp"
+#line 2343 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 61: /* unary_instruction: "store instruction" "instruction suffix" argument  */
-#line 412 "specs/parser.y"
+  case 62: /* unary_instruction: "store instruction" "instruction suffix" argument  */
+#line 413 "specs/parser.y"
                                             {
                                                 (yyval.insn) = as::createUnaryInstruction(AMANDA_VM_INSN_FAMILY(STORE), (yyvsp[-1].character));
                                                 (yyval.insn)->setOperand((yyvsp[0].operand)); 
                                             }
-#line 2346 "assembler/AssemblerParser-C.cpp"
+#line 2352 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 62: /* unary_instruction: "stack write instruction" "integer literal"  */
-#line 416 "specs/parser.y"
+  case 63: /* unary_instruction: "stack write instruction" "integer literal"  */
+#line 417 "specs/parser.y"
                                             {
                                                 (yyval.insn) = as::createUnaryNoSuffixInstruction(AMANDA_VM_INSN_SINGLE(SSTORE), VM_ADDRESS_SIZE);
                                                 Operand* operand = new Operand((yyvsp[0].integer)); (yyval.insn)->setOperand(operand);
                                             }
-#line 2355 "assembler/AssemblerParser-C.cpp"
-    break;
-
-  case 63: /* label_declaration: "identifier" ':'  */
-#line 423 "specs/parser.y"
-                                            { (yyval.insn) = new Label(*(yyvsp[-1].string), STATE(state)->localOffset); delete (yyvsp[-1].string); }
 #line 2361 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 64: /* argument: "identifier"  */
-#line 428 "specs/parser.y"
-                                            { (yyval.operand) = new Operand(*(yyvsp[0].string)); delete (yyvsp[0].string); }
+  case 64: /* label_declaration: "identifier" ':'  */
+#line 424 "specs/parser.y"
+                                            { (yyval.insn) = new Label(*(yyvsp[-1].string), STATE(state)->localOffset); delete (yyvsp[-1].string); }
 #line 2367 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 65: /* argument: "integer literal"  */
+  case 65: /* argument: "identifier"  */
 #line 429 "specs/parser.y"
-                                            { (yyval.operand) = new Operand((yyvsp[0].integer)); }
+                                            { (yyval.operand) = new Operand(*(yyvsp[0].string)); delete (yyvsp[0].string); }
 #line 2373 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 66: /* argument: "floating point literal"  */
+  case 66: /* argument: "integer literal"  */
 #line 430 "specs/parser.y"
-                                            { (yyval.operand) = NULL; }
+                                            { (yyval.operand) = new Operand((yyvsp[0].integer)); }
 #line 2379 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 69: /* branch_target: "identifier"  */
-#line 436 "specs/parser.y"
-                                            { (yyval.operand) = new Operand(*(yyvsp[0].string)); delete (yyvsp[0].string); }
+  case 67: /* argument: "floating point literal"  */
+#line 431 "specs/parser.y"
+                                            { (yyval.operand) = NULL; }
 #line 2385 "assembler/AssemblerParser-C.cpp"
     break;
 
-  case 70: /* address_constant: '[' "integer literal" ']'  */
-#line 440 "specs/parser.y"
-                                            { (yyval.operand) = new Operand((yyvsp[-1].integer), VM_QWORD_SIZE); }
+  case 70: /* branch_target: "identifier"  */
+#line 437 "specs/parser.y"
+                                            { (yyval.operand) = new Operand(*(yyvsp[0].string)); delete (yyvsp[0].string); }
 #line 2391 "assembler/AssemblerParser-C.cpp"
     break;
 
+  case 71: /* address_constant: '[' "integer literal" ']'  */
+#line 441 "specs/parser.y"
+                                            { (yyval.operand) = new Operand((yyvsp[-1].integer), VM_QWORD_SIZE); }
+#line 2397 "assembler/AssemblerParser-C.cpp"
+    break;
 
-#line 2395 "assembler/AssemblerParser-C.cpp"
+
+#line 2401 "assembler/AssemblerParser-C.cpp"
 
         default: break;
       }
@@ -2632,7 +2638,7 @@ yyreturn:
   return yyresult;
 }
 
-#line 449 "specs/parser.y"
+#line 450 "specs/parser.y"
 
 
 void yyerror(YYLTYPE* location, void* scanner, void** module, void* state, char const* message)

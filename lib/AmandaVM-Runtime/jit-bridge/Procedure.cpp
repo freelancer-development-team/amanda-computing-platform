@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -121,11 +121,14 @@ vm::vm_qword_t Procedure::execute(Stack& stack, ProcessorFlags& eflags)
         rvsize = executeInterpreted(stack, eflags);
     }
 
-    //
-    vm_qword_t result = 0;
-    stack.peek((vm_byte_t*) &result, rvsize);
-    LOGGER.debug("function returned %llu bytes (most significant quad word 0x%llx)",
-                rvsize, result);
+    // This is only for logging purposes.
+    // It could be removed after
+    {
+        vm_qword_t result = 0;
+        stack.peek((vm_byte_t*) &result, rvsize);
+        LOGGER.debug("function returned %llu bytes (most significant quad word 0x%llx)",
+                    rvsize, result);
+    }
 
     // Pop the frame
     stack.popFrame(rvsize);
@@ -278,7 +281,7 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
                 stack.peek(BYTEPOINTER(value), VM_DWORD_SIZE);
                 stack.push(BYTEPOINTER(value), VM_DWORD_SIZE, false);
 
-                LOGGER.trace("duplicating long value: 0x%x", value);
+                // LOGGER.trace("duplicating long value: 0x%x", value);
                 break;
             }
             case I_DUPQ:
@@ -376,9 +379,41 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
                 }
                 break;
             }
+#define MULTIPLY(type) \
+            vm::vm_dword_t operand1 = stack.pop<type>(); \
+            vm::vm_dword_t operand2 = stack.pop<type>(); \
+            vm::vm_dword_t result = operand1 * operand2; \
+            \
+            stack.push(result);
+            case I_MULB:
+            {
+                MULTIPLY(vm::vm_byte_t);
+                break;
+            }
+            case I_MULL:
+            {
+                MULTIPLY(vm::vm_dword_t);
+                break;
+            }
+#undef MULTIPLY
+            case I_POPB:
+            {
+                stack.discard(VM_BYTE_SIZE);
+                break;
+            }
+            case I_POPW:
+            {
+                stack.discard(VM_WORD_SIZE);
+                break;
+            }
             case I_POPL:
             {
                 stack.discard(VM_DWORD_SIZE);
+                break;
+            }
+            case I_POPQ:
+            {
+                stack.discard(VM_QWORD_SIZE);
                 break;
             }
             case I_PUSHA:
@@ -487,6 +522,14 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
                 SUBSTRACTION(vm::vm_qword_t, VM_QWORD_SIZE);
             }
 #undef SUBSTRACTION
+            case I_STORE:
+            {
+                vm::vm_address_t target = stack.pop<vm::vm_address_t>();
+                stack.pop((vm::vm_byte_t*) target, readFromPool<vm::vm_qword_t>(pool, ip));
+                augmentProgramCounter(ip, VM_QWORD_SIZE);
+
+                break;
+            }
                 // Conversion operations
             case I_W2Q:
             {
@@ -709,6 +752,7 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
             }
             case I_DELLOC:
             {
+                //TODO: Is this the real shit?
                 vm::vm_address_t address = readFromPool<vm::vm_address_t>(pool, ip);
                 augmentProgramCounter(ip, VM_ADDRESS_SIZE);
 
@@ -729,7 +773,7 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
                 vm::vm_qword_t symbolIndex = readFromPool<vm::vm_qword_t>(pool, ip);
                 augmentProgramCounter(ip, VM_QWORD_SIZE);
 
-                LOGGER.info("requesting load by index: 0x%llx", symbolIndex);
+                LOGGER.debug("requesting load by index: 0x%llx", symbolIndex);
                 if (symbolIndex > executableModule->getSymbolCount())
                 {
                     LOGGER.error("illegal load-by-index, index out of bounds (%llu)", symbolIndex);

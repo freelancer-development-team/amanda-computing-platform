@@ -42,11 +42,13 @@ public:
     static const char PATH_SEPARATOR = '/';
 
     Path(const core::String& pathName = core::String::EMPTY);
-    Path(const Path& first, ...);
+    Path(const Path& first, const Path& second);
+    Path(const Path& rhs);
     virtual ~Path();
 
     virtual core::String    getLastPathComponent();
     virtual Path            getParent();
+    virtual Path&           join(const core::String& second);
     virtual Path&           join(const Path& second);
     virtual Path&           normalize();
     virtual core::String    toString() const;

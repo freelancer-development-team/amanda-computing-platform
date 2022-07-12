@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -94,32 +94,25 @@ moduleLoader(new ModuleLoader(memoryAllocator->getReference()))
     // Set the signal handlers
     std::signal(SIGSEGV, handleSigsegv);
 
-    // Create the logging file
-    loggingFile = new io::File("amandavm-session.log", io::File::WRITE | io::File::CREATE);
-    if (!loggingFile->open())
-    {
-        fprintf(stderr, "amanda-vm: fatal error: unable to open log file (%s).", loggingFile->getLastErrorString().toCharArray());
-        throw nio::IOException("unable to open log file.");
-    }
-
     // Get the virtual machine execution path
+    this->path = new io::Path(path);
+
+    // Create the logging file
     {
-        // Get the full path object
-        io::Path full(path);
-
-        // Assign to the path reference
-        this->path = new io::Path(full.getParent().toString());
+        loggingFile = new io::File("vm-session.log", io::File::WRITE | io::File::CREATE);
+        if (!loggingFile->open())
+        {
+            fprintf(stderr, "amanda-vm: fatal error: unable to open log file (%s).", loggingFile->getLastErrorString().toCharArray());
+            throw nio::IOException("unable to open log file.");
+        }
     }
-
-    // Initialize the local file system
-    fileSystem = new FileSystem();
 
     // Initialize the default system properties.
     initializeSystemProperties();
 
     // Create the logging object and output the first message.
     LOGGER.setUseParentHandlers(false);
-    LOGGER.setLevel(logging::Logger::ALL);
+    LOGGER.setLevel(logging::Logger::L_ALL);
 
     // Create the file handler
     fileFormatter = new logging::GNUFormatter("amanda-vm", false);
@@ -127,7 +120,7 @@ moduleLoader(new ModuleLoader(memoryAllocator->getReference()))
 
     // Configure the handlers
     CONSOLE_HANDLER.setFormatter(FORMATTER);
-    CONSOLE_HANDLER.setLevel(logging::Logger::WARN);
+    CONSOLE_HANDLER.setLevel(logging::Logger::L_WARN);
 
     // Add the handlers
     LOGGER.addHandler(CONSOLE_HANDLER);
@@ -135,6 +128,9 @@ moduleLoader(new ModuleLoader(memoryAllocator->getReference()))
 
     // Trace the context creation
     LOGGER.info("creating virtual machine context object (0x%p)", this);
+
+    // Initialize the local file system
+    fileSystem = new FileSystem(getConstReference(), this->path);
 
     // Load the C library
     LOGGER.info("loading runtime descriptor for the standard C library.");
@@ -160,7 +156,9 @@ moduleLoader(new ModuleLoader(memoryAllocator->getReference()))
     // If we are in release mode
     // set the logging level to info
 #ifndef DEBUG
-    LOGGER.setLevel(logging::Logger::INFO);
+    LOGGER.setLevel(logging::Logger::L_INFO);
+#else
+    LOGGER.setLevel(logging::Logger::L_DEBUG);
 #endif
 }
 
@@ -299,7 +297,7 @@ int Context::callNative(const core::String& name, Stack& stack) const
 {
     // Log the attempt
     LOGGER.debug("attempting call to native function named <%s> (local stack: 0x%p)",
-                name.toCharArray(), stack.getSelfPointer());
+                 name.toCharArray(), stack.getSelfPointer());
 
     // Set the default result to OK
     int result = FFI_OK;
@@ -407,6 +405,11 @@ const Procedure* Context::getCachedLocalProcedure(const core::String& name) cons
     return cachedProcedures.find(name)->second;
 }
 
+logging::FileHandler* Context::getFileHandlerForLog() const
+{
+    return fileHandler;
+}
+
 MemoryAllocator& Context::getMemoryAllocator() const
 {
     return memoryAllocator->getReference();
@@ -466,8 +469,11 @@ int Context::loadAndExecute(const core::String& fullPath)
         std::time_t localtime = std::time(NULL);
         core::String strLocalTime(std::ctime(&localtime));
 
+        LOGGER.info("\t-- EXEC STARTED --");
         LOGGER.info("execution started (local date & time: %s)", strLocalTime.substring(0, strLocalTime.length() - 1).toCharArray());
         core::StrongReference<const Schedulable> mainSchedulable = scheduler->schedule(mainProcedure).getSelfPointer();
+
+        //TODO: Set the priority of the main thread to idle if it is the invoker
 
         // Wait until this thread (and all the spawned threads) finishes executing
         scheduler->waitForAll();
@@ -521,11 +527,12 @@ ExecutableModule* Context::loadModule(const core::String& fullPath)
     core::StrongReference<io::ConsistentInputStream> cstream = new io::ConsistentInputStream(stream->getReference(), io::ConsistentInputStream::BIG_ENDIAN);
 
     // Trace the resulting id
-    LOGGER.trace("loading module: %s (scheme: %s)", rid.toString().toCharArray(), rid.getScheme().toCharArray());
+    LOGGER.info("loading module: %s (scheme: %s) [%s]", rid.toString().toCharArray(), rid.getScheme().toCharArray(), fullPath.toCharArray());
 
     // Create the module reader object & load the resultant module object
     // propagate exceptions if any.
     return moduleLoader->load(fullPath, cstream);
+
 }
 
 Context::NativeTypeList Context::parseFunctionArgumentTypes(const core::String& str) const

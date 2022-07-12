@@ -1,0 +1,24 @@
+amanda-vm: info: creating virtual machine context object (0x000001dc947476e0)
+amanda-vm: info: initializing virtual file-system server (root path 'D:/Workspace/freelancer-amanda-computing-platform-master/dist').
+amanda-vm: info: loading runtime descriptor for the standard C library.
+amanda-vm: info: attempting load of native library: msvcrt
+amanda-vm: info: module 'msvcrt' loaded successfully as a native library. Handle at 0x00007ffc1e6e0000
+amanda-vm: info: loading module: vfs://program-02.ax (scheme: vfs) [program-02.ax]
+amanda-vm: info: 	-- EXEC STARTED --
+amanda-vm: info: execution started (local date & time: Mon Jul 11 22:02:24 2022)
+amanda-vm: info: created native procedure handle to process at 0x00007ffc1e727790, with name 'putchar', and with 1 arguments.
+amanda-vm: info: created native procedure handle to process at 0x00007ffc1e745340, with name 'clock', and with 0 arguments.
+amanda-vm: info: created native procedure handle to process at 0x00007ffc1e726fd0, with name 'getchar', and with 0 arguments.
+amanda-vm: info: execution finished, return value: 0
+amanda-vm: info: destroying virtual machine context @ 0x000001dc947476e0.
+amanda-vm: info: unloading dynamic link library 'msvcrt'.
+amanda-vm: info: un-caching native symbol 'clock'.
+amanda-vm: info: un-caching native symbol 'getchar'.
+amanda-vm: info: un-caching native symbol 'putchar'.
+amanda-vm: info: un-caching local symbol '@@main?A_string@!l32'.
+amanda-vm: info: un-caching local symbol 'delay'.
+amanda-vm: info: un-caching local symbol 'pause'.
+amanda-vm: info: un-caching local symbol 'slowprint'.
+amanda-vm: info: deleting global optimization criteria of class 'NullOptimizationCriteria'
+amanda-vm: info: 	-- EXEC FINISHED --
+

@@ -17,7 +17,9 @@
 
 #include <amanda-vm/String.h>
 
+// C++
 #include <cstdio>
+#include <cstdlib>
 
 using amanda::core::String;
 
@@ -26,11 +28,13 @@ const String String::EMPTY;
 
 String String::makeFormattedStringWithArguments(const core::String& fmt, va_list va)
 {
-    char* buffer = new char[0x1000];
-    ::vsnprintf(buffer, 0x1000, fmt.toCharArray(), va);
+    size_t limit = 0x10 * fmt.length();
+    char* buffer = static_cast<char*>(std::calloc(limit, sizeof (char)));
+
+    ::vsnprintf(buffer, limit, fmt.toCharArray(), va);
     String result(buffer);
 
-    delete[] buffer;
+    std::free(buffer);
     return result;
 }
 

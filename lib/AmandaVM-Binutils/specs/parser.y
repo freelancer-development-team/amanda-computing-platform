@@ -352,6 +352,7 @@ zeroed_instruction
     | CLE INSTRUCTION_SUFFIX                { $$ = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(CLE), $2); }
     | DIV INSTRUCTION_SUFFIX                { $$ = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(DIV), $2); }
     | DUP INSTRUCTION_SUFFIX                { $$ = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(DUP), $2); }
+    | MUL INSTRUCTION_SUFFIX                { $$ = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(MUL), $2); }
     | POP INSTRUCTION_SUFFIX                { $$ = new Instruction(AMANDA_VM_INSN_FAMILY(POP) + Instruction::getInstructionNumericSuffix($2), 0); }
     | RET INSTRUCTION_SUFFIX                { $$ = new Instruction(AMANDA_VM_INSN_FAMILY(RET) + Instruction::getInstructionNumericSuffix($2), 0); }
     | SUB INSTRUCTION_SUFFIX                { $$ = as::createZeroOpInstruction(AMANDA_VM_INSN_FAMILY(SUB), $2); }

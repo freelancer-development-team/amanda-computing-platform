@@ -185,8 +185,8 @@ bool LogManager::LoggerComparator::operator ()(const core::String& s1, const cor
 void LogManager::initializeLogManager()
 {
     /* Set the default level for the root logger. */
-    Logger::root.setLevel(Logger::ALL);
-    Logger::global.setLevel(Logger::ALL);
+    Logger::root.setLevel(Logger::L_ALL);
+    Logger::global.setLevel(Logger::L_ALL);
 
     /* Initialize the default console handler. */
     Handler* consoleHandler = new ConsoleHandler();

@@ -35,16 +35,17 @@ pathName(pathName)
     normalize();
 }
 
-Path::Path(const Path& first, ...)
+Path::Path(const Path& first, const Path& second)
 :
-pathName(first.pathName)
+pathName(first.toString())
 {
-    va_list va;
-    va_start(va, first);
-    
-    va_end(va);
+    join(second);
+}
 
-    normalize();
+Path::Path(const Path& rhs)
+:
+pathName(rhs.pathName)
+{
 }
 
 Path::~Path()
@@ -71,6 +72,11 @@ Path Path::getParent()
         path = Path(pathName.substring(0, index));
     }
     return path;
+}
+
+Path& Path::join(const core::String& second)
+{
+    join(second);
 }
 
 Path& Path::join(const Path& second)

@@ -69,12 +69,15 @@ Logger* Logger::getLogger(const core::String& name)
     }
 
 #define DECLARE_SHORTCUTS \
-    DECLARE_SHORTCUT(debug, DEBUG) \
-    DECLARE_SHORTCUT(error, ERROR) \
-    DECLARE_SHORTCUT(fatal, FATAL) \
-    DECLARE_SHORTCUT(info, INFO) \
-    DECLARE_SHORTCUT(trace, TRACE) \
-    DECLARE_SHORTCUT(warn, WARN)
+    DECLARE_SHORTCUT(debug, L_DEBUG) \
+    DECLARE_SHORTCUT(error, L_ERROR) \
+    DECLARE_SHORTCUT(fatal, L_FATAL) \
+    DECLARE_SHORTCUT(info, L_INFO) \
+    DECLARE_SHORTCUT(trace, L_TRACE) \
+    DECLARE_SHORTCUT(warn, L_WARN) \
+    DECLARE_SHORTCUT(fine, L_FINE) \
+    DECLARE_SHORTCUT(finer, L_FINER) \
+    DECLARE_SHORTCUT(finest, L_FINEST)
 
 // Declare
 
@@ -85,7 +88,7 @@ Logger::Logger(const core::String& name)
 filter(NULL),
 name(name)
 {
-    level = NONE;
+    level = L_NONE;
     parent = (this == &root) ? NULL : amanda::eliminateConstness(&root);
     useParentHandlers = (parent != NULL);
 }
@@ -116,7 +119,7 @@ void Logger::addHandler(Handler& handler)
     AMANDA_DESYNCHRONIZED(lock);
 }
 
-const std::deque<Handler*>& Logger::getHandlers()
+const std::deque<Handler*>& Logger::getHandlers() const
 {
     return handlerList;
 }
@@ -145,7 +148,7 @@ bool Logger::isLoggable(int level) const
 {
     AMANDA_SYNCHRONIZED(lock);
     {
-        if (level != NONE)
+        if (level != L_NONE)
         {
             return this->level >= level;
         }
@@ -234,7 +237,7 @@ void Logger::setUseParentHandlers(bool useParentHandlers)
     this->useParentHandlers = useParentHandlers;
 }
 
-void Logger::logp(int level, const core::String& fmt, va_list va) const
+void Logger::logp(int level, const core::String& fmt, va_list& va) const
 {
     LogRecord record(level, fmt, va, getName());
     log(record);

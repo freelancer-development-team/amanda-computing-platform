@@ -1,0 +1,13 @@
+amanda-vm: info: creating virtual machine context object (0x0000019e589be6a0)
+amanda-vm: info: loading runtime descriptor for the standard C library.
+amanda-vm: info: attempting load of native library: msvcrt
+amanda-vm: info: module 'msvcrt' loaded successfully as a native library. Handle at 0x00007ffc1e6e0000
+amanda-vm: info: 	-- EXEC STARTED --
+amanda-vm: info: execution started (local date & time: Sun Jul 10 18:54:25 2022)
+amanda-vm: info: execution finished, return value: 0
+amanda-vm: info: destroying virtual machine context @ 0x0000019e589be6a0.
+amanda-vm: info: unloading dynamic link library 'msvcrt'.
+amanda-vm: info: un-caching local symbol '@@main?A_string@!l32'.
+amanda-vm: info: deleting global optimization criteria of class 'NullOptimizationCriteria'
+amanda-vm: info: 	-- EXEC FINISHED --
+

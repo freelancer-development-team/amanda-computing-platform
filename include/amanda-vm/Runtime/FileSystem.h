@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,8 @@ namespace amanda
 namespace vm
 {
 
+class Context;
+
 /**
  * The file system class 'sandboxes' the virtual machine visible local file system.
  * This allows for clear responsibility separation between the virtual machine
@@ -58,12 +60,25 @@ class FileSystem : public core::Object
     AMANDA_OBJECT(FileSystem, core::Object)
 public:
 
+    static const core::String& BIN_DIRECTORY;
+    static const core::String& CONFIG_DIRECTORY;
+    static const core::String& LIBRARIES_DIRECTORY;
+    static const core::String& MODULES_DIRECTORY;
+
+    FileSystem(const Context& context, io::Path* root);
+    virtual ~FileSystem();
+
     virtual io::File*           getResourceAsFile(const ResourceIdentifier& id) const;
     virtual io::InputStream*    getResourceAsStream(const ResourceIdentifier& id) const;
 
 protected:
 
-    static const logging::Logger& LOGGER;
+    const Context&                  context;
+    logging::Logger&                logger;
+    core::StrongReference<io::Path> executablePath;
+    core::StrongReference<io::Path> rootPath;
+
+    virtual bool                checkExistenceOfDirectory(const core::String& name) const;
 } ;
 
 }

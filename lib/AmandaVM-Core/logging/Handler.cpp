@@ -32,7 +32,7 @@ Handler::Handler(Filter* filter, Formatter* formatter)
 :
 filter(filter),
 formatter(formatter),
-level(Logger::ALL)
+level(Logger::L_ALL)
 {
 }
 
