@@ -95,8 +95,10 @@ moduleLoader(new ModuleLoader(memoryAllocator->getReference()))
     std::signal(SIGSEGV, handleSigsegv);
 
     // Get the virtual machine execution path
-    this->path = new io::Path(path);
-
+    {
+        io::Path absolutePath(path);
+        this->path = new io::Path(absolutePath.toAbsolutePath().toString());
+    }
     // Create the logging file
     {
         loggingFile = new io::File("vm-session.log", io::File::WRITE | io::File::CREATE);
@@ -120,7 +122,7 @@ moduleLoader(new ModuleLoader(memoryAllocator->getReference()))
 
     // Configure the handlers
     CONSOLE_HANDLER.setFormatter(FORMATTER);
-    CONSOLE_HANDLER.setLevel(logging::Logger::L_WARN);
+    CONSOLE_HANDLER.setLevel(logging::Logger::L_ERROR);
 
     // Add the handlers
     LOGGER.addHandler(CONSOLE_HANDLER);
@@ -148,7 +150,7 @@ moduleLoader(new ModuleLoader(memoryAllocator->getReference()))
 #endif
 
     // Prepare the console to display ANSI escape codes if on Windows
-    //TODO: Finish this
+    //TODO: Finish this, set the code-page and the ansi escapes
 #if _W32
 
 #endif
@@ -158,8 +160,29 @@ moduleLoader(new ModuleLoader(memoryAllocator->getReference()))
 #ifndef DEBUG
     LOGGER.setLevel(logging::Logger::L_INFO);
 #else
-    LOGGER.setLevel(logging::Logger::L_DEBUG);
+    LOGGER.setLevel(logging::Logger::L_FINER);
 #endif
+
+    // Load every library and every module out there
+    const io::Path::DirectoryList& ldl = fileSystem->getLibrariesFolder().getAllFilesInDirectory();
+    for (io::Path::DirectoryList::const_iterator it = ldl.begin(), end = ldl.end();
+         it != end; ++it)
+    {
+        if ((*it).hasExtension(fileSystem->getDllExtension()))
+        {
+            loadLibrary((*it).toAbsolutePath().toString());
+        }
+    }
+
+    const io::Path::DirectoryList mdl = fileSystem->getModulesFolder().getAllFilesInDirectory();
+    for (io::Path::DirectoryList::const_iterator it = mdl.begin(), end = mdl.end();
+         it != end; ++it)
+    {
+        if ((*it).hasExtension(FileSystem::EXECUTABLE_FILE_EXTENSION))
+        {
+            loadModule((*it).toAbsolutePath().toString());
+        }
+    }
 }
 
 Context::~Context()
@@ -501,20 +524,43 @@ void Context::loadLibrary(const core::String& fullPath)
 
         // Load the library
         // LOAD METHOD ON WINDOWS
-#ifdef _W32
-        HMODULE handle = LoadLibraryA(fullPath.replaced('/', '\\').toCharArray());
-        if (handle == NULL)
+        if (nativeLibraries.find(name) == nativeLibraries.end())
         {
-            throw core::Exception(core::String::makeFormattedString("unable to load native library '%s'.", fullPath.toCharArray()));
-        }
+#ifdef _W32
+            HMODULE handle = LoadLibraryA(fullPath.replaced('/', '\\').toCharArray());
+            if (handle == NULL)
+            {
+                throw core::Exception(core::String::makeFormattedString("unable to load native library '%s'.", fullPath.toCharArray()));
+            }
 
-        LOGGER.info("module '%s' loaded successfully as a native library. Handle at 0x%p",
-                    fullPath.toCharArray(), handle);
-        descriptor.setHandle(handle);
+            LOGGER.info("module '%s' loaded successfully as a native library. Handle at 0x%p",
+                        fullPath.toCharArray(), handle);
+            descriptor.setHandle(handle);
 #endif
 
-        // Add the descriptor to the list of loaded libraries
-        nativeLibraries.insert(std::make_pair(descriptor.getName(), descriptor));
+            // Add the descriptor to the list of loaded libraries
+            nativeLibraries.insert(std::make_pair(descriptor.getName(), descriptor));
+        }
+        else
+        {
+            LOGGER.warn("the native library '%s' is already loaded, flushing cache and re-loading.", name.toCharArray());
+            NativeLibraryDescriptor& loaded = nativeLibraries.find(name)->second;
+#ifdef _W32
+            // Unload the previously loaded library
+            loaded.unload();
+
+            // Load the library again
+            HMODULE handle = LoadLibraryA(fullPath.replaced('/', '\\').toCharArray());
+            if (handle == NULL)
+            {
+                throw core::Exception(core::String::makeFormattedString("unable to re-load native library '%s'.", fullPath.toCharArray()));
+            }
+
+            LOGGER.info("module '%s' loaded successfully as a native library. Handle at 0x%p",
+                        fullPath.toCharArray(), handle);
+            loaded.setHandle(handle);
+#endif
+        }
     }
     AMANDA_DESYNCHRONIZED(lock);
 }
@@ -529,10 +575,29 @@ ExecutableModule* Context::loadModule(const core::String& fullPath)
     // Trace the resulting id
     LOGGER.info("loading module: %s (scheme: %s) [%s]", rid.toString().toCharArray(), rid.getScheme().toCharArray(), fullPath.toCharArray());
 
+    // Create the result pointer
+    ExecutableModule* result = NULL;
+
     // Create the module reader object & load the resultant module object
     // propagate exceptions if any.
-    return moduleLoader->load(fullPath, cstream);
-
+    io::Path modulePath(fullPath);
+    if (!modulePath.exists())
+    {
+        throw nio::NoSuchFileException(fullPath);
+    }
+    else
+    {
+        if (moduleLoader->isLoaded(modulePath.getLastPathComponent()))
+        {
+            LOGGER.warn("module is already loaded, retrieving from module cache.");
+            result = moduleLoader->get(modulePath.getLastPathComponent());
+        }
+        else
+        {
+            result = moduleLoader->load(modulePath.getLastPathComponent(), cstream);
+        }
+    }
+    return result;
 }
 
 Context::NativeTypeList Context::parseFunctionArgumentTypes(const core::String& str) const

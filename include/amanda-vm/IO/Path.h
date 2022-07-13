@@ -28,34 +28,68 @@
 #include <amanda-vm/Object.h>
 #include <amanda-vm/String.h>
 
+// C API
+#include <amanda-vm-c/sdk-configuration.h>
+
+// C++
+#include <vector>
+
 namespace amanda
 {
 namespace io
 {
 
+/**
+ * The <code>Path</code> class abstract all native path operations, such as
+ * normalization, relative paths, absolute paths.
+ *
+ * @author J. Marrero
+ */
 class Path : public amanda::core::Object
 {
     AMANDA_OBJECT(Path, amanda::core::Object)
 
 public:
 
-    static const char PATH_SEPARATOR = '/';
+    typedef std::vector<Path>   DirectoryList;
+
+    static const core::String&  END_OF_PATH;
+    static const char           PATH_SEPARATOR = '/';
+
+    static Path get(const core::String& first, ...);
 
     Path(const core::String& pathName = core::String::EMPTY);
     Path(const Path& first, const Path& second);
     Path(const Path& rhs);
     virtual ~Path();
 
-    virtual core::String    getLastPathComponent();
-    virtual Path            getParent();
-    virtual Path&           join(const core::String& second);
-    virtual Path&           join(const Path& second);
-    virtual Path&           normalize();
-    virtual core::String    toString() const;
+    virtual short               compareTo(const Path& other) const;
+    virtual bool                endsWith(const core::String& str) const;
+    virtual bool                exists() const;
+    virtual const DirectoryList getAllFilesInDirectory() const;
+    virtual core::String        getLastPathComponent() const;
+    virtual unsigned            getNameCount() const;
+    virtual Path                getParent() const;
+    virtual bool                hasExtension(const core::String& str) const;
+    virtual bool                isAbsolutePath() const;
+    virtual bool                isDirectory() const;
+    virtual bool                isRelativePath() const;
+    virtual Path&               join(const core::String& second);
+    virtual Path&               join(const Path& second);
+    virtual Path&               makeAbsolute();
+    virtual Path&               normalize();
+    virtual Path                toAbsolutePath() const;
+    virtual core::String        toString() const;
+
+#ifdef _W32
+    Path&                       makeWindowsPath();
+#endif
 
 private:
 
     core::String pathName;
+
+    void                        checkNotEmpty() const;
 } ;
 
 }

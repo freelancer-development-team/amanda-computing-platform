@@ -27,7 +27,7 @@ int main(int argc, char** argv)
 {
     Logger& logger = Logger::getLogger("test")->getReference();
 
-    for (int i = 0; i < 1000000; ++i)
+    for (int i = 0; i < 100000; ++i)
     {
         logger.info("i = %d", i);
         //printf("i-> %d\n", i);

@@ -63,7 +63,7 @@ int main(int argc, char** argv)
             listOfLoadables = commandLine->getOptionValue('L');
         }
 
-        const std::list<core::String>& arguments = commandLine->getArgumentList();
+        const std::vector<core::String>& arguments = commandLine->getArgumentList();
         if (arguments.size() < 1)
         {
             amanda::vm::printFormattedHelpMessage(options);
@@ -108,7 +108,7 @@ int main(int argc, char** argv)
         }
 
         /* Load the file and start executing. */
-        for (std::list<core::String>::const_iterator iter = arguments.begin(),
+        for (std::vector<core::String>::const_iterator iter = arguments.begin(),
              end = arguments.end(); iter != end; ++iter)
         {
             try

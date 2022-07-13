@@ -1,0 +1,1369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="100">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>../../include/amanda-vm/Runtime/AdaptiveOptimizationCondition.h</itemPath>
+      <itemPath>../../include/AmandaSDK.h</itemPath>
+      <itemPath>../../include/AmandaVM.h</itemPath>
+      <itemPath>../../include/amanda-vm/ADT/Array.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/BaseExceptions.h</itemPath>
+      <itemPath>../../include/amanda-vm/ADT/BinaryBuffer.h</itemPath>
+      <itemPath>../../include/amanda-vm/Callable.h</itemPath>
+      <itemPath>../../include/amanda-vm/Class.h</itemPath>
+      <itemPath>../../include/amanda-vm/IO/Closeable.h</itemPath>
+      <itemPath>../../include/amanda-vm/ADT/Collections.h</itemPath>
+      <itemPath>../../include/amanda-vm/IO/ConsistentInputStream.h</itemPath>
+      <itemPath>../../include/amanda-vm/IO/ConsistentOutputStream.h</itemPath>
+      <itemPath>../../include/amanda-vm/io/Console.h</itemPath>
+      <itemPath>../../include/amanda-vm/Logging/ConsoleHandler.h</itemPath>
+      <itemPath>../../include/amanda-vm/Logging/ErrorManager.h</itemPath>
+      <itemPath>../../include/amanda-vm/Exception.h</itemPath>
+      <itemPath>../../include/amanda-vm/io/File.h</itemPath>
+      <itemPath>../../include/amanda-vm/Logging/FileHandler.h</itemPath>
+      <itemPath>../../include/amanda-vm/IO/FileInputStream.h</itemPath>
+      <itemPath>../../include/amanda-vm/IO/FileOutputStream.h</itemPath>
+      <itemPath>../../include/amanda-vm/Logging/Filter.h</itemPath>
+      <itemPath>../../include/amanda-vm/IO/Flushable.h</itemPath>
+      <itemPath>../../include/amanda-vm/Logging/Formatter.h</itemPath>
+      <itemPath>../../include/amanda-vm/Logging/GNUFormatter.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/Linker/GlobalOffsetTable.h</itemPath>
+      <itemPath>../../include/amanda-vm/Logging/Handler.h</itemPath>
+      <itemPath>../../include/amanda-vm/NIO/IOException.h</itemPath>
+      <itemPath>../../include/amanda-vm/IllegalArgumentException.h</itemPath>
+      <itemPath>../../include/amanda-vm/IO/InputStream.h</itemPath>
+      <itemPath>../../include/amanda-vm/Integer.h</itemPath>
+      <itemPath>../../include/amanda-vm/Interface.h</itemPath>
+      <itemPath>../../include/amanda-vm/ADT/Iterators.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/Locations.h</itemPath>
+      <itemPath>../../include/amanda-vm/Logging/LogManager.h</itemPath>
+      <itemPath>../../include/amanda-vm/Logging/LogRecord.h</itemPath>
+      <itemPath>../../include/amanda-vm/Logging/Logger.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/Logging.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/Mangling.h</itemPath>
+      <itemPath>../../include/amanda-vm/IO/MemoryInputStream.h</itemPath>
+      <itemPath>../../include/amanda-vm/IO/MemoryOutputStream.h</itemPath>
+      <itemPath>../../include/amanda-vm/NIO/NoSuchFileException.h</itemPath>
+      <itemPath>../../include/amanda-vm/Object.h</itemPath>
+      <itemPath>../../include/amanda-vm/Option/Option.h</itemPath>
+      <itemPath>../../include/amanda-vm/IO/OutputStream.h</itemPath>
+      <itemPath>../../include/amanda-vm/io/Path.h</itemPath>
+      <itemPath>../../include/amanda-vm/Pointer.h</itemPath>
+      <itemPath>../../include/amanda-vm/io/PrintStream.h</itemPath>
+      <itemPath>../../include/amanda-vm/ReferenceCounted.h</itemPath>
+      <itemPath>../../include/amanda-vm/Threading/Runnable.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/Schedulable.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/SchedulableFactory.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/Serializable.h</itemPath>
+      <itemPath>../../include/amanda-vm/Logging/SimpleFormatter.h</itemPath>
+      <itemPath>../../include/amanda-vm/Logging/StreamHandler.h</itemPath>
+      <itemPath>../../include/amanda-vm/String.h</itemPath>
+      <itemPath>../../include/amanda-vm/Threading/Synchronization.h</itemPath>
+      <itemPath>../../include/amanda-vm/Threading/SynchronizationError.h</itemPath>
+      <itemPath>../../include/amanda-vm/System.h</itemPath>
+      <itemPath>../../include/amanda-vm/Threading/Thread.h</itemPath>
+      <itemPath>../../include/amanda-vm/Threading/ThreadingException.h</itemPath>
+      <itemPath>../../include/amanda-vm/TypeSystem.h</itemPath>
+      <itemPath>../../include/amanda-vm/Types.h</itemPath>
+      <itemPath>../../include/amanda-vm/IO/Utility.h</itemPath>
+      <itemPath>../../include/amanda-vm-c/jit/arch/config.h</itemPath>
+      <itemPath>../../include/amanda-vm-c/jit/jit-defs.h</itemPath>
+      <itemPath>../../include/amanda-vm-c/jit/jit.h</itemPath>
+      <itemPath>../../include/amanda-vm/Option/package.hxx</itemPath>
+      <itemPath>../../include/amanda-vm/IL/package.hxx</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/package.hxx</itemPath>
+      <itemPath>../../include/amanda-vm-c/sdk-assert-helper.h</itemPath>
+      <itemPath>../../include/amanda-vm-c/sdk-configuration.h</itemPath>
+      <itemPath>../../include/amanda-vm-c/sdk-definitions.h</itemPath>
+      <itemPath>../../include/amanda-vm-c/sdk-gcc.h</itemPath>
+      <itemPath>../../include/amanda-vm-c/sdk-jit-engine.h</itemPath>
+      <itemPath>../../include/amanda-vm-c/sdk-toolchains.h</itemPath>
+      <itemPath>../../include/amanda-vm-c/sdk-types.h</itemPath>
+      <itemPath>../../include/amanda-vm-c/sdk-unreachable.h</itemPath>
+      <itemPath>../../include/amanda-vm-c/sdk-version.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/vm-ieee754.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/vm-opcodes.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/vm-types.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>core/Class.cpp</itemPath>
+      <itemPath>io/ConsistentInputStream.cpp</itemPath>
+      <itemPath>io/ConsistentOutputStream.cpp</itemPath>
+      <itemPath>io/Console.cpp</itemPath>
+      <itemPath>logging/ConsoleHandler.cpp</itemPath>
+      <itemPath>io/Endianness.cpp</itemPath>
+      <itemPath>logging/ErrorManager.cpp</itemPath>
+      <itemPath>core/Exception.cpp</itemPath>
+      <itemPath>io/File.cpp</itemPath>
+      <itemPath>logging/FileHandler.cpp</itemPath>
+      <itemPath>io/FileInputStream.cpp</itemPath>
+      <itemPath>io/FileOutputStream.cpp</itemPath>
+      <itemPath>logging/Formatter.cpp</itemPath>
+      <itemPath>logging/GNUFormatter.cpp</itemPath>
+      <itemPath>logging/Handler.cpp</itemPath>
+      <itemPath>nio/IOException.cpp</itemPath>
+      <itemPath>core/IllegalArgumentException.cpp</itemPath>
+      <itemPath>io/InputStream.cpp</itemPath>
+      <itemPath>core/Integer.cpp</itemPath>
+      <itemPath>logging/LogManager.cpp</itemPath>
+      <itemPath>logging/LogRecord.cpp</itemPath>
+      <itemPath>logging/Logger.cpp</itemPath>
+      <itemPath>io/MemoryInputStream.cpp</itemPath>
+      <itemPath>io/MemoryOutputStream.cpp</itemPath>
+      <itemPath>nio/NoSuchFileException.cpp</itemPath>
+      <itemPath>core/Object.cpp</itemPath>
+      <itemPath>io/OutputStream.cpp</itemPath>
+      <itemPath>io/Path.cpp</itemPath>
+      <itemPath>io/PrintStream.cpp</itemPath>
+      <itemPath>core/ReferenceCounted.cpp</itemPath>
+      <itemPath>threading/Runnable.cpp</itemPath>
+      <itemPath>logging/SimpleFormatter.cpp</itemPath>
+      <itemPath>logging/StreamHandler.cpp</itemPath>
+      <itemPath>core/String.cpp</itemPath>
+      <itemPath>threading/Synchronization.cpp</itemPath>
+      <itemPath>threading/SynchronizationError.cpp</itemPath>
+      <itemPath>threading/Thread.cpp</itemPath>
+      <itemPath>threading/ThreadingException.cpp</itemPath>
+      <itemPath>system/cores.cpp</itemPath>
+      <itemPath>system/os.cpp</itemPath>
+      <itemPath>c/unreachable.c</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+      <logicalFolder name="f1"
+                     displayName="ConsoleIO"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/conio-tests.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f2"
+                     displayName="File I/O Test"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/fileio-test.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f5"
+                     displayName="LoggingStressTest"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>../../include/tests/LoggingStressTest.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f3"
+                     displayName="ObjectSystemTest"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/object-system-test.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f6" displayName="PathTest" projectFiles="true" kind="TEST">
+        <itemPath>../../include/tests/PathTest.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f4"
+                     displayName="StringTest"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>../../include/tests/StringTest.cpp</itemPath>
+      </logicalFolder>
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+    <itemPath>scripts/common.sh</itemPath>
+    <itemPath>scripts/test.sh</itemPath>
+  </logicalFolder>
+  <sourceRootList>
+    <Elem>../../include</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="3">
+      <toolsSet>
+        <compilerSet>MinGW|MinGW</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <standard>2</standard>
+          <incDir>
+            <pElem>../../include</pElem>
+          </incDir>
+          <warningLevel>2</warningLevel>
+        </cTool>
+        <ccTool>
+          <standard>4</standard>
+          <incDir>
+            <pElem>../../include</pElem>
+          </incDir>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <archiverTool>
+        </archiverTool>
+      </compileType>
+      <item path="../../include/AmandaSDK.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/AmandaVM.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm-c/jit/arch/config.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm-c/jit/jit-defs.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm-c/jit/jit.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm-c/sdk-assert-helper.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm-c/sdk-configuration.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm-c/sdk-definitions.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm-c/sdk-gcc.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm-c/sdk-jit-engine.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm-c/sdk-toolchains.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm-c/sdk-types.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm-c/sdk-unreachable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm-c/sdk-version.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/ADT/Array.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/ADT/BinaryBuffer.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/ADT/Collections.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/ADT/Iterators.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Linker/GlobalOffsetTable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Locations.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Logging.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Mangling.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Serializable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/package.hxx"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/vm-ieee754.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/vm-opcodes.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/vm-types.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Callable.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Class.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Exception.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/package.hxx"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IO/Closeable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IO/ConsistentInputStream.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IO/ConsistentOutputStream.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IO/FileInputStream.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IO/FileOutputStream.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IO/Flushable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IO/InputStream.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IO/MemoryInputStream.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IO/MemoryOutputStream.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IO/OutputStream.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IO/Utility.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IllegalArgumentException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Integer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Interface.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Logging/ConsoleHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Logging/ErrorManager.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Logging/FileHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Logging/Filter.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Logging/Formatter.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Logging/GNUFormatter.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Logging/Handler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Logging/LogManager.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Logging/LogRecord.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Logging/Logger.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Logging/SimpleFormatter.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Logging/StreamHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/NIO/IOException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/NIO/NoSuchFileException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Object.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Option/Option.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Option/package.hxx"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Pointer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/ReferenceCounted.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/AdaptiveOptimizationCondition.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/BaseExceptions.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/Schedulable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/SchedulableFactory.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/String.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/System.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Threading/Runnable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Threading/Synchronization.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Threading/SynchronizationError.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Threading/Thread.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Threading/ThreadingException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/TypeSystem.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Types.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/io/Console.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/io/File.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/io/Path.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/io/PrintStream.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/tests/LoggingStressTest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../include/tests/PathTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../../include/tests/StringTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="c/unreachable.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="core/Class.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/Exception.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/IllegalArgumentException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/Integer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/Object.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/ReferenceCounted.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/String.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <folder path="TestFiles/f1">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f2">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f2</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f3">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f3</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f4">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f4</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f5">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f5</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f6">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f6</output>
+        </linkerTool>
+      </folder>
+      <item path="io/ConsistentInputStream.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/ConsistentOutputStream.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/Console.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/Endianness.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/File.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/FileInputStream.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/FileOutputStream.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/InputStream.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/MemoryInputStream.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/MemoryOutputStream.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/OutputStream.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/Path.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/PrintStream.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="logging/ConsoleHandler.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="logging/ErrorManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="logging/FileHandler.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="logging/Formatter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="logging/GNUFormatter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="logging/Handler.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="logging/LogManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="logging/LogRecord.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="logging/Logger.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="logging/SimpleFormatter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="logging/StreamHandler.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="nio/IOException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="nio/NoSuchFileException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="scripts/common.sh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="scripts/test.sh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="system/cores.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="system/os.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/conio-tests.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/fileio-test.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/object-system-test.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="threading/Runnable.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="threading/Synchronization.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="threading/SynchronizationError.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="threading/Thread.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="threading/ThreadingException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="3">
+      <toolsSet>
+        <compilerSet>MinGW|MinGW</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+          <standard>2</standard>
+          <incDir>
+            <pElem>../../include</pElem>
+          </incDir>
+          <warningLevel>2</warningLevel>
+        </cTool>
+        <ccTool>
+          <developmentMode>6</developmentMode>
+          <standard>4</standard>
+          <incDir>
+            <pElem>../../include</pElem>
+          </incDir>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>6</developmentMode>
+        </asmTool>
+        <archiverTool>
+        </archiverTool>
+      </compileType>
+      <item path="../../include/AmandaSDK.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/AmandaVM.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm-c/jit/arch/config.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm-c/jit/jit-defs.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm-c/jit/jit.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm-c/sdk-assert-helper.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm-c/sdk-configuration.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm-c/sdk-definitions.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm-c/sdk-gcc.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm-c/sdk-jit-engine.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm-c/sdk-toolchains.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm-c/sdk-types.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm-c/sdk-unreachable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm-c/sdk-version.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/ADT/Array.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/ADT/BinaryBuffer.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/ADT/Collections.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/ADT/Iterators.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Linker/GlobalOffsetTable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Locations.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Logging.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Mangling.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Serializable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/package.hxx"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/vm-ieee754.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/vm-opcodes.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/vm-types.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Callable.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Class.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Exception.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/package.hxx"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IO/Closeable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IO/ConsistentInputStream.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IO/ConsistentOutputStream.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IO/FileInputStream.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IO/FileOutputStream.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IO/Flushable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IO/InputStream.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IO/MemoryInputStream.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IO/MemoryOutputStream.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IO/OutputStream.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IO/Utility.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IllegalArgumentException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Integer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Interface.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Logging/ConsoleHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Logging/ErrorManager.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Logging/FileHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Logging/Filter.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Logging/Formatter.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Logging/GNUFormatter.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Logging/Handler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Logging/LogManager.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Logging/LogRecord.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Logging/Logger.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Logging/SimpleFormatter.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Logging/StreamHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/NIO/IOException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/NIO/NoSuchFileException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Object.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Option/Option.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Option/package.hxx"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Pointer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/ReferenceCounted.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/AdaptiveOptimizationCondition.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/BaseExceptions.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/Schedulable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/SchedulableFactory.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/String.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/System.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Threading/Runnable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Threading/Synchronization.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Threading/SynchronizationError.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Threading/Thread.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Threading/ThreadingException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/TypeSystem.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Types.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/io/Console.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/io/File.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/io/Path.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/io/PrintStream.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/tests/LoggingStressTest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../include/tests/PathTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../../include/tests/StringTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="c/unreachable.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="core/Class.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/Exception.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/IllegalArgumentException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/Integer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/Object.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/ReferenceCounted.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/String.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <folder path="TestFiles/f1">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f2">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f2</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f3">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f3</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f4">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f4</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f5">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f5</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f6">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f6</output>
+        </linkerTool>
+      </folder>
+      <item path="io/ConsistentInputStream.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/ConsistentOutputStream.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/Console.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/Endianness.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/File.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/FileInputStream.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/FileOutputStream.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/InputStream.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/MemoryInputStream.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/MemoryOutputStream.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/OutputStream.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/Path.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/PrintStream.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="logging/ConsoleHandler.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="logging/ErrorManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="logging/FileHandler.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="logging/Formatter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="logging/GNUFormatter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="logging/Handler.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="logging/LogManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="logging/LogRecord.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="logging/Logger.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="logging/SimpleFormatter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="logging/StreamHandler.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="nio/IOException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="nio/NoSuchFileException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="scripts/common.sh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="scripts/test.sh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="system/cores.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="system/os.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/conio-tests.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/fileio-test.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/object-system-test.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="threading/Runnable.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="threading/Synchronization.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="threading/SynchronizationError.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="threading/Thread.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="threading/ThreadingException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>

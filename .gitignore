@@ -1,18 +1,52 @@
-# Object files
-*.o
+# Amanda Computing Platform repo-level .gitignore file
+# Written by J. Marrero
+
+### C++ ###
+# Prerequisites
 *.d
-*.o.d
-*.exe
-*.res
-*.a
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled headers
+*.gch
+*.pch
+
+# Compiled dynamic libraries
+*.so
+*.dylib
 *.dll
-*.ax
 
-# Sensitive files used by NetBeans
-nbproject
+# Fortran module files
+*.mod
+*.smod
 
-# Export folders & relatives
-dist
-build
+# Compiled static libraries
+*.lai
+*.la
+*.a
+*.lib
 
-# Misc
+# Executables
+*.exe
+*.out
+*.app
+*.elf
+
+### NetBeans specific ###
+**/nbproject/private/
+**/nbproject/Makefile-*.mk
+**/nbproject/Package-*.bash
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+.nb-gradle/
+
+### Amanda ###
+*.ax	# Amanda compiled files

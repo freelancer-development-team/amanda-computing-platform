@@ -59,15 +59,20 @@ class FileSystem : public core::Object
 {
     AMANDA_OBJECT(FileSystem, core::Object)
 public:
-
-    static const core::String& BIN_DIRECTORY;
-    static const core::String& CONFIG_DIRECTORY;
-    static const core::String& LIBRARIES_DIRECTORY;
-    static const core::String& MODULES_DIRECTORY;
+    
+    static const core::String&  BIN_DIRECTORY;
+    static const core::String&  CONFIG_DIRECTORY;
+    static const core::String&  EXECUTABLE_FILE_EXTENSION;
+    static const core::String&  LIBRARIES_DIRECTORY;
+    static const core::String&  MODULES_DIRECTORY;
 
     FileSystem(const Context& context, io::Path* root);
     virtual ~FileSystem();
 
+    virtual bool                checkExistenceOfDirectory(const core::String& name) const;
+    const core::String          getDllExtension() const;
+    virtual io::Path            getLibrariesFolder() const;
+    virtual io::Path            getModulesFolder() const;
     virtual io::File*           getResourceAsFile(const ResourceIdentifier& id) const;
     virtual io::InputStream*    getResourceAsStream(const ResourceIdentifier& id) const;
 
@@ -78,7 +83,6 @@ protected:
     core::StrongReference<io::Path> executablePath;
     core::StrongReference<io::Path> rootPath;
 
-    virtual bool                checkExistenceOfDirectory(const core::String& name) const;
 } ;
 
 }

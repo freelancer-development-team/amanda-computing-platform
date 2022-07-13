@@ -39,7 +39,7 @@ CommandLine::CommandLine()
 
 CommandLine::~CommandLine()
 {
-    std::list<const Option*>::iterator iter;
+    std::vector<const Option*>::iterator iter;
     for (iter = options.begin(); iter != options.end(); ++iter)
     {
         const Option* option = *iter;
@@ -59,7 +59,7 @@ void CommandLine::addOption(const Option* option)
     options.push_back(option);
 }
 
-std::list<String>& CommandLine::getArgumentList()
+std::vector<String>& CommandLine::getArgumentList()
 {
     return arguments;
 }
@@ -68,7 +68,7 @@ void CommandLine::getArguments(core::String arguments[], size_t size)
 {
     size_t i = 0;
 
-    std::list<String>::iterator iter;
+    std::vector<String>::iterator iter;
     for (iter = this->arguments.begin();
          iter != this->arguments.end() && (i < size); ++iter)
     {
@@ -76,7 +76,7 @@ void CommandLine::getArguments(core::String arguments[], size_t size)
     }
 }
 
-std::list<const Option*>& CommandLine::getOptionsList()
+std::vector<const Option*>& CommandLine::getOptionsList()
 {
     return options;
 }
@@ -85,7 +85,7 @@ void CommandLine::getOptions(const Option* options[], size_t size)
 {
     size_t i = 0;
 
-    STL_ITERATOR(list, const Option*, iter);
+    STL_ITERATOR(vector, const Option*, iter);
     for (iter = adt::begin(this->options);
          iter != adt::end(this->options) && (i < size); ++iter)
     {
@@ -121,16 +121,16 @@ Array<String> CommandLine::getOptionValues(const core::String& opt)
 
 Array<String> CommandLine::getOptionValues(const Option* option)
 {
-    std::list<String> valueList;
+    std::vector<String> valueList;
     option->getValuesList(valueList);
 
     Array<String> array(valueList.size());
     unsigned counter = 0;
-    for (std::list<String>::iterator it = valueList.begin(); it != valueList.end(); ++it)
+    for (std::vector<String>::iterator it = valueList.begin(); it != valueList.end(); ++it)
     {
         array[counter++] = *it;
     }
-    
+
     return array;
 }
 
@@ -154,8 +154,8 @@ const Option* CommandLine::resolveOption(const core::String& option)
     const Option* result = NULL;
     String opt = cli::stripLeadingHyphens(option);
 
-    for (std::list<const Option*>::const_iterator iter = options.begin();
-         iter != options.end() && result == NULL; ++iter)
+    for (std::vector<const Option*>::const_iterator iter = options.begin(),
+         end = options.end(); iter != end && result == NULL; ++iter)
     {
         const Option* optionObject = *iter;
         assert(optionObject != NULL && "Got a null option object.");

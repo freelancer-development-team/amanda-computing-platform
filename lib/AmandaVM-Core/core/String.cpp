@@ -16,6 +16,7 @@
  */
 
 #include <amanda-vm/String.h>
+#include <amanda-vm-c/sdk-types.h>
 
 // C++
 #include <cstdio>
@@ -29,7 +30,7 @@ const String String::EMPTY;
 String String::makeFormattedStringWithArguments(const core::String& fmt, va_list va)
 {
     size_t limit = 0x10 * fmt.length();
-    char* buffer = static_cast<char*>(std::calloc(limit, sizeof (char)));
+    char* buffer = static_cast<char*> (std::calloc(limit, sizeof (char)));
 
     ::vsnprintf(buffer, limit, fmt.toCharArray(), va);
     String result(buffer);
@@ -51,7 +52,8 @@ String String::makeFormattedString(const core::String& fmt, ...)
 String::String(int value) :
 bufferLength(0),
 bufferCapacity(0),
-buffer(&endZero)
+buffer(&endZero),
+wcBuffer(NULL)
 {
     char tempBuffer[CONVERSION_BUFFER_LENGTH];
     sprintf(tempBuffer, "%d", value);
@@ -61,7 +63,8 @@ buffer(&endZero)
 String::String(short value) :
 bufferLength(0),
 bufferCapacity(0),
-buffer(&endZero)
+buffer(&endZero),
+wcBuffer(NULL)
 {
     char tempBuffer[CONVERSION_BUFFER_LENGTH];
     sprintf(tempBuffer, "%d", value);
@@ -71,7 +74,8 @@ buffer(&endZero)
 String::String(long value) :
 bufferLength(0),
 bufferCapacity(0),
-buffer(&endZero)
+buffer(&endZero),
+wcBuffer(NULL)
 {
     char tempBuffer[CONVERSION_BUFFER_LENGTH];
     sprintf(tempBuffer, "%ld", value);
@@ -81,7 +85,8 @@ buffer(&endZero)
 String::String(long long value) :
 bufferLength(0),
 bufferCapacity(0),
-buffer(&endZero)
+buffer(&endZero),
+wcBuffer(NULL)
 {
     char tempBuffer[CONVERSION_BUFFER_LENGTH];
     sprintf(tempBuffer, "%lld", value);
@@ -91,7 +96,8 @@ buffer(&endZero)
 String::String(unsigned value) :
 bufferLength(0),
 bufferCapacity(0),
-buffer(&endZero)
+buffer(&endZero),
+wcBuffer(NULL)
 {
     char tempBuffer[CONVERSION_BUFFER_LENGTH];
     sprintf(tempBuffer, "%u", value);
@@ -101,7 +107,8 @@ buffer(&endZero)
 String::String(unsigned short value) :
 bufferLength(0),
 bufferCapacity(0),
-buffer(&endZero)
+buffer(&endZero),
+wcBuffer(NULL)
 {
     char tempBuffer[CONVERSION_BUFFER_LENGTH];
     sprintf(tempBuffer, "%u", value);
@@ -111,7 +118,8 @@ buffer(&endZero)
 String::String(unsigned long value) :
 bufferLength(0),
 bufferCapacity(0),
-buffer(&endZero)
+buffer(&endZero),
+wcBuffer(NULL)
 {
     char tempBuffer[CONVERSION_BUFFER_LENGTH];
     sprintf(tempBuffer, "%lu", value);
@@ -121,7 +129,8 @@ buffer(&endZero)
 String::String(unsigned long long value) :
 bufferLength(0),
 bufferCapacity(0),
-buffer(&endZero)
+buffer(&endZero),
+wcBuffer(NULL)
 {
     char tempBuffer[CONVERSION_BUFFER_LENGTH];
     sprintf(tempBuffer, "%llu", value);
@@ -131,7 +140,8 @@ buffer(&endZero)
 String::String(float value) :
 bufferLength(0),
 bufferCapacity(0),
-buffer(&endZero)
+buffer(&endZero),
+wcBuffer(NULL)
 {
     char tempBuffer[CONVERSION_BUFFER_LENGTH];
     sprintf(tempBuffer, "%g", value);
@@ -141,7 +151,8 @@ buffer(&endZero)
 String::String(double value) :
 bufferLength(0),
 bufferCapacity(0),
-buffer(&endZero)
+buffer(&endZero),
+wcBuffer(NULL)
 {
     char tempBuffer[CONVERSION_BUFFER_LENGTH];
     sprintf(tempBuffer, "%.15g", value);
@@ -151,7 +162,8 @@ buffer(&endZero)
 String::String(bool value) :
 bufferLength(0),
 bufferCapacity(0),
-buffer(&endZero)
+buffer(&endZero),
+wcBuffer(NULL)
 {
     if (value)
         * this = "true";
@@ -162,7 +174,8 @@ buffer(&endZero)
 String::String(char value) :
 bufferLength(0),
 bufferCapacity(0),
-buffer(&endZero)
+buffer(&endZero),
+wcBuffer(NULL)
 {
     resize(1);
     buffer[0] = value;
@@ -171,11 +184,24 @@ buffer(&endZero)
 String::String(char value, unsigned length) :
 bufferLength(0),
 bufferCapacity(0),
-buffer(&endZero)
+buffer(&endZero),
+wcBuffer(NULL)
 {
     resize(length);
     for (unsigned i = 0; i < length; ++i)
         buffer[i] = value;
+}
+
+String::~String()
+{
+    if (bufferCapacity)
+    {
+        delete[] buffer;
+    }
+    if (wcBuffer != NULL)
+    {
+        std::free(wcBuffer);
+    }
 }
 
 String& String::operator +=(int rhs)
@@ -676,14 +702,14 @@ void String::setUtf8FromLatin1(const char* str)
 
 void String::setUtf8FromWChar(const wchar_t* str)
 {
-    char temp[7];
+    char temp[7] = {0};
 
     clear();
 
     if (!str)
         return;
 
-#ifdef _WIN32
+#ifdef _W32
     while (*str)
     {
         unsigned unicodeChar = decodeUtf16(str);
@@ -701,6 +727,20 @@ void String::setUtf8FromWChar(const wchar_t* str)
         append(temp);
     }
 #endif
+}
+
+void String::setWCharFromUTF8(const char* str) const
+{
+    while (*str)
+    {
+        wchar_t temp[16] = {0};
+        unsigned unicodeChar = decodeUtf8(str);
+        wchar_t* dest = temp;
+        this->encodeUtf16(dest, unicodeChar);
+        *dest = 0;
+
+        std::wcscat(wcBuffer, temp);
+    }
 }
 
 unsigned String::lengthUtf8() const
@@ -922,7 +962,7 @@ unsigned String::decodeUtf8(const char*& src)
     }
 }
 
-#ifdef _WIN32
+#ifdef _W32
 
 void String::encodeUtf16(wchar_t*& dest, unsigned unicodeChar)
 {
@@ -1172,6 +1212,27 @@ unsigned String::count(const String& str) const
     return count;
 }
 
+unsigned String::count(const wchar_t wc) const
+{
+    unsigned count = 0;
+
+    return count;
+}
+
+unsigned String::count(const char c) const
+{
+    unsigned count = 0;
+    for (unsigned i = 0; i < lengthUtf8(); ++i)
+    {
+        unsigned unicodeChar = utf8CharAt(i);
+        if (unicodeChar == (unsigned char) c)
+        {
+            ++count;
+        }
+    }
+    return count;
+}
+
 std::vector<String> String::split(const String& delimiter, unsigned maxCount) const
 {
     // Max-count parameter evaluation
@@ -1218,4 +1279,14 @@ std::vector<String> String::split(const String& delimiter, unsigned maxCount) co
         }
     }
     return result;
+}
+
+const wchar_t* String::toWideCharArray() const
+{
+    if (wcBuffer == NULL)
+    {
+        wcBuffer = (wchar_t*) std::calloc(lengthUtf8(), sizeof (wchar_t));
+    }
+    setWCharFromUTF8(buffer);
+    return wcBuffer;
 }

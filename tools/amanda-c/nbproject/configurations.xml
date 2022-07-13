@@ -1,0 +1,716 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="100">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>include/amanda-c/CompilationContext.h</itemPath>
+      <itemPath>include/amanda-c/Driver.h</itemPath>
+      <itemPath>include/amanda-c/ast/Lists.h</itemPath>
+      <itemPath>include/amanda-c/Messages.h</itemPath>
+      <itemPath>include/amanda-c/ast/Modifiers.h</itemPath>
+      <itemPath>include/amanda-c/ast/NAssignmentExpression.h</itemPath>
+      <itemPath>include/amanda-c/ast/NBinaryOperator.h</itemPath>
+      <itemPath>include/amanda-c/ast/NBlock.h</itemPath>
+      <itemPath>include/amanda-c/ast/NBoolean.h</itemPath>
+      <itemPath>include/amanda-c/ast/NClassDeclaration.h</itemPath>
+      <itemPath>include/amanda-c/ast/NClassFieldDeclaration.h</itemPath>
+      <itemPath>include/amanda-c/ast/NCompilationUnit.h</itemPath>
+      <itemPath>include/amanda-c/ast/NCompoundStatement.h</itemPath>
+      <itemPath>include/amanda-c/ast/NConditionalStatement.h</itemPath>
+      <itemPath>include/amanda-c/ast/NDeclaration.h</itemPath>
+      <itemPath>include/amanda-c/ast/NExpression.h</itemPath>
+      <itemPath>include/amanda-c/ast/NExpressionStatement.h</itemPath>
+      <itemPath>include/amanda-c/ast/NForLoopStatement.h</itemPath>
+      <itemPath>include/amanda-c/ast/NFunctionCall.h</itemPath>
+      <itemPath>include/amanda-c/ast/NFunctionDeclaration.h</itemPath>
+      <itemPath>include/amanda-c/ast/NIdentifier.h</itemPath>
+      <itemPath>include/amanda-c/ast/NInteger.h</itemPath>
+      <itemPath>include/amanda-c/ast/NNamespaceDeclaration.h</itemPath>
+      <itemPath>include/amanda-c/ast/NReturnStatement.h</itemPath>
+      <itemPath>include/amanda-c/ast/NStatement.h</itemPath>
+      <itemPath>include/amanda-c/ast/NUsingDeclaration.h</itemPath>
+      <itemPath>include/amanda-c/ast/NVariableDeclaration.h</itemPath>
+      <itemPath>include/amanda-c/ast/NWhileStatement.h</itemPath>
+      <itemPath>include/amanda-c/ast/OperatorKinds.h</itemPath>
+      <itemPath>include/amanda-c/OptionsParser.h</itemPath>
+      <itemPath>include/amanda-c/Parser.h</itemPath>
+      <itemPath>compiler/Parser.h</itemPath>
+      <itemPath>include/amanda-c/ParserLocations.h</itemPath>
+      <itemPath>include/amanda-c/Scanner.h</itemPath>
+      <itemPath>include/amanda-c/SemanticAnalizer.h</itemPath>
+      <itemPath>include/amanda-c/ast-package.h</itemPath>
+      <itemPath>include/amanda-c/c/config.h</itemPath>
+      <itemPath>w32/ids.h</itemPath>
+      <itemPath>include/amanda-c/c/version.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+      <itemPath>w32/resource.rc</itemPath>
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>compiler/CompilationContext.cpp</itemPath>
+      <itemPath>compiler/Driver.cpp</itemPath>
+      <itemPath>compiler/Messages.cpp</itemPath>
+      <itemPath>ast/NAssignmentExpression.cpp</itemPath>
+      <itemPath>ast/NBinaryOperator.cpp</itemPath>
+      <itemPath>ast/NBlock.cpp</itemPath>
+      <itemPath>ast/NBoolean.cpp</itemPath>
+      <itemPath>ast/NClassDeclaration.cpp</itemPath>
+      <itemPath>ast/NClassFieldDeclaration.cpp</itemPath>
+      <itemPath>ast/NCompilationUnit.cpp</itemPath>
+      <itemPath>ast/NCompoundStatement.cpp</itemPath>
+      <itemPath>ast/NConditionalStatement.cpp</itemPath>
+      <itemPath>ast/NDeclaration.cpp</itemPath>
+      <itemPath>ast/NExpression.cpp</itemPath>
+      <itemPath>ast/NExpressionStatement.cpp</itemPath>
+      <itemPath>ast/NForLoopStatement.cpp</itemPath>
+      <itemPath>ast/NFunctionCall.cpp</itemPath>
+      <itemPath>ast/NFunctionDeclaration.cpp</itemPath>
+      <itemPath>ast/NIdentifier.cpp</itemPath>
+      <itemPath>ast/NInteger.cpp</itemPath>
+      <itemPath>ast/NNamespaceDeclaration.cpp</itemPath>
+      <itemPath>ast/NReturnStatement.cpp</itemPath>
+      <itemPath>ast/NStatement.cpp</itemPath>
+      <itemPath>ast/NUsingDeclaration.cpp</itemPath>
+      <itemPath>ast/NVariableDeclaration.cpp</itemPath>
+      <itemPath>ast/NWhileStatement.cpp</itemPath>
+      <itemPath>compiler/OptionsParser.cpp</itemPath>
+      <itemPath>compiler/Parser.cpp</itemPath>
+      <itemPath>compiler/Scanner.cpp</itemPath>
+      <itemPath>compiler/SemanticAnalizer.cpp</itemPath>
+      <itemPath>main.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+    <itemPath>utils/build-reflex.sh</itemPath>
+    <itemPath>utils/clean-reflex.sh</itemPath>
+    <itemPath>specs/grammar.y</itemPath>
+    <itemPath>utils/reflex-commons.sh</itemPath>
+    <itemPath>specs/scanner.l</itemPath>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>MinGW|MinGW</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <standard>2</standard>
+          <incDir>
+            <pElem>../../include</pElem>
+          </incDir>
+          <warningLevel>2</warningLevel>
+        </cTool>
+        <ccTool>
+          <standard>4</standard>
+          <incDir>
+            <pElem>../../include</pElem>
+            <pElem>include</pElem>
+            <pElem>../../third-party/reflex-3.2.1/include</pElem>
+          </incDir>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <linkerTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/amanda-c</output>
+          <linkerCopySharedLibs>true</linkerCopySharedLibs>
+          <additionalDep>${CND_BUILDDIR}/w32/resource.o</additionalDep>
+          <linkerLibItems>
+            <linkerLibFileItem>../../third-party/reflex-3.2.1/lib/libreflex.a</linkerLibFileItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../../lib/Option"
+                            CT="3"
+                            CN="Debug"
+                            AC="true"
+                            BL="true"
+                            WD="../../lib/Option"
+                            BC="${MAKE} -j8 -f Makefile CONF=Debug"
+                            CC="${MAKE} -j8 -f Makefile CONF=Debug clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liboption.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../../lib/IL"
+                            CT="3"
+                            CN="Debug"
+                            AC="true"
+                            BL="true"
+                            WD="../../lib/IL"
+                            BC="${MAKE} -j8 -f Makefile CONF=Debug"
+                            CC="${MAKE} -j8 -f Makefile CONF=Debug clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libil.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../../lib/Frontend"
+                            CT="3"
+                            CN="Debug"
+                            AC="true"
+                            BL="true"
+                            WD="../../lib/Frontend"
+                            BC="${MAKE} -j8 -f Makefile CONF=Debug"
+                            CC="${MAKE} -j8 -f Makefile CONF=Debug clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfrontend.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../../lib/AmandaVM-Core"
+                            CT="3"
+                            CN="Debug"
+                            AC="true"
+                            BL="true"
+                            WD="../../lib/AmandaVM-Core"
+                            BC="${MAKE} -j8 -f Makefile CONF=Debug"
+                            CC="${MAKE} -j8 -f Makefile CONF=Debug clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libamandavm-core.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+          </linkerLibItems>
+          <commandLine>${CND_BUILDDIR}/w32/resource.o</commandLine>
+        </linkerTool>
+      </compileType>
+      <item path="ast/NAssignmentExpression.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NBinaryOperator.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NBlock.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NBoolean.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NClassDeclaration.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NClassFieldDeclaration.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NCompilationUnit.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NCompoundStatement.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NConditionalStatement.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NDeclaration.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NExpression.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NExpressionStatement.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NForLoopStatement.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NFunctionCall.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NFunctionDeclaration.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NIdentifier.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NInteger.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NNamespaceDeclaration.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NReturnStatement.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NStatement.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NUsingDeclaration.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NVariableDeclaration.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NWhileStatement.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="compiler/CompilationContext.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="compiler/Driver.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="compiler/Messages.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="compiler/OptionsParser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="compiler/Parser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="compiler/Parser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="compiler/Scanner.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="compiler/SemanticAnalizer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="include/amanda-c/CompilationContext.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/Driver.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/Messages.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/OptionsParser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/Parser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/ParserLocations.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/Scanner.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/SemanticAnalizer.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast-package.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/Lists.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/Modifiers.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NAssignmentExpression.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NBinaryOperator.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NBlock.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NBoolean.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NClassDeclaration.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NClassFieldDeclaration.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NCompilationUnit.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NCompoundStatement.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NConditionalStatement.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NDeclaration.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NExpression.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NExpressionStatement.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NForLoopStatement.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NFunctionCall.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NFunctionDeclaration.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NIdentifier.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NInteger.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NNamespaceDeclaration.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NReturnStatement.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NStatement.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NUsingDeclaration.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NVariableDeclaration.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NWhileStatement.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/OperatorKinds.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/c/config.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/c/version.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="specs/grammar.y" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="specs/scanner.l" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="utils/build-reflex.sh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="utils/clean-reflex.sh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="utils/reflex-commons.sh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="w32/ids.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="w32/resource.rc" ex="false" tool="3" flavor2="0">
+        <customTool>
+          <customToolCommandline>windres.exe w32/resource.rc ${CND_BUILDDIR}/resource.o</customToolCommandline>
+          <customToolDescription>Processing resources...</customToolDescription>
+          <customToolOutputs>${CND_BUILDDIR}/resource.o</customToolOutputs>
+          <customToolAdditionalDep>w32/ids.h</customToolAdditionalDep>
+        </customTool>
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <compilerSet>MinGW|MinGW</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+          <standard>2</standard>
+          <incDir>
+            <pElem>../../include</pElem>
+          </incDir>
+          <warningLevel>2</warningLevel>
+        </cTool>
+        <ccTool>
+          <developmentMode>6</developmentMode>
+          <standard>4</standard>
+          <incDir>
+            <pElem>../../include</pElem>
+            <pElem>include</pElem>
+            <pElem>../../third-party/reflex-3.2.1/include</pElem>
+          </incDir>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>6</developmentMode>
+          <warningLevel>2</warningLevel>
+        </asmTool>
+        <linkerTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/amanda-c</output>
+          <linkerCopySharedLibs>true</linkerCopySharedLibs>
+          <additionalDep>${CND_BUILDDIR}/w32/resource.o</additionalDep>
+          <linkerLibItems>
+            <linkerLibFileItem>../../third-party/reflex-3.2.1/lib/libreflex.a</linkerLibFileItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../../lib/Option"
+                            CT="3"
+                            CN="Release"
+                            AC="false"
+                            BL="true"
+                            WD="../../lib/Option"
+                            BC="${MAKE} -j8 -f Makefile CONF=Release"
+                            CC="${MAKE} -j8 -f Makefile CONF=Release clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liboption.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../../lib/IL"
+                            CT="3"
+                            CN="Release"
+                            AC="false"
+                            BL="true"
+                            WD="../../lib/IL"
+                            BC="${MAKE} -j8 -f Makefile CONF=Release"
+                            CC="${MAKE} -j8 -f Makefile CONF=Release clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libil.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../../lib/Frontend"
+                            CT="3"
+                            CN="Release"
+                            AC="false"
+                            BL="true"
+                            WD="../../lib/Frontend"
+                            BC="${MAKE} -j8 -f Makefile CONF=Release"
+                            CC="${MAKE} -j8 -f Makefile CONF=Release clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfrontend.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../../lib/AmandaVM-Core"
+                            CT="3"
+                            CN="Release"
+                            AC="false"
+                            BL="true"
+                            WD="../../lib/AmandaVM-Core"
+                            BC="${MAKE} -j8 -f Makefile CONF=Release"
+                            CC="${MAKE} -j8 -f Makefile CONF=Release clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libamandavm-core.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+          </linkerLibItems>
+          <commandLine>${CND_BUILDDIR}/w32/resource.o</commandLine>
+        </linkerTool>
+      </compileType>
+      <item path="ast/NAssignmentExpression.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NBinaryOperator.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NBlock.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NBoolean.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NClassDeclaration.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NClassFieldDeclaration.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NCompilationUnit.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NCompoundStatement.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NConditionalStatement.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NDeclaration.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NExpression.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NExpressionStatement.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NForLoopStatement.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NFunctionCall.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NFunctionDeclaration.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NIdentifier.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NInteger.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NNamespaceDeclaration.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NReturnStatement.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NStatement.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NUsingDeclaration.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NVariableDeclaration.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NWhileStatement.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="compiler/CompilationContext.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="compiler/Driver.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="compiler/Messages.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="compiler/OptionsParser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="compiler/Parser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="compiler/Parser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="compiler/Scanner.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="compiler/SemanticAnalizer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="include/amanda-c/CompilationContext.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/Driver.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/Messages.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/OptionsParser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/Parser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/ParserLocations.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/Scanner.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/SemanticAnalizer.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast-package.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/Lists.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/Modifiers.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NAssignmentExpression.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NBinaryOperator.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NBlock.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NBoolean.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NClassDeclaration.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NClassFieldDeclaration.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NCompilationUnit.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NCompoundStatement.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NConditionalStatement.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NDeclaration.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NExpression.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NExpressionStatement.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NForLoopStatement.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NFunctionCall.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NFunctionDeclaration.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NIdentifier.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NInteger.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NNamespaceDeclaration.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NReturnStatement.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NStatement.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NUsingDeclaration.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NVariableDeclaration.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NWhileStatement.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/OperatorKinds.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="include/amanda-c/c/config.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/c/version.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="specs/grammar.y" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="specs/scanner.l" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="utils/build-reflex.sh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="utils/clean-reflex.sh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="utils/reflex-commons.sh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="w32/ids.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="w32/resource.rc" ex="false" tool="3" flavor2="0">
+        <customTool>
+          <customToolCommandline>windres.exe -I "../../include" w32/resource.rc ${CND_BUILDDIR}/w32/resource.o</customToolCommandline>
+          <customToolDescription>Processing resources...</customToolDescription>
+          <customToolOutputs>${CND_BUILDDIR}/w32/resource.o</customToolOutputs>
+          <customToolAdditionalDep>w32/ids.h</customToolAdditionalDep>
+        </customTool>
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>

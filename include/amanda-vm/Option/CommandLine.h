@@ -49,9 +49,9 @@ public:
 
     void                        addArgument(const core::String& argument);
     void                        addOption(const Option* option);
-    std::list<core::String>&    getArgumentList();
+    std::vector<core::String>&  getArgumentList();
     void                        getArguments(core::String arguments[], size_t size);
-    std::list<const Option*>&   getOptionsList();
+    std::vector<const Option*>& getOptionsList();
     void                        getOptions(const Option* options[], size_t size);
     core::String                getOptionValue(const char opt);
     core::String                getOptionValue(const core::String& opt);
@@ -65,8 +65,8 @@ public:
 
 private:
 
-    std::list<core::String>     arguments;
-    std::list<const Option*>    options;
+    std::vector<core::String>     arguments;
+    std::vector<const Option*>    options;
 
     const Option*   resolveOption(const core::String& option);
 } ;

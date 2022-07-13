@@ -32,6 +32,7 @@ using namespace amanda::vm;
 
 const core::String& FileSystem::BIN_DIRECTORY = "bin";
 const core::String& FileSystem::CONFIG_DIRECTORY = "conf";
+const core::String& FileSystem::EXECUTABLE_FILE_EXTENSION = ".ax";
 const core::String& FileSystem::LIBRARIES_DIRECTORY = "lib";
 const core::String& FileSystem::MODULES_DIRECTORY = "mods";
 
@@ -40,7 +41,7 @@ FileSystem::FileSystem(const Context& context, io::Path* root)
 context(context),
 logger(logging::Logger::getLogger("amanda.vm.FileSystem")->getReference()),
 executablePath(root),
-rootPath(new io::Path(root->getParent().getParent()))
+rootPath(new io::Path(root->getParent().getParent().toAbsolutePath()))
 {
     // Set the logger properties
     logger.setUseParentHandlers(false);
@@ -49,7 +50,11 @@ rootPath(new io::Path(root->getParent().getParent()))
     // Log the initialization phase
     logger.info("initializing virtual file-system server (root path '%s').",
                 rootPath->toString().toCharArray());
-    
+
+    // Check the integrity of the installation
+    checkExistenceOfDirectory(BIN_DIRECTORY);
+    checkExistenceOfDirectory(LIBRARIES_DIRECTORY);
+    checkExistenceOfDirectory(MODULES_DIRECTORY);
 }
 
 FileSystem::~FileSystem()
@@ -59,19 +64,43 @@ FileSystem::~FileSystem()
 bool FileSystem::checkExistenceOfDirectory(const core::String& name) const
 {
     bool result = true;
-    io::File directory(io::Path(rootPath->getConstReference(), name), io::File::READ);
+    io::Path directory(rootPath->toAbsolutePath(), name);
+#ifdef _W32
+    directory.makeWindowsPath();
+#endif
 
-    if (!directory.exists() || directory.isDirectory())
+    //    logger.debug("checking existence of path '%s'", directory.toString().toCharArray());
+
+    bool exists = directory.exists();
+    bool isDir = exists ? directory.isDirectory() : false;
+
+    if (!exists || !isDir)
     {
         result = false;
         throw nio::IOException(core::String::makeFormattedString("the specified directory (%s) is not a directory or does not exists.",
-                                                                 directory.getPath().toCharArray()));
+                                                                 directory.toString().toCharArray()));
     }
-    else
-    {
-        logger.finest("successfully checked existence of directory: %s", directory.getPath().toCharArray());
-    }
+    logger.finest("successfully checked existence of directory: %s", directory.toString().toCharArray());
     return result;
+}
+
+const core::String FileSystem::getDllExtension() const
+{
+#ifdef _W32
+    return ".dll";
+#else
+    return ".so";
+#endif
+}
+
+io::Path FileSystem::getLibrariesFolder() const
+{
+    return io::Path(rootPath->getReference(), LIBRARIES_DIRECTORY);
+}
+
+io::Path FileSystem::getModulesFolder() const
+{
+    return io::Path(rootPath->getReference(), MODULES_DIRECTORY);
 }
 
 io::File* FileSystem::getResourceAsFile(const ResourceIdentifier& id) const

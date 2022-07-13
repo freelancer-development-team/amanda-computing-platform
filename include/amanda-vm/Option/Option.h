@@ -66,7 +66,7 @@ public:
     const core::String& getKey() const;
     const core::String& getLongOption() const;
     const core::String& getOption() const;
-    void                getValuesList(std::list<core::String>& list) const;
+    void                getValuesList(std::vector<core::String>& list) const;
     char                getValueSeparator() const;
     bool                hasArgument() const;
     bool                hasArguments() const;

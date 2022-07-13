@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="100">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>include/amanda-as/initialization.h</itemPath>
+      <itemPath>include/amanda-as/logging.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+      <itemPath>w32/resource.rc</itemPath>
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>core/logging.cpp</itemPath>
+      <itemPath>main.cpp</itemPath>
+      <itemPath>core/options.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>MinGW|MinGW</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <incDir>
+            <pElem>../../include</pElem>
+          </incDir>
+          <warningLevel>2</warningLevel>
+        </cTool>
+        <ccTool>
+          <standard>4</standard>
+          <incDir>
+            <pElem>../../include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <asmTool>
+          <warningLevel>2</warningLevel>
+        </asmTool>
+        <linkerTool>
+          <linkerCopySharedLibs>true</linkerCopySharedLibs>
+          <additionalDep>${CND_BUILDDIR}/w32/resource.o</additionalDep>
+          <linkerLibItems>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../../lib/AmandaVM-Binutils"
+                            CT="3"
+                            CN="Debug"
+                            AC="true"
+                            BL="true"
+                            WD="../../lib/AmandaVM-Binutils"
+                            BC="${MAKE} -j8 -f Makefile CONF=Debug"
+                            CC="${MAKE} -j8 -f Makefile CONF=Debug clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libamandavm-binutils.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../../lib/Option"
+                            CT="3"
+                            CN="Debug"
+                            AC="true"
+                            BL="true"
+                            WD="../../lib/Option"
+                            BC="${MAKE} -j8 -f Makefile CONF=Debug"
+                            CC="${MAKE} -j8 -f Makefile CONF=Debug clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liboption.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../../lib/AmandaVM-Core"
+                            CT="3"
+                            CN="Debug"
+                            AC="false"
+                            BL="true"
+                            WD="../../lib/AmandaVM-Core"
+                            BC="${MAKE} -j8 -f Makefile CONF=Debug"
+                            CC="${MAKE} -j8 -f Makefile CONF=Debug clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libamandavm-core.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+          </linkerLibItems>
+          <commandLine>${CND_BUILDDIR}/w32/resource.o</commandLine>
+        </linkerTool>
+      </compileType>
+      <item path="core/logging.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/options.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="include/amanda-as/initialization.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-as/logging.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="w32/resource.rc" ex="false" tool="3" flavor2="0">
+        <customTool>
+          <customToolCommandline>windres.exe -I "../../include" w32/resource.rc ${CND_BUILDDIR}/w32/resource.o</customToolCommandline>
+          <customToolDescription>Building application resources</customToolDescription>
+          <customToolOutputs>${CND_BUILDDIR}/w32/resource.o</customToolOutputs>
+          <customToolAdditionalDep>w32/ids.h</customToolAdditionalDep>
+        </customTool>
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <compilerSet>MinGW|MinGW</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+          <incDir>
+            <pElem>../../include</pElem>
+          </incDir>
+          <warningLevel>2</warningLevel>
+        </cTool>
+        <ccTool>
+          <developmentMode>6</developmentMode>
+          <standard>4</standard>
+          <incDir>
+            <pElem>../../include</pElem>
+            <pElem>include</pElem>
+          </incDir>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>6</developmentMode>
+          <warningLevel>2</warningLevel>
+        </asmTool>
+        <linkerTool>
+          <linkerCopySharedLibs>true</linkerCopySharedLibs>
+          <additionalDep>${CND_BUILDDIR}/w32/resource.o</additionalDep>
+          <linkerLibItems>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../../lib/AmandaVM-Binutils"
+                            CT="3"
+                            CN="Release"
+                            AC="false"
+                            BL="true"
+                            WD="../../lib/AmandaVM-Binutils"
+                            BC="${MAKE} -j8 -f Makefile CONF=Release"
+                            CC="${MAKE} -j8 -f Makefile CONF=Release clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libamandavm-binutils.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../../lib/Option"
+                            CT="3"
+                            CN="Release"
+                            AC="false"
+                            BL="true"
+                            WD="../../lib/Option"
+                            BC="${MAKE} -j8 -f Makefile CONF=Release"
+                            CC="${MAKE} -j8 -f Makefile CONF=Release clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liboption.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../../lib/AmandaVM-Core"
+                            CT="3"
+                            CN="Release"
+                            AC="true"
+                            BL="true"
+                            WD="../../lib/AmandaVM-Core"
+                            BC="${MAKE} -j8 -f Makefile CONF=Release"
+                            CC="${MAKE} -j8 -f Makefile CONF=Release clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libamandavm-core.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+          </linkerLibItems>
+          <commandLine>${CND_BUILDDIR}/w32/resource.o</commandLine>
+        </linkerTool>
+      </compileType>
+      <item path="core/logging.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/options.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="include/amanda-as/initialization.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-as/logging.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="w32/resource.rc" ex="false" tool="3" flavor2="0">
+        <customTool>
+          <customToolCommandline>windres.exe -I "../../include" w32/resource.rc ${CND_BUILDDIR}/w32/resource.o</customToolCommandline>
+          <customToolDescription>Building application resources</customToolDescription>
+          <customToolOutputs>${CND_BUILDDIR}/w32/resource.o</customToolOutputs>
+          <customToolAdditionalDep>w32/ids.h</customToolAdditionalDep>
+        </customTool>
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>

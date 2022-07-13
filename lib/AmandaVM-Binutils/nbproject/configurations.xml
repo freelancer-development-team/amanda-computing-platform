@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="100">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>../../include/amanda-vm/Binutils/AssemblerDriver.h</itemPath>
+      <itemPath>assembler/AssemblerLexer-Inc.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/AssemblerLexer.h</itemPath>
+      <itemPath>assembler/AssemblerParser-Inc.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/AssemblerParser.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/DataObject.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/Function.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/Input.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/Instruction.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/InvalidFileFormatException.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/Label.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/LinkException.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/LinkerDriver.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/Module.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/ModuleReader.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/Operand.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/Section.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/SectionReader.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/Serializable.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/Serializer.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/StringTable.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/Symbol.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/SymbolTable.h</itemPath>
+      <itemPath>../../include/amanda-vm/Binutils/SyntaxError.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>assembler/AssemblerDriver.cpp</itemPath>
+      <itemPath>assembler/AssemblerLexer-C.cpp</itemPath>
+      <itemPath>assembler/AssemblerLexer.cpp</itemPath>
+      <itemPath>assembler/AssemblerParser-C.cpp</itemPath>
+      <itemPath>assembler/AssemblerParser.cpp</itemPath>
+      <itemPath>linker/DataObject.cpp</itemPath>
+      <itemPath>linker/Function.cpp</itemPath>
+      <itemPath>assembler/Input.cpp</itemPath>
+      <itemPath>core/Instruction.cpp</itemPath>
+      <itemPath>io/InvalidFileFormatException.cpp</itemPath>
+      <itemPath>core/Label.cpp</itemPath>
+      <itemPath>linker/LinkException.cpp</itemPath>
+      <itemPath>linker/LinkerDriver.cpp</itemPath>
+      <itemPath>core/Mangling.cpp</itemPath>
+      <itemPath>linker/Module.cpp</itemPath>
+      <itemPath>io/ModuleReader.cpp</itemPath>
+      <itemPath>core/Operand.cpp</itemPath>
+      <itemPath>linker/Section.cpp</itemPath>
+      <itemPath>io/SectionReader.cpp</itemPath>
+      <itemPath>core/Serializable.cpp</itemPath>
+      <itemPath>core/Serializer.cpp</itemPath>
+      <itemPath>linker/StringTable.cpp</itemPath>
+      <itemPath>linker/Symbol.cpp</itemPath>
+      <itemPath>linker/SymbolTable.cpp</itemPath>
+      <itemPath>assembler/SyntaxError.cpp</itemPath>
+      <itemPath>logging/default.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+    <itemPath>specs/lexer.l</itemPath>
+    <itemPath>specs/parser.y</itemPath>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="3">
+      <toolsSet>
+        <compilerSet>MinGW|MinGW</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <warningLevel>2</warningLevel>
+        </cTool>
+        <ccTool>
+          <standard>4</standard>
+          <incDir>
+            <pElem>../../include</pElem>
+          </incDir>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <archiverTool>
+        </archiverTool>
+      </compileType>
+      <item path="../../include/amanda-vm/Binutils/AssemblerDriver.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/AssemblerLexer.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/AssemblerParser.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/DataObject.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Function.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Input.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Instruction.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/InvalidFileFormatException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Label.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/LinkException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/LinkerDriver.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Module.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/ModuleReader.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Operand.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Section.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/SectionReader.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Serializable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Serializer.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/StringTable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Symbol.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/SymbolTable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/SyntaxError.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="assembler/AssemblerDriver.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="assembler/AssemblerLexer-C.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="assembler/AssemblerLexer-Inc.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="assembler/AssemblerLexer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="assembler/AssemblerParser-C.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="assembler/AssemblerParser-Inc.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="assembler/AssemblerParser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="assembler/Input.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="assembler/SyntaxError.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/Instruction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/Label.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/Mangling.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/Operand.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/Serializable.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/Serializer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/InvalidFileFormatException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/ModuleReader.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/SectionReader.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="linker/DataObject.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="linker/Function.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="linker/LinkException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="linker/LinkerDriver.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="linker/Module.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="linker/Section.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="linker/StringTable.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="linker/Symbol.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="linker/SymbolTable.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="logging/default.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="specs/lexer.l" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="specs/parser.y" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="3">
+      <toolsSet>
+        <compilerSet>MinGW|MinGW</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+          <warningLevel>2</warningLevel>
+        </cTool>
+        <ccTool>
+          <developmentMode>6</developmentMode>
+          <standard>4</standard>
+          <incDir>
+            <pElem>../../include</pElem>
+          </incDir>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>6</developmentMode>
+        </asmTool>
+        <archiverTool>
+        </archiverTool>
+      </compileType>
+      <item path="../../include/amanda-vm/Binutils/AssemblerDriver.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/AssemblerLexer.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/AssemblerParser.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/DataObject.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Function.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Input.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Instruction.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/InvalidFileFormatException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Label.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/LinkException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/LinkerDriver.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Module.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/ModuleReader.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Operand.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Section.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/SectionReader.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Serializable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Serializer.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/StringTable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/Symbol.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/SymbolTable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Binutils/SyntaxError.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="assembler/AssemblerDriver.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="assembler/AssemblerLexer-C.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="assembler/AssemblerLexer-Inc.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="assembler/AssemblerLexer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="assembler/AssemblerParser-C.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="assembler/AssemblerParser-Inc.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="assembler/AssemblerParser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="assembler/Input.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="assembler/SyntaxError.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/Instruction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/Label.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/Mangling.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/Operand.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/Serializable.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/Serializer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/InvalidFileFormatException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/ModuleReader.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/SectionReader.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="linker/DataObject.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="linker/Function.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="linker/LinkException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="linker/LinkerDriver.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="linker/Module.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="linker/Section.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="linker/StringTable.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="linker/Symbol.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="linker/SymbolTable.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="logging/default.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="specs/lexer.l" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="specs/parser.y" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>

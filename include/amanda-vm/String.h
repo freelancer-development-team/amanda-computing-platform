@@ -22,18 +22,19 @@
  * Created on February 13, 2022, 5:04 PM
  */
 
-#ifndef STRING_H
-#define STRING_H
+#ifndef AMANDA_STRING_H
+#define AMANDA_STRING_H
 
 #include <amanda-vm/ReferenceCounted.h>
 #include <amanda-vm-c/sdk-definitions.h>
 
+// C++
 #include <vector>
-
 #include <cassert>
 #include <cstdarg>
 #include <cstring>
 #include <cctype>
+#include <cwchar>
 
 namespace amanda
 {
@@ -54,64 +55,76 @@ public:
     static String makeFormattedString(const core::String& fmt, ...);
 
     /// Construct empty.
+
     String() :
-        bufferLength(0),
-        bufferCapacity(0),
-        buffer(&endZero)
-    {
-    }
+    bufferLength(0),
+    bufferCapacity(0),
+    buffer(&endZero),
+    wcBuffer(NULL) { }
 
     /// Construct from another string.
+
     String(const String& str) :
-        bufferLength(0),
-        bufferCapacity(0),
-        buffer(&endZero)
+    bufferLength(0),
+    bufferCapacity(0),
+    buffer(&endZero),
+    wcBuffer(NULL)
     {
         *this = str;
     }
 
     /// Construct from a C string.
+
     String(const char* str) :
-        bufferLength(0),
-        bufferCapacity(0),
-        buffer(&endZero)
+    bufferLength(0),
+    bufferCapacity(0),
+    buffer(&endZero),
+    wcBuffer(NULL)
     {
         *this = str;
     }
 
     /// Construct from a C string.
+
     String(char* str) :
-        bufferLength(0),
-        bufferCapacity(0),
-        buffer(&endZero)
+    bufferLength(0),
+    bufferCapacity(0),
+    buffer(&endZero),
+    wcBuffer(NULL)
     {
-        *this = (const char*)str;
+        *this = (const char*) str;
     }
 
     /// Construct from a char array and length.
+
     String(const char* str, unsigned length) :
-        bufferLength(0),
-        bufferCapacity(0),
-        buffer(&endZero)
+    bufferLength(0),
+    bufferCapacity(0),
+    buffer(&endZero),
+    wcBuffer(NULL)
     {
         resize(length);
         copyCharacters(buffer, str, length);
     }
 
     /// Construct from a null-terminated wide character array.
+
     String(const wchar_t* str) :
-        bufferLength(0),
-        bufferCapacity(0),
-        buffer(&endZero)
+    bufferLength(0),
+    bufferCapacity(0),
+    buffer(&endZero),
+    wcBuffer(NULL)
     {
         setUtf8FromWChar(str);
     }
 
     /// Construct from a null-terminated wide character array.
+
     String(wchar_t* str) :
-        bufferLength(0),
-        bufferCapacity(0),
-        buffer(&endZero)
+    bufferLength(0),
+    bufferCapacity(0),
+    buffer(&endZero),
+    wcBuffer(NULL)
     {
         setUtf8FromWChar(str);
     }
@@ -144,22 +157,21 @@ public:
     explicit String(char value, unsigned length);
 
     /// Construct from a convertable value.
+
     template <class T> explicit String(const T& value) :
-        bufferLength(0),
-        bufferCapacity(0),
-        buffer(&endZero)
+    bufferLength(0),
+    bufferCapacity(0),
+    buffer(&endZero)
     {
         *this = value.toString();
     }
 
     /// Destruct.
-    ~String()
-    {
-        if (bufferCapacity)
-            delete[] buffer;
-    }
+
+    ~String();
 
     /// Assign a string.
+
     String& operator =(const String& rhs)
     {
         resize(rhs.bufferLength);
@@ -169,6 +181,7 @@ public:
     }
 
     /// Assign a C string.
+
     String& operator =(const char* rhs)
     {
         unsigned rhsLength = getCharArrayLength(rhs);
@@ -179,6 +192,7 @@ public:
     }
 
     /// Add-assign a string.
+
     String& operator +=(const String& rhs)
     {
         unsigned oldLength = bufferLength;
@@ -189,6 +203,7 @@ public:
     }
 
     /// Add-assign a C string.
+
     String& operator +=(const char* rhs)
     {
         unsigned rhsLength = getCharArrayLength(rhs);
@@ -200,6 +215,7 @@ public:
     }
 
     /// Add-assign a character.
+
     String& operator +=(char rhs)
     {
         unsigned oldLength = bufferLength;
@@ -210,30 +226,35 @@ public:
     }
 
     /// Add-assign (concatenate as string) an integer.
-    String& operator +=(int rhs);
+    String& operator +=(int rhs) ;
     /// Add-assign (concatenate as string) a short integer.
-    String& operator +=(short rhs);
+    String& operator +=(short rhs) ;
     /// Add-assign (concatenate as string) a long integer.
-    String& operator +=(long rhs);
+    String& operator +=(long rhs) ;
     /// Add-assign (concatenate as string) a long long integer.
-    String& operator +=(long long rhs);
+    String& operator +=(long long rhs) ;
     /// Add-assign (concatenate as string) an unsigned integer.
-    String& operator +=(unsigned rhs);
+    String& operator +=(unsigned rhs) ;
     /// Add-assign (concatenate as string) a short unsigned integer.
-    String& operator +=(unsigned short rhs);
+    String& operator +=(unsigned short rhs) ;
     /// Add-assign (concatenate as string) a long unsigned integer.
-    String& operator +=(unsigned long rhs);
+    String& operator +=(unsigned long rhs) ;
     /// Add-assign (concatenate as string) a long long unsigned integer.
-    String& operator +=(unsigned long long rhs);
+    String& operator +=(unsigned long long rhs) ;
     /// Add-assign (concatenate as string) a float.
-    String& operator +=(float rhs);
+    String& operator +=(float rhs) ;
     /// Add-assign (concatenate as string) a bool.
     String& operator +=(bool rhs);
 
     /// Add-assign (concatenate as string) an arbitrary type.
-    template <class T> String operator +=(const T& rhs) { return *this += rhs.ToString(); }
+
+    template <class T> String operator +=(const T& rhs)
+    {
+        return *this += rhs.ToString();
+    }
 
     /// Add a string.
+
     String operator +(const String& rhs) const
     {
         String ret;
@@ -245,6 +266,7 @@ public:
     }
 
     /// Add a C string.
+
     String operator +(const char* rhs) const
     {
         unsigned rhsLength = getCharArrayLength(rhs);
@@ -257,30 +279,63 @@ public:
     }
 
     /// Test for equality with another string.
-    bool operator ==(const String& rhs) const { return strcmp(toCharArray(), rhs.toCharArray()) == 0; }
+
+    bool operator ==(const String& rhs) const
+    {
+        return strcmp(toCharArray(), rhs.toCharArray()) == 0;
+    }
 
     /// Test for inequality with another string.
-    bool operator !=(const String& rhs) const { return strcmp(toCharArray(), rhs.toCharArray()) != 0; }
+
+    bool operator !=(const String& rhs) const
+    {
+        return strcmp(toCharArray(), rhs.toCharArray()) != 0;
+    }
 
     /// Test if string is less than another string.
-    bool operator <(const String& rhs) const { return strcmp(toCharArray(), rhs.toCharArray()) < 0; }
+
+    bool operator <(const String& rhs) const
+    {
+        return strcmp(toCharArray(), rhs.toCharArray()) < 0;
+    }
 
     /// Test if string is greater than another string.
-    bool operator >(const String& rhs) const { return strcmp(toCharArray(), rhs.toCharArray()) > 0; }
+
+    bool operator >(const String& rhs) const
+    {
+        return strcmp(toCharArray(), rhs.toCharArray()) > 0;
+    }
 
     /// Test for equality with a C string.
-    bool operator ==(const char* rhs) const { return strcmp(toCharArray(), rhs) == 0; }
+
+    bool operator ==(const char* rhs) const
+    {
+        return strcmp(toCharArray(), rhs) == 0;
+    }
 
     /// Test for inequality with a C string.
-    bool operator !=(const char* rhs) const { return strcmp(toCharArray(), rhs) != 0; }
+
+    bool operator !=(const char* rhs) const
+    {
+        return strcmp(toCharArray(), rhs) != 0;
+    }
 
     /// Test if string is less than a C string.
-    bool operator <(const char* rhs) const { return strcmp(toCharArray(), rhs) < 0; }
+
+    bool operator <(const char* rhs) const
+    {
+        return strcmp(toCharArray(), rhs) < 0;
+    }
 
     /// Test if string is greater than a C string.
-    bool operator >(const char* rhs) const { return strcmp(toCharArray(), rhs) > 0; }
+
+    bool operator >(const char* rhs) const
+    {
+        return strcmp(toCharArray(), rhs) > 0;
+    }
 
     /// Return char at index.
+
     char& operator [](unsigned index)
     {
         assert(index < bufferLength);
@@ -288,6 +343,7 @@ public:
     }
 
     /// Return const char at index.
+
     const char& operator [](unsigned index) const
     {
         assert(index < bufferLength);
@@ -295,6 +351,7 @@ public:
     }
 
     /// Return char at index.
+
     char& charAt(unsigned index)
     {
         assert(index < bufferLength);
@@ -302,6 +359,7 @@ public:
     }
 
     /// Return const char at index.
+
     const char& charAt(unsigned index) const
     {
         assert(index < bufferLength);
@@ -310,6 +368,12 @@ public:
 
     /// Counts how many occurrences of str are in the string
     unsigned count(const String& str) const;
+
+    /// Counts how many occurrences of the given wide character are in the string
+    unsigned count(const wchar_t wc) const;
+
+    /// Count how manu occurrences of the given C char are in the string
+    unsigned count(const char c) const;
 
     /// Replace all occurrences of a character.
     void replace(char replaceThis, char replaceWith, bool caseSensitive = true);
@@ -320,7 +384,7 @@ public:
     /// Replace a substring with a C string.
     void replace(unsigned pos, unsigned length, const char* replaceWith);
     /// Replace a substring by iterators.
-    
+
     /// Return a string with all occurrences of a character replaced.
     String replaced(char replaceThis, char replaceWith, bool caseSensitive = true) const;
     /// Return a string with all occurrences of a string replaced.
@@ -337,7 +401,7 @@ public:
     void insert(unsigned pos, const String& str);
     /// Insert a character.
     void insert(unsigned pos, char c);
-    
+
     /// Resize the string.
     void resize(unsigned newLength);
     /// Set new capacity.
@@ -350,10 +414,18 @@ public:
     void swap(String& str);
 
     /// Return first char, or 0 if empty.
-    char front() const { return buffer[0]; }
+
+    char front() const
+    {
+        return buffer[0];
+    }
 
     /// Return last char, or 0 if empty.
-    char back() const { return bufferLength ? buffer[bufferLength - 1] : buffer[0]; }
+
+    char back() const
+    {
+        return bufferLength ? buffer[bufferLength - 1] : buffer[0];
+    }
 
     /// Return a substring from position to end.
     String substring(unsigned pos) const;
@@ -367,7 +439,7 @@ public:
     String toUpper() const;
     /// Return string in lowercase.
     String toLower() const;
-    
+
     /// Return index to the first occurrence of a string, or NPOS if not found.
     unsigned find(const String& str, unsigned startPos = 0, bool caseSensitive = true) const;
     /// Return index to the first occurrence of a character, or NPOS if not found.
@@ -382,19 +454,43 @@ public:
     bool endsWith(const String& str, bool caseSensitive = true) const;
 
     /// Returns true if both strings are equals
-    bool equals(const String& rhs) const { return (compare(rhs, true) == 0); }
+
+    bool equals(const String& rhs) const
+    {
+        return (compare(rhs, true) == 0);
+    }
 
     /// Return the C string.
-    const char* toCharArray() const { return buffer; }
+
+    const char* toCharArray() const
+    {
+        return buffer;
+    }
+
+    /// Returns the wide-character string corresponding to this string.
+    /// Memory is only allocated once, and it is managed by this class.
+    const wchar_t* toWideCharArray() const;
 
     /// Return length.
-    unsigned length() const { return bufferLength; }
+
+    unsigned length() const
+    {
+        return bufferLength;
+    }
 
     /// Return buffer capacity.
-    unsigned capacity() const { return bufferCapacity; }
+
+    unsigned capacity() const
+    {
+        return bufferCapacity;
+    }
 
     /// Return whether the string is empty.
-    bool isEmpty() const { return bufferLength == 0; }
+
+    bool isEmpty() const
+    {
+        return bufferLength == 0;
+    }
 
     /// Return comparison result with a string.
     int compare(const String& str, bool caseSensitive = true) const;
@@ -402,15 +498,25 @@ public:
     int compare(const char* str, bool caseSensitive = true) const;
 
     /// Return whether contains a specific occurrence of a string.
-    bool contains(const String& str, bool caseSensitive = true) const { return find(str, 0, caseSensitive) != NPOS; }
+
+    bool contains(const String& str, bool caseSensitive = true) const
+    {
+        return find(str, 0, caseSensitive) != NPOS;
+    }
 
     /// Return whether contains a specific character.
-    bool contains(char c, bool caseSensitive = true) const { return find(c, 0, caseSensitive) != NPOS; }
+
+    bool contains(char c, bool caseSensitive = true) const
+    {
+        return find(c, 0, caseSensitive) != NPOS;
+    }
 
     /// Construct UTF8 content from Latin1.
     void setUtf8FromLatin1(const char* str);
     /// Construct UTF8 content from wide characters.
     void setUtf8FromWChar(const wchar_t* str);
+    /// Construct wide characters from UTF8 content
+    void setWCharFromUTF8(const char* str) const;
     /// Calculate number of characters in UTF8 content.
     unsigned lengthUtf8() const;
     /// Return byte offset to char in UTF8 content.
@@ -429,6 +535,7 @@ public:
     String substringUtf8(unsigned pos, unsigned length) const;
 
     /// Return hash value for HashSet & HashMap.
+
     unsigned hashCode() const
     {
         unsigned hash = 0;
@@ -454,7 +561,11 @@ public:
 #endif
 
     /// Return length of a C string.
-    static unsigned getCharArrayLength(const char* str) { return str ? (unsigned)strlen(str) : 0; }
+
+    static unsigned getCharArrayLength(const char* str)
+    {
+        return str ? (unsigned) strlen(str) : 0;
+    }
 
     /// Append to string using formatting.
     String& appendWithFormat(const char* formatString, ...);
@@ -479,6 +590,7 @@ public:
 
 private:
     /// Move a range of characters within the string.
+
     void moveRange(unsigned dest, unsigned src, unsigned count)
     {
         if (count)
@@ -486,6 +598,7 @@ private:
     }
 
     /// Copy chars from one buffer to another.
+
     static void copyCharacters(char* dest, const char* src, unsigned count)
     {
 #ifdef _MSC_VER
@@ -511,12 +624,15 @@ private:
     unsigned bufferCapacity;
     /// String buffer, null if not allocated.
     char* buffer;
+    /// String wide char buffer, garbage if not allocated. Allocated only once
+    mutable wchar_t* wcBuffer;
 
     /// End zero for empty strings.
     static char endZero;
-};
+} ;
 
 /// Add a string to a C string.
+
 inline String operator +(const char* lhs, const String& rhs)
 {
     String ret(lhs);
@@ -525,6 +641,7 @@ inline String operator +(const char* lhs, const String& rhs)
 }
 
 /// Add a string to a wide char C string.
+
 inline String operator +(const wchar_t* lhs, const String& rhs)
 {
     String ret(lhs);
@@ -544,11 +661,12 @@ inline String operator +(const wchar_t* lhs, const String& rhs)
  */
 struct NaturalOrderComparator
 {
+
     inline bool operator()(const String& s1, const String& s2) const
     {
         return true;
     }
-};
+} ;
 
 /**
  * Sorts two strings by alphabetical order (a != A).
@@ -559,11 +677,12 @@ struct NaturalOrderComparator
  */
 struct AlphabeticalOrderComparator
 {
+
     inline bool operator()(const String& s1, const String& s2) const
     {
         return s1.compare(s2) < 0;
     }
-};
+} ;
 
 }
 }
