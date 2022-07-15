@@ -66,6 +66,7 @@ public:
 
     void            operator delete(void* pointer);
     void*           operator new(size_t size);
+    void*           operator new(size_t size, void* where);
 
 private:
 

@@ -37,6 +37,7 @@
 #include <cstdlib>
 #include <csignal>
 #include <signal.h>
+#include <clocale>
 
 using namespace amanda;
 
@@ -66,6 +67,9 @@ void handleNonSigSegv(int signalNumber)
  */
 int main(int argc, char** argv)
 {
+    /* Set up the locale */
+    std::setlocale(LC_ALL, "");
+
     /* Set-up signal handler */
     signal(SIGSEGV, &handleSegmentationFault);
     signal(SIGTERM, &handleNonSigSegv);
@@ -88,7 +92,7 @@ int main(int argc, char** argv)
     /* Parse the command line. */
     if (commandLine->hasOption('h'))
     {
-        compiler::displayHelpMessage(options.getReference());
+        compiler::displayHelpMessage(options->getReference());
     }
     else if (commandLine->hasOption("version"))
     {
@@ -131,10 +135,15 @@ int main(int argc, char** argv)
         }
         if (commandLine->hasOption('W'))
         {
-
+            core::String level = commandLine->getOptionValue('W');
+            if (level == "all")
+            {
+                driver->setWarnLevel(compiler::Driver::WL_ALL);
+            }
+            //TODO: Finish this
         }
 
-        for (std::list<core::String>::iterator iter = commandLine->getArgumentList().begin();
+        for (std::vector<core::String>::iterator iter = commandLine->getArgumentList().begin();
              iter != commandLine->getArgumentList().end(); ++iter)
         {
             io::File* f = new io::File(*iter, io::File::READ);

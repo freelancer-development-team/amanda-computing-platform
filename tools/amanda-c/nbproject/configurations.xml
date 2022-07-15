@@ -19,6 +19,7 @@
       <itemPath>include/amanda-c/ast/NCompoundStatement.h</itemPath>
       <itemPath>include/amanda-c/ast/NConditionalStatement.h</itemPath>
       <itemPath>include/amanda-c/ast/NDeclaration.h</itemPath>
+      <itemPath>include/amanda-c/ast/NDoWhileStatement.h</itemPath>
       <itemPath>include/amanda-c/ast/NExpression.h</itemPath>
       <itemPath>include/amanda-c/ast/NExpressionStatement.h</itemPath>
       <itemPath>include/amanda-c/ast/NForLoopStatement.h</itemPath>
@@ -29,6 +30,7 @@
       <itemPath>include/amanda-c/ast/NNamespaceDeclaration.h</itemPath>
       <itemPath>include/amanda-c/ast/NReturnStatement.h</itemPath>
       <itemPath>include/amanda-c/ast/NStatement.h</itemPath>
+      <itemPath>include/amanda-c/ast/NUnaryOperator.h</itemPath>
       <itemPath>include/amanda-c/ast/NUsingDeclaration.h</itemPath>
       <itemPath>include/amanda-c/ast/NVariableDeclaration.h</itemPath>
       <itemPath>include/amanda-c/ast/NWhileStatement.h</itemPath>
@@ -65,6 +67,7 @@
       <itemPath>ast/NCompoundStatement.cpp</itemPath>
       <itemPath>ast/NConditionalStatement.cpp</itemPath>
       <itemPath>ast/NDeclaration.cpp</itemPath>
+      <itemPath>ast/NDoWhileStatement.cpp</itemPath>
       <itemPath>ast/NExpression.cpp</itemPath>
       <itemPath>ast/NExpressionStatement.cpp</itemPath>
       <itemPath>ast/NForLoopStatement.cpp</itemPath>
@@ -75,6 +78,7 @@
       <itemPath>ast/NNamespaceDeclaration.cpp</itemPath>
       <itemPath>ast/NReturnStatement.cpp</itemPath>
       <itemPath>ast/NStatement.cpp</itemPath>
+      <itemPath>ast/NUnaryOperator.cpp</itemPath>
       <itemPath>ast/NUsingDeclaration.cpp</itemPath>
       <itemPath>ast/NVariableDeclaration.cpp</itemPath>
       <itemPath>ast/NWhileStatement.cpp</itemPath>
@@ -180,6 +184,18 @@
                             OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libamandavm-core.a">
               </makeArtifact>
             </linkerLibProjectItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../../lib/AmandaVM-Binutils"
+                            CT="3"
+                            CN="Debug"
+                            AC="false"
+                            BL="true"
+                            WD="../../lib/AmandaVM-Binutils"
+                            BC="${MAKE} -j8 -f Makefile CONF=Debug"
+                            CC="${MAKE} -j8 -f Makefile CONF=Debug clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libamandavm-binutils.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
           </linkerLibItems>
           <commandLine>${CND_BUILDDIR}/w32/resource.o</commandLine>
         </linkerTool>
@@ -204,6 +220,8 @@
       </item>
       <item path="ast/NDeclaration.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="ast/NDoWhileStatement.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="ast/NExpression.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="ast/NExpressionStatement.cpp" ex="false" tool="1" flavor2="0">
@@ -223,6 +241,8 @@
       <item path="ast/NReturnStatement.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="ast/NStatement.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NUnaryOperator.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="ast/NUsingDeclaration.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -318,6 +338,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="include/amanda-c/ast/NDoWhileStatement.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="include/amanda-c/ast/NExpression.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/amanda-c/ast/NExpressionStatement.h"
@@ -355,6 +380,11 @@
             flavor2="0">
       </item>
       <item path="include/amanda-c/ast/NStatement.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NUnaryOperator.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="include/amanda-c/ast/NUsingDeclaration.h"
             ex="false"
@@ -489,6 +519,18 @@
                             OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libamandavm-core.a">
               </makeArtifact>
             </linkerLibProjectItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../../lib/AmandaVM-Binutils"
+                            CT="3"
+                            CN="Release"
+                            AC="true"
+                            BL="true"
+                            WD="../../lib/AmandaVM-Binutils"
+                            BC="${MAKE} -j8 -f Makefile CONF=Release"
+                            CC="${MAKE} -j8 -f Makefile CONF=Release clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libamandavm-binutils.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
           </linkerLibItems>
           <commandLine>${CND_BUILDDIR}/w32/resource.o</commandLine>
         </linkerTool>
@@ -513,6 +555,8 @@
       </item>
       <item path="ast/NDeclaration.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="ast/NDoWhileStatement.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="ast/NExpression.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="ast/NExpressionStatement.cpp" ex="false" tool="1" flavor2="0">
@@ -532,6 +576,8 @@
       <item path="ast/NReturnStatement.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="ast/NStatement.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/NUnaryOperator.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="ast/NUsingDeclaration.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -627,6 +673,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="include/amanda-c/ast/NDoWhileStatement.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="include/amanda-c/ast/NExpression.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/amanda-c/ast/NExpressionStatement.h"
@@ -664,6 +715,11 @@
             flavor2="0">
       </item>
       <item path="include/amanda-c/ast/NStatement.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/amanda-c/ast/NUnaryOperator.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="include/amanda-c/ast/NUsingDeclaration.h"
             ex="false"

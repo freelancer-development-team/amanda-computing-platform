@@ -111,6 +111,10 @@
             { "char",       TOKEN(CHAR) },
             { "float",      TOKEN(FLOAT) },
             { "double",     TOKEN(DOUBLE) },
+            // Logical operators
+            { "and",        TOKEN(AND) },
+            { "or",         TOKEN(OR) },
+            { "not",        TOKEN(NOT) },
             { NULL, 0 }
         };
 
@@ -199,6 +203,10 @@ integer_literal                 {decimal_integer}
 "|"                             { return token('|'); }
 "~"                             { return token('~'); }
 "^"                             { return token('^'); }
+
+"&&"                            { return token(Tokens::TOKEN_AND); }
+"||"                            { return token(Tokens::TOKEN_OR); }
+"!"                             { return token(Tokens::TOKEN_NOT); }
 
 <<EOF>>                         { return DefaultParser::make_EOF(location()); }
 .                               { scannerException(); }

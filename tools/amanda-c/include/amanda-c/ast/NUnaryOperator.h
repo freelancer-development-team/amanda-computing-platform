@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,44 +16,41 @@
  */
 
 /* 
- * File:   Module.h
+ * File:   NUnaryOperator.h
  * Author: Javier Marrero
  *
- * Created on March 12, 2022, 3:06 PM
+ * Created on July 13, 2022, 3:22 PM
  */
 
-#ifndef MODULE_H
-#define MODULE_H
+#ifndef NUNARYOPERATOR_H
+#define NUNARYOPERATOR_H
 
-#include <amanda-vm/TypeSystem.h>
-#include <amanda-vm/IL/Function.h>
+#include <amanda-c/ast/NExpression.h>
+#include <amanda-c/ast/OperatorKinds.h>
 
 namespace amanda
 {
-namespace il
+namespace compiler
+{
+namespace ast
 {
 
-class Module : public core::Object
+class NUnaryOperator : public NExpression
 {
-    AMANDA_OBJECT(Module, core::Object)
-
 public:
 
-    Module(const core::String& id);
-    virtual ~Module();
-
-    void                            addFunction(Function* f);
-    const std::vector<Function*>&   getFunctions() const;
-    const core::String&             getIdentifier() const;
+    NUnaryOperator(UnaryOperator op, NExpression* expression);
+    virtual ~NUnaryOperator();
 
 protected:
 
-    std::vector<Function*>  functions;
-    core::String            identifier;
+    core::StrongReference<NExpression>  expression;
+    UnaryOperator                       op;
 } ;
 
 }
 }
+}
 
-#endif /* MODULE_H */
+#endif /* NUNARYOPERATOR_H */
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,44 +16,36 @@
  */
 
 /* 
- * File:   Module.h
+ * File:   AssemblyILExporter.h
  * Author: Javier Marrero
  *
- * Created on March 12, 2022, 3:06 PM
+ * Created on July 13, 2022, 6:29 PM
  */
 
-#ifndef MODULE_H
-#define MODULE_H
+#ifndef ASSEMBLYILEXPORTER_H
+#define ASSEMBLYILEXPORTER_H
 
-#include <amanda-vm/TypeSystem.h>
-#include <amanda-vm/IL/Function.h>
+#include <amanda-vm/IL/ILExporter.h>
 
 namespace amanda
 {
 namespace il
 {
 
-class Module : public core::Object
+class AssemblyILExporter : public ILExporter
 {
-    AMANDA_OBJECT(Module, core::Object)
-
+    AMANDA_OBJECT(AssemblyILExporter, ILExporter)
 public:
 
-    Module(const core::String& id);
-    virtual ~Module();
+    AssemblyILExporter(Module* module);
+    virtual ~AssemblyILExporter();
 
-    void                            addFunction(Function* f);
-    const std::vector<Function*>&   getFunctions() const;
-    const core::String&             getIdentifier() const;
+    virtual void exportData(io::OutputStream& stream);
 
-protected:
-
-    std::vector<Function*>  functions;
-    core::String            identifier;
 } ;
 
 }
 }
 
-#endif /* MODULE_H */
+#endif /* ASSEMBLYILEXPORTER_H */
 

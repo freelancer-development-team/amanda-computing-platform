@@ -334,6 +334,10 @@ namespace amanda { namespace compiler {
         value.YY_MOVE_OR_COPY< amanda::compiler::ast::NDeclarationBlock* > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_do_while_statement: // do_while_statement
+        value.YY_MOVE_OR_COPY< amanda::compiler::ast::NDoWhileStatement* > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_optional_expression: // optional_expression
       case symbol_kind::S_expression: // expression
       case symbol_kind::S_numeric_literal: // numeric_literal
@@ -373,6 +377,10 @@ namespace amanda { namespace compiler {
       case symbol_kind::S_simple_statement: // simple_statement
       case symbol_kind::S_compound_statement: // compound_statement
         value.YY_MOVE_OR_COPY< amanda::compiler::ast::NStatement* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_unary_operator: // unary_operator
+        value.YY_MOVE_OR_COPY< amanda::compiler::ast::NUnaryOperator* > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_using_declaration: // using_declaration
@@ -481,6 +489,10 @@ namespace amanda { namespace compiler {
         value.move< amanda::compiler::ast::NDeclarationBlock* > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_do_while_statement: // do_while_statement
+        value.move< amanda::compiler::ast::NDoWhileStatement* > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_optional_expression: // optional_expression
       case symbol_kind::S_expression: // expression
       case symbol_kind::S_numeric_literal: // numeric_literal
@@ -520,6 +532,10 @@ namespace amanda { namespace compiler {
       case symbol_kind::S_simple_statement: // simple_statement
       case symbol_kind::S_compound_statement: // compound_statement
         value.move< amanda::compiler::ast::NStatement* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_unary_operator: // unary_operator
+        value.move< amanda::compiler::ast::NUnaryOperator* > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_using_declaration: // using_declaration
@@ -628,6 +644,10 @@ namespace amanda { namespace compiler {
         value.copy< amanda::compiler::ast::NDeclarationBlock* > (that.value);
         break;
 
+      case symbol_kind::S_do_while_statement: // do_while_statement
+        value.copy< amanda::compiler::ast::NDoWhileStatement* > (that.value);
+        break;
+
       case symbol_kind::S_optional_expression: // optional_expression
       case symbol_kind::S_expression: // expression
       case symbol_kind::S_numeric_literal: // numeric_literal
@@ -667,6 +687,10 @@ namespace amanda { namespace compiler {
       case symbol_kind::S_simple_statement: // simple_statement
       case symbol_kind::S_compound_statement: // compound_statement
         value.copy< amanda::compiler::ast::NStatement* > (that.value);
+        break;
+
+      case symbol_kind::S_unary_operator: // unary_operator
+        value.copy< amanda::compiler::ast::NUnaryOperator* > (that.value);
         break;
 
       case symbol_kind::S_using_declaration: // using_declaration
@@ -774,6 +798,10 @@ namespace amanda { namespace compiler {
         value.move< amanda::compiler::ast::NDeclarationBlock* > (that.value);
         break;
 
+      case symbol_kind::S_do_while_statement: // do_while_statement
+        value.move< amanda::compiler::ast::NDoWhileStatement* > (that.value);
+        break;
+
       case symbol_kind::S_optional_expression: // optional_expression
       case symbol_kind::S_expression: // expression
       case symbol_kind::S_numeric_literal: // numeric_literal
@@ -813,6 +841,10 @@ namespace amanda { namespace compiler {
       case symbol_kind::S_simple_statement: // simple_statement
       case symbol_kind::S_compound_statement: // compound_statement
         value.move< amanda::compiler::ast::NStatement* > (that.value);
+        break;
+
+      case symbol_kind::S_unary_operator: // unary_operator
+        value.move< amanda::compiler::ast::NUnaryOperator* > (that.value);
         break;
 
       case symbol_kind::S_using_declaration: // using_declaration
@@ -1175,6 +1207,10 @@ namespace amanda { namespace compiler {
         yylhs.value.emplace< amanda::compiler::ast::NDeclarationBlock* > ();
         break;
 
+      case symbol_kind::S_do_while_statement: // do_while_statement
+        yylhs.value.emplace< amanda::compiler::ast::NDoWhileStatement* > ();
+        break;
+
       case symbol_kind::S_optional_expression: // optional_expression
       case symbol_kind::S_expression: // expression
       case symbol_kind::S_numeric_literal: // numeric_literal
@@ -1214,6 +1250,10 @@ namespace amanda { namespace compiler {
       case symbol_kind::S_simple_statement: // simple_statement
       case symbol_kind::S_compound_statement: // compound_statement
         yylhs.value.emplace< amanda::compiler::ast::NStatement* > ();
+        break;
+
+      case symbol_kind::S_unary_operator: // unary_operator
+        yylhs.value.emplace< amanda::compiler::ast::NUnaryOperator* > ();
         break;
 
       case symbol_kind::S_using_declaration: // using_declaration
@@ -1268,7 +1308,7 @@ namespace amanda { namespace compiler {
           switch (yyn)
             {
   case 2: // compilation_unit: declarations
-#line 268 "specs/grammar.y"
+#line 270 "specs/grammar.y"
                     {
                         NCompilationUnit* unit = new NCompilationUnit(lexer.filename.c_str());
                         assert(yystack_[0].value.as < amanda::compiler::ast::NDeclarationBlock* > () != NULL && "Null pointer exception.");
@@ -1281,59 +1321,59 @@ namespace amanda { namespace compiler {
                         // Assign the semmantic value to the accept rule
                         yylhs.value.as < amanda::compiler::ast::NCompilationUnit* > () = unit;
                     }
-#line 1285 "compiler/Parser.cpp"
+#line 1325 "compiler/Parser.cpp"
     break;
 
   case 3: // declarations: %empty
-#line 284 "specs/grammar.y"
+#line 286 "specs/grammar.y"
                                 { yylhs.value.as < amanda::compiler::ast::NDeclarationBlock* > () = new NDeclarationBlock(); }
-#line 1291 "compiler/Parser.cpp"
+#line 1331 "compiler/Parser.cpp"
     break;
 
   case 4: // declarations: declaration
-#line 285 "specs/grammar.y"
+#line 287 "specs/grammar.y"
                                 { yylhs.value.as < amanda::compiler::ast::NDeclarationBlock* > () = new NDeclarationBlock(); yylhs.value.as < amanda::compiler::ast::NDeclarationBlock* > ()->addDeclaration(yystack_[0].value.as < amanda::compiler::ast::NDeclaration* > ()); }
-#line 1297 "compiler/Parser.cpp"
+#line 1337 "compiler/Parser.cpp"
     break;
 
   case 5: // declarations: declarations declaration
-#line 286 "specs/grammar.y"
+#line 288 "specs/grammar.y"
                                 { yylhs.value.as < amanda::compiler::ast::NDeclarationBlock* > () = yystack_[1].value.as < amanda::compiler::ast::NDeclarationBlock* > (); yylhs.value.as < amanda::compiler::ast::NDeclarationBlock* > ()->addDeclaration(yystack_[0].value.as < amanda::compiler::ast::NDeclaration* > ()); }
-#line 1303 "compiler/Parser.cpp"
+#line 1343 "compiler/Parser.cpp"
     break;
 
   case 6: // declaration: namespace_declaration
-#line 292 "specs/grammar.y"
+#line 294 "specs/grammar.y"
                             { yylhs.value.as < amanda::compiler::ast::NDeclaration* > () = yystack_[0].value.as < amanda::compiler::ast::NNamespaceDeclaration* > (); }
-#line 1309 "compiler/Parser.cpp"
+#line 1349 "compiler/Parser.cpp"
     break;
 
   case 7: // declaration: using_declaration
-#line 293 "specs/grammar.y"
+#line 295 "specs/grammar.y"
                             { yylhs.value.as < amanda::compiler::ast::NDeclaration* > () = yystack_[0].value.as < amanda::compiler::ast::NUsingDeclaration* > (); }
-#line 1315 "compiler/Parser.cpp"
+#line 1355 "compiler/Parser.cpp"
     break;
 
   case 8: // declaration: class_declaration
-#line 294 "specs/grammar.y"
+#line 296 "specs/grammar.y"
                             { yylhs.value.as < amanda::compiler::ast::NDeclaration* > () = yystack_[0].value.as < amanda::compiler::ast::NClassDeclaration* > (); }
-#line 1321 "compiler/Parser.cpp"
+#line 1361 "compiler/Parser.cpp"
     break;
 
   case 9: // declaration: function_declaration
-#line 295 "specs/grammar.y"
+#line 297 "specs/grammar.y"
                             { yylhs.value.as < amanda::compiler::ast::NDeclaration* > () = yystack_[0].value.as < amanda::compiler::ast::NFunctionDeclaration* > (); }
-#line 1327 "compiler/Parser.cpp"
+#line 1367 "compiler/Parser.cpp"
     break;
 
   case 10: // namespace_declaration: "namespace" "identifier" '{' declarations '}'
-#line 299 "specs/grammar.y"
+#line 301 "specs/grammar.y"
                                                 { yylhs.value.as < amanda::compiler::ast::NNamespaceDeclaration* > () = new NNamespaceDeclaration(yystack_[3].value.as < amanda::core::String > ()); yylhs.value.as < amanda::compiler::ast::NNamespaceDeclaration* > ()->addDeclarations(yystack_[1].value.as < amanda::compiler::ast::NDeclarationBlock* > ()); }
-#line 1333 "compiler/Parser.cpp"
+#line 1373 "compiler/Parser.cpp"
     break;
 
   case 11: // namespace_declaration: "namespace" name ';' declarations
-#line 300 "specs/grammar.y"
+#line 302 "specs/grammar.y"
                                                 {
                                                     // This is gonna be the last generated namespace when
                                                     // we call the function
@@ -1345,23 +1385,23 @@ namespace amanda { namespace compiler {
 
                                                     yylhs.value.as < amanda::compiler::ast::NNamespaceDeclaration* > () = parent; last->addDeclarations(yystack_[0].value.as < amanda::compiler::ast::NDeclarationBlock* > ());
                                                 }
-#line 1349 "compiler/Parser.cpp"
+#line 1389 "compiler/Parser.cpp"
     break;
 
   case 12: // using_declaration: "using" name ';'
-#line 314 "specs/grammar.y"
+#line 316 "specs/grammar.y"
                             { yylhs.value.as < amanda::compiler::ast::NUsingDeclaration* > () = new NUsingDeclaration(yystack_[1].value.as < amanda::core::String > ()); }
-#line 1355 "compiler/Parser.cpp"
+#line 1395 "compiler/Parser.cpp"
     break;
 
   case 13: // function_declaration: type "identifier" '(' argument_list ')' '{' statement_sequence '}'
-#line 318 "specs/grammar.y"
+#line 320 "specs/grammar.y"
                                                                        { yylhs.value.as < amanda::compiler::ast::NFunctionDeclaration* > () = new NFunctionDeclaration(yystack_[6].value.as < amanda::core::String > (), yystack_[1].value.as < amanda::compiler::ast::NBlock* > ()); }
-#line 1361 "compiler/Parser.cpp"
+#line 1401 "compiler/Parser.cpp"
     break;
 
   case 14: // class_declaration: access_modifier "class" "identifier" '{' class_scope '}'
-#line 326 "specs/grammar.y"
+#line 328 "specs/grammar.y"
         {
             yylhs.value.as < amanda::compiler::ast::NClassDeclaration* > () = new NClassDeclaration(yystack_[3].value.as < amanda::core::String > ());
             yylhs.value.as < amanda::compiler::ast::NClassDeclaration* > ()->addClassSections(*yystack_[1].value.as < amanda::compiler::ast::NClassDeclaration::ClassSectionList* > ());
@@ -1372,23 +1412,23 @@ namespace amanda { namespace compiler {
             // Clean-up
             delete yystack_[1].value.as < amanda::compiler::ast::NClassDeclaration::ClassSectionList* > ();
         }
-#line 1376 "compiler/Parser.cpp"
+#line 1416 "compiler/Parser.cpp"
     break;
 
   case 15: // class_scope: class_section
-#line 339 "specs/grammar.y"
+#line 341 "specs/grammar.y"
                                                 { yylhs.value.as < amanda::compiler::ast::NClassDeclaration::ClassSectionList* > () = new NClassDeclaration::ClassSectionList(); yylhs.value.as < amanda::compiler::ast::NClassDeclaration::ClassSectionList* > ()->reserve(3); yylhs.value.as < amanda::compiler::ast::NClassDeclaration::ClassSectionList* > ()->push_back(yystack_[0].value.as < amanda::compiler::ast::NClassDeclaration::ClassBodySection* > ()); }
-#line 1382 "compiler/Parser.cpp"
+#line 1422 "compiler/Parser.cpp"
     break;
 
   case 16: // class_scope: class_scope class_section
-#line 340 "specs/grammar.y"
+#line 342 "specs/grammar.y"
                                                 { yylhs.value.as < amanda::compiler::ast::NClassDeclaration::ClassSectionList* > () = yystack_[1].value.as < amanda::compiler::ast::NClassDeclaration::ClassSectionList* > (); yylhs.value.as < amanda::compiler::ast::NClassDeclaration::ClassSectionList* > ()->push_back(yystack_[0].value.as < amanda::compiler::ast::NClassDeclaration::ClassBodySection* > ()); }
-#line 1388 "compiler/Parser.cpp"
+#line 1428 "compiler/Parser.cpp"
     break;
 
   case 17: // class_section: access_modifier ':' class_statement_sequence
-#line 345 "specs/grammar.y"
+#line 347 "specs/grammar.y"
                                                 {
                                                     yylhs.value.as < amanda::compiler::ast::NClassDeclaration::ClassBodySection* > () = new NClassDeclaration::ClassBodySection(yystack_[2].value.as < amanda::compiler::ast::NClassDeclaration::AccessModifier > ());
                                                     yylhs.value.as < amanda::compiler::ast::NClassDeclaration::ClassBodySection* > ()->setStatements(*yystack_[0].value.as < amanda::compiler::ast::StatementList* > ());
@@ -1396,148 +1436,160 @@ namespace amanda { namespace compiler {
                                                     // Clean-up the mess
                                                     delete yystack_[0].value.as < amanda::compiler::ast::StatementList* > ();
                                                 }
-#line 1400 "compiler/Parser.cpp"
+#line 1440 "compiler/Parser.cpp"
     break;
 
   case 18: // class_statement_sequence: %empty
-#line 355 "specs/grammar.y"
+#line 357 "specs/grammar.y"
                                                 { yylhs.value.as < amanda::compiler::ast::StatementList* > () = new StatementList(); }
-#line 1406 "compiler/Parser.cpp"
+#line 1446 "compiler/Parser.cpp"
     break;
 
   case 19: // class_statement_sequence: class_statement
-#line 356 "specs/grammar.y"
+#line 358 "specs/grammar.y"
                                                 { yylhs.value.as < amanda::compiler::ast::StatementList* > () = new StatementList(); yylhs.value.as < amanda::compiler::ast::StatementList* > ()->push_back(yystack_[0].value.as < amanda::compiler::ast::NStatement* > ()); }
-#line 1412 "compiler/Parser.cpp"
+#line 1452 "compiler/Parser.cpp"
     break;
 
   case 20: // class_statement_sequence: class_statement_sequence class_statement
-#line 357 "specs/grammar.y"
+#line 359 "specs/grammar.y"
                                                 { yylhs.value.as < amanda::compiler::ast::StatementList* > () = yystack_[1].value.as < amanda::compiler::ast::StatementList* > (); yylhs.value.as < amanda::compiler::ast::StatementList* > ()->push_back(yystack_[0].value.as < amanda::compiler::ast::NStatement* > ()); }
-#line 1418 "compiler/Parser.cpp"
+#line 1458 "compiler/Parser.cpp"
     break;
 
   case 21: // class_statement: field_declaration ';'
-#line 361 "specs/grammar.y"
+#line 363 "specs/grammar.y"
                                                 { yylhs.value.as < amanda::compiler::ast::NStatement* > () = yystack_[1].value.as < amanda::compiler::ast::NClassFieldDeclaration* > (); }
-#line 1424 "compiler/Parser.cpp"
+#line 1464 "compiler/Parser.cpp"
     break;
 
   case 22: // field_declaration: type id
-#line 365 "specs/grammar.y"
+#line 367 "specs/grammar.y"
                         { yylhs.value.as < amanda::compiler::ast::NClassFieldDeclaration* > () = new NClassFieldDeclaration(yystack_[1].value.as < amanda::core::String > (), yystack_[0].value.as < amanda::compiler::ast::NIdentifier* > ()); }
-#line 1430 "compiler/Parser.cpp"
+#line 1470 "compiler/Parser.cpp"
     break;
 
-  case 23: // statement: simple_statement ';'
-#line 370 "specs/grammar.y"
-      { yylhs.value.as < amanda::compiler::ast::NStatement* > () = yystack_[1].value.as < amanda::compiler::ast::NStatement* > (); }
-#line 1436 "compiler/Parser.cpp"
+  case 23: // statement: simple_statement
+#line 372 "specs/grammar.y"
+      { yylhs.value.as < amanda::compiler::ast::NStatement* > () = yystack_[0].value.as < amanda::compiler::ast::NStatement* > (); }
+#line 1476 "compiler/Parser.cpp"
     break;
 
   case 24: // statement: compound_statement
-#line 371 "specs/grammar.y"
+#line 373 "specs/grammar.y"
       { yylhs.value.as < amanda::compiler::ast::NStatement* > () = yystack_[0].value.as < amanda::compiler::ast::NStatement* > (); }
-#line 1442 "compiler/Parser.cpp"
+#line 1482 "compiler/Parser.cpp"
     break;
 
   case 25: // simple_statement: return_statement
-#line 375 "specs/grammar.y"
+#line 377 "specs/grammar.y"
                                     { yylhs.value.as < amanda::compiler::ast::NStatement* > () = yystack_[0].value.as < amanda::compiler::ast::NReturnStatement* > (); }
-#line 1448 "compiler/Parser.cpp"
+#line 1488 "compiler/Parser.cpp"
     break;
 
   case 26: // simple_statement: expression_statement
-#line 376 "specs/grammar.y"
+#line 378 "specs/grammar.y"
                                     { yylhs.value.as < amanda::compiler::ast::NStatement* > () = yystack_[0].value.as < amanda::compiler::ast::NExpressionStatement* > (); }
-#line 1454 "compiler/Parser.cpp"
+#line 1494 "compiler/Parser.cpp"
     break;
 
   case 27: // compound_statement: if_statement
-#line 380 "specs/grammar.y"
+#line 382 "specs/grammar.y"
                                     { yylhs.value.as < amanda::compiler::ast::NStatement* > () = yystack_[0].value.as < amanda::compiler::ast::NConditionalStatement* > (); }
-#line 1460 "compiler/Parser.cpp"
+#line 1500 "compiler/Parser.cpp"
     break;
 
   case 28: // compound_statement: for_statement
-#line 381 "specs/grammar.y"
+#line 383 "specs/grammar.y"
                                     { yylhs.value.as < amanda::compiler::ast::NStatement* > () = yystack_[0].value.as < amanda::compiler::ast::NForLoopStatement* > (); }
-#line 1466 "compiler/Parser.cpp"
+#line 1506 "compiler/Parser.cpp"
     break;
 
   case 29: // compound_statement: while_statement
-#line 382 "specs/grammar.y"
+#line 384 "specs/grammar.y"
                                     { yylhs.value.as < amanda::compiler::ast::NStatement* > () = yystack_[0].value.as < amanda::compiler::ast::NWhileStatement* > (); }
-#line 1472 "compiler/Parser.cpp"
+#line 1512 "compiler/Parser.cpp"
     break;
 
-  case 30: // expression_statement: function_call
-#line 388 "specs/grammar.y"
-                                    { yylhs.value.as < amanda::compiler::ast::NExpressionStatement* > () = new NExpressionStatement(yystack_[0].value.as < amanda::compiler::ast::NFunctionCall* > ()); }
-#line 1478 "compiler/Parser.cpp"
-    break;
-
-  case 31: // expression_statement: variable_declaration
-#line 389 "specs/grammar.y"
-                                    { yylhs.value.as < amanda::compiler::ast::NExpressionStatement* > () = new NExpressionStatement(yystack_[0].value.as < amanda::compiler::ast::NVariableDeclaration* > ()); }
-#line 1484 "compiler/Parser.cpp"
-    break;
-
-  case 32: // expression_statement: assignment_expression
-#line 390 "specs/grammar.y"
-                                    { yylhs.value.as < amanda::compiler::ast::NExpressionStatement* > () = new NExpressionStatement(yystack_[0].value.as < amanda::compiler::ast::NAssignmentExpression* > ()); }
-#line 1490 "compiler/Parser.cpp"
-    break;
-
-  case 33: // return_statement: "return" expression
-#line 395 "specs/grammar.y"
-                                    { yylhs.value.as < amanda::compiler::ast::NReturnStatement* > () = new NReturnStatement(); }
-#line 1496 "compiler/Parser.cpp"
-    break;
-
-  case 34: // return_statement: "return"
-#line 396 "specs/grammar.y"
-                                    { yylhs.value.as < amanda::compiler::ast::NReturnStatement* > () = new NReturnStatement(); }
-#line 1502 "compiler/Parser.cpp"
-    break;
-
-  case 35: // if_statement: "if" '(' expression ')' '{' statement_sequence '}'
-#line 402 "specs/grammar.y"
-                                                        {
-                                                            yylhs.value.as < amanda::compiler::ast::NConditionalStatement* > () = new NConditionalStatement(yystack_[4].value.as < amanda::compiler::ast::NExpression* > (), yystack_[1].value.as < amanda::compiler::ast::NBlock* > ());
-                                                        }
-#line 1510 "compiler/Parser.cpp"
-    break;
-
-  case 36: // if_statement: "if" '(' expression ')' '{' statement_sequence '}' "else" '{' statement_sequence '}'
-#line 407 "specs/grammar.y"
-                                                        {
-                                                            yylhs.value.as < amanda::compiler::ast::NConditionalStatement* > () = new NConditionalStatement(yystack_[8].value.as < amanda::compiler::ast::NExpression* > (), yystack_[5].value.as < amanda::compiler::ast::NBlock* > ()); yylhs.value.as < amanda::compiler::ast::NConditionalStatement* > ()->addElseClause(yystack_[1].value.as < amanda::compiler::ast::NBlock* > ()); 
-                                                        }
+  case 30: // compound_statement: do_while_statement
+#line 385 "specs/grammar.y"
+                                    { yylhs.value.as < amanda::compiler::ast::NStatement* > () = yystack_[0].value.as < amanda::compiler::ast::NDoWhileStatement* > (); }
 #line 1518 "compiler/Parser.cpp"
     break;
 
-  case 37: // if_statement: "if" '(' expression ')' '{' statement_sequence '}' multiple_else_if_clauses
+  case 31: // expression_statement: function_call ';'
+#line 391 "specs/grammar.y"
+                                    { yylhs.value.as < amanda::compiler::ast::NExpressionStatement* > () = new NExpressionStatement(yystack_[1].value.as < amanda::compiler::ast::NFunctionCall* > ()); }
+#line 1524 "compiler/Parser.cpp"
+    break;
+
+  case 32: // expression_statement: variable_declaration ';'
+#line 392 "specs/grammar.y"
+                                    { yylhs.value.as < amanda::compiler::ast::NExpressionStatement* > () = new NExpressionStatement(yystack_[1].value.as < amanda::compiler::ast::NVariableDeclaration* > ()); }
+#line 1530 "compiler/Parser.cpp"
+    break;
+
+  case 33: // expression_statement: assignment_expression ';'
+#line 393 "specs/grammar.y"
+                                    { yylhs.value.as < amanda::compiler::ast::NExpressionStatement* > () = new NExpressionStatement(yystack_[1].value.as < amanda::compiler::ast::NAssignmentExpression* > ()); }
+#line 1536 "compiler/Parser.cpp"
+    break;
+
+  case 34: // expression_statement: unary_operator ';'
+#line 394 "specs/grammar.y"
+                                    { yylhs.value.as < amanda::compiler::ast::NExpressionStatement* > () = new NExpressionStatement(yystack_[1].value.as < amanda::compiler::ast::NUnaryOperator* > ()); }
+#line 1542 "compiler/Parser.cpp"
+    break;
+
+  case 35: // return_statement: "return" expression ';'
+#line 399 "specs/grammar.y"
+                                    { yylhs.value.as < amanda::compiler::ast::NReturnStatement* > () = new NReturnStatement(); }
+#line 1548 "compiler/Parser.cpp"
+    break;
+
+  case 36: // return_statement: "return" ';'
+#line 400 "specs/grammar.y"
+                                    { yylhs.value.as < amanda::compiler::ast::NReturnStatement* > () = new NReturnStatement(); }
+#line 1554 "compiler/Parser.cpp"
+    break;
+
+  case 37: // if_statement: "if" '(' expression ')' '{' statement_sequence '}'
+#line 406 "specs/grammar.y"
+                                                        {
+                                                            yylhs.value.as < amanda::compiler::ast::NConditionalStatement* > () = new NConditionalStatement(yystack_[4].value.as < amanda::compiler::ast::NExpression* > (), yystack_[1].value.as < amanda::compiler::ast::NBlock* > ());
+                                                        }
+#line 1562 "compiler/Parser.cpp"
+    break;
+
+  case 38: // if_statement: "if" '(' expression ')' '{' statement_sequence '}' "else" '{' statement_sequence '}'
 #line 411 "specs/grammar.y"
+                                                        {
+                                                            yylhs.value.as < amanda::compiler::ast::NConditionalStatement* > () = new NConditionalStatement(yystack_[8].value.as < amanda::compiler::ast::NExpression* > (), yystack_[5].value.as < amanda::compiler::ast::NBlock* > ()); yylhs.value.as < amanda::compiler::ast::NConditionalStatement* > ()->addElseClause(yystack_[1].value.as < amanda::compiler::ast::NBlock* > ()); 
+                                                        }
+#line 1570 "compiler/Parser.cpp"
+    break;
+
+  case 39: // if_statement: "if" '(' expression ')' '{' statement_sequence '}' multiple_else_if_clauses
+#line 415 "specs/grammar.y"
                                                         {
                                                             yylhs.value.as < amanda::compiler::ast::NConditionalStatement* > () = new NConditionalStatement(yystack_[5].value.as < amanda::compiler::ast::NExpression* > (), yystack_[2].value.as < amanda::compiler::ast::NBlock* > ());
                                                             yylhs.value.as < amanda::compiler::ast::NConditionalStatement* > ()->addMultipleElseIfClauses(yystack_[0].value.as < amanda::compiler::ast::ConditionalStatementList > ());
                                                         }
-#line 1527 "compiler/Parser.cpp"
+#line 1579 "compiler/Parser.cpp"
     break;
 
-  case 38: // if_statement: "if" '(' expression ')' '{' statement_sequence '}' multiple_else_if_clauses "else" '{' statement_sequence '}'
-#line 416 "specs/grammar.y"
+  case 40: // if_statement: "if" '(' expression ')' '{' statement_sequence '}' multiple_else_if_clauses "else" '{' statement_sequence '}'
+#line 420 "specs/grammar.y"
                                                         {
                                                             yylhs.value.as < amanda::compiler::ast::NConditionalStatement* > () = new NConditionalStatement(yystack_[9].value.as < amanda::compiler::ast::NExpression* > (), yystack_[6].value.as < amanda::compiler::ast::NBlock* > ());
                                                             yylhs.value.as < amanda::compiler::ast::NConditionalStatement* > ()->addMultipleElseIfClauses(yystack_[4].value.as < amanda::compiler::ast::ConditionalStatementList > ());
                                                             yylhs.value.as < amanda::compiler::ast::NConditionalStatement* > ()->addElseClause(yystack_[1].value.as < amanda::compiler::ast::NBlock* > ());
                                                         }
-#line 1537 "compiler/Parser.cpp"
+#line 1589 "compiler/Parser.cpp"
     break;
 
-  case 39: // if_statement: "if" '(' expression ')' statement
-#line 422 "specs/grammar.y"
+  case 41: // if_statement: "if" '(' expression ')' statement
+#line 426 "specs/grammar.y"
                                                         {
                                                             // Add a statement sequence
                                                             NBlock* block = new NBlock();
@@ -1546,44 +1598,44 @@ namespace amanda { namespace compiler {
                                                             // Create the conditional statement
                                                             yylhs.value.as < amanda::compiler::ast::NConditionalStatement* > () = new NConditionalStatement(yystack_[2].value.as < amanda::compiler::ast::NExpression* > (), block);
                                                         }
-#line 1550 "compiler/Parser.cpp"
+#line 1602 "compiler/Parser.cpp"
     break;
 
-  case 40: // multiple_else_if_clauses: "else" "if" '(' expression ')' '{' statement_sequence '}'
-#line 434 "specs/grammar.y"
+  case 42: // multiple_else_if_clauses: "else" "if" '(' expression ')' '{' statement_sequence '}'
+#line 438 "specs/grammar.y"
                                                         {
                                                             yylhs.value.as < amanda::compiler::ast::ConditionalStatementList > ().push_back(new NConditionalStatement(yystack_[4].value.as < amanda::compiler::ast::NExpression* > (), yystack_[1].value.as < amanda::compiler::ast::NBlock* > ()));
                                                         }
-#line 1558 "compiler/Parser.cpp"
+#line 1610 "compiler/Parser.cpp"
     break;
 
-  case 41: // multiple_else_if_clauses: multiple_else_if_clauses "else" "if" '(' expression ')' '{' statement_sequence '}'
-#line 438 "specs/grammar.y"
+  case 43: // multiple_else_if_clauses: multiple_else_if_clauses "else" "if" '(' expression ')' '{' statement_sequence '}'
+#line 442 "specs/grammar.y"
                                                         {
                                                             yylhs.value.as < amanda::compiler::ast::ConditionalStatementList > () = yystack_[8].value.as < amanda::compiler::ast::ConditionalStatementList > ();
                                                             yylhs.value.as < amanda::compiler::ast::ConditionalStatementList > ().push_back(new NConditionalStatement(yystack_[4].value.as < amanda::compiler::ast::NExpression* > (), yystack_[1].value.as < amanda::compiler::ast::NBlock* > ()));
                                                         }
-#line 1567 "compiler/Parser.cpp"
+#line 1619 "compiler/Parser.cpp"
     break;
 
-  case 42: // for_statement: "for" '(' optional_expression ';' expression ';' optional_expression ')' '{' statement_sequence '}'
-#line 446 "specs/grammar.y"
+  case 44: // for_statement: "for" '(' optional_expression ';' expression ';' optional_expression ')' '{' statement_sequence '}'
+#line 450 "specs/grammar.y"
                                                         {
                                                             yylhs.value.as < amanda::compiler::ast::NForLoopStatement* > () = new NForLoopStatement(yystack_[8].value.as < amanda::compiler::ast::NExpression* > (), yystack_[6].value.as < amanda::compiler::ast::NExpression* > (), yystack_[4].value.as < amanda::compiler::ast::NExpression* > (), yystack_[1].value.as < amanda::compiler::ast::NBlock* > ());
                                                         }
-#line 1575 "compiler/Parser.cpp"
+#line 1627 "compiler/Parser.cpp"
     break;
 
-  case 43: // while_statement: "while" '(' expression ')' '{' statement_sequence '}'
-#line 453 "specs/grammar.y"
+  case 45: // while_statement: "while" '(' expression ')' '{' statement_sequence '}'
+#line 457 "specs/grammar.y"
                                                 {
                                                     yylhs.value.as < amanda::compiler::ast::NWhileStatement* > () = new NWhileStatement(yystack_[4].value.as < amanda::compiler::ast::NExpression* > (), yystack_[1].value.as < amanda::compiler::ast::NBlock* > ());
                                                 }
-#line 1583 "compiler/Parser.cpp"
+#line 1635 "compiler/Parser.cpp"
     break;
 
-  case 44: // while_statement: "while" '(' expression ')' statement
-#line 457 "specs/grammar.y"
+  case 46: // while_statement: "while" '(' expression ')' statement
+#line 461 "specs/grammar.y"
                                                 {
                                                     // Add a new scope to the while loop
                                                     NBlock* body = new NBlock();
@@ -1591,335 +1643,391 @@ namespace amanda { namespace compiler {
 
                                                     yylhs.value.as < amanda::compiler::ast::NWhileStatement* > () = new NWhileStatement(yystack_[2].value.as < amanda::compiler::ast::NExpression* > (), body);
                                                 }
-#line 1595 "compiler/Parser.cpp"
+#line 1647 "compiler/Parser.cpp"
     break;
 
-  case 45: // optional_expression: expression
-#line 468 "specs/grammar.y"
-                                                { yylhs.value.as < amanda::compiler::ast::NExpression* > () = yystack_[0].value.as < amanda::compiler::ast::NExpression* > (); }
-#line 1601 "compiler/Parser.cpp"
-    break;
-
-  case 46: // optional_expression: %empty
-#line 469 "specs/grammar.y"
-                                                { yylhs.value.as < amanda::compiler::ast::NExpression* > () = NULL; }
-#line 1607 "compiler/Parser.cpp"
-    break;
-
-  case 47: // expression: id
-#line 473 "specs/grammar.y"
-                                                { yylhs.value.as < amanda::compiler::ast::NExpression* > () = yystack_[0].value.as < amanda::compiler::ast::NIdentifier* > (); }
-#line 1613 "compiler/Parser.cpp"
-    break;
-
-  case 48: // expression: boolean_literal
-#line 474 "specs/grammar.y"
-                                                { yylhs.value.as < amanda::compiler::ast::NExpression* > () = yystack_[0].value.as < amanda::compiler::ast::NBoolean* > (); }
-#line 1619 "compiler/Parser.cpp"
-    break;
-
-  case 49: // expression: numeric_literal
-#line 475 "specs/grammar.y"
-                                                { yylhs.value.as < amanda::compiler::ast::NExpression* > () = yystack_[0].value.as < amanda::compiler::ast::NExpression* > (); }
-#line 1625 "compiler/Parser.cpp"
-    break;
-
-  case 50: // expression: variable_declaration
-#line 476 "specs/grammar.y"
-                                                { yylhs.value.as < amanda::compiler::ast::NExpression* > () = yystack_[0].value.as < amanda::compiler::ast::NVariableDeclaration* > (); }
-#line 1631 "compiler/Parser.cpp"
-    break;
-
-  case 51: // expression: function_call
-#line 477 "specs/grammar.y"
-                                                { yylhs.value.as < amanda::compiler::ast::NExpression* > () = yystack_[0].value.as < amanda::compiler::ast::NFunctionCall* > (); }
-#line 1637 "compiler/Parser.cpp"
-    break;
-
-  case 52: // expression: binary_operator
-#line 478 "specs/grammar.y"
-                                                { yylhs.value.as < amanda::compiler::ast::NExpression* > () = yystack_[0].value.as < amanda::compiler::ast::NBinaryOperator* > (); }
-#line 1643 "compiler/Parser.cpp"
-    break;
-
-  case 53: // expression: assignment_expression
-#line 479 "specs/grammar.y"
-                                                { yylhs.value.as < amanda::compiler::ast::NExpression* > () = yystack_[0].value.as < amanda::compiler::ast::NAssignmentExpression* > (); }
-#line 1649 "compiler/Parser.cpp"
-    break;
-
-  case 54: // expression: '(' expression ')'
-#line 480 "specs/grammar.y"
-                                                { yylhs.value.as < amanda::compiler::ast::NExpression* > () = yystack_[1].value.as < amanda::compiler::ast::NExpression* > (); }
+  case 47: // do_while_statement: "do" '{' statement_sequence '}' "while" '(' expression ')' ';'
+#line 472 "specs/grammar.y"
+                                                {
+                                                    yylhs.value.as < amanda::compiler::ast::NDoWhileStatement* > () = new NDoWhileStatement(yystack_[2].value.as < amanda::compiler::ast::NExpression* > (), yystack_[6].value.as < amanda::compiler::ast::NBlock* > ());
+                                                }
 #line 1655 "compiler/Parser.cpp"
     break;
 
-  case 55: // function_call: name '(' expression_list ')'
-#line 484 "specs/grammar.y"
-                                    { yylhs.value.as < amanda::compiler::ast::NFunctionCall* > () = new NFunctionCall(yystack_[3].value.as < amanda::core::String > ()); yylhs.value.as < amanda::compiler::ast::NFunctionCall* > ()->addPassedArguments(*yystack_[1].value.as < amanda::compiler::ast::ExpressionList* > ()); delete yystack_[1].value.as < amanda::compiler::ast::ExpressionList* > (); }
+  case 48: // optional_expression: expression
+#line 479 "specs/grammar.y"
+                                                { yylhs.value.as < amanda::compiler::ast::NExpression* > () = yystack_[0].value.as < amanda::compiler::ast::NExpression* > (); }
 #line 1661 "compiler/Parser.cpp"
     break;
 
-  case 56: // variable_declaration: type id
-#line 488 "specs/grammar.y"
-                                            { yylhs.value.as < amanda::compiler::ast::NVariableDeclaration* > () = new NVariableDeclaration(yystack_[1].value.as < amanda::core::String > (), yystack_[0].value.as < amanda::compiler::ast::NIdentifier* > ()); }
+  case 49: // optional_expression: %empty
+#line 480 "specs/grammar.y"
+                                                { yylhs.value.as < amanda::compiler::ast::NExpression* > () = NULL; }
 #line 1667 "compiler/Parser.cpp"
     break;
 
-  case 57: // variable_declaration: variable_declaration '=' expression
-#line 489 "specs/grammar.y"
-                                            { yylhs.value.as < amanda::compiler::ast::NVariableDeclaration* > () = yystack_[2].value.as < amanda::compiler::ast::NVariableDeclaration* > (); yylhs.value.as < amanda::compiler::ast::NVariableDeclaration* > ()->setAssignmentExpression(yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+  case 50: // expression: id
+#line 484 "specs/grammar.y"
+                                                { yylhs.value.as < amanda::compiler::ast::NExpression* > () = yystack_[0].value.as < amanda::compiler::ast::NIdentifier* > (); }
 #line 1673 "compiler/Parser.cpp"
     break;
 
-  case 58: // assignment_expression: id '=' expression
-#line 493 "specs/grammar.y"
-                                { yylhs.value.as < amanda::compiler::ast::NAssignmentExpression* > () = new NAssignmentExpression(yystack_[2].value.as < amanda::compiler::ast::NIdentifier* > (), yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+  case 51: // expression: boolean_literal
+#line 485 "specs/grammar.y"
+                                                { yylhs.value.as < amanda::compiler::ast::NExpression* > () = yystack_[0].value.as < amanda::compiler::ast::NBoolean* > (); }
 #line 1679 "compiler/Parser.cpp"
     break;
 
-  case 59: // id: name
-#line 498 "specs/grammar.y"
-                                { yylhs.value.as < amanda::compiler::ast::NIdentifier* > () = new NIdentifier(yystack_[0].value.as < amanda::core::String > ()); }
+  case 52: // expression: numeric_literal
+#line 486 "specs/grammar.y"
+                                                { yylhs.value.as < amanda::compiler::ast::NExpression* > () = yystack_[0].value.as < amanda::compiler::ast::NExpression* > (); }
 #line 1685 "compiler/Parser.cpp"
     break;
 
-  case 60: // numeric_literal: "integer literal"
-#line 503 "specs/grammar.y"
-                                { yylhs.value.as < amanda::compiler::ast::NExpression* > () = new NInteger(yystack_[0].value.as < amanda::core::String > ()); }
+  case 53: // expression: variable_declaration
+#line 487 "specs/grammar.y"
+                                                { yylhs.value.as < amanda::compiler::ast::NExpression* > () = yystack_[0].value.as < amanda::compiler::ast::NVariableDeclaration* > (); }
 #line 1691 "compiler/Parser.cpp"
     break;
 
-  case 61: // boolean_literal: "boolean literal"
-#line 508 "specs/grammar.y"
-                                { yylhs.value.as < amanda::compiler::ast::NBoolean* > () = new NBoolean(yystack_[0].value.as < bool > ()); }
+  case 54: // expression: function_call
+#line 488 "specs/grammar.y"
+                                                { yylhs.value.as < amanda::compiler::ast::NExpression* > () = yystack_[0].value.as < amanda::compiler::ast::NFunctionCall* > (); }
 #line 1697 "compiler/Parser.cpp"
     break;
 
-  case 62: // expression_list: %empty
-#line 513 "specs/grammar.y"
-                                        { yylhs.value.as < amanda::compiler::ast::ExpressionList* > () = new ExpressionList();                    }
+  case 55: // expression: binary_operator
+#line 489 "specs/grammar.y"
+                                                { yylhs.value.as < amanda::compiler::ast::NExpression* > () = yystack_[0].value.as < amanda::compiler::ast::NBinaryOperator* > (); }
 #line 1703 "compiler/Parser.cpp"
     break;
 
-  case 63: // expression_list: expression
-#line 514 "specs/grammar.y"
-                                        { yylhs.value.as < amanda::compiler::ast::ExpressionList* > () = new ExpressionList(); yylhs.value.as < amanda::compiler::ast::ExpressionList* > ()->push_back(yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+  case 56: // expression: assignment_expression
+#line 490 "specs/grammar.y"
+                                                { yylhs.value.as < amanda::compiler::ast::NExpression* > () = yystack_[0].value.as < amanda::compiler::ast::NAssignmentExpression* > (); }
 #line 1709 "compiler/Parser.cpp"
     break;
 
-  case 64: // expression_list: expression_list ',' expression
-#line 515 "specs/grammar.y"
-                                        { yylhs.value.as < amanda::compiler::ast::ExpressionList* > () = yystack_[2].value.as < amanda::compiler::ast::ExpressionList* > (); yylhs.value.as < amanda::compiler::ast::ExpressionList* > ()->push_back(yystack_[0].value.as < amanda::compiler::ast::NExpression* > ());                   }
+  case 57: // expression: unary_operator
+#line 491 "specs/grammar.y"
+                                                { yylhs.value.as < amanda::compiler::ast::NExpression* > () = yystack_[0].value.as < amanda::compiler::ast::NUnaryOperator* > (); }
 #line 1715 "compiler/Parser.cpp"
     break;
 
-  case 65: // statement_sequence: %empty
-#line 520 "specs/grammar.y"
-                                    { yylhs.value.as < amanda::compiler::ast::NBlock* > () = new NBlock(); }
+  case 58: // expression: '(' expression ')'
+#line 492 "specs/grammar.y"
+                                                { yylhs.value.as < amanda::compiler::ast::NExpression* > () = yystack_[1].value.as < amanda::compiler::ast::NExpression* > (); }
 #line 1721 "compiler/Parser.cpp"
     break;
 
-  case 66: // statement_sequence: statement
-#line 521 "specs/grammar.y"
-                                    { yylhs.value.as < amanda::compiler::ast::NBlock* > () = new NBlock(); yylhs.value.as < amanda::compiler::ast::NBlock* > ()->addStatement(yystack_[0].value.as < amanda::compiler::ast::NStatement* > ()); }
+  case 59: // function_call: name '(' expression_list ')'
+#line 496 "specs/grammar.y"
+                                    { yylhs.value.as < amanda::compiler::ast::NFunctionCall* > () = new NFunctionCall(yystack_[3].value.as < amanda::core::String > ()); yylhs.value.as < amanda::compiler::ast::NFunctionCall* > ()->addPassedArguments(*yystack_[1].value.as < amanda::compiler::ast::ExpressionList* > ()); delete yystack_[1].value.as < amanda::compiler::ast::ExpressionList* > (); }
 #line 1727 "compiler/Parser.cpp"
     break;
 
-  case 67: // statement_sequence: statement_sequence statement
-#line 522 "specs/grammar.y"
-                                    { yylhs.value.as < amanda::compiler::ast::NBlock* > () = yystack_[1].value.as < amanda::compiler::ast::NBlock* > (); yylhs.value.as < amanda::compiler::ast::NBlock* > ()->addStatement(yystack_[0].value.as < amanda::compiler::ast::NStatement* > ()); }
+  case 60: // variable_declaration: type id
+#line 500 "specs/grammar.y"
+                                            { yylhs.value.as < amanda::compiler::ast::NVariableDeclaration* > () = new NVariableDeclaration(yystack_[1].value.as < amanda::core::String > (), yystack_[0].value.as < amanda::compiler::ast::NIdentifier* > ()); }
 #line 1733 "compiler/Parser.cpp"
     break;
 
-  case 68: // type: simple_type
-#line 527 "specs/grammar.y"
-      { yylhs.value.as < amanda::core::String > () = yystack_[0].value.as < amanda::core::String > (); }
+  case 61: // variable_declaration: variable_declaration '=' expression
+#line 501 "specs/grammar.y"
+                                            { yylhs.value.as < amanda::compiler::ast::NVariableDeclaration* > () = yystack_[2].value.as < amanda::compiler::ast::NVariableDeclaration* > (); yylhs.value.as < amanda::compiler::ast::NVariableDeclaration* > ()->setAssignmentExpression(yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
 #line 1739 "compiler/Parser.cpp"
     break;
 
-  case 69: // type: reference_type
-#line 528 "specs/grammar.y"
-      { yylhs.value.as < amanda::core::String > () = yystack_[0].value.as < amanda::core::String > (); }
+  case 62: // assignment_expression: id '=' expression
+#line 505 "specs/grammar.y"
+                                { yylhs.value.as < amanda::compiler::ast::NAssignmentExpression* > () = new NAssignmentExpression(yystack_[2].value.as < amanda::compiler::ast::NIdentifier* > (), yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
 #line 1745 "compiler/Parser.cpp"
     break;
 
-  case 70: // type: type '[' ']'
-#line 529 "specs/grammar.y"
-                    { yylhs.value.as < amanda::core::String > () = "Array@<"; yylhs.value.as < amanda::core::String > ().append(yystack_[2].value.as < amanda::core::String > ()).append(">"); }
+  case 63: // id: name
+#line 510 "specs/grammar.y"
+                                { yylhs.value.as < amanda::compiler::ast::NIdentifier* > () = new NIdentifier(yystack_[0].value.as < amanda::core::String > ()); }
 #line 1751 "compiler/Parser.cpp"
     break;
 
-  case 71: // simple_type: "void"
-#line 533 "specs/grammar.y"
-                { yylhs.value.as < amanda::core::String > () = "default-types::void"; }
+  case 64: // numeric_literal: "integer literal"
+#line 515 "specs/grammar.y"
+                                { yylhs.value.as < amanda::compiler::ast::NExpression* > () = new NInteger(yystack_[0].value.as < amanda::core::String > ()); }
 #line 1757 "compiler/Parser.cpp"
     break;
 
-  case 72: // simple_type: "bool"
-#line 534 "specs/grammar.y"
-                { yylhs.value.as < amanda::core::String > () = "default-types::bool"; }
+  case 65: // boolean_literal: "boolean literal"
+#line 520 "specs/grammar.y"
+                                { yylhs.value.as < amanda::compiler::ast::NBoolean* > () = new NBoolean(yystack_[0].value.as < bool > ()); }
 #line 1763 "compiler/Parser.cpp"
     break;
 
-  case 73: // simple_type: "byte"
-#line 535 "specs/grammar.y"
-                { yylhs.value.as < amanda::core::String > () = "default-types::byte"; }
+  case 66: // expression_list: %empty
+#line 525 "specs/grammar.y"
+                                        { yylhs.value.as < amanda::compiler::ast::ExpressionList* > () = new ExpressionList();                    }
 #line 1769 "compiler/Parser.cpp"
     break;
 
-  case 74: // simple_type: "short"
-#line 536 "specs/grammar.y"
-                { yylhs.value.as < amanda::core::String > () = "default-types::short"; }
+  case 67: // expression_list: expression
+#line 526 "specs/grammar.y"
+                                        { yylhs.value.as < amanda::compiler::ast::ExpressionList* > () = new ExpressionList(); yylhs.value.as < amanda::compiler::ast::ExpressionList* > ()->push_back(yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
 #line 1775 "compiler/Parser.cpp"
     break;
 
-  case 75: // simple_type: "int"
-#line 537 "specs/grammar.y"
-                { yylhs.value.as < amanda::core::String > () = "default-types::int"; }
+  case 68: // expression_list: expression_list ',' expression
+#line 527 "specs/grammar.y"
+                                        { yylhs.value.as < amanda::compiler::ast::ExpressionList* > () = yystack_[2].value.as < amanda::compiler::ast::ExpressionList* > (); yylhs.value.as < amanda::compiler::ast::ExpressionList* > ()->push_back(yystack_[0].value.as < amanda::compiler::ast::NExpression* > ());                   }
 #line 1781 "compiler/Parser.cpp"
     break;
 
-  case 76: // simple_type: "long"
-#line 538 "specs/grammar.y"
-                { yylhs.value.as < amanda::core::String > () = "default-types::long"; }
+  case 69: // statement_sequence: %empty
+#line 532 "specs/grammar.y"
+                                    { yylhs.value.as < amanda::compiler::ast::NBlock* > () = new NBlock(); }
 #line 1787 "compiler/Parser.cpp"
     break;
 
-  case 77: // simple_type: "float"
-#line 539 "specs/grammar.y"
-                { yylhs.value.as < amanda::core::String > () = "default-types::float"; }
+  case 70: // statement_sequence: statement
+#line 533 "specs/grammar.y"
+                                    { yylhs.value.as < amanda::compiler::ast::NBlock* > () = new NBlock(); yylhs.value.as < amanda::compiler::ast::NBlock* > ()->addStatement(yystack_[0].value.as < amanda::compiler::ast::NStatement* > ()); }
 #line 1793 "compiler/Parser.cpp"
     break;
 
-  case 78: // simple_type: "double"
-#line 540 "specs/grammar.y"
-                { yylhs.value.as < amanda::core::String > () = "default-types::double"; }
+  case 71: // statement_sequence: statement_sequence statement
+#line 534 "specs/grammar.y"
+                                    { yylhs.value.as < amanda::compiler::ast::NBlock* > () = yystack_[1].value.as < amanda::compiler::ast::NBlock* > (); yylhs.value.as < amanda::compiler::ast::NBlock* > ()->addStatement(yystack_[0].value.as < amanda::compiler::ast::NStatement* > ()); }
 #line 1799 "compiler/Parser.cpp"
     break;
 
-  case 79: // reference_type: name
-#line 544 "specs/grammar.y"
+  case 72: // type: simple_type
+#line 539 "specs/grammar.y"
       { yylhs.value.as < amanda::core::String > () = yystack_[0].value.as < amanda::core::String > (); }
 #line 1805 "compiler/Parser.cpp"
     break;
 
-  case 80: // reference_type: "string"
-#line 545 "specs/grammar.y"
-                { yylhs.value.as < amanda::core::String > () = "default-types::string"; }
+  case 73: // type: reference_type
+#line 540 "specs/grammar.y"
+      { yylhs.value.as < amanda::core::String > () = yystack_[0].value.as < amanda::core::String > (); }
 #line 1811 "compiler/Parser.cpp"
     break;
 
-  case 81: // name: simple_name
-#line 550 "specs/grammar.y"
-      { yylhs.value.as < amanda::core::String > () = yystack_[0].value.as < amanda::core::String > (); }
+  case 74: // type: type '[' ']'
+#line 541 "specs/grammar.y"
+                    { yylhs.value.as < amanda::core::String > () = "Array@<"; yylhs.value.as < amanda::core::String > ().append(yystack_[2].value.as < amanda::core::String > ()).append(">"); }
 #line 1817 "compiler/Parser.cpp"
     break;
 
-  case 82: // name: qualified_name
-#line 551 "specs/grammar.y"
-      { yylhs.value.as < amanda::core::String > () = yystack_[0].value.as < amanda::core::String > (); }
+  case 75: // simple_type: "void"
+#line 545 "specs/grammar.y"
+                { yylhs.value.as < amanda::core::String > () = "default-types::void"; }
 #line 1823 "compiler/Parser.cpp"
     break;
 
-  case 83: // simple_name: "identifier"
-#line 555 "specs/grammar.y"
-      { yylhs.value.as < amanda::core::String > () = yystack_[0].value.as < amanda::core::String > (); }
+  case 76: // simple_type: "bool"
+#line 546 "specs/grammar.y"
+                { yylhs.value.as < amanda::core::String > () = "default-types::bool"; }
 #line 1829 "compiler/Parser.cpp"
     break;
 
-  case 84: // qualified_name: "identifier" "'::'" "identifier"
-#line 559 "specs/grammar.y"
-                                            { yylhs.value.as < amanda::core::String > ().append(yystack_[2].value.as < amanda::core::String > ()).append("::").append(yystack_[0].value.as < amanda::core::String > ()); }
+  case 77: // simple_type: "byte"
+#line 547 "specs/grammar.y"
+                { yylhs.value.as < amanda::core::String > () = "default-types::byte"; }
 #line 1835 "compiler/Parser.cpp"
     break;
 
-  case 85: // qualified_name: qualified_name "'::'" "identifier"
-#line 560 "specs/grammar.y"
-                                            { yylhs.value.as < amanda::core::String > () = yystack_[2].value.as < amanda::core::String > (); yylhs.value.as < amanda::core::String > ().append("::").append(yystack_[0].value.as < amanda::core::String > ()); }
+  case 78: // simple_type: "short"
+#line 548 "specs/grammar.y"
+                { yylhs.value.as < amanda::core::String > () = "default-types::short"; }
 #line 1841 "compiler/Parser.cpp"
     break;
 
-  case 86: // access_modifier: "private"
-#line 565 "specs/grammar.y"
-                    { yylhs.value.as < amanda::compiler::ast::NClassDeclaration::AccessModifier > () = NClassDeclaration::createAccessModifierFromString("private"); }
+  case 79: // simple_type: "int"
+#line 549 "specs/grammar.y"
+                { yylhs.value.as < amanda::core::String > () = "default-types::int"; }
 #line 1847 "compiler/Parser.cpp"
     break;
 
-  case 87: // access_modifier: "protected"
-#line 566 "specs/grammar.y"
-                    { yylhs.value.as < amanda::compiler::ast::NClassDeclaration::AccessModifier > () = NClassDeclaration::createAccessModifierFromString("protected"); }
+  case 80: // simple_type: "long"
+#line 550 "specs/grammar.y"
+                { yylhs.value.as < amanda::core::String > () = "default-types::long"; }
 #line 1853 "compiler/Parser.cpp"
     break;
 
-  case 88: // access_modifier: "public"
-#line 567 "specs/grammar.y"
-                    { yylhs.value.as < amanda::compiler::ast::NClassDeclaration::AccessModifier > () = NClassDeclaration::createAccessModifierFromString("public"); }
+  case 81: // simple_type: "float"
+#line 551 "specs/grammar.y"
+                { yylhs.value.as < amanda::core::String > () = "default-types::float"; }
 #line 1859 "compiler/Parser.cpp"
     break;
 
-  case 92: // binary_operator: expression '<' expression
-#line 579 "specs/grammar.y"
-                                            { yylhs.value.as < amanda::compiler::ast::NBinaryOperator* > () = new NBinaryOperator(BO_Lesser, yystack_[2].value.as < amanda::compiler::ast::NExpression* > (), yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+  case 82: // simple_type: "double"
+#line 552 "specs/grammar.y"
+                { yylhs.value.as < amanda::core::String > () = "default-types::double"; }
 #line 1865 "compiler/Parser.cpp"
     break;
 
-  case 93: // binary_operator: expression "'<='" expression
-#line 580 "specs/grammar.y"
-                                            { yylhs.value.as < amanda::compiler::ast::NBinaryOperator* > () = new NBinaryOperator(BO_LesserEquals, yystack_[2].value.as < amanda::compiler::ast::NExpression* > (), yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+  case 83: // reference_type: name
+#line 556 "specs/grammar.y"
+      { yylhs.value.as < amanda::core::String > () = yystack_[0].value.as < amanda::core::String > (); }
 #line 1871 "compiler/Parser.cpp"
     break;
 
-  case 94: // binary_operator: expression '>' expression
-#line 581 "specs/grammar.y"
-                                            { yylhs.value.as < amanda::compiler::ast::NBinaryOperator* > () = new NBinaryOperator(BO_Greater, yystack_[2].value.as < amanda::compiler::ast::NExpression* > (), yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+  case 84: // reference_type: "string"
+#line 557 "specs/grammar.y"
+                { yylhs.value.as < amanda::core::String > () = "default-types::string"; }
 #line 1877 "compiler/Parser.cpp"
     break;
 
-  case 95: // binary_operator: expression "'>='" expression
-#line 582 "specs/grammar.y"
-                                            { yylhs.value.as < amanda::compiler::ast::NBinaryOperator* > () = new NBinaryOperator(BO_GreaterEquals, yystack_[2].value.as < amanda::compiler::ast::NExpression* > (), yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+  case 85: // name: simple_name
+#line 562 "specs/grammar.y"
+      { yylhs.value.as < amanda::core::String > () = yystack_[0].value.as < amanda::core::String > (); }
 #line 1883 "compiler/Parser.cpp"
     break;
 
-  case 96: // binary_operator: expression "'=='" expression
-#line 583 "specs/grammar.y"
-                                            { yylhs.value.as < amanda::compiler::ast::NBinaryOperator* > () = new NBinaryOperator(BO_Equals, yystack_[2].value.as < amanda::compiler::ast::NExpression* > (), yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+  case 86: // name: qualified_name
+#line 563 "specs/grammar.y"
+      { yylhs.value.as < amanda::core::String > () = yystack_[0].value.as < amanda::core::String > (); }
 #line 1889 "compiler/Parser.cpp"
     break;
 
-  case 97: // binary_operator: expression "'!='" expression
-#line 584 "specs/grammar.y"
-                                            { yylhs.value.as < amanda::compiler::ast::NBinaryOperator* > () = new NBinaryOperator(BO_NotEquals, yystack_[2].value.as < amanda::compiler::ast::NExpression* > (), yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+  case 87: // simple_name: "identifier"
+#line 567 "specs/grammar.y"
+      { yylhs.value.as < amanda::core::String > () = yystack_[0].value.as < amanda::core::String > (); }
 #line 1895 "compiler/Parser.cpp"
     break;
 
-  case 98: // binary_operator: expression '+' expression
-#line 585 "specs/grammar.y"
-                                            { yylhs.value.as < amanda::compiler::ast::NBinaryOperator* > () = new NBinaryOperator(BO_Sum, yystack_[2].value.as < amanda::compiler::ast::NExpression* > (), yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+  case 88: // qualified_name: "identifier" "'::'" "identifier"
+#line 571 "specs/grammar.y"
+                                            { yylhs.value.as < amanda::core::String > ().append(yystack_[2].value.as < amanda::core::String > ()).append("::").append(yystack_[0].value.as < amanda::core::String > ()); }
 #line 1901 "compiler/Parser.cpp"
     break;
 
-  case 99: // binary_operator: expression '-' expression
-#line 586 "specs/grammar.y"
-                                            { yylhs.value.as < amanda::compiler::ast::NBinaryOperator* > () = new NBinaryOperator(BO_Sub, yystack_[2].value.as < amanda::compiler::ast::NExpression* > (), yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+  case 89: // qualified_name: qualified_name "'::'" "identifier"
+#line 572 "specs/grammar.y"
+                                            { yylhs.value.as < amanda::core::String > () = yystack_[2].value.as < amanda::core::String > (); yylhs.value.as < amanda::core::String > ().append("::").append(yystack_[0].value.as < amanda::core::String > ()); }
 #line 1907 "compiler/Parser.cpp"
     break;
 
-  case 100: // binary_operator: expression '/' expression
-#line 587 "specs/grammar.y"
-                                            { yylhs.value.as < amanda::compiler::ast::NBinaryOperator* > () = new NBinaryOperator(BO_Div, yystack_[2].value.as < amanda::compiler::ast::NExpression* > (), yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+  case 90: // access_modifier: "private"
+#line 577 "specs/grammar.y"
+                    { yylhs.value.as < amanda::compiler::ast::NClassDeclaration::AccessModifier > () = NClassDeclaration::createAccessModifierFromString("private"); }
 #line 1913 "compiler/Parser.cpp"
     break;
 
-  case 101: // binary_operator: expression '*' expression
-#line 588 "specs/grammar.y"
-                                            { yylhs.value.as < amanda::compiler::ast::NBinaryOperator* > () = new NBinaryOperator(BO_Mult, yystack_[2].value.as < amanda::compiler::ast::NExpression* > (), yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+  case 91: // access_modifier: "protected"
+#line 578 "specs/grammar.y"
+                    { yylhs.value.as < amanda::compiler::ast::NClassDeclaration::AccessModifier > () = NClassDeclaration::createAccessModifierFromString("protected"); }
 #line 1919 "compiler/Parser.cpp"
     break;
 
+  case 92: // access_modifier: "public"
+#line 579 "specs/grammar.y"
+                    { yylhs.value.as < amanda::compiler::ast::NClassDeclaration::AccessModifier > () = NClassDeclaration::createAccessModifierFromString("public"); }
+#line 1925 "compiler/Parser.cpp"
+    break;
 
-#line 1923 "compiler/Parser.cpp"
+  case 96: // binary_operator: expression '<' expression
+#line 591 "specs/grammar.y"
+                                            { yylhs.value.as < amanda::compiler::ast::NBinaryOperator* > () = new NBinaryOperator(BO_Lesser, yystack_[2].value.as < amanda::compiler::ast::NExpression* > (), yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+#line 1931 "compiler/Parser.cpp"
+    break;
+
+  case 97: // binary_operator: expression "'<='" expression
+#line 592 "specs/grammar.y"
+                                            { yylhs.value.as < amanda::compiler::ast::NBinaryOperator* > () = new NBinaryOperator(BO_LesserEquals, yystack_[2].value.as < amanda::compiler::ast::NExpression* > (), yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+#line 1937 "compiler/Parser.cpp"
+    break;
+
+  case 98: // binary_operator: expression '>' expression
+#line 593 "specs/grammar.y"
+                                            { yylhs.value.as < amanda::compiler::ast::NBinaryOperator* > () = new NBinaryOperator(BO_Greater, yystack_[2].value.as < amanda::compiler::ast::NExpression* > (), yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+#line 1943 "compiler/Parser.cpp"
+    break;
+
+  case 99: // binary_operator: expression "'>='" expression
+#line 594 "specs/grammar.y"
+                                            { yylhs.value.as < amanda::compiler::ast::NBinaryOperator* > () = new NBinaryOperator(BO_GreaterEquals, yystack_[2].value.as < amanda::compiler::ast::NExpression* > (), yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+#line 1949 "compiler/Parser.cpp"
+    break;
+
+  case 100: // binary_operator: expression "'=='" expression
+#line 595 "specs/grammar.y"
+                                            { yylhs.value.as < amanda::compiler::ast::NBinaryOperator* > () = new NBinaryOperator(BO_Equals, yystack_[2].value.as < amanda::compiler::ast::NExpression* > (), yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+#line 1955 "compiler/Parser.cpp"
+    break;
+
+  case 101: // binary_operator: expression "'!='" expression
+#line 596 "specs/grammar.y"
+                                            { yylhs.value.as < amanda::compiler::ast::NBinaryOperator* > () = new NBinaryOperator(BO_NotEquals, yystack_[2].value.as < amanda::compiler::ast::NExpression* > (), yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+#line 1961 "compiler/Parser.cpp"
+    break;
+
+  case 102: // binary_operator: expression '+' expression
+#line 597 "specs/grammar.y"
+                                            { yylhs.value.as < amanda::compiler::ast::NBinaryOperator* > () = new NBinaryOperator(BO_Sum, yystack_[2].value.as < amanda::compiler::ast::NExpression* > (), yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+#line 1967 "compiler/Parser.cpp"
+    break;
+
+  case 103: // binary_operator: expression '-' expression
+#line 598 "specs/grammar.y"
+                                            { yylhs.value.as < amanda::compiler::ast::NBinaryOperator* > () = new NBinaryOperator(BO_Sub, yystack_[2].value.as < amanda::compiler::ast::NExpression* > (), yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+#line 1973 "compiler/Parser.cpp"
+    break;
+
+  case 104: // binary_operator: expression '/' expression
+#line 599 "specs/grammar.y"
+                                            { yylhs.value.as < amanda::compiler::ast::NBinaryOperator* > () = new NBinaryOperator(BO_Div, yystack_[2].value.as < amanda::compiler::ast::NExpression* > (), yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+#line 1979 "compiler/Parser.cpp"
+    break;
+
+  case 105: // binary_operator: expression '*' expression
+#line 600 "specs/grammar.y"
+                                            { yylhs.value.as < amanda::compiler::ast::NBinaryOperator* > () = new NBinaryOperator(BO_Mult, yystack_[2].value.as < amanda::compiler::ast::NExpression* > (), yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+#line 1985 "compiler/Parser.cpp"
+    break;
+
+  case 106: // binary_operator: expression '%' expression
+#line 601 "specs/grammar.y"
+                                            { yylhs.value.as < amanda::compiler::ast::NBinaryOperator* > () = new NBinaryOperator(BO_Mod, yystack_[2].value.as < amanda::compiler::ast::NExpression* > (), yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+#line 1991 "compiler/Parser.cpp"
+    break;
+
+  case 107: // binary_operator: expression "and" expression
+#line 602 "specs/grammar.y"
+                                            { yylhs.value.as < amanda::compiler::ast::NBinaryOperator* > () = new NBinaryOperator(BO_LogicAnd, yystack_[2].value.as < amanda::compiler::ast::NExpression* > (), yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+#line 1997 "compiler/Parser.cpp"
+    break;
+
+  case 108: // binary_operator: expression "or" expression
+#line 603 "specs/grammar.y"
+                                            { yylhs.value.as < amanda::compiler::ast::NBinaryOperator* > () = new NBinaryOperator(BO_LogicOr, yystack_[2].value.as < amanda::compiler::ast::NExpression* > (), yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+#line 2003 "compiler/Parser.cpp"
+    break;
+
+  case 109: // unary_operator: "'++'" expression
+#line 607 "specs/grammar.y"
+                                            { yylhs.value.as < amanda::compiler::ast::NUnaryOperator* > () = new NUnaryOperator(UO_Preincrement, yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+#line 2009 "compiler/Parser.cpp"
+    break;
+
+  case 110: // unary_operator: "'--'" expression
+#line 608 "specs/grammar.y"
+                                            { yylhs.value.as < amanda::compiler::ast::NUnaryOperator* > () = new NUnaryOperator(UO_Predecrement, yystack_[0].value.as < amanda::compiler::ast::NExpression* > ()); }
+#line 2015 "compiler/Parser.cpp"
+    break;
+
+  case 111: // unary_operator: expression "'++'"
+#line 609 "specs/grammar.y"
+                                            { yylhs.value.as < amanda::compiler::ast::NUnaryOperator* > () = new NUnaryOperator(UO_Postincrement, yystack_[1].value.as < amanda::compiler::ast::NExpression* > ()); }
+#line 2021 "compiler/Parser.cpp"
+    break;
+
+  case 112: // unary_operator: expression "'--'"
+#line 610 "specs/grammar.y"
+                                            { yylhs.value.as < amanda::compiler::ast::NUnaryOperator* > () = new NUnaryOperator(UO_Postdecrement, yystack_[1].value.as < amanda::compiler::ast::NExpression* > ()); }
+#line 2027 "compiler/Parser.cpp"
+    break;
+
+
+#line 2031 "compiler/Parser.cpp"
 
             default:
               break;
@@ -2120,11 +2228,12 @@ namespace amanda { namespace compiler {
   "statement", "simple_statement", "compound_statement",
   "expression_statement", "return_statement", "if_statement",
   "multiple_else_if_clauses", "for_statement", "while_statement",
-  "optional_expression", "expression", "function_call",
-  "variable_declaration", "assignment_expression", "id", "numeric_literal",
-  "boolean_literal", "expression_list", "statement_sequence", "type",
-  "simple_type", "reference_type", "name", "simple_name", "qualified_name",
-  "access_modifier", "argument_list", "binary_operator", YY_NULLPTR
+  "do_while_statement", "optional_expression", "expression",
+  "function_call", "variable_declaration", "assignment_expression", "id",
+  "numeric_literal", "boolean_literal", "expression_list",
+  "statement_sequence", "type", "simple_type", "reference_type", "name",
+  "simple_name", "qualified_name", "access_modifier", "argument_list",
+  "binary_operator", "unary_operator", YY_NULLPTR
     };
     return yy_sname[yysymbol];
   }
@@ -2389,246 +2498,352 @@ namespace amanda { namespace compiler {
   }
 
 
-  const signed char DefaultParser::yypact_ninf_ = -61;
+  const signed char DefaultParser::yypact_ninf_ = -87;
 
-  const signed char DefaultParser::yytable_ninf_ = -80;
+  const signed char DefaultParser::yytable_ninf_ = -84;
 
   const short
   DefaultParser::yypact_[] =
   {
-     595,   -42,    22,   -61,   -61,   -61,    33,   -61,   -61,   -61,
-     -61,   -61,   -61,   -61,   -61,   -61,    42,   595,   -61,   -61,
-     -61,   -61,   -61,    -4,   -61,   -61,   -61,   -61,     9,    36,
-      58,   -32,    -9,    -1,   -61,   -61,    12,    10,    65,    74,
-     -61,   595,   595,   -61,   269,   -61,   -61,     7,   256,   595,
-       1,   -23,    25,   -61,   -61,    11,   269,     8,   -61,    23,
-     616,     5,   -61,   -61,   269,    26,    37,   560,    38,   -61,
-      24,   -61,   -61,   -61,   -61,   -61,   -61,   -61,    28,   -61,
-      34,   302,     6,     2,   -61,   269,   -61,    35,     6,   560,
-     560,   -61,   -61,   560,   723,   -61,    28,   -61,    34,   -61,
-     -61,   -61,   560,   -61,   560,   560,   -61,   -61,   -61,   -61,
-     560,   -61,   -61,   -61,    40,   723,   615,   639,   560,   560,
-     560,   560,   560,   560,   560,   560,   560,   560,   663,   723,
-     723,   723,   -17,   560,   514,   -61,   -44,   -44,   -44,   -44,
-     -61,   -40,   -40,   -61,   -44,   -44,   536,   -61,   560,   669,
-     616,   -61,   616,   -61,   723,   560,   324,   355,    45,    90,
-     -61,    41,    -8,    94,   616,    53,   616,     0,   377,   560,
-     408,    55,   616,   -61,   693,   -61,   560,   430,    43,   717,
-     -61,   616,    47,   461,   616,   -61,   483,   -61
+    1234,   -37,     8,   -87,   -87,   -87,    21,   -87,   -87,   -87,
+     -87,   -87,   -87,   -87,   -87,   -87,    39,  1234,   -87,   -87,
+     -87,   -87,   -87,     0,   -87,   -87,   -87,   -87,   -24,    43,
+      44,   -43,   -10,    22,   -87,   -87,    36,     7,    62,    88,
+     -87,  1234,  1234,   -87,  1247,   -87,   -87,    24,   271,  1234,
+       4,   -35,    66,   -87,   -87,    25,  1247,    13,   -87,    31,
+    1179,     5,   -87,   -87,  1247,   -87,   -87,    27,    40,    47,
+     864,    49,  1199,  1199,  1199,   -87,   -87,   -87,   -87,   -87,
+     -87,   -87,   -87,   -87,  1113,    42,   -25,    48,    51,   -87,
+     -87,   351,     6,    -2,   -87,    54,   -87,  1247,   -87,    55,
+       6,  1179,  1199,  1199,   -87,   878,   -87,    57,   -87,   -87,
+    1199,  1113,  1113,   909,  1199,  1199,  1199,  1199,  1199,  1199,
+     -87,   -87,  1199,  1199,  1199,  1199,  1199,  1199,  1199,   -87,
+     -87,  1199,   -87,  1199,   -87,   -87,   -87,   -87,  1199,   -87,
+     -87,   -87,   -87,   399,    60,  1113,   939,   -87,   968,   -87,
+    1113,  1113,    23,    23,    23,    23,  1113,    11,   142,   142,
+      11,    23,    23,  1113,  1113,  1113,   -33,    76,  1199,   783,
+     831,   -87,  1199,    52,   997,  1179,   -87,  1179,   -87,  1113,
+    1199,  1199,   447,   495,  1026,    59,   101,   -87,    61,    56,
+      -4,   114,   -87,  1179,    72,  1179,    12,   543,  1199,   591,
+      78,  1179,   -87,  1055,   -87,  1199,   639,    67,  1084,   -87,
+    1179,    74,   687,  1179,   -87,   735,   -87
   };
 
   const signed char
   DefaultParser::yydefact_[] =
   {
-       3,    83,     0,    86,    87,    88,     0,    72,    73,    74,
-      75,    76,    80,    71,    77,    78,     0,     2,     4,     6,
-       7,     9,     8,     0,    68,    69,    79,    81,    82,     0,
-       0,    83,     0,     0,     1,     5,     0,     0,     0,     0,
-      84,     3,     3,    12,    89,    70,    85,     0,     0,    11,
-       0,     0,     0,    10,    90,     0,     0,     0,    15,     0,
-      65,     0,    14,    16,    18,     0,     0,    34,     0,    66,
-       0,    24,    26,    25,    27,    28,    29,    30,    31,    32,
-       0,     0,     0,    59,    91,    17,    19,     0,     0,    46,
-       0,    61,    60,     0,    33,    51,    50,    53,    47,    49,
-      48,    52,     0,    23,     0,     0,    13,    67,    56,    59,
-      62,    20,    21,    22,     0,    45,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,     0,    57,
-      58,    63,     0,     0,     0,    54,    93,    95,    96,    97,
-     101,    98,    99,   100,    92,    94,     0,    55,     0,     0,
-      65,    39,    65,    44,    64,    46,     0,     0,     0,    35,
-      43,     0,     0,    37,    65,     0,    65,     0,     0,     0,
-       0,     0,    65,    42,     0,    36,     0,     0,     0,     0,
-      38,    65,     0,     0,    65,    40,     0,    41
+       3,    87,     0,    90,    91,    92,     0,    76,    77,    78,
+      79,    80,    84,    75,    81,    82,     0,     2,     4,     6,
+       7,     9,     8,     0,    72,    73,    83,    85,    86,     0,
+       0,    87,     0,     0,     1,     5,     0,     0,     0,     0,
+      88,     3,     3,    12,    93,    74,    89,     0,     0,    11,
+       0,     0,     0,    10,    94,     0,     0,     0,    15,     0,
+      69,     0,    14,    16,    18,    65,    64,     0,     0,     0,
+       0,     0,     0,     0,     0,    70,    23,    24,    26,    25,
+      27,    28,    29,    30,     0,    54,    53,    56,    50,    52,
+      51,     0,     0,    63,    55,    57,    95,    17,    19,     0,
+       0,    69,    49,     0,    36,     0,    54,    53,    56,    57,
+       0,   109,   110,     0,     0,     0,     0,     0,     0,     0,
+     111,   112,     0,     0,     0,     0,     0,     0,     0,    31,
+      32,     0,    33,     0,    13,    71,    60,    63,    66,    34,
+      20,    21,    22,     0,     0,    48,     0,    35,     0,    58,
+     107,   108,    97,    99,   100,   101,   106,   105,   102,   103,
+     104,    96,    98,    61,    62,    67,     0,     0,     0,     0,
+       0,    59,     0,     0,     0,    69,    41,    69,    46,    68,
+       0,    49,     0,     0,     0,     0,    37,    45,     0,     0,
+       0,    39,    47,    69,     0,    69,     0,     0,     0,     0,
+       0,    69,    44,     0,    38,     0,     0,     0,     0,    40,
+      69,     0,     0,    69,    42,     0,    43
   };
 
   const short
   DefaultParser::yypgoto_[] =
   {
-     -61,   -61,   -16,   -13,   -61,   -61,   -61,   -61,   -61,    61,
-     -61,    30,   -61,    51,   -61,   -61,   -61,   -61,   -61,   -61,
-     -61,   -61,   -33,   145,   -21,    18,    59,   -60,   -61,   -61,
-     -61,   424,    13,   -61,   -61,     3,   -61,   -61,   -28,   -61,
-     -61
+     -87,   -87,    -7,    -1,   -87,   -87,   -87,   -87,   -87,    92,
+     -87,    64,   -87,   146,   -87,   -87,   -87,   -87,   -87,   -87,
+     -87,   -87,   -87,   -36,   155,   -60,   -39,    20,   -86,   -87,
+     -87,   -87,   149,    15,   -87,   -87,     2,   -87,   -87,   -34,
+     -87,   -87,    41
   };
 
   const unsigned char
   DefaultParser::yydefgoto_[] =
   {
        0,    16,    17,    18,    19,    20,    21,    22,    57,    58,
-      85,    86,    87,    69,    70,    71,    72,    73,    74,   163,
-      75,    76,   114,   115,    95,    96,    97,    98,    99,   100,
-     132,    81,    82,    24,    25,    83,    27,    28,    29,    51,
-     101
+      97,    98,    99,    75,    76,    77,    78,    79,    80,   191,
+      81,    82,    83,   144,    84,   106,   107,   108,    88,    89,
+      90,   166,    91,    92,    24,    25,    93,    27,    28,    29,
+      51,    94,   109
   };
 
   const short
   DefaultParser::yytable_[] =
   {
-      80,    36,    30,    26,    35,    32,    54,   -79,   165,    33,
-      84,     1,    30,    23,   122,   123,   171,   124,   122,   125,
-      26,    80,   108,   125,    59,    48,    49,    31,   113,    59,
-      23,     3,     4,     5,    55,    35,    35,    56,     1,    77,
-     147,    41,    34,   148,    26,    26,    39,    26,     3,     4,
-       5,    26,    26,    38,    23,    23,    42,    50,   110,    26,
-      77,    23,    23,    40,    43,   166,    37,    26,    44,    61,
-      46,    37,   -79,   172,    80,    37,    37,    88,    78,    47,
-      52,    45,    89,    62,    60,   109,    80,    64,    26,   103,
-      80,   109,    80,    90,   102,   104,    80,    80,    88,    78,
-     112,   105,   161,   162,    80,   133,    80,   167,    80,   169,
-      80,   176,    80,    77,   164,   111,   181,    80,    63,    79,
-     184,    80,   158,    80,    80,    77,    80,     0,     0,    77,
-       0,    77,   107,     0,     0,    77,    77,     0,     0,     0,
-      79,     0,     0,    77,     0,    77,     0,    77,     0,    77,
-       0,    77,    78,     0,     0,     0,    77,     0,     0,     0,
-      77,     0,    77,    77,    78,    77,     0,     0,    78,     0,
-      78,     0,     0,     0,    78,    78,     0,     0,     0,     0,
-       0,     0,    78,     0,    78,   151,    78,     0,    78,     0,
-      78,     0,     0,    79,     0,    78,     0,   153,     0,    78,
-       0,    78,    78,     0,    78,    79,     0,   107,   107,    79,
-       0,    79,    94,     0,     0,    79,    79,     0,     0,   107,
-       0,   107,     0,    79,     0,    79,     0,    79,   107,    79,
-       0,    79,     0,     0,   107,   116,    79,   107,   117,     0,
-      79,     0,    79,    79,     0,    79,     0,   128,     0,   129,
-     130,     0,     0,     0,     0,   131,     0,     0,     0,     0,
-       0,     1,     0,   136,   137,   138,   139,   140,   141,   142,
-     143,   144,   145,     0,     1,     2,     0,     0,   149,     3,
-       4,     5,     0,     0,     0,     6,     0,     7,     8,     9,
-      10,    11,     0,   154,     0,    12,     0,    13,    14,    15,
-       7,     8,     9,    10,    11,     0,     0,     1,    12,     0,
-      13,    14,    15,     0,   174,     0,     0,    65,    66,     0,
-       0,   179,     0,     0,     0,     0,     0,     0,    67,     1,
-       0,    53,    68,     7,     8,     9,    10,    11,     0,    65,
-      66,    12,     0,    13,    14,    15,     0,     0,     0,     0,
-      67,     0,     0,     0,    68,     7,     8,     9,    10,    11,
-       1,     0,     0,    12,     0,    13,    14,    15,     0,     0,
-      65,    66,     0,     0,     0,     0,     0,   106,     0,     0,
-       0,    67,     1,     0,     0,    68,     7,     8,     9,    10,
-      11,     0,    65,    66,    12,     0,    13,    14,    15,   159,
-       0,     0,     0,    67,     0,     0,     0,    68,     7,     8,
-       9,    10,    11,     1,     0,     0,    12,     0,    13,    14,
-      15,     0,     0,    65,    66,     0,     0,     0,     0,     0,
-     160,     0,     0,     0,    67,     1,     0,     0,    68,     7,
-       8,     9,    10,    11,     0,    65,    66,    12,     0,    13,
-      14,    15,   173,     0,     0,     0,    67,     0,     0,     0,
-      68,     7,     8,     9,    10,    11,     1,     0,     0,    12,
-       0,    13,    14,    15,     0,     0,    65,    66,     0,     0,
-       0,     0,     0,   175,     0,     0,     0,    67,     1,     0,
-       0,    68,     7,     8,     9,    10,    11,     0,    65,    66,
-      12,     0,    13,    14,    15,   180,     0,     0,     0,    67,
-       0,     0,     0,    68,     7,     8,     9,    10,    11,     1,
-       0,     0,    12,     0,    13,    14,    15,     0,     0,    65,
-      66,     0,     0,     0,     0,     0,   185,     0,     0,     0,
-      67,     1,     0,     0,    68,     7,     8,     9,    10,    11,
-       0,    65,    66,    12,     0,    13,    14,    15,   187,     0,
-       0,     0,    67,    91,    92,     1,    68,     7,     8,     9,
-      10,    11,     0,     0,   156,    12,   157,    13,    14,    15,
-       0,     0,     0,     0,     0,     0,     0,   150,   168,     0,
-     170,     7,     8,     9,    10,    11,   177,     0,     0,    12,
-       1,    13,    14,    15,     0,   183,     0,     0,   186,   152,
-       0,     0,     0,     0,     2,     0,    93,     0,     3,     4,
-       5,     1,     0,     0,     6,     0,     7,     8,     9,    10,
-      11,    65,    66,     0,    12,     0,    13,    14,    15,     0,
-       0,     0,    67,     0,     0,     0,    68,     7,     8,     9,
-      10,    11,     0,     0,     0,    12,     0,    13,    14,    15,
-     118,   119,   120,   121,     0,     0,     0,     0,     0,     0,
-       0,     0,   134,   122,   123,     0,   124,     0,   125,     0,
-       0,   126,     0,   127,   118,   119,   120,   121,     0,     0,
-       0,     0,     0,     0,     0,     0,   135,   122,   123,     0,
-     124,     0,   125,     0,     0,   126,     0,   127,   118,   119,
-     120,   121,     0,     0,   118,   119,   120,   121,     0,     0,
-     146,   122,   123,     0,   124,     0,   125,   122,   123,   126,
-     124,   127,   125,     0,   155,   126,     0,   127,   118,   119,
-     120,   121,     0,     0,     0,     0,     0,     0,     0,     0,
-     178,   122,   123,     0,   124,     0,   125,     0,     0,   126,
-       0,   127,   118,   119,   120,   121,     0,     0,   118,   119,
-     120,   121,     0,     0,   182,   122,   123,     0,   124,     0,
-     125,   122,   123,   126,   124,   127,   125,     0,     0,   126,
-       0,   127
+      85,    30,    26,   -83,    32,    36,   136,    30,    33,    54,
+      96,     1,   194,    31,   142,    23,    35,   114,    59,    26,
+      38,    86,    55,    59,   171,    56,     1,   172,   200,   114,
+      41,    85,    23,   115,    48,    49,     3,     4,     5,    34,
+     130,    85,   131,    26,    26,   115,    26,    35,    35,    40,
+      26,    26,    86,    39,   138,    42,    23,    23,    26,    50,
+     120,   121,    86,    23,    23,   122,    26,    46,   -83,   195,
+      37,    61,   120,   121,    37,    37,    37,   122,    45,   100,
+      87,   123,   124,    85,   125,   201,   126,    43,    62,     3,
+       4,     5,    44,    47,   137,    64,   102,    52,    60,    26,
+     101,    95,   137,   103,    86,   110,   173,   129,   180,    85,
+      85,    87,   100,   132,   190,    85,   189,    85,   133,   139,
+     141,    87,    85,    85,   131,   168,   192,   196,   198,   193,
+      86,    86,    95,    85,   205,    85,    86,    85,    86,    85,
+     210,    85,    95,    86,    86,   185,    85,   213,   114,    63,
+      85,     0,    85,    85,    86,    85,    86,     0,    86,     0,
+      86,   140,    86,    87,   115,     0,     0,    86,     0,     0,
+       0,    86,     0,    86,    86,     0,    86,     0,     0,     0,
+       0,     0,     0,     0,    95,     0,     0,     0,     0,    87,
+      87,   120,   121,     0,     0,    87,   122,    87,     0,     0,
+     123,     0,    87,    87,     0,   126,     0,     0,     0,     0,
+      95,    95,     0,    87,     0,    87,    95,    87,    95,    87,
+       0,    87,     0,    95,    95,   105,    87,   111,   112,   113,
+      87,     0,    87,    87,    95,    87,    95,   135,    95,     0,
+      95,     0,    95,     0,     0,     0,     0,    95,     0,     0,
+     143,    95,     0,    95,    95,     0,    95,   145,   146,     0,
+       0,     0,     0,     0,     0,   148,     0,     0,     0,   150,
+     151,   152,   153,   154,   155,     0,     1,   156,   157,   158,
+     159,   160,   161,   162,     0,     0,   163,     0,   164,   135,
+       2,     0,     0,   165,     3,     4,     5,     0,     0,     0,
+       6,     0,     7,     8,     9,    10,    11,     0,     0,     0,
+      12,     0,    13,    14,    15,   176,   178,     0,     0,     0,
+       0,     0,     0,   174,   182,     0,   183,   179,   135,   135,
+       0,     0,     0,     0,     0,   184,   145,     0,     0,     0,
+       0,     0,   197,   135,   199,   135,    53,     0,     0,     0,
+     206,     0,   135,   203,    65,    66,     1,     0,   135,   212,
+     208,   135,   215,    67,     0,     0,    68,    69,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,    70,     0,     0,
+       0,    71,     7,     8,     9,    10,    11,     0,     0,     0,
+      12,     0,    13,    14,    15,     0,     0,     0,     0,     0,
+      72,    73,    65,    66,     1,     0,     0,    74,     0,     0,
+       0,    67,     0,     0,    68,    69,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,    70,   134,     0,     0,    71,
+       7,     8,     9,    10,    11,     0,     0,     0,    12,     0,
+      13,    14,    15,     0,     0,     0,     0,     0,    72,    73,
+      65,    66,     1,     0,     0,    74,     0,     0,     0,    67,
+       0,     0,    68,    69,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,    70,   167,     0,     0,    71,     7,     8,
+       9,    10,    11,     0,     0,     0,    12,     0,    13,    14,
+      15,     0,     0,     0,     0,     0,    72,    73,    65,    66,
+       1,     0,     0,    74,     0,     0,     0,    67,     0,     0,
+      68,    69,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,    70,   186,     0,     0,    71,     7,     8,     9,    10,
+      11,     0,     0,     0,    12,     0,    13,    14,    15,     0,
+       0,     0,     0,     0,    72,    73,    65,    66,     1,     0,
+       0,    74,     0,     0,     0,    67,     0,     0,    68,    69,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,    70,
+     187,     0,     0,    71,     7,     8,     9,    10,    11,     0,
+       0,     0,    12,     0,    13,    14,    15,     0,     0,     0,
+       0,     0,    72,    73,    65,    66,     1,     0,     0,    74,
+       0,     0,     0,    67,     0,     0,    68,    69,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,    70,   202,     0,
+       0,    71,     7,     8,     9,    10,    11,     0,     0,     0,
+      12,     0,    13,    14,    15,     0,     0,     0,     0,     0,
+      72,    73,    65,    66,     1,     0,     0,    74,     0,     0,
+       0,    67,     0,     0,    68,    69,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,    70,   204,     0,     0,    71,
+       7,     8,     9,    10,    11,     0,     0,     0,    12,     0,
+      13,    14,    15,     0,     0,     0,     0,     0,    72,    73,
+      65,    66,     1,     0,     0,    74,     0,     0,     0,    67,
+       0,     0,    68,    69,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,    70,   209,     0,     0,    71,     7,     8,
+       9,    10,    11,     0,     0,     0,    12,     0,    13,    14,
+      15,     0,     0,     0,     0,     0,    72,    73,    65,    66,
+       1,     0,     0,    74,     0,     0,     0,    67,     0,     0,
+      68,    69,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,    70,   214,     0,     0,    71,     7,     8,     9,    10,
+      11,     0,     0,     0,    12,     0,    13,    14,    15,     0,
+       0,     0,     0,     0,    72,    73,    65,    66,     1,     0,
+       0,    74,     0,     0,     0,    67,     0,     0,    68,    69,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,    70,
+     216,     0,     0,    71,     7,     8,     9,    10,    11,     0,
+       0,     0,    12,     0,    13,    14,    15,     0,     0,     0,
+       0,     0,    72,    73,    65,    66,     1,     0,     0,    74,
+       0,     0,     0,    67,     0,     0,    68,    69,     0,     0,
+       0,     0,     0,     0,     0,     0,   175,    70,     0,     0,
+       0,    71,     7,     8,     9,    10,    11,    65,    66,     1,
+      12,     0,    13,    14,    15,     0,     0,     0,     0,     0,
+      72,    73,     0,     0,   114,     0,     0,    74,     0,     0,
+       0,     0,     0,     0,     0,     7,     8,     9,    10,    11,
+     115,     0,     0,    12,   177,    13,    14,    15,     0,     0,
+       0,     0,     0,    72,    73,   114,     0,     0,     0,     0,
+      74,     0,     0,   116,   117,   118,   119,   120,   121,   104,
+       0,   115,   122,     0,     0,     0,   123,   124,     0,   125,
+       0,   126,     0,   147,   127,   114,   128,     0,     0,     0,
+       0,     0,     0,     0,   116,   117,   118,   119,   120,   121,
+       0,   115,     0,   122,     0,     0,   149,   123,   124,     0,
+     125,     0,   126,     0,   114,   127,     0,   128,     0,     0,
+       0,     0,     0,     0,   116,   117,   118,   119,   120,   121,
+     115,     0,     0,   122,     0,     0,   169,   123,   124,     0,
+     125,     0,   126,   114,     0,   127,     0,   128,     0,     0,
+       0,     0,     0,   116,   117,   118,   119,   120,   121,   115,
+       0,     0,   122,     0,     0,   170,   123,   124,     0,   125,
+       0,   126,   114,     0,   127,     0,   128,     0,     0,     0,
+       0,     0,   116,   117,   118,   119,   120,   121,   115,     0,
+       0,   122,     0,     0,     0,   123,   124,     0,   125,     0,
+     126,   114,   181,   127,     0,   128,     0,     0,     0,     0,
+       0,   116,   117,   118,   119,   120,   121,   115,     0,     0,
+     122,     0,     0,   188,   123,   124,     0,   125,     0,   126,
+     114,     0,   127,     0,   128,     0,     0,     0,     0,     0,
+     116,   117,   118,   119,   120,   121,   115,     0,     0,   122,
+       0,     0,   207,   123,   124,     0,   125,     0,   126,   114,
+       0,   127,     0,   128,     0,     0,     0,     0,     0,   116,
+     117,   118,   119,   120,   121,   115,     0,     0,   122,     0,
+       0,   211,   123,   124,     0,   125,     0,   126,     0,     0,
+     127,     0,   128,     0,     0,     0,     0,     0,   116,   117,
+     118,   119,   120,   121,     0,     0,     0,   122,     0,     0,
+       0,   123,   124,     0,   125,     0,   126,     0,     0,   127,
+       0,   128,    65,    66,     1,     0,     0,     0,     0,     0,
+       0,    67,     0,     0,    68,    69,     0,     0,     0,     0,
+       0,     0,    65,    66,     1,    70,     0,     0,     0,    71,
+       7,     8,     9,    10,    11,     0,     0,     0,    12,     0,
+      13,    14,    15,     0,     0,     0,     0,     0,    72,    73,
+       7,     8,     9,    10,    11,    74,     0,     0,    12,     1,
+      13,    14,    15,     0,     0,     0,     0,     0,    72,    73,
+       0,     0,     1,     2,     0,    74,     0,     3,     4,     5,
+       0,     0,     0,     6,     0,     7,     8,     9,    10,    11,
+       0,     0,     0,    12,     0,    13,    14,    15,     7,     8,
+       9,    10,    11,     0,     0,     0,    12,     0,    13,    14,
+      15
   };
 
   const short
   DefaultParser::yycheck_[] =
   {
-      60,     5,    44,     0,    17,     2,     5,     5,    16,     6,
-       5,     5,    44,     0,    58,    59,    16,    61,    58,    63,
-      17,    81,    82,    63,    52,    41,    42,     5,    88,    57,
-      17,    23,    24,    25,    57,    48,    49,    60,     5,    60,
-      57,    73,     0,    60,    41,    42,    10,    44,    23,    24,
-      25,    48,    49,    44,    41,    42,    65,    44,    56,    56,
-      81,    48,    49,     5,    65,    73,    70,    64,    56,    56,
-       5,    70,    70,    73,   134,    70,    70,    64,    60,     5,
-      73,    71,    56,    75,    73,    82,   146,    64,    85,    65,
-     150,    88,   152,    56,    56,    67,   156,   157,    85,    81,
-      65,    67,    57,    13,   164,    65,   166,    13,   168,    56,
-     170,    56,   172,   134,    73,    85,    73,   177,    57,    60,
-      73,   181,   155,   183,   184,   146,   186,    -1,    -1,   150,
-      -1,   152,    81,    -1,    -1,   156,   157,    -1,    -1,    -1,
-      81,    -1,    -1,   164,    -1,   166,    -1,   168,    -1,   170,
-      -1,   172,   134,    -1,    -1,    -1,   177,    -1,    -1,    -1,
-     181,    -1,   183,   184,   146,   186,    -1,    -1,   150,    -1,
-     152,    -1,    -1,    -1,   156,   157,    -1,    -1,    -1,    -1,
-      -1,    -1,   164,    -1,   166,   134,   168,    -1,   170,    -1,
-     172,    -1,    -1,   134,    -1,   177,    -1,   146,    -1,   181,
-      -1,   183,   184,    -1,   186,   146,    -1,   156,   157,   150,
-      -1,   152,    67,    -1,    -1,   156,   157,    -1,    -1,   168,
-      -1,   170,    -1,   164,    -1,   166,    -1,   168,   177,   170,
-      -1,   172,    -1,    -1,   183,    90,   177,   186,    93,    -1,
-     181,    -1,   183,   184,    -1,   186,    -1,   102,    -1,   104,
-     105,    -1,    -1,    -1,    -1,   110,    -1,    -1,    -1,    -1,
-      -1,     5,    -1,   118,   119,   120,   121,   122,   123,   124,
-     125,   126,   127,    -1,     5,    19,    -1,    -1,   133,    23,
-      24,    25,    -1,    -1,    -1,    29,    -1,    31,    32,    33,
-      34,    35,    -1,   148,    -1,    39,    -1,    41,    42,    43,
-      31,    32,    33,    34,    35,    -1,    -1,     5,    39,    -1,
-      41,    42,    43,    -1,   169,    -1,    -1,    15,    16,    -1,
-      -1,   176,    -1,    -1,    -1,    -1,    -1,    -1,    26,     5,
-      -1,    75,    30,    31,    32,    33,    34,    35,    -1,    15,
-      16,    39,    -1,    41,    42,    43,    -1,    -1,    -1,    -1,
-      26,    -1,    -1,    -1,    30,    31,    32,    33,    34,    35,
-       5,    -1,    -1,    39,    -1,    41,    42,    43,    -1,    -1,
-      15,    16,    -1,    -1,    -1,    -1,    -1,    75,    -1,    -1,
-      -1,    26,     5,    -1,    -1,    30,    31,    32,    33,    34,
-      35,    -1,    15,    16,    39,    -1,    41,    42,    43,    75,
-      -1,    -1,    -1,    26,    -1,    -1,    -1,    30,    31,    32,
-      33,    34,    35,     5,    -1,    -1,    39,    -1,    41,    42,
-      43,    -1,    -1,    15,    16,    -1,    -1,    -1,    -1,    -1,
-      75,    -1,    -1,    -1,    26,     5,    -1,    -1,    30,    31,
-      32,    33,    34,    35,    -1,    15,    16,    39,    -1,    41,
-      42,    43,    75,    -1,    -1,    -1,    26,    -1,    -1,    -1,
-      30,    31,    32,    33,    34,    35,     5,    -1,    -1,    39,
-      -1,    41,    42,    43,    -1,    -1,    15,    16,    -1,    -1,
-      -1,    -1,    -1,    75,    -1,    -1,    -1,    26,     5,    -1,
-      -1,    30,    31,    32,    33,    34,    35,    -1,    15,    16,
-      39,    -1,    41,    42,    43,    75,    -1,    -1,    -1,    26,
-      -1,    -1,    -1,    30,    31,    32,    33,    34,    35,     5,
-      -1,    -1,    39,    -1,    41,    42,    43,    -1,    -1,    15,
-      16,    -1,    -1,    -1,    -1,    -1,    75,    -1,    -1,    -1,
-      26,     5,    -1,    -1,    30,    31,    32,    33,    34,    35,
-      -1,    15,    16,    39,    -1,    41,    42,    43,    75,    -1,
-      -1,    -1,    26,     3,     4,     5,    30,    31,    32,    33,
-      34,    35,    -1,    -1,   150,    39,   152,    41,    42,    43,
-      -1,    -1,    -1,    -1,    -1,    -1,    -1,    73,   164,    -1,
-     166,    31,    32,    33,    34,    35,   172,    -1,    -1,    39,
-       5,    41,    42,    43,    -1,   181,    -1,    -1,   184,    73,
-      -1,    -1,    -1,    -1,    19,    -1,    56,    -1,    23,    24,
-      25,     5,    -1,    -1,    29,    -1,    31,    32,    33,    34,
-      35,    15,    16,    -1,    39,    -1,    41,    42,    43,    -1,
-      -1,    -1,    26,    -1,    -1,    -1,    30,    31,    32,    33,
-      34,    35,    -1,    -1,    -1,    39,    -1,    41,    42,    43,
-      45,    46,    47,    48,    -1,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,    57,    58,    59,    -1,    61,    -1,    63,    -1,
-      -1,    66,    -1,    68,    45,    46,    47,    48,    -1,    -1,
-      -1,    -1,    -1,    -1,    -1,    -1,    57,    58,    59,    -1,
-      61,    -1,    63,    -1,    -1,    66,    -1,    68,    45,    46,
-      47,    48,    -1,    -1,    45,    46,    47,    48,    -1,    -1,
-      57,    58,    59,    -1,    61,    -1,    63,    58,    59,    66,
-      61,    68,    63,    -1,    65,    66,    -1,    68,    45,    46,
-      47,    48,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      57,    58,    59,    -1,    61,    -1,    63,    -1,    -1,    66,
-      -1,    68,    45,    46,    47,    48,    -1,    -1,    45,    46,
-      47,    48,    -1,    -1,    57,    58,    59,    -1,    61,    -1,
-      63,    58,    59,    66,    61,    68,    63,    -1,    -1,    66,
-      -1,    68
+      60,    44,     0,     5,     2,     5,    92,    44,     6,     5,
+       5,     5,    16,     5,   100,     0,    17,     6,    52,    17,
+      44,    60,    57,    57,    57,    60,     5,    60,    16,     6,
+      73,    91,    17,    22,    41,    42,    23,    24,    25,     0,
+      65,   101,    67,    41,    42,    22,    44,    48,    49,     5,
+      48,    49,    91,    10,    56,    65,    41,    42,    56,    44,
+      49,    50,   101,    48,    49,    54,    64,     5,    70,    73,
+      70,    56,    49,    50,    70,    70,    70,    54,    71,    64,
+      60,    58,    59,   143,    61,    73,    63,    65,    75,    23,
+      24,    25,    56,     5,    92,    64,    56,    73,    73,    97,
+      73,    60,   100,    56,   143,    56,    30,    65,    56,   169,
+     170,    91,    97,    65,    13,   175,    57,   177,    67,    65,
+      65,   101,   182,   183,    67,    65,    65,    13,    56,    73,
+     169,   170,    91,   193,    56,   195,   175,   197,   177,   199,
+      73,   201,   101,   182,   183,   181,   206,    73,     6,    57,
+     210,    -1,   212,   213,   193,   215,   195,    -1,   197,    -1,
+     199,    97,   201,   143,    22,    -1,    -1,   206,    -1,    -1,
+      -1,   210,    -1,   212,   213,    -1,   215,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,   143,    -1,    -1,    -1,    -1,   169,
+     170,    49,    50,    -1,    -1,   175,    54,   177,    -1,    -1,
+      58,    -1,   182,   183,    -1,    63,    -1,    -1,    -1,    -1,
+     169,   170,    -1,   193,    -1,   195,   175,   197,   177,   199,
+      -1,   201,    -1,   182,   183,    70,   206,    72,    73,    74,
+     210,    -1,   212,   213,   193,   215,   195,    91,   197,    -1,
+     199,    -1,   201,    -1,    -1,    -1,    -1,   206,    -1,    -1,
+     101,   210,    -1,   212,   213,    -1,   215,   102,   103,    -1,
+      -1,    -1,    -1,    -1,    -1,   110,    -1,    -1,    -1,   114,
+     115,   116,   117,   118,   119,    -1,     5,   122,   123,   124,
+     125,   126,   127,   128,    -1,    -1,   131,    -1,   133,   143,
+      19,    -1,    -1,   138,    23,    24,    25,    -1,    -1,    -1,
+      29,    -1,    31,    32,    33,    34,    35,    -1,    -1,    -1,
+      39,    -1,    41,    42,    43,   169,   170,    -1,    -1,    -1,
+      -1,    -1,    -1,   168,   175,    -1,   177,   172,   182,   183,
+      -1,    -1,    -1,    -1,    -1,   180,   181,    -1,    -1,    -1,
+      -1,    -1,   193,   197,   195,   199,    75,    -1,    -1,    -1,
+     201,    -1,   206,   198,     3,     4,     5,    -1,   212,   210,
+     205,   215,   213,    12,    -1,    -1,    15,    16,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    26,    -1,    -1,
+      -1,    30,    31,    32,    33,    34,    35,    -1,    -1,    -1,
+      39,    -1,    41,    42,    43,    -1,    -1,    -1,    -1,    -1,
+      49,    50,     3,     4,     5,    -1,    -1,    56,    -1,    -1,
+      -1,    12,    -1,    -1,    15,    16,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    26,    75,    -1,    -1,    30,
+      31,    32,    33,    34,    35,    -1,    -1,    -1,    39,    -1,
+      41,    42,    43,    -1,    -1,    -1,    -1,    -1,    49,    50,
+       3,     4,     5,    -1,    -1,    56,    -1,    -1,    -1,    12,
+      -1,    -1,    15,    16,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    26,    75,    -1,    -1,    30,    31,    32,
+      33,    34,    35,    -1,    -1,    -1,    39,    -1,    41,    42,
+      43,    -1,    -1,    -1,    -1,    -1,    49,    50,     3,     4,
+       5,    -1,    -1,    56,    -1,    -1,    -1,    12,    -1,    -1,
+      15,    16,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    26,    75,    -1,    -1,    30,    31,    32,    33,    34,
+      35,    -1,    -1,    -1,    39,    -1,    41,    42,    43,    -1,
+      -1,    -1,    -1,    -1,    49,    50,     3,     4,     5,    -1,
+      -1,    56,    -1,    -1,    -1,    12,    -1,    -1,    15,    16,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    26,
+      75,    -1,    -1,    30,    31,    32,    33,    34,    35,    -1,
+      -1,    -1,    39,    -1,    41,    42,    43,    -1,    -1,    -1,
+      -1,    -1,    49,    50,     3,     4,     5,    -1,    -1,    56,
+      -1,    -1,    -1,    12,    -1,    -1,    15,    16,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    26,    75,    -1,
+      -1,    30,    31,    32,    33,    34,    35,    -1,    -1,    -1,
+      39,    -1,    41,    42,    43,    -1,    -1,    -1,    -1,    -1,
+      49,    50,     3,     4,     5,    -1,    -1,    56,    -1,    -1,
+      -1,    12,    -1,    -1,    15,    16,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    26,    75,    -1,    -1,    30,
+      31,    32,    33,    34,    35,    -1,    -1,    -1,    39,    -1,
+      41,    42,    43,    -1,    -1,    -1,    -1,    -1,    49,    50,
+       3,     4,     5,    -1,    -1,    56,    -1,    -1,    -1,    12,
+      -1,    -1,    15,    16,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    26,    75,    -1,    -1,    30,    31,    32,
+      33,    34,    35,    -1,    -1,    -1,    39,    -1,    41,    42,
+      43,    -1,    -1,    -1,    -1,    -1,    49,    50,     3,     4,
+       5,    -1,    -1,    56,    -1,    -1,    -1,    12,    -1,    -1,
+      15,    16,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    26,    75,    -1,    -1,    30,    31,    32,    33,    34,
+      35,    -1,    -1,    -1,    39,    -1,    41,    42,    43,    -1,
+      -1,    -1,    -1,    -1,    49,    50,     3,     4,     5,    -1,
+      -1,    56,    -1,    -1,    -1,    12,    -1,    -1,    15,    16,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    26,
+      75,    -1,    -1,    30,    31,    32,    33,    34,    35,    -1,
+      -1,    -1,    39,    -1,    41,    42,    43,    -1,    -1,    -1,
+      -1,    -1,    49,    50,     3,     4,     5,    -1,    -1,    56,
+      -1,    -1,    -1,    12,    -1,    -1,    15,    16,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    73,    26,    -1,    -1,
+      -1,    30,    31,    32,    33,    34,    35,     3,     4,     5,
+      39,    -1,    41,    42,    43,    -1,    -1,    -1,    -1,    -1,
+      49,    50,    -1,    -1,     6,    -1,    -1,    56,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    31,    32,    33,    34,    35,
+      22,    -1,    -1,    39,    73,    41,    42,    43,    -1,    -1,
+      -1,    -1,    -1,    49,    50,     6,    -1,    -1,    -1,    -1,
+      56,    -1,    -1,    45,    46,    47,    48,    49,    50,    65,
+      -1,    22,    54,    -1,    -1,    -1,    58,    59,    -1,    61,
+      -1,    63,    -1,    65,    66,     6,    68,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    45,    46,    47,    48,    49,    50,
+      -1,    22,    -1,    54,    -1,    -1,    57,    58,    59,    -1,
+      61,    -1,    63,    -1,     6,    66,    -1,    68,    -1,    -1,
+      -1,    -1,    -1,    -1,    45,    46,    47,    48,    49,    50,
+      22,    -1,    -1,    54,    -1,    -1,    57,    58,    59,    -1,
+      61,    -1,    63,     6,    -1,    66,    -1,    68,    -1,    -1,
+      -1,    -1,    -1,    45,    46,    47,    48,    49,    50,    22,
+      -1,    -1,    54,    -1,    -1,    57,    58,    59,    -1,    61,
+      -1,    63,     6,    -1,    66,    -1,    68,    -1,    -1,    -1,
+      -1,    -1,    45,    46,    47,    48,    49,    50,    22,    -1,
+      -1,    54,    -1,    -1,    -1,    58,    59,    -1,    61,    -1,
+      63,     6,    65,    66,    -1,    68,    -1,    -1,    -1,    -1,
+      -1,    45,    46,    47,    48,    49,    50,    22,    -1,    -1,
+      54,    -1,    -1,    57,    58,    59,    -1,    61,    -1,    63,
+       6,    -1,    66,    -1,    68,    -1,    -1,    -1,    -1,    -1,
+      45,    46,    47,    48,    49,    50,    22,    -1,    -1,    54,
+      -1,    -1,    57,    58,    59,    -1,    61,    -1,    63,     6,
+      -1,    66,    -1,    68,    -1,    -1,    -1,    -1,    -1,    45,
+      46,    47,    48,    49,    50,    22,    -1,    -1,    54,    -1,
+      -1,    57,    58,    59,    -1,    61,    -1,    63,    -1,    -1,
+      66,    -1,    68,    -1,    -1,    -1,    -1,    -1,    45,    46,
+      47,    48,    49,    50,    -1,    -1,    -1,    54,    -1,    -1,
+      -1,    58,    59,    -1,    61,    -1,    63,    -1,    -1,    66,
+      -1,    68,     3,     4,     5,    -1,    -1,    -1,    -1,    -1,
+      -1,    12,    -1,    -1,    15,    16,    -1,    -1,    -1,    -1,
+      -1,    -1,     3,     4,     5,    26,    -1,    -1,    -1,    30,
+      31,    32,    33,    34,    35,    -1,    -1,    -1,    39,    -1,
+      41,    42,    43,    -1,    -1,    -1,    -1,    -1,    49,    50,
+      31,    32,    33,    34,    35,    56,    -1,    -1,    39,     5,
+      41,    42,    43,    -1,    -1,    -1,    -1,    -1,    49,    50,
+      -1,    -1,     5,    19,    -1,    56,    -1,    23,    24,    25,
+      -1,    -1,    -1,    29,    -1,    31,    32,    33,    34,    35,
+      -1,    -1,    -1,    39,    -1,    41,    42,    43,    31,    32,
+      33,    34,    35,    -1,    -1,    -1,    39,    -1,    41,    42,
+      43
   };
 
   const signed char
@@ -2636,23 +2851,26 @@ namespace amanda { namespace compiler {
   {
        0,     5,    19,    23,    24,    25,    29,    31,    32,    33,
       34,    35,    39,    41,    42,    43,    78,    79,    80,    81,
-      82,    83,    84,   109,   110,   111,   112,   113,   114,   115,
-      44,     5,   112,   112,     0,    80,     5,    70,    44,    10,
+      82,    83,    84,   110,   111,   112,   113,   114,   115,   116,
+      44,     5,   113,   113,     0,    80,     5,    70,    44,    10,
        5,    73,    65,    65,    56,    71,     5,     5,    79,    79,
-     109,   116,    73,    75,     5,    57,    60,    85,    86,   115,
-      73,   109,    75,    86,    64,    15,    16,    26,    30,    90,
-      91,    92,    93,    94,    95,    97,    98,   101,   102,   103,
-     104,   108,   109,   112,     5,    87,    88,    89,   109,    56,
-      56,     3,     4,    56,   100,   101,   102,   103,   104,   105,
-     106,   117,    56,    65,    67,    67,    75,    90,   104,   112,
-      56,    88,    65,   104,    99,   100,   100,   100,    45,    46,
-      47,    48,    58,    59,    61,    63,    66,    68,   100,   100,
-     100,   100,   107,    65,    57,    57,   100,   100,   100,   100,
-     100,   100,   100,   100,   100,   100,    57,    57,    60,   100,
-      73,    90,    73,    90,   100,    65,   108,   108,    99,    75,
-      75,    57,    13,    96,    73,    16,    73,    13,   108,    56,
-     108,    16,    73,    75,   100,    75,    56,   108,    57,   100,
-      75,    73,    57,   108,    73,    75,   108,    75
+     110,   117,    73,    75,     5,    57,    60,    85,    86,   116,
+      73,   110,    75,    86,    64,     3,     4,    12,    15,    16,
+      26,    30,    49,    50,    56,    90,    91,    92,    93,    94,
+      95,    97,    98,    99,   101,   102,   103,   104,   105,   106,
+     107,   109,   110,   113,   118,   119,     5,    87,    88,    89,
+     110,    73,    56,    56,    65,   101,   102,   103,   104,   119,
+      56,   101,   101,   101,     6,    22,    45,    46,    47,    48,
+      49,    50,    54,    58,    59,    61,    63,    66,    68,    65,
+      65,    67,    65,    67,    75,    90,   105,   113,    56,    65,
+      88,    65,   105,   109,   100,   101,   101,    65,   101,    57,
+     101,   101,   101,   101,   101,   101,   101,   101,   101,   101,
+     101,   101,   101,   101,   101,   101,   108,    75,    65,    57,
+      57,    57,    60,    30,   101,    73,    90,    73,    90,   101,
+      56,    65,   109,   109,   101,   100,    75,    75,    57,    57,
+      13,    96,    65,    73,    16,    73,    13,   109,    56,   109,
+      16,    73,    75,   101,    75,    56,   109,    57,   101,    75,
+      73,    57,   109,    73,    75,   109,    75
   };
 
   const signed char
@@ -2661,14 +2879,15 @@ namespace amanda { namespace compiler {
        0,    77,    78,    79,    79,    79,    80,    80,    80,    80,
       81,    81,    82,    83,    84,    85,    85,    86,    87,    87,
       87,    88,    89,    90,    90,    91,    91,    92,    92,    92,
-      93,    93,    93,    94,    94,    95,    95,    95,    95,    95,
-      96,    96,    97,    98,    98,    99,    99,   100,   100,   100,
-     100,   100,   100,   100,   100,   101,   102,   102,   103,   104,
-     105,   106,   107,   107,   107,   108,   108,   108,   109,   109,
-     109,   110,   110,   110,   110,   110,   110,   110,   110,   111,
-     111,   112,   112,   113,   114,   114,   115,   115,   115,   116,
-     116,   116,   117,   117,   117,   117,   117,   117,   117,   117,
-     117,   117
+      92,    93,    93,    93,    93,    94,    94,    95,    95,    95,
+      95,    95,    96,    96,    97,    98,    98,    99,   100,   100,
+     101,   101,   101,   101,   101,   101,   101,   101,   101,   102,
+     103,   103,   104,   105,   106,   107,   108,   108,   108,   109,
+     109,   109,   110,   110,   110,   111,   111,   111,   111,   111,
+     111,   111,   111,   112,   112,   113,   113,   114,   115,   115,
+     116,   116,   116,   117,   117,   117,   118,   118,   118,   118,
+     118,   118,   118,   118,   118,   118,   118,   118,   118,   119,
+     119,   119,   119
   };
 
   const signed char
@@ -2676,15 +2895,16 @@ namespace amanda { namespace compiler {
   {
        0,     2,     1,     0,     1,     2,     1,     1,     1,     1,
        5,     4,     3,     8,     6,     1,     2,     3,     0,     1,
-       2,     2,     2,     2,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     2,     1,     7,    11,     8,    12,     5,
-       8,     9,    11,     7,     5,     1,     0,     1,     1,     1,
-       1,     1,     1,     1,     3,     4,     2,     3,     3,     1,
-       1,     1,     0,     1,     3,     0,     1,     2,     1,     1,
-       3,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     1,     3,     3,     1,     1,     1,     0,
-       2,     4,     3,     3,     3,     3,     3,     3,     3,     3,
-       3,     3
+       2,     2,     2,     1,     1,     1,     1,     1,     1,     1,
+       1,     2,     2,     2,     2,     3,     2,     7,    11,     8,
+      12,     5,     8,     9,    11,     7,     5,     9,     1,     0,
+       1,     1,     1,     1,     1,     1,     1,     1,     3,     4,
+       2,     3,     3,     1,     1,     1,     0,     1,     3,     0,
+       1,     2,     1,     1,     3,     1,     1,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     3,     3,
+       1,     1,     1,     0,     2,     4,     3,     3,     3,     3,
+       3,     3,     3,     3,     3,     3,     3,     3,     3,     2,
+       2,     2,     2
   };
 
 
@@ -2694,17 +2914,18 @@ namespace amanda { namespace compiler {
   const short
   DefaultParser::yyrline_[] =
   {
-       0,   268,   268,   284,   285,   286,   292,   293,   294,   295,
-     299,   300,   314,   318,   322,   339,   340,   344,   355,   356,
-     357,   361,   365,   370,   371,   375,   376,   380,   381,   382,
-     388,   389,   390,   395,   396,   401,   406,   410,   415,   421,
-     433,   437,   445,   452,   456,   468,   469,   473,   474,   475,
-     476,   477,   478,   479,   480,   484,   488,   489,   493,   498,
-     503,   508,   513,   514,   515,   520,   521,   522,   527,   528,
-     529,   533,   534,   535,   536,   537,   538,   539,   540,   544,
-     545,   550,   551,   555,   559,   560,   565,   566,   567,   572,
-     573,   574,   579,   580,   581,   582,   583,   584,   585,   586,
-     587,   588
+       0,   270,   270,   286,   287,   288,   294,   295,   296,   297,
+     301,   302,   316,   320,   324,   341,   342,   346,   357,   358,
+     359,   363,   367,   372,   373,   377,   378,   382,   383,   384,
+     385,   391,   392,   393,   394,   399,   400,   405,   410,   414,
+     419,   425,   437,   441,   449,   456,   460,   471,   479,   480,
+     484,   485,   486,   487,   488,   489,   490,   491,   492,   496,
+     500,   501,   505,   510,   515,   520,   525,   526,   527,   532,
+     533,   534,   539,   540,   541,   545,   546,   547,   548,   549,
+     550,   551,   552,   556,   557,   562,   563,   567,   571,   572,
+     577,   578,   579,   584,   585,   586,   591,   592,   593,   594,
+     595,   596,   597,   598,   599,   600,   601,   602,   603,   607,
+     608,   609,   610
   };
 
   void
@@ -2737,9 +2958,9 @@ namespace amanda { namespace compiler {
 
 #line 53 "specs/grammar.y"
 } } // amanda::compiler
-#line 2741 "compiler/Parser.cpp"
+#line 2962 "compiler/Parser.cpp"
 
-#line 591 "specs/grammar.y"
+#line 613 "specs/grammar.y"
 
 // ========================== EPILOGUE ====================================== //
 

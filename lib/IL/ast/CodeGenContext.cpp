@@ -16,52 +16,53 @@
  */
 
 /* 
- * File:   Stream.cpp
+ * File:   CodeGenContext.cpp
  * Author: Javier Marrero
  * 
- * Created on March 1, 2022, 1:37 AM
+ * Created on March 12, 2022, 5:59 PM
  */
 
-#include <amanda-vm/IO/OutputStream.h>
+#include <amanda-vm/IL/CodeGenContext.h>
+#include <amanda-vm/IL/Module.h>
 
-using amanda::io::OutputStream;
+#include <algorithm>
 
-OutputStream::OutputStream()
+using namespace amanda;
+using namespace amanda::il;
+
+CodeGenContext::CodeGenContext()
+:
+vid(0)
 {
 }
 
-OutputStream::~OutputStream()
+CodeGenContext::~CodeGenContext()
 {
 }
 
-void OutputStream::flush() const
+unsigned CodeGenContext::allocateValueIdentifier()
 {
-    assert("This method is not implemented here!");
+    return vid++;
 }
 
-void OutputStream::write(const core::String& str) const
+Module* CodeGenContext::getModule() const
 {
-    write(str.toCharArray());
+    return module;
 }
 
-void OutputStream::write(const void* data, size_t size, size_t count) const
+const Type* CodeGenContext::getPrimitiveType(Type::TypeID idNumber)
 {
-    const char* buffer = (const char*) data;
-    for (size_t i = 0; i < count; ++i)
+    for (unsigned i = 0; i < types.size(); ++i)
     {
-        write(buffer, size);
-        buffer += size;
+        if (types.at(i)->getTypeId() == idNumber)
+        {
+            return types.at(i);
+        }
     }
+    return NULL;
 }
 
-void OutputStream::write(const void* data, size_t size) const
+void CodeGenContext::setModule(Module* module)
 {
-    assert("This method is not implemented here!");
+    this->module = module;
 }
-
-void OutputStream::write(const char* data) const
-{
-    write(data, strlen(data));
-}
-
-

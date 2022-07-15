@@ -27,6 +27,9 @@
 #include <amanda-c/CompilationContext.h>
 #include <AmandaSDK.h>
 
+#include <amanda-vm/IL/AssemblyILExporter.h>
+#include <amanda-vm/IO/FileOutputStream.h>
+
 using namespace amanda;
 using namespace amanda::compiler;
 
@@ -85,15 +88,35 @@ int Driver::compileFile(io::File* input, io::File* output)
 
     try
     {
-        core::StrongReference<CompilationContext> context = new CompilationContext(input, output);
-        if (context->performSSATransformation() != 0)
+        core::StrongReference<CompilationContext> context = new CompilationContext(input);
+        core::StrongReference<il::Module> module = context->performSSATransformation();
+
+        // Perform the different optimization passes as specified
+
+        // Export the IL to assembly code
+        core::StrongReference<il::ILExporter> exporter = new il::AssemblyILExporter(module);
+        if (!assemble)
         {
-            log::error("%s: compilation failed.", input->getPath().toCharArray());
+            // Export the assembly code directly
+            if (!output->isOpen())
+            {
+                if (!output->open())
+                {
+                    throw nio::IOException(output->getLastErrorString());
+                }
+            }
+
+            io::FileOutputStream outputStream(output);
+            exporter->exportData(outputStream);
+        }
+        else
+        {
+
         }
     }
     catch (core::Exception& ex)
     {
-        log::error("%s: %s", input->getPath().toCharArray(), ex.toString().toCharArray());
+        log::error("%s: %s: %s", input->getPath().toCharArray(), ex.getClassDynamically().getName(), ex.getMessage().toCharArray());
         result = 1;
     }
 

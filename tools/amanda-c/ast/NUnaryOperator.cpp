@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,30 +16,27 @@
  */
 
 /* 
- * File:   ValueReferrer.cpp
+ * File:   NUnaryOperator.cpp
  * Author: Javier Marrero
  * 
- * Created on March 12, 2022, 3:57 PM
+ * Created on July 13, 2022, 3:22 PM
  */
 
-#include <amanda-vm/IL/ValueReferrer.h>
-#include <amanda-vm/IL/Value.h>
+#include <amanda-c/ast/NUnaryOperator.h>
 
 using namespace amanda;
-using namespace amanda::il;
+using namespace amanda::compiler::ast;
 
-unsigned ValueReferrer::getNumberOfOperands() const
+NUnaryOperator::NUnaryOperator(UnaryOperator op, NExpression* expression)
+:
+expression(expression),
+op(op)
 {
-    return operands.size();
 }
 
-Value* ValueReferrer::getOperand(unsigned index) const
+NUnaryOperator::~NUnaryOperator()
 {
-    checkIndexInclusive(index);
-    return operands.at(index);
 }
 
-void ValueReferrer::checkIndexInclusive(unsigned index) const
-{
-    assert(index >= 0 && index < operands.size() && "Index out of bounds.");
-}
+
+

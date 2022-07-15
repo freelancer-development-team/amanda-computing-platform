@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,28 +16,15 @@
  */
 
 /* 
- * File:   Value.cpp
+ * File:   ValueListener.cpp
  * Author: Javier Marrero
  * 
- * Created on March 12, 2022, 3:36 PM
+ * Created on July 14, 2022, 5:41 PM
  */
 
-#include <amanda-vm/IL/Value.h>
+#include <amanda-vm/IL/ValueListener.h>
 
 using namespace amanda;
 using namespace amanda::il;
 
-const core::String& Value::getName() const
-{
-    return name;
-}
 
-const Type* Value::getType() const
-{
-    return type.get();
-}
-
-void Value::setName(const core::String& name)
-{
-    this->name = name;
-}

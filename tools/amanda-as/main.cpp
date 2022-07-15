@@ -42,7 +42,7 @@ int main(int argc, char** argv)
         std::locale utf8_locale("en_US.UTF-8");
         std::locale::global(utf8_locale);
     }
-    catch (std::exception& ex)
+    catch (...)
     { /* Its a no-op */ }
 
     /* The logger formatter. */

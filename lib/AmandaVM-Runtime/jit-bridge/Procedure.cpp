@@ -260,7 +260,18 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
                 }
                 break;
             }
+#define DIVIDE(T) \
+            T operand2 = stack.pop<T>(); \
+            T operand1 = stack.pop<T>(); \
+            \
+            stack.push<T>(operand1 / operand2); \
+            break 
             
+            case I_DIVB: { DIVIDE(vm::vm_byte_t); }
+            case I_DIVW: { DIVIDE(vm::vm_word_t); }
+            case I_DIVL: { DIVIDE(vm::vm_dword_t); }
+            case I_DIVQ: { DIVIDE(vm::vm_qword_t); }
+#undef DIVIDE
 #define DUPLICATE(T) \
                 T value = 0; \
                 stack.peek(BYTEPOINTER(value), sizeof(T)); \
@@ -379,6 +390,18 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
                 }
                 break;
             }
+#define MODULE(T) \
+            T operand2 = stack.pop<T>(); \
+            T operand1 = stack.pop<T>(); \
+            \
+            stack.push<T>(operand1 % operand2); \
+            break
+
+            case I_MODB: { MODULE(vm::vm_byte_t); }
+            case I_MODW: { MODULE(vm::vm_word_t); }
+            case I_MODL: { MODULE(vm::vm_dword_t); }
+            case I_MODQ: { MODULE(vm::vm_qword_t); }
+#undef MODULE
 #define MULTIPLY(type) \
             vm::vm_dword_t operand1 = stack.pop<type>(); \
             vm::vm_dword_t operand2 = stack.pop<type>(); \
@@ -390,9 +413,19 @@ vm::vm_qword_t Procedure::executeInterpreted(Stack& stack, ProcessorFlags& eflag
                 MULTIPLY(vm::vm_byte_t);
                 break;
             }
+            case I_MULW:
+            {
+                MULTIPLY(vm::vm_word_t);
+                break;
+            }
             case I_MULL:
             {
                 MULTIPLY(vm::vm_dword_t);
+                break;
+            }
+            case I_MULQ:
+            {
+                MULTIPLY(vm::vm_qword_t);
                 break;
             }
 #undef MULTIPLY

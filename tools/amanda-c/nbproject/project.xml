@@ -10,6 +10,7 @@
             <sourceEncoding>UTF-8</sourceEncoding>
             <make-dep-projects>
                 <make-dep-project>../../lib/Frontend</make-dep-project>
+                <make-dep-project>../../lib/AmandaVM-Binutils</make-dep-project>
                 <make-dep-project>../../lib/IL</make-dep-project>
                 <make-dep-project>../../lib/Option</make-dep-project>
                 <make-dep-project>../../lib/AmandaVM-Core</make-dep-project>

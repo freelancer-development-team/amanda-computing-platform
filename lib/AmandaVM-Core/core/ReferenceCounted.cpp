@@ -251,3 +251,11 @@ void* ReferenceCounted::operator new(size_t size) {
    // Return the resulting object
    return result;
 }
+
+
+void* ReferenceCounted::operator new(size_t size, void* where)
+{
+    ::operator new(size, where);
+    setLastAllocationOnHeap(false);
+    return where;
+}

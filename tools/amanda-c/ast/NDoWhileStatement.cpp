@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,44 +16,32 @@
  */
 
 /* 
- * File:   Module.h
+ * File:   NDoWhileStatement.cpp
  * Author: Javier Marrero
- *
- * Created on March 12, 2022, 3:06 PM
+ * 
+ * Created on July 13, 2022, 2:55 PM
  */
 
-#ifndef MODULE_H
-#define MODULE_H
+#include <amanda-c/ast/NDoWhileStatement.h>
 
-#include <amanda-vm/TypeSystem.h>
-#include <amanda-vm/IL/Function.h>
+using namespace amanda;
+using namespace amanda::compiler::ast;
 
-namespace amanda
+NDoWhileStatement::NDoWhileStatement(NExpression* condition, NBlock* block)
+:
+NCompoundStatement(block),
+condition(condition)
 {
-namespace il
-{
-
-class Module : public core::Object
-{
-    AMANDA_OBJECT(Module, core::Object)
-
-public:
-
-    Module(const core::String& id);
-    virtual ~Module();
-
-    void                            addFunction(Function* f);
-    const std::vector<Function*>&   getFunctions() const;
-    const core::String&             getIdentifier() const;
-
-protected:
-
-    std::vector<Function*>  functions;
-    core::String            identifier;
-} ;
-
-}
 }
 
-#endif /* MODULE_H */
+NDoWhileStatement::~NDoWhileStatement()
+{
+}
 
+core::String NDoWhileStatement::toString() const
+{
+    core::String buffer(buildHeaderString());
+    buffer.append("\nWith condition: <").append(condition->toString()).append(">\n");
+
+    return buffer;
+}

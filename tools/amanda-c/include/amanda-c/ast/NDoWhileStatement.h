@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,40 +16,44 @@
  */
 
 /* 
- * File:   BasicBlock.cpp
+ * File:   NDoWhileStatement.h
  * Author: Javier Marrero
- * 
- * Created on March 12, 2022, 3:22 PM
+ *
+ * Created on July 13, 2022, 2:55 PM
  */
 
-#include <amanda-vm/IL/BasicBlock.h>
+#ifndef NDOWHILESTATEMENT_H
+#define NDOWHILESTATEMENT_H
 
-using namespace amanda;
-using namespace amanda::il;
+#include <amanda-c/ast/NCompoundStatement.h>
+#include <amanda-c/ast/NExpression.h>
+#include <amanda-c/ast/NBlock.h>
 
-BasicBlock::BasicBlock()
-:
-label(core::String::EMPTY)
+namespace amanda
 {
+namespace compiler
+{
+namespace ast
+{
+
+class NDoWhileStatement : public NCompoundStatement
+{
+    AMANDA_OBJECT(NDoWhileStatement, NCompoundStatement)
+public:
+
+    NDoWhileStatement(NExpression* condition, NBlock* block);
+    virtual ~NDoWhileStatement();
+
+    virtual core::String toString() const;
+
+protected:
+
+    core::StrongReference<NExpression> condition;
+} ;
+
+}
+}
 }
 
-BasicBlock::~BasicBlock()
-{
-}
-
-const core::String& BasicBlock::getLabel() const
-{
-    return label;
-}
-
-bool BasicBlock::hasLabel() const
-{
-    return !label.isEmpty();
-}
-
-void BasicBlock::setLabel(const core::String& label)
-{
-    this->label = label;
-}
-
+#endif /* NDOWHILESTATEMENT_H */
 

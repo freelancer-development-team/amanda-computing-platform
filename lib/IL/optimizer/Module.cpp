@@ -16,44 +16,44 @@
  */
 
 /* 
- * File:   Module.h
+ * File:   Module.cpp
  * Author: Javier Marrero
- *
+ * 
  * Created on March 12, 2022, 3:06 PM
  */
 
-#ifndef MODULE_H
-#define MODULE_H
+#include <amanda-vm/IL/Module.h>
 
-#include <amanda-vm/TypeSystem.h>
-#include <amanda-vm/IL/Function.h>
+using namespace amanda;
+using namespace amanda::il;
 
-namespace amanda
+Module::Module(const core::String& id)
+:
+identifier(id)
 {
-namespace il
-{
-
-class Module : public core::Object
-{
-    AMANDA_OBJECT(Module, core::Object)
-
-public:
-
-    Module(const core::String& id);
-    virtual ~Module();
-
-    void                            addFunction(Function* f);
-    const std::vector<Function*>&   getFunctions() const;
-    const core::String&             getIdentifier() const;
-
-protected:
-
-    std::vector<Function*>  functions;
-    core::String            identifier;
-} ;
-
-}
 }
 
-#endif /* MODULE_H */
+Module::~Module()
+{
+    for (std::vector<Function*>::iterator it = functions.begin(),
+         end = functions.end(); it != end; ++it)
+    {
+        (*it)->release();
+    }
+}
 
+void Module::addFunction(Function* f)
+{
+    f->grab();
+    functions.push_back(f);
+}
+
+const std::vector<Function*>& Module::getFunctions() const
+{
+    return functions;
+}
+
+const core::String& Module::getIdentifier() const
+{
+    return identifier;
+}

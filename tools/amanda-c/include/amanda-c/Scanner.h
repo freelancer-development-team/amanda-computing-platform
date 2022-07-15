@@ -137,6 +137,10 @@ class Scanner : public reflex::AbstractLexer<reflex::Matcher> {
             { "char",       TOKEN(CHAR) },
             { "float",      TOKEN(FLOAT) },
             { "double",     TOKEN(DOUBLE) },
+            // Logical operators
+            { "and",        TOKEN(AND) },
+            { "or",         TOKEN(OR) },
+            { "not",        TOKEN(NOT) },
             { NULL, 0 }
         };
 

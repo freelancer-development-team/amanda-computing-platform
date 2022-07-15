@@ -26,6 +26,10 @@
 #define CODEGENCONTEXT_H
 
 #include <amanda-vm/TypeSystem.h>
+#include <amanda-vm/IL/Type.h>
+
+// C++
+#include <vector>
 
 namespace amanda
 {
@@ -43,11 +47,16 @@ public:
     CodeGenContext();
     virtual ~CodeGenContext();
 
-    void setModule(Module* module);
-    
+    unsigned    allocateValueIdentifier();
+    Module*     getModule() const;
+    const Type* getPrimitiveType(Type::TypeID idNumber);
+    void        setModule(Module* module);
+
 protected:
 
-    core::StrongReference<Module> module;
+    core::StrongReference<Module>   module;
+    std::vector<Type*>              types;
+    unsigned                        vid;
 } ;
 
 }
