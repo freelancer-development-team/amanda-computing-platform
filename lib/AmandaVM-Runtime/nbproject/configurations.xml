@@ -1,0 +1,712 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="100">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>../../include/amanda-vm/Runtime/Context.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/DefaultPoolAllocator.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/ExecutableModule.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/FfiException.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/FileSystem.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/IllegalInstructionException.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/IllegalStateException.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/InvalidAllocationError.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/InvalidResourceIdentifierException.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/JitContext.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/LinkageError.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/LocklessDefaultAllocator.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/MemoryAllocator.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/MemoryManager.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/MirJitContext.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/ModuleLoader.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/NativeCProcedure.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/NativeLibrary.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/NativeProcedure.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/NativeThreadScheduler.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/NullJitContext.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/Optimization/NullOptimizationCriteria.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/NI/Object.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/OutOfMemoryError.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/Procedure.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/ResourceIdentifier.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/Schedulable.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/SegmentationFault.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/Stack.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/ThreadScheduler.h</itemPath>
+      <itemPath>../../include/amanda-vm/Runtime/UnschedulableException.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>core/Context.cpp</itemPath>
+      <itemPath>mm/DefaultPoolAllocator.cpp</itemPath>
+      <itemPath>dl/ExecutableModule.cpp</itemPath>
+      <itemPath>dl/FfiException.cpp</itemPath>
+      <itemPath>fs/FileSystem.cpp</itemPath>
+      <itemPath>core/IllegalInstructionException.cpp</itemPath>
+      <itemPath>core/IllegalStateException.cpp</itemPath>
+      <itemPath>mm/InvalidAllocationError.cpp</itemPath>
+      <itemPath>fs/InvalidResourceIdentifierException.cpp</itemPath>
+      <itemPath>dl/LinkageError.cpp</itemPath>
+      <itemPath>mm/LocklessDefaultAllocator.cpp</itemPath>
+      <itemPath>mm/MemoryAllocator.cpp</itemPath>
+      <itemPath>mm/MemoryManager.cpp</itemPath>
+      <itemPath>jit-bridge/MirJitContext.cpp</itemPath>
+      <itemPath>core/ModuleLoader.cpp</itemPath>
+      <itemPath>dl/NativeCProcedure.cpp</itemPath>
+      <itemPath>dl/NativeProcedure.cpp</itemPath>
+      <itemPath>core/NativeThreadScheduler.cpp</itemPath>
+      <itemPath>jit-bridge/NullJitContext.cpp</itemPath>
+      <itemPath>optimization/NullOptimizationCriteria.cpp</itemPath>
+      <itemPath>ani/Object.cpp</itemPath>
+      <itemPath>mm/OutOfMemoryError.cpp</itemPath>
+      <itemPath>jit-bridge/Procedure.cpp</itemPath>
+      <itemPath>fs/ResourceIdentifier.cpp</itemPath>
+      <itemPath>core/Schedulable.cpp</itemPath>
+      <itemPath>mm/SegmentationFault.cpp</itemPath>
+      <itemPath>core/Stack.cpp</itemPath>
+      <itemPath>core/ThreadScheduler.cpp</itemPath>
+      <itemPath>core/UnschedulableException.cpp</itemPath>
+      <itemPath>ani/VTable.cpp</itemPath>
+      <itemPath>w32/WinMain.c</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+    <itemPath>.gitignore</itemPath>
+    <itemPath>utils/build-libck.sh</itemPath>
+  </logicalFolder>
+  <sourceRootList>
+    <Elem>jit</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="2">
+      <toolsSet>
+        <compilerSet>MinGW|MinGW</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <standard>3</standard>
+          <incDir>
+            <pElem>../../include</pElem>
+            <pElem>bin/mir/include</pElem>
+          </incDir>
+          <warningLevel>2</warningLevel>
+        </cTool>
+        <ccTool>
+          <standard>4</standard>
+          <incDir>
+            <pElem>../../include</pElem>
+            <pElem>bin/mir/include</pElem>
+            <pElem>../../third-party/libffi/bin/include</pElem>
+            <pElem>../../third-party/ck/bin/include</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>DEBUG</Elem>
+            <Elem>NO_JIT_COMPILATION</Elem>
+            <Elem>USE_MALLOC_ALLOCATOR</Elem>
+          </preprocessorList>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <asmTool>
+          <warningLevel>2</warningLevel>
+        </asmTool>
+        <linkerTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libamandavm-runtime.${CND_DLIB_EXT}</output>
+          <linkerAddLib>
+            <pElem>bin/mir/lib</pElem>
+            <pElem>../../third-party/ck/bin/lib</pElem>
+            <pElem>../../third-party/libffi/bin/lib</pElem>
+          </linkerAddLib>
+          <linkerCopySharedLibs>true</linkerCopySharedLibs>
+          <linkerLibItems>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../AmandaVM-Binutils"
+                            CT="3"
+                            CN="Debug"
+                            AC="true"
+                            BL="true"
+                            WD="../AmandaVM-Binutils"
+                            BC="${MAKE} -j8 -f Makefile CONF=Debug"
+                            CC="${MAKE} -j8 -f Makefile CONF=Debug clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libamandavm-binutils.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../AmandaVM-Core"
+                            CT="3"
+                            CN="Debug"
+                            AC="false"
+                            BL="true"
+                            WD="../AmandaVM-Core"
+                            BC="${MAKE} -j8 -f Makefile CONF=Debug"
+                            CC="${MAKE} -j8 -f Makefile CONF=Debug clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libamandavm-core.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+            <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
+            <linkerLibLibItem>mir</linkerLibLibItem>
+            <linkerLibLibItem>ck</linkerLibLibItem>
+            <linkerLibLibItem>ffi</linkerLibLibItem>
+          </linkerLibItems>
+          <commandLine>-Wl,--out-implib=${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libamandavm-runtime.a</commandLine>
+        </linkerTool>
+      </compileType>
+      <item path="../../include/amanda-vm/Runtime/Context.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/DefaultPoolAllocator.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/ExecutableModule.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/FfiException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/FileSystem.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/IllegalInstructionException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/IllegalStateException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/InvalidAllocationError.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/InvalidResourceIdentifierException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/JitContext.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/LinkageError.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/LocklessDefaultAllocator.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/MemoryAllocator.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/MemoryManager.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/MirJitContext.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/ModuleLoader.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/NI/Object.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/NativeCProcedure.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/NativeLibrary.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/NativeProcedure.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/NativeThreadScheduler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/NullJitContext.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/Optimization/NullOptimizationCriteria.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/OutOfMemoryError.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/Procedure.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/ResourceIdentifier.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/Schedulable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/SegmentationFault.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/Stack.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/ThreadScheduler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/UnschedulableException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path=".gitignore" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ani/Object.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ani/VTable.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/Context.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/IllegalInstructionException.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="core/IllegalStateException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/ModuleLoader.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/NativeThreadScheduler.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/Schedulable.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/Stack.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/ThreadScheduler.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/UnschedulableException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="dl/ExecutableModule.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="dl/FfiException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="dl/LinkageError.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="dl/NativeCProcedure.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="dl/NativeProcedure.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="fs/FileSystem.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="fs/InvalidResourceIdentifierException.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="fs/ResourceIdentifier.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="jit-bridge/MirJitContext.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="jit-bridge/NullJitContext.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="jit-bridge/Procedure.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="mm/DefaultPoolAllocator.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="mm/InvalidAllocationError.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="mm/LocklessDefaultAllocator.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="mm/MemoryAllocator.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="mm/MemoryManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="mm/OutOfMemoryError.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="mm/SegmentationFault.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="optimization/NullOptimizationCriteria.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="utils/build-libck.sh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="w32/WinMain.c" ex="false" tool="0" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="2">
+      <toolsSet>
+        <compilerSet>MinGW|MinGW</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+          <standard>3</standard>
+          <incDir>
+            <pElem>../../include</pElem>
+            <pElem>bin/mir/include</pElem>
+          </incDir>
+          <warningLevel>2</warningLevel>
+        </cTool>
+        <ccTool>
+          <developmentMode>6</developmentMode>
+          <standard>4</standard>
+          <incDir>
+            <pElem>../../include</pElem>
+            <pElem>bin/mir/include</pElem>
+            <pElem>../../third-party/libffi/bin/include</pElem>
+            <pElem>../../third-party/ck/bin/include</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>NO_JIT_COMPILATION</Elem>
+            <Elem>USE_MALLOC_ALLOCATOR</Elem>
+          </preprocessorList>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>6</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>6</developmentMode>
+          <warningLevel>2</warningLevel>
+        </asmTool>
+        <linkerTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libamandavm-runtime.${CND_DLIB_EXT}</output>
+          <linkerAddLib>
+            <pElem>bin/mir/lib</pElem>
+            <pElem>../../third-party/ck/bin/lib</pElem>
+            <pElem>../../third-party/libffi/bin/lib</pElem>
+          </linkerAddLib>
+          <linkerCopySharedLibs>true</linkerCopySharedLibs>
+          <linkerLibItems>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../AmandaVM-Binutils"
+                            CT="3"
+                            CN="Debug"
+                            AC="true"
+                            BL="true"
+                            WD="../AmandaVM-Binutils"
+                            BC="${MAKE} -j8 -f Makefile CONF=Debug"
+                            CC="${MAKE} -j8 -f Makefile CONF=Debug clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libamandavm-binutils.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../AmandaVM-Core"
+                            CT="3"
+                            CN="Debug"
+                            AC="false"
+                            BL="true"
+                            WD="../AmandaVM-Core"
+                            BC="${MAKE} -j8 -f Makefile CONF=Debug"
+                            CC="${MAKE} -j8 -f Makefile CONF=Debug clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libamandavm-core.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+            <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
+            <linkerLibLibItem>mir</linkerLibLibItem>
+            <linkerLibLibItem>ffi</linkerLibLibItem>
+          </linkerLibItems>
+          <commandLine>-Wl,--out-implib=${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libamandavm-runtime.a</commandLine>
+        </linkerTool>
+      </compileType>
+      <item path="../../include/amanda-vm/Runtime/Context.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/DefaultPoolAllocator.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/ExecutableModule.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/FfiException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/FileSystem.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/IllegalInstructionException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/IllegalStateException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/InvalidAllocationError.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/InvalidResourceIdentifierException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/JitContext.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/LinkageError.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/LocklessDefaultAllocator.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/MemoryAllocator.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/MemoryManager.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/MirJitContext.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/ModuleLoader.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/NI/Object.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/NativeCProcedure.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/NativeLibrary.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/NativeProcedure.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/NativeThreadScheduler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/NullJitContext.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/Optimization/NullOptimizationCriteria.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/OutOfMemoryError.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/Procedure.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/ResourceIdentifier.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/Schedulable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/SegmentationFault.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/Stack.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/ThreadScheduler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Runtime/UnschedulableException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path=".gitignore" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ani/Object.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ani/VTable.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/Context.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/IllegalInstructionException.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="core/IllegalStateException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/ModuleLoader.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/NativeThreadScheduler.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/Schedulable.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/Stack.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/ThreadScheduler.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="core/UnschedulableException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="dl/ExecutableModule.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="dl/FfiException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="dl/LinkageError.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="dl/NativeCProcedure.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="dl/NativeProcedure.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="fs/FileSystem.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="fs/InvalidResourceIdentifierException.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="fs/ResourceIdentifier.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="jit-bridge/MirJitContext.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="jit-bridge/NullJitContext.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="jit-bridge/Procedure.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="mm/DefaultPoolAllocator.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="mm/InvalidAllocationError.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="mm/LocklessDefaultAllocator.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="mm/MemoryAllocator.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="mm/MemoryManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="mm/OutOfMemoryError.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="mm/SegmentationFault.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="optimization/NullOptimizationCriteria.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="utils/build-libck.sh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="w32/WinMain.c" ex="false" tool="0" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>

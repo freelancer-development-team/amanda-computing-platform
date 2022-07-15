@@ -33,6 +33,8 @@ namespace amanda
 namespace il
 {
 
+class CodeGenContext;
+
 /**
  * Type instances are the supported data types in the IL library for the
  * Amanda Computing Platform. There is only a single instance of a given type
@@ -49,6 +51,7 @@ public:
     {
         // Derived types
         ID_VoidType = 0,
+        ID_LabelType,
         ID_IntegerType,
         ID_FloatingPointType,
         ID_FunctionType,
@@ -57,21 +60,24 @@ public:
         ID_SequentialType
     } TypeID;
 
+    Type(CodeGenContext& context, const TypeID id);
     virtual ~Type();
 
+    CodeGenContext& getContext() const;
     TypeID          getTypeId() const;
     virtual bool    isFloatingPointType() const;
     virtual bool    isFunctionType() const;
     virtual bool    isIntegralType() const;
     virtual bool    isSized() const;
-    virtual void    print(io::OutputStream& os, bool debug = false, bool detailed = false) const;
+    // virtual void    print(io::OutputStream& os, bool debug = false, bool detailed = false) const;
 
     bool operator == (const Type& object) const;
     bool operator == (const Type* object) const;
 
 protected:
 
-    TypeID id;
+    CodeGenContext& context;
+    TypeID          id;
 
 } ;
 

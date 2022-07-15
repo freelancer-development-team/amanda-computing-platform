@@ -30,7 +30,7 @@ using namespace amanda::logging;
 
 unsigned long LogRecord::idGenerator = LONG_MIN;
 
-LogRecord::LogRecord(int level, const core::String& message, va_list va, const core::String& logger)
+LogRecord::LogRecord(int level, const core::String& message, va_list& va, const core::String& logger)
 :
 level(level),
 loggerName(logger),

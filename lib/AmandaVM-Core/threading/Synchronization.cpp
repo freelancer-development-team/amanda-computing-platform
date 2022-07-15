@@ -33,105 +33,80 @@
 #include <pthread.h>
 #include <unistd.h>
 
-
 using namespace amanda;
 using namespace amanda::concurrent;
 
-class amanda::concurrent::SynchronizationLock : public core::Object
+SynchronizationLock::SynchronizationLock()
+:
+disposed(false)
 {
+    // Initialize the mutex
+    std::memset(nativeLock, 0, 16);
+    *((pthread_mutex_t*) nativeLock) = PTHREAD_MUTEX_INITIALIZER;
 
-    AMANDA_OBJECT(SynchronizationLock, core::Object)
-public:
+    core::String failCause;
 
-    SynchronizationLock()
+    // Lock
+    int result = pthread_mutex_lock((pthread_mutex_t*) nativeLock);
+    switch (result)
     {
-        mutex = PTHREAD_MUTEX_INITIALIZER;
-        pthread_mutex_lock(&mutex);
+        case EINVAL:
+            failCause = "the value specified by mutex does not refer to an initialized mutex object.";
+            break;
+        case EAGAIN:
+            failCause = "the mutex could not be acquired.";
+            break;
+        case EDEADLK:
+            failCause = "the current thread already owns the mutex.";
+            break;
+        case EPERM:
+            failCause = "the current thread does not own the mutex.";
+            break;
     }
 
-    ~SynchronizationLock()
+    if (result != 0)
     {
-        pthread_mutex_unlock(&mutex);
+        throw SynchronizationError(failCause);
     }
-
-private:
-
-    pthread_mutex_t mutex;
-};
-
-SynchronizationLock* amanda::concurrent::synchronized()
-{
-    pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
-    pthread_mutex_lock(&mutex);
-    SynchronizationLock* lock = NULL;
-
-    try
-    {
-        lock = new SynchronizationLock();
-        lock->grab();
-    }
-    catch (...)
-    {
-        throw SynchronizationError("Unable to create mutex object.");
-    }
-
-    pthread_mutex_unlock(&mutex);
-    return lock;
 }
 
-void amanda::concurrent::unlock(SynchronizationLock* lock)
+SynchronizationLock::~SynchronizationLock()
 {
-    pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
-    pthread_mutex_lock(&mutex);
-
-    try
+    if (!disposed)
     {
-        if (lock != NULL)
+        unlock();
+    }
+    pthread_mutex_destroy((pthread_mutex_t*) nativeLock);
+}
+
+void SynchronizationLock::unlock()
+{
+    if (!disposed)
+    {
+        core::String failCause;
+
+        int result = pthread_mutex_unlock((pthread_mutex_t*) nativeLock);
+        switch (result)
         {
-            lock->release();
+            case EINVAL:
+                failCause = "the value specified by mutex does not refer to an initialized mutex object.";
+                break;
+            case EAGAIN:
+                failCause = "the mutex could not be acquired.";
+                break;
+            case EDEADLK:
+                failCause = "the current thread already owns the mutex.";
+                break;
+            case EPERM:
+                failCause = "the current thread does not own the mutex.";
+                break;
+        }
+
+        if (result != 0)
+        {
+            throw SynchronizationError(failCause);
         }
     }
-    catch (...)
-    {
-        throw SynchronizationError("Unable to exit synchronized block. Possible deadlock occurring.");
-    }
-    
-    pthread_mutex_unlock(&mutex);
-}
-
-// WRAPPER OBJECT
-
-SynchronizationLockWrapper::SynchronizationLockWrapper()
-:
-lock(amanda::concurrent::synchronized())
-{
-    assert(lock != NULL);
-    lock->grab();
-}
-
-SynchronizationLockWrapper::SynchronizationLockWrapper(SynchronizationLock* lock)
-:
-lock(lock)
-{
-    assert(lock != NULL);
-    lock->grab();
-}
-
-SynchronizationLockWrapper::SynchronizationLockWrapper(const SynchronizationLockWrapper& rhs)
-:
-lock(rhs.lock)
-{
-    lock->grab();
-}
-
-SynchronizationLockWrapper::~SynchronizationLockWrapper()
-{
-    assert(lock != NULL);
-    unlock(lock);
-}
-
-SynchronizationLock* SynchronizationLockWrapper::getLock()
-{
-    return lock;
+    disposed = true;
 }
 

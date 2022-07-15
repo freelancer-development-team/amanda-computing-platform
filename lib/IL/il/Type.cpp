@@ -26,8 +26,20 @@
 
 using namespace amanda::il;
 
+Type::Type(CodeGenContext& context, const TypeID id)
+:
+context(context),
+id(id)
+{
+}
+
 Type::~Type()
 {
+}
+
+CodeGenContext& Type::getContext() const
+{
+    return context;
 }
 
 Type::TypeID Type::getTypeId() const

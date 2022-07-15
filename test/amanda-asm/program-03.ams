@@ -1,0 +1,78 @@
+.section .code
+
+.def @@main?A_string@!l32
+	iload	str1
+	invoke	slowrite
+.endef
+
+.def factorial
+.endef
+
+.def slowprint
+	# Arguments:
+	# $0	- a pointer to a unicode string representing the string to print
+	push	a64 $-8
+	sload	$8					# $0 contains a pointer
+	push	q64 $0				# $8 index to offset	
+	
+.loop:	
+	# Load the variables and add them
+	# Load the offset first
+	push	a64 $0
+	sload	$8
+	# Load the offset
+	push	a64 $8
+	sload	$8
+	
+	add		q64					# sum the two variables
+	load	$1					# load the character
+	b2l							# convert it to a 32bit integer
+	
+	dup		l32					# duplicate the value
+	push 	l32 $0				# push ''
+	ceq		l32					# compare if the character is the terminator
+	jt		.end				# if true jump to the end of the function
+	
+	ccall 	$c!!putchar@i32@i32 # call the putchar C function
+	pop		l32					# discard the return value of the function
+	
+	push	a64 $8				# push the address of the offset
+	sload	$8					# load the offset 
+	push	q64 $1				# push 1
+	add		q64					# add one to the offset
+	
+	push	a64 $8				# push the first variable address
+	sstore	$8					# write the summed index
+	
+	invoke	delay				# delay 1s the character
+	jmp		.loop				# repeat the loop
+	
+.end:
+	pop		q64					# clear the argument
+	ret		v0
+.endef
+
+.def delay
+	ccall	$c!!clock@i32@nil	# start_time = clock()
+	push	l32 $110			# 0.11s delay
+	add		l32					# $0 - now contains the start time + delay
+	
+.L1:
+	ccall	$c!!clock@i32@nil	# clock()
+	
+	push	a64 $0				# push the address of $0
+	sload	$4					# load the variable at $0
+	
+	clt		l32					# clock() < start_time + delay
+	jt		.L1					# jump to .L1 if the condition holds
+		
+	ret		v0
+.endef
+
+.section .data
+
+.local str1: .unicode "Hola, Maya :D"
+.local str2: .unicode "Mi nombre es Amanda"
+.local str3: .unicode "Dame un número (no muy grande, por favor) y te digo su factorial."
+.local str4: .unicode "el factorial de "
+.local str5: .unicode " es "

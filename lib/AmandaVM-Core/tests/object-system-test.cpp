@@ -54,7 +54,7 @@ int main(int argc, char** argv)
         console().out.println("Is object1 an object of type Object? %d", object1->is<Object>());
         console().out.println("Is object2 an object of type File? %d", object2->is<File>());
 
-        if (object1 != object2)
+        if (object1.get() != object2.get())
         {
             console().out.println("Objects are not equals.");
         }

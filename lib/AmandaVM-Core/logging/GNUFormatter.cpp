@@ -50,11 +50,11 @@ core::String GNUFormatter::levelToString(int level) const
 
     if (useAnsiEscapes)
     {
-        if (level >= Logger::INFO)
+        if (level >= Logger::L_INFO)
         {
             result = "\033[37;1m";
         }
-        else if (level == Logger::WARN)
+        else if (level == Logger::L_WARN)
         {
             result = "\033[33;1m";
         }
@@ -66,22 +66,31 @@ core::String GNUFormatter::levelToString(int level) const
 
     switch (level)
     {
-        case Logger::TRACE:
+        case Logger::L_TRACE:
             result.append("trace");
             break;
-        case Logger::DEBUG:
+        case Logger::L_DEBUG:
             result.append("debug");
             break;
-        case Logger::INFO:
+        case Logger::L_FINEST:
+            result.append("finest");
+            break;
+        case Logger::L_FINER:
+            result.append("finer");
+            break;
+        case Logger::L_FINE:
+            result.append("fine");
+            break;
+        case Logger::L_INFO:
             result.append("info");
             break;
-        case Logger::WARN:
+        case Logger::L_WARN:
             result.append("warning");
             break;
-        case Logger::ERROR:
+        case Logger::L_ERROR:
             result.append("error");
             break;
-        case Logger::FATAL:
+        case Logger::L_FATAL:
             result.append("fatal error");
             break;
         default:

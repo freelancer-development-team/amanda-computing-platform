@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ ResourceIdentifier ResourceIdentifier::parse(const core::String& uri)
     core::String scheme;
     core::String address;
 
-    if (uri.find(':') != core::String::NPOS)
+    if (uri.find(FS_SCHEME_DELIMITER) != core::String::NPOS)
     {
         std::vector<core::String> splitted = uri.split(FS_SCHEME_DELIMITER, 1);
     }

@@ -45,12 +45,14 @@ int main(int argc, char** argv)
     {
         amanda::vm::printFormattedHelpMessage(options);
     }
-    if (commandLine->hasOption("version"))
+    else if (commandLine->hasOption("version"))
     {
         amanda::vm::printVersionInformation();
     }
     else
     {
+        core::String listOfLoadables;
+
         // Parse the rest of options
         if (commandLine->hasOption("show-version"))
         {
@@ -58,15 +60,15 @@ int main(int argc, char** argv)
         }
         if (commandLine->hasOption('L'))
         {
-
+            listOfLoadables = commandLine->getOptionValue('L');
         }
 
-        const std::list<core::String>& arguments = commandLine->getArgumentList();
+        const std::vector<core::String>& arguments = commandLine->getArgumentList();
         if (arguments.size() < 1)
         {
             amanda::vm::printFormattedHelpMessage(options);
             AMANDA_ERROR("no valid module passed (needs 1 at least, passed %u).", arguments.size());
-            abort();
+            std::abort();
         }
 
         /* Create the virtual machine context helpers. */
@@ -80,16 +82,33 @@ int main(int argc, char** argv)
 #endif
 
         /* Create the virtual machine context. */
-        core::StrongReference<vm::Context> context =
-                new vm::Context(memoryAllocator,
-                                argv[1]);
+        core::StrongReference<vm::Context> context;
+        try
+        {
+            context = new vm::Context(memoryAllocator, argv[0]);
+        }
+        catch (core::Exception& ex)
+        {
+            AMANDA_ERROR("%s: %s", ex.getClassDynamically().getName(), ex.getMessage().toCharArray());
+            std::abort();
+        }
 
         /* Create & configure the scheduler */
         core::StrongReference<vm::ThreadScheduler> scheduler = new vm::NativeThreadScheduler(context->getReference());
         context->setScheduler(scheduler);
 
+        /* From the list of loadable modules, load every of them */
+        if (!listOfLoadables.isEmpty())
+        {
+            std::vector<core::String> loadables = listOfLoadables.split(";");
+            for (unsigned i = 0; i < loadables.size(); ++i)
+            {
+                context->loadModule(loadables.at(i));
+            }
+        }
+
         /* Load the file and start executing. */
-        for (std::list<core::String>::const_iterator iter = arguments.begin(),
+        for (std::vector<core::String>::const_iterator iter = arguments.begin(),
              end = arguments.end(); iter != end; ++iter)
         {
             try

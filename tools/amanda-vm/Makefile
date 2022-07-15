@@ -57,8 +57,7 @@ build: .build-post
 # Add your pre 'build' code here...
 
 .build-post: .build-impl
-# Add your post 'build' code here...
-
+	$(CP) -v ${CND_ARTIFACT_DIR_${CONF}}/* "../../dist/amanda-sdk/bin"
 
 # clean
 clean: .clean-post

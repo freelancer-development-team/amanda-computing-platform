@@ -42,7 +42,7 @@ int main(int argc, char** argv)
         std::locale utf8_locale("en_US.UTF-8");
         std::locale::global(utf8_locale);
     }
-    catch (std::exception& ex)
+    catch (...)
     { /* Its a no-op */ }
 
     /* The logger formatter. */
@@ -82,7 +82,7 @@ int main(int argc, char** argv)
         }
 
         // Create the assembly context
-        std::list<core::String>& argumentList = commandLine->getArgumentList();
+        std::vector<core::String>& argumentList = commandLine->getArgumentList();
         if (argumentList.empty())
         {
             as::logger::fatal("no input files.");
@@ -96,7 +96,7 @@ int main(int argc, char** argv)
              * assembler program invocation.
              */
             std::vector<binutils::as::AssemblerDriver*> drivers;
-            for (std::list<core::String>::const_iterator it = argumentList.begin(),
+            for (std::vector<core::String>::const_iterator it = argumentList.begin(),
                  end = argumentList.end(); it != end; ++it)
             {
                 core::StrongReference<io::File> file = new io::File(*it, io::File::READ | io::File::BINARY);

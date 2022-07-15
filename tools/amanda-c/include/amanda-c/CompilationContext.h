@@ -35,6 +35,10 @@
 #include <amanda-c/ParserLocations.h>
 #include <amanda-c/ast-package.h>
 
+// IL
+#include <amanda-vm/IL/Module.h>
+#include <amanda-vm/IL/Value.h>
+
 namespace amanda
 {
 namespace compiler
@@ -46,10 +50,10 @@ class CompilationContext : public core::Object
 
 public:
 
-    CompilationContext(io::File* input, io::File* output);
+    CompilationContext(io::File* input);
     virtual ~CompilationContext();
 
-    virtual int         performSSATransformation();
+    virtual il::Module* performSSATransformation();
     void                printAbstractSyntaxTree();
     void                setAbstractSyntaxTree(ast::NCompilationUnit* tree);
 
@@ -57,12 +61,11 @@ protected:
 
     virtual void        performSemanticAnalysis();
 
-    ast::NCompilationUnit*                          abstractSyntaxTree;
-    core::StrongReference<io::File>                 inputFile;
-    core::StrongReference<io::File>                 outputFile;
-    DefaultParser*                                  parserObject;
-    Scanner*                                        scannerObject;
-    
+    ast::NCompilationUnit*          abstractSyntaxTree;
+    core::StrongReference<io::File> inputFile;
+    DefaultParser*                  parserObject;
+    Scanner*                        scannerObject;
+
 } ;
 
 }

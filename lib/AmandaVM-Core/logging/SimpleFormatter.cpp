@@ -50,22 +50,31 @@ core::String SimpleFormatter::levelToString(int level) const
     core::String result;
     switch (level)
     {
-        case Logger::TRACE:
+        case Logger::L_TRACE:
             result = "TRACE";
             break;
-        case Logger::DEBUG:
+        case Logger::L_DEBUG:
             result = "DEBUG";
             break;
-        case Logger::INFO:
+        case Logger::L_FINEST:
+            result.append("FINEST");
+            break;
+        case Logger::L_FINER:
+            result.append("FINER");
+            break;
+        case Logger::L_FINE:
+            result.append("FINE");
+            break;
+        case Logger::L_INFO:
             result = "INFO";
             break;
-        case Logger::WARN:
+        case Logger::L_WARN:
             result = "WARN";
             break;
-        case Logger::ERROR:
+        case Logger::L_ERROR:
             result = "ERROR";
             break;
-        case Logger::FATAL:
+        case Logger::L_FATAL:
             result = "FATAL";
             break;
         default:

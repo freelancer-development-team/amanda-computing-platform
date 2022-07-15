@@ -49,7 +49,7 @@ namespace core
         template <class __class> \
         __class& cast() \
         { \
-            return static_cast<__class&> (*this); \
+            return static_cast<__class*> (this)->getReference(); \
         } \
         \
         virtual amanda::core::Class& getClassDynamically() const { return getClass(); } \

@@ -28,6 +28,7 @@
 #include <amanda-vm/Object.h>
 #include <amanda-vm/Pointer.h>
 #include <amanda-vm/IO/File.h>
+#include <amanda-vm/IL/PassManager.h>
 
 #include <ctime>
 #include <list>

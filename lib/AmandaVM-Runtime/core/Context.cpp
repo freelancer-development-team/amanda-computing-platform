@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -94,32 +94,27 @@ moduleLoader(new ModuleLoader(memoryAllocator->getReference()))
     // Set the signal handlers
     std::signal(SIGSEGV, handleSigsegv);
 
-    // Create the logging file
-    loggingFile = new io::File("amandavm-session.log", io::File::WRITE | io::File::CREATE);
-    if (!loggingFile->open())
-    {
-        fprintf(stderr, "amanda-vm: fatal error: unable to open log file (%s).", loggingFile->getLastErrorString().toCharArray());
-        throw nio::IOException("unable to open log file.");
-    }
-
     // Get the virtual machine execution path
     {
-        // Get the full path object
-        io::Path full(path);
-
-        // Assign to the path reference
-        this->path = new io::Path(full.getParent().toString());
+        io::Path absolutePath(path);
+        this->path = new io::Path(absolutePath.toAbsolutePath().toString());
     }
-
-    // Initialize the local file system
-    fileSystem = new FileSystem();
+    // Create the logging file
+    {
+        loggingFile = new io::File("vm-session.log", io::File::WRITE | io::File::CREATE);
+        if (!loggingFile->open())
+        {
+            fprintf(stderr, "amanda-vm: fatal error: unable to open log file (%s).", loggingFile->getLastErrorString().toCharArray());
+            throw nio::IOException("unable to open log file.");
+        }
+    }
 
     // Initialize the default system properties.
     initializeSystemProperties();
 
     // Create the logging object and output the first message.
     LOGGER.setUseParentHandlers(false);
-    LOGGER.setLevel(logging::Logger::ALL);
+    LOGGER.setLevel(logging::Logger::L_ALL);
 
     // Create the file handler
     fileFormatter = new logging::GNUFormatter("amanda-vm", false);
@@ -127,7 +122,7 @@ moduleLoader(new ModuleLoader(memoryAllocator->getReference()))
 
     // Configure the handlers
     CONSOLE_HANDLER.setFormatter(FORMATTER);
-    CONSOLE_HANDLER.setLevel(logging::Logger::WARN);
+    CONSOLE_HANDLER.setLevel(logging::Logger::L_ERROR);
 
     // Add the handlers
     LOGGER.addHandler(CONSOLE_HANDLER);
@@ -135,6 +130,9 @@ moduleLoader(new ModuleLoader(memoryAllocator->getReference()))
 
     // Trace the context creation
     LOGGER.info("creating virtual machine context object (0x%p)", this);
+
+    // Initialize the local file system
+    fileSystem = new FileSystem(getConstReference(), this->path);
 
     // Load the C library
     LOGGER.info("loading runtime descriptor for the standard C library.");
@@ -152,7 +150,7 @@ moduleLoader(new ModuleLoader(memoryAllocator->getReference()))
 #endif
 
     // Prepare the console to display ANSI escape codes if on Windows
-    //TODO: Finish this
+    //TODO: Finish this, set the code-page and the ansi escapes
 #if _W32
 
 #endif
@@ -160,8 +158,31 @@ moduleLoader(new ModuleLoader(memoryAllocator->getReference()))
     // If we are in release mode
     // set the logging level to info
 #ifndef DEBUG
-    LOGGER.setLevel(logging::Logger::INFO);
+    LOGGER.setLevel(logging::Logger::L_INFO);
+#else
+    LOGGER.setLevel(logging::Logger::L_FINER);
 #endif
+
+    // Load every library and every module out there
+    const io::Path::DirectoryList& ldl = fileSystem->getLibrariesFolder().getAllFilesInDirectory();
+    for (io::Path::DirectoryList::const_iterator it = ldl.begin(), end = ldl.end();
+         it != end; ++it)
+    {
+        if ((*it).hasExtension(fileSystem->getDllExtension()))
+        {
+            loadLibrary((*it).toAbsolutePath().toString());
+        }
+    }
+
+    const io::Path::DirectoryList mdl = fileSystem->getModulesFolder().getAllFilesInDirectory();
+    for (io::Path::DirectoryList::const_iterator it = mdl.begin(), end = mdl.end();
+         it != end; ++it)
+    {
+        if ((*it).hasExtension(FileSystem::EXECUTABLE_FILE_EXTENSION))
+        {
+            loadModule((*it).toAbsolutePath().toString());
+        }
+    }
 }
 
 Context::~Context()
@@ -299,7 +320,7 @@ int Context::callNative(const core::String& name, Stack& stack) const
 {
     // Log the attempt
     LOGGER.debug("attempting call to native function named <%s> (local stack: 0x%p)",
-                name.toCharArray(), stack.getSelfPointer());
+                 name.toCharArray(), stack.getSelfPointer());
 
     // Set the default result to OK
     int result = FFI_OK;
@@ -407,6 +428,11 @@ const Procedure* Context::getCachedLocalProcedure(const core::String& name) cons
     return cachedProcedures.find(name)->second;
 }
 
+logging::FileHandler* Context::getFileHandlerForLog() const
+{
+    return fileHandler;
+}
+
 MemoryAllocator& Context::getMemoryAllocator() const
 {
     return memoryAllocator->getReference();
@@ -466,8 +492,11 @@ int Context::loadAndExecute(const core::String& fullPath)
         std::time_t localtime = std::time(NULL);
         core::String strLocalTime(std::ctime(&localtime));
 
+        LOGGER.info("\t-- EXEC STARTED --");
         LOGGER.info("execution started (local date & time: %s)", strLocalTime.substring(0, strLocalTime.length() - 1).toCharArray());
         core::StrongReference<const Schedulable> mainSchedulable = scheduler->schedule(mainProcedure).getSelfPointer();
+
+        //TODO: Set the priority of the main thread to idle if it is the invoker
 
         // Wait until this thread (and all the spawned threads) finishes executing
         scheduler->waitForAll();
@@ -495,20 +524,43 @@ void Context::loadLibrary(const core::String& fullPath)
 
         // Load the library
         // LOAD METHOD ON WINDOWS
-#ifdef _W32
-        HMODULE handle = LoadLibraryA(fullPath.replaced('/', '\\').toCharArray());
-        if (handle == NULL)
+        if (nativeLibraries.find(name) == nativeLibraries.end())
         {
-            throw core::Exception(core::String::makeFormattedString("unable to load native library '%s'.", fullPath.toCharArray()));
-        }
+#ifdef _W32
+            HMODULE handle = LoadLibraryA(fullPath.replaced('/', '\\').toCharArray());
+            if (handle == NULL)
+            {
+                throw core::Exception(core::String::makeFormattedString("unable to load native library '%s'.", fullPath.toCharArray()));
+            }
 
-        LOGGER.info("module '%s' loaded successfully as a native library. Handle at 0x%p",
-                    fullPath.toCharArray(), handle);
-        descriptor.setHandle(handle);
+            LOGGER.info("module '%s' loaded successfully as a native library. Handle at 0x%p",
+                        fullPath.toCharArray(), handle);
+            descriptor.setHandle(handle);
 #endif
 
-        // Add the descriptor to the list of loaded libraries
-        nativeLibraries.insert(std::make_pair(descriptor.getName(), descriptor));
+            // Add the descriptor to the list of loaded libraries
+            nativeLibraries.insert(std::make_pair(descriptor.getName(), descriptor));
+        }
+        else
+        {
+            LOGGER.warn("the native library '%s' is already loaded, flushing cache and re-loading.", name.toCharArray());
+            NativeLibraryDescriptor& loaded = nativeLibraries.find(name)->second;
+#ifdef _W32
+            // Unload the previously loaded library
+            loaded.unload();
+
+            // Load the library again
+            HMODULE handle = LoadLibraryA(fullPath.replaced('/', '\\').toCharArray());
+            if (handle == NULL)
+            {
+                throw core::Exception(core::String::makeFormattedString("unable to re-load native library '%s'.", fullPath.toCharArray()));
+            }
+
+            LOGGER.info("module '%s' loaded successfully as a native library. Handle at 0x%p",
+                        fullPath.toCharArray(), handle);
+            loaded.setHandle(handle);
+#endif
+        }
     }
     AMANDA_DESYNCHRONIZED(lock);
 }
@@ -521,11 +573,31 @@ ExecutableModule* Context::loadModule(const core::String& fullPath)
     core::StrongReference<io::ConsistentInputStream> cstream = new io::ConsistentInputStream(stream->getReference(), io::ConsistentInputStream::BIG_ENDIAN);
 
     // Trace the resulting id
-    LOGGER.trace("loading module: %s (scheme: %s)", rid.toString().toCharArray(), rid.getScheme().toCharArray());
+    LOGGER.info("loading module: %s (scheme: %s) [%s]", rid.toString().toCharArray(), rid.getScheme().toCharArray(), fullPath.toCharArray());
+
+    // Create the result pointer
+    ExecutableModule* result = NULL;
 
     // Create the module reader object & load the resultant module object
     // propagate exceptions if any.
-    return moduleLoader->load(fullPath, cstream);
+    io::Path modulePath(fullPath);
+    if (!modulePath.exists())
+    {
+        throw nio::NoSuchFileException(fullPath);
+    }
+    else
+    {
+        if (moduleLoader->isLoaded(modulePath.getLastPathComponent()))
+        {
+            LOGGER.warn("module is already loaded, retrieving from module cache.");
+            result = moduleLoader->get(modulePath.getLastPathComponent());
+        }
+        else
+        {
+            result = moduleLoader->load(modulePath.getLastPathComponent(), cstream);
+        }
+    }
+    return result;
 }
 
 Context::NativeTypeList Context::parseFunctionArgumentTypes(const core::String& str) const

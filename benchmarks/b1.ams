@@ -1,0 +1,34 @@
+.section ".code"
+
+.def @@main?A_string@!l32
+	alloc	$4	# $0 - i = 0
+	alloc	$4	# $4 - x = 0
+	
+.loop:
+	# x = x + 1
+	push	a64 $4
+	sload	$4
+	push	l32 $1
+	add		l32
+	push	a64 $4
+	sstore	$4
+	
+	# ++i
+	push	a64 $0
+	sload	$4
+	push	l32 $1
+	add		l32
+	push	a64 $0
+	sstore	$4
+	
+	# i < 10000
+	push	a64 $0
+	sload	$4
+	push	l32 $100000
+	clt		l32
+	jt		.loop
+	
+	# Return 0
+	push	l32 $0
+	ret		l32
+.endef

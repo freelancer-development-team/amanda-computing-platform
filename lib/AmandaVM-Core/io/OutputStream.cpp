@@ -39,6 +39,11 @@ void OutputStream::flush() const
     assert("This method is not implemented here!");
 }
 
+void OutputStream::write(const core::String& str) const
+{
+    write(str.toCharArray());
+}
+
 void OutputStream::write(const void* data, size_t size, size_t count) const
 {
     const char* buffer = (const char*) data;

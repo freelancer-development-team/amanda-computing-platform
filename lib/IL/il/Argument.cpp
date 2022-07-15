@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,27 +16,41 @@
  */
 
 /* 
- * File:   CodeGenContext.cpp
+ * File:   Argument.cpp
  * Author: Javier Marrero
  * 
- * Created on March 12, 2022, 5:59 PM
+ * Created on July 14, 2022, 6:40 PM
  */
 
+#include <amanda-vm/IL/Argument.h>
 #include <amanda-vm/IL/CodeGenContext.h>
-#include <amanda-vm/IL/Module.h>
 
 using namespace amanda;
 using namespace amanda::il;
 
-CodeGenContext::CodeGenContext()
+Argument::Argument(const Type* type, const core::String& name, Function* f, unsigned argumentNumber)
+:
+Value(type, type->getContext().allocateValueIdentifier()),
+argumentNumber(argumentNumber),
+name(name),
+parent(f)
 {
 }
 
-CodeGenContext::~CodeGenContext()
+Argument::~Argument()
 {
 }
 
-void CodeGenContext::setModule(Module* module)
+unsigned Argument::getArgumentNumber() const
 {
-    this->module = module;
+    return argumentNumber;
 }
+
+const Function* Argument::getParent() const
+{
+    return parent;
+}
+
+
+
+

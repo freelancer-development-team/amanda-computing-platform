@@ -68,8 +68,9 @@ public:
     bool                isStarted() const;
     virtual void        join(unsigned long long id);
     virtual void        run();
-    void                setJoinable(bool joinable);
     void                setDead(bool dead);
+    void                setJoinable(bool joinable);
+    void                setPriority(ThreadPriority priority);
     virtual void        start();
 
 private:

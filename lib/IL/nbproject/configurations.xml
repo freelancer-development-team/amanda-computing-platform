@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="100">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>../../include/amanda-vm/IL/AbstractPass.h</itemPath>
+      <itemPath>../../include/amanda-vm/IL/Argument.h</itemPath>
+      <itemPath>../../include/amanda-vm/IL/AssemblyILExporter.h</itemPath>
+      <itemPath>../../include/amanda-vm/IL/AstNodeBase.h</itemPath>
+      <itemPath>../../include/amanda-vm/IL/BasicBlock.h</itemPath>
+      <itemPath>../../include/amanda-vm/IL/CodeGenContext.h</itemPath>
+      <itemPath>../../include/amanda-vm/IL/DerivedTypes.h</itemPath>
+      <itemPath>../../include/amanda-vm/IL/Function.h</itemPath>
+      <itemPath>../../include/amanda-vm/IL/ILExporter.h</itemPath>
+      <itemPath>il/Instruction.h</itemPath>
+      <itemPath>../../include/amanda-vm/IL/Location.h</itemPath>
+      <itemPath>../../include/amanda-vm/IL/Module.h</itemPath>
+      <itemPath>../../include/amanda-vm/IL/PassManager.h</itemPath>
+      <itemPath>../../include/amanda-vm/IL/Representable.h</itemPath>
+      <itemPath>../../include/amanda-vm/IL/SemanticAnalysisContext.h</itemPath>
+      <itemPath>../../include/amanda-vm/IL/Symbol.h</itemPath>
+      <itemPath>../../include/amanda-vm/IL/SymbolTable.h</itemPath>
+      <itemPath>../../include/amanda-vm/IL/Type.h</itemPath>
+      <itemPath>../../include/amanda-vm/IL/Use.h</itemPath>
+      <itemPath>../../include/amanda-vm/IL/Value.h</itemPath>
+      <itemPath>../../include/amanda-vm/IL/ValueListener.h</itemPath>
+      <itemPath>../../include/amanda-vm/IL/ValueReferrer.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>optimizer/AbstractPass.cpp</itemPath>
+      <itemPath>il/Argument.cpp</itemPath>
+      <itemPath>io/AssemblyILExporter.cpp</itemPath>
+      <itemPath>ast/AstNodeBase.cpp</itemPath>
+      <itemPath>optimizer/BasicBlock.cpp</itemPath>
+      <itemPath>ast/CodeGenContext.cpp</itemPath>
+      <itemPath>il/DerivedTypes.cpp</itemPath>
+      <itemPath>optimizer/Function.cpp</itemPath>
+      <itemPath>io/ILExporter.cpp</itemPath>
+      <itemPath>il/Instruction.cpp</itemPath>
+      <itemPath>ast/Location.cpp</itemPath>
+      <itemPath>optimizer/Module.cpp</itemPath>
+      <itemPath>optimizer/PassManager.cpp</itemPath>
+      <itemPath>ast/SemanticAnalysisContext.cpp</itemPath>
+      <itemPath>ast/Symbol.cpp</itemPath>
+      <itemPath>ast/SymbolTable.cpp</itemPath>
+      <itemPath>il/Type.cpp</itemPath>
+      <itemPath>il/Use.cpp</itemPath>
+      <itemPath>il/Value.cpp</itemPath>
+      <itemPath>il/ValueListener.cpp</itemPath>
+      <itemPath>il/ValueReferrer.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="3">
+      <toolsSet>
+        <compilerSet>MinGW|MinGW</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <ccTool>
+          <standard>4</standard>
+          <incDir>
+            <pElem>../../include</pElem>
+          </incDir>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <archiverTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libil.a</output>
+        </archiverTool>
+      </compileType>
+      <item path="../../include/amanda-vm/IL/AbstractPass.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/Argument.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/AssemblyILExporter.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/AstNodeBase.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/BasicBlock.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/CodeGenContext.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/DerivedTypes.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/Function.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/ILExporter.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/Location.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/Module.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/PassManager.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/Representable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/SemanticAnalysisContext.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/Symbol.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/SymbolTable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/Type.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/Use.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/Value.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/ValueListener.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/ValueReferrer.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="ast/AstNodeBase.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/CodeGenContext.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/Location.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/SemanticAnalysisContext.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/Symbol.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/SymbolTable.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="il/Argument.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="il/DerivedTypes.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="il/Instruction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="il/Instruction.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="il/Type.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="il/Use.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="il/Value.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="il/ValueListener.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="il/ValueReferrer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/AssemblyILExporter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/ILExporter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="optimizer/AbstractPass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="optimizer/BasicBlock.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="optimizer/Function.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="optimizer/Module.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="optimizer/PassManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="3">
+      <toolsSet>
+        <compilerSet>MinGW|MinGW</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>6</developmentMode>
+          <standard>4</standard>
+          <incDir>
+            <pElem>../../include</pElem>
+          </incDir>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>6</developmentMode>
+        </asmTool>
+        <archiverTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libil.a</output>
+        </archiverTool>
+      </compileType>
+      <item path="../../include/amanda-vm/IL/AbstractPass.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/Argument.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/AssemblyILExporter.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/AstNodeBase.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/BasicBlock.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/CodeGenContext.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/DerivedTypes.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/Function.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/ILExporter.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/Location.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/Module.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/PassManager.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/Representable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/SemanticAnalysisContext.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/Symbol.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/SymbolTable.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/Type.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/Use.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/Value.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/ValueListener.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/IL/ValueReferrer.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="ast/AstNodeBase.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/CodeGenContext.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/Location.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/SemanticAnalysisContext.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/Symbol.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ast/SymbolTable.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="il/Argument.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="il/DerivedTypes.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="il/Instruction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="il/Instruction.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="il/Type.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="il/Use.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="il/Value.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="il/ValueListener.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="il/ValueReferrer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/AssemblyILExporter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="io/ILExporter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="optimizer/AbstractPass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="optimizer/BasicBlock.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="optimizer/Function.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="optimizer/Module.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="optimizer/PassManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>

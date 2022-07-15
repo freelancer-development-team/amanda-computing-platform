@@ -27,15 +27,15 @@
 #include <amanda-c/Messages.h>
 
 #include <amanda-vm/Frontend/SemanticException.h>
+#include <amanda-vm/IL/package.hxx>
 
 using namespace amanda;
 using namespace amanda::compiler;
 
-CompilationContext::CompilationContext(io::File* input, io::File* output)
+CompilationContext::CompilationContext(io::File* input)
 :
 abstractSyntaxTree(NULL),
 inputFile(input),
-outputFile(output),
 parserObject(NULL),
 scannerObject(NULL)
 {
@@ -67,11 +67,14 @@ void CompilationContext::setAbstractSyntaxTree(ast::NCompilationUnit* tree)
     abstractSyntaxTree->grab();
 }
 
-int CompilationContext::performSSATransformation()
+il::Module* CompilationContext::performSSATransformation()
 {
     // RAII pattern
     parserObject = new DefaultParser(*this, *scannerObject);
     int parserResult = 1;
+
+    // The resulting object
+    il::Module* result = NULL;
 
     //TODO: Debug only when necessary
     // parserObject->set_debug_level(1);
@@ -81,14 +84,19 @@ int CompilationContext::performSSATransformation()
         parserResult = parserObject->parse();
         if (parserResult == 0)
         {
-            performSemanticAnalysis();
+            performSemanticAnalysis();  // This throws an exception if fails
+
+            // Now perform the SSA transformation
+            // il::CodeGenContext codeGenContex;
+
         }
     }
-    catch (std::exception& ex)
+    catch (core::Exception& ex)
     {
-        log::fatal("internal compiler fault (%s).", ex.what());
+        log::fatal("%s: %s", ex.getClassDynamically().getName(), ex.getMessage().toCharArray());
+        throw ex;
     }
-    return parserResult;
+    return result;
 }
 
 void CompilationContext::printAbstractSyntaxTree()
@@ -98,7 +106,7 @@ void CompilationContext::printAbstractSyntaxTree()
     io::console().err.println("\n ===== ABSTRACT SYNTAX TREE ===== ");
     abstractSyntaxTree->printNodeAndChildren();
     io::console().err.println(" ===== DONE ===== \n");
-    
+
 }
 
 void CompilationContext::performSemanticAnalysis()

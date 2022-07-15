@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 FreeLancer Development Team
+ * Copyright (C) 2022 Javier Marrero
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,28 +16,32 @@
  */
 
 /* 
- * File:   Module.cpp
+ * File:   ValueListener.h
  * Author: Javier Marrero
- * 
- * Created on March 12, 2022, 3:06 PM
+ *
+ * Created on July 14, 2022, 5:41 PM
  */
 
-#include <amanda-vm/IL/Module.h>
+#ifndef VALUELISTENER_H
+#define VALUELISTENER_H
 
-using namespace amanda;
-using namespace amanda::il;
+#include <amanda-vm/TypeSystem.h>
 
-Module::Module(const core::String& id)
-:
-identifier(id)
+namespace amanda
 {
+namespace il
+{
+
+class ValueListener : public core::Object
+{
+    AMANDA_OBJECT(ValueListener, core::Object)
+public:
+
+    
+} ;
+
+}
 }
 
-Module::~Module()
-{
-}
+#endif /* VALUELISTENER_H */
 
-const core::String& Module::getIdentifier() const
-{
-    return identifier;
-}

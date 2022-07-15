@@ -149,6 +149,7 @@
 %type<amanda::compiler::ast::NStatement*>                           compound_statement
 %type<amanda::compiler::ast::NDeclaration*>                         declaration
 %type<amanda::compiler::ast::NDeclarationBlock*>                    declarations
+%type<amanda::compiler::ast::NDoWhileStatement*>                    do_while_statement
 %type<amanda::compiler::ast::NExpression*>                          expression
 %type<amanda::compiler::ast::ExpressionList*>                       expression_list
 %type<amanda::compiler::ast::NExpressionStatement*>                 expression_statement
@@ -170,6 +171,7 @@
 %type<amanda::compiler::ast::NStatement*>                           statement
 %type<amanda::compiler::ast::NBlock*>                               statement_sequence
 %type<amanda::core::String>                                         type simple_type reference_type
+%type<amanda::compiler::ast::NUnaryOperator*>                       unary_operator
 %type<amanda::compiler::ast::NUsingDeclaration*>                    using_declaration
 %type<amanda::compiler::ast::NVariableDeclaration*>                 variable_declaration
 %type<amanda::compiler::ast::NWhileStatement*>                      while_statement
@@ -367,7 +369,7 @@ field_declaration
 
 /* ============================ Statements ================================== */
 statement
-    : simple_statement ';'
+    : simple_statement
     | compound_statement
     ;
 
@@ -380,20 +382,22 @@ compound_statement
     : if_statement                  { $$ = $1; }
     | for_statement                 { $$ = $1; }
     | while_statement               { $$ = $1; }
+    | do_while_statement            { $$ = $1; }
     ;
 
 // These are the expressions allowed as
 // statements
 expression_statement
-    : function_call                 { $$ = new NExpressionStatement($1); }
-    | variable_declaration          { $$ = new NExpressionStatement($1); }
-    | assignment_expression         { $$ = new NExpressionStatement($1); }
+    : function_call ';'             { $$ = new NExpressionStatement($1); }
+    | variable_declaration ';'      { $$ = new NExpressionStatement($1); }
+    | assignment_expression ';'     { $$ = new NExpressionStatement($1); }
+    | unary_operator ';'            { $$ = new NExpressionStatement($1); }
     ;
 
 /* ======================== Simple statements =============================== */
 return_statement
-    : RETURN expression             { $$ = new NReturnStatement(); }
-    | RETURN                        { $$ = new NReturnStatement(); }
+    : RETURN expression ';'         { $$ = new NReturnStatement(); }
+    | RETURN ';'                    { $$ = new NReturnStatement(); }
     ;
 
 /* ======================= Compound statements ============================== */
@@ -463,6 +467,13 @@ while_statement
                                                 }
     ;
 
+do_while_statement
+    : DO '{' statement_sequence '}' WHILE '(' expression ')' ';'
+                                                {
+                                                    $$ = new NDoWhileStatement($7, $3);
+                                                }
+    ;
+
 /* =========================== Expressions ================================== */
 optional_expression
     : expression                                { $$ = $1; }
@@ -477,6 +488,7 @@ expression
     | function_call                             { $$ = $1; }
     | binary_operator                           { $$ = $1; }
     | assignment_expression                     { $$ = $1; }
+    | unary_operator                            { $$ = $1; }
     | '(' expression ')'                        { $$ = $2; }
     ;
 
@@ -586,6 +598,16 @@ binary_operator
     | expression '-' expression             { $$ = new NBinaryOperator(BO_Sub, $1, $3); }
     | expression '/' expression             { $$ = new NBinaryOperator(BO_Div, $1, $3); }
     | expression '*' expression             { $$ = new NBinaryOperator(BO_Mult, $1, $3); }
+    | expression '%' expression             { $$ = new NBinaryOperator(BO_Mod, $1, $3); }
+    | expression AND expression             { $$ = new NBinaryOperator(BO_LogicAnd, $1, $3); }
+    | expression OR expression              { $$ = new NBinaryOperator(BO_LogicOr, $1, $3); }
+    ;
+
+unary_operator
+    : PLUSPLUS expression                   { $$ = new NUnaryOperator(UO_Preincrement, $2); }
+    | MINUSMINUS expression                 { $$ = new NUnaryOperator(UO_Predecrement, $2); }
+    | expression PLUSPLUS                   { $$ = new NUnaryOperator(UO_Postincrement, $1); }
+    | expression MINUSMINUS                 { $$ = new NUnaryOperator(UO_Postdecrement, $1); }
     ;
 
 %%

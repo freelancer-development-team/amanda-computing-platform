@@ -50,12 +50,17 @@ typedef enum BinaryOperator
     // Logic
     BO_LogicAnd,
     BO_LogicOr,
-    BO_LogicNot
 } BinaryOperator;
 
 typedef enum UnaryOperator
 {
-    UO_Negate
+    UO_Negate,
+    UO_Preincrement,
+    UO_Postincrement,
+    UO_Predecrement,
+    UO_Postdecrement,
+    // Logic
+    UO_LogicNot
 } UnaryOperator;
 
 }

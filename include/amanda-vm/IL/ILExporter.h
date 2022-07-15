@@ -26,6 +26,7 @@
 #define ILEXPORTER_H
 
 #include <amanda-vm/TypeSystem.h>
+#include <amanda-vm/IO/OutputStream.h>
 #include <amanda-vm/IL/Module.h>
 
 #include <stdint.h>
@@ -48,13 +49,13 @@ class ILExporter : public core::Object
     AMANDA_OBJECT(ILExporter, core::Object)
 
 public:
-    
+
     ILExporter(Module* module);
     virtual ~ILExporter();
 
-    virtual void exportData(char buffer[], size_t size) = 0;
+    virtual void exportData(io::OutputStream& stream) = 0;
 
-private:
+protected:
 
     core::StrongReference<Module> module;
 } ;

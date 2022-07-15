@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="100">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>../../include/amanda-vm/Option/AmbiguousOptionException.h</itemPath>
+      <itemPath>../../include/amanda-vm/Option/CommandLine.h</itemPath>
+      <itemPath>../../include/amanda-vm/Option/CommandLineParser.h</itemPath>
+      <itemPath>../../include/amanda-vm/Option/DefaultParser.h</itemPath>
+      <itemPath>../../include/amanda-vm/Option/HelpFormatter.h</itemPath>
+      <itemPath>../../include/amanda-vm/Option/MissingArgumentException.h</itemPath>
+      <itemPath>../../include/amanda-vm/Option/MissingOptionException.h</itemPath>
+      <itemPath>../../include/amanda-vm/Option/Option.h</itemPath>
+      <itemPath>../../include/amanda-vm/Option/OptionBuilder.h</itemPath>
+      <itemPath>../../include/amanda-vm/Option/Options.h</itemPath>
+      <itemPath>../../include/amanda-vm/Option/ParseException.h</itemPath>
+      <itemPath>../../include/amanda-vm/Option/UnrecognizedOptionException.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>AmbiguousOptionException.cpp</itemPath>
+      <itemPath>CommandLine.cpp</itemPath>
+      <itemPath>CommandLineParser.cpp</itemPath>
+      <itemPath>DefaultParser.cpp</itemPath>
+      <itemPath>HelpFormatter.cpp</itemPath>
+      <itemPath>MissingArgumentException.cpp</itemPath>
+      <itemPath>MissingOptionException.cpp</itemPath>
+      <itemPath>Option.cpp</itemPath>
+      <itemPath>OptionBuilder.cpp</itemPath>
+      <itemPath>Options.cpp</itemPath>
+      <itemPath>ParseException.cpp</itemPath>
+      <itemPath>UnrecognizedOptionException.cpp</itemPath>
+      <itemPath>Util.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="3">
+      <toolsSet>
+        <compilerSet>MinGW|MinGW</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <ccTool>
+          <standard>4</standard>
+          <incDir>
+            <pElem>../../include</pElem>
+          </incDir>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <asmTool>
+          <warningLevel>2</warningLevel>
+        </asmTool>
+        <archiverTool>
+        </archiverTool>
+      </compileType>
+      <item path="../../include/amanda-vm/Option/AmbiguousOptionException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Option/CommandLine.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Option/CommandLineParser.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Option/DefaultParser.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Option/HelpFormatter.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Option/MissingArgumentException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Option/MissingOptionException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Option/Option.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Option/OptionBuilder.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Option/Options.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Option/ParseException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Option/UnrecognizedOptionException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="AmbiguousOptionException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="CommandLine.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="CommandLineParser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="DefaultParser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="HelpFormatter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MissingArgumentException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MissingOptionException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Option.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="OptionBuilder.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Options.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ParseException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="UnrecognizedOptionException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Util.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="3">
+      <toolsSet>
+        <compilerSet>MinGW|MinGW</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>6</developmentMode>
+          <standard>4</standard>
+          <incDir>
+            <pElem>../../include</pElem>
+          </incDir>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>6</developmentMode>
+          <warningLevel>2</warningLevel>
+        </asmTool>
+        <archiverTool>
+        </archiverTool>
+      </compileType>
+      <item path="../../include/amanda-vm/Option/AmbiguousOptionException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Option/CommandLine.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Option/CommandLineParser.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Option/DefaultParser.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Option/HelpFormatter.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Option/MissingArgumentException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Option/MissingOptionException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Option/Option.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Option/OptionBuilder.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Option/Options.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Option/ParseException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../include/amanda-vm/Option/UnrecognizedOptionException.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="AmbiguousOptionException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="CommandLine.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="CommandLineParser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="DefaultParser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="HelpFormatter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MissingArgumentException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MissingOptionException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Option.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="OptionBuilder.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Options.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ParseException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="UnrecognizedOptionException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Util.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>

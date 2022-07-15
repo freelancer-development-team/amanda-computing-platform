@@ -25,6 +25,7 @@
 #ifndef INSTRUCTIONS_H
 #define INSTRUCTIONS_H
 
+// C++
 #include <stdint.h>
 
 namespace amanda
@@ -134,8 +135,33 @@ typedef enum VM_Opcodes
     I_MODW,
     I_MODL,
     I_MODQ,
-    I_MODF,
-    I_MODD,
+
+    // Bitwise manipulation
+    I_SLB,
+    I_SLW,
+    I_SLL,
+    I_SLQ,
+
+    I_SRB,
+    I_SRW,
+    I_SRL,
+    I_SRQ,
+
+    I_ANDB,
+    I_ANDW,
+    I_ANDL,
+    I_ANDQ,
+
+    I_ORB,
+    I_ORW,
+    I_ORL,
+    I_ORQ,
+
+    I_NOTB,
+    I_NOTW,
+    I_NOTL,
+    I_NOTQ,
+
     // Stack manipulation
     I_PUSHB,
     I_PUSHW,
@@ -235,6 +261,7 @@ typedef enum VM_Opcodes
     I_ILOAD,
     I_SLOAD,
 
+    I_STORE,
     I_STOREB,
     I_STOREW,
     I_STOREL,
@@ -244,8 +271,16 @@ typedef enum VM_Opcodes
 
     I_SSTORE,
 
+    // Exception control
+    I_RAISE,
+    I_CEF,
+
+    // Synchronization
+    I_SYNC,
+    I_DESYNC,
+
     // Reserved
-    I_INVALID = 0xFF
+    I_INVALID = 0x100
 } VM_Opcodes;
 
 /**

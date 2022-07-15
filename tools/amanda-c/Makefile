@@ -72,7 +72,7 @@ build: .build-post
 	${YACC} ${YACC_OPTIONS} --report-file="specs/parser-report.txt" -o "compiler/Parser.cpp" --defines="include/amanda-c/Parser.h" "specs/grammar.y"	
 
 .build-post: .build-impl
-# Add your post 'build' code here...
+	$(CP) -v ${CND_ARTIFACT_DIR_${CONF}}/* "../../dist/amanda-sdk/bin"
 
 # clean
 clean: .clean-post

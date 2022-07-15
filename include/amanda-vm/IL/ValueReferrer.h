@@ -27,6 +27,7 @@
 
 #include <amanda-vm/TypeSystem.h>
 #include <amanda-vm/IL/Value.h>
+#include <amanda-vm/IL/Use.h>
 
 #include <vector>
 
@@ -35,20 +36,35 @@ namespace amanda
 namespace il
 {
 
+/**
+ * <code>ValueReferrer</code> objects are values that can take other values
+ * as operands.
+ */
 class ValueReferrer : public Value
 {
     AMANDA_OBJECT(ValueReferrer, Value)
 
 public:
-    
-    unsigned    getNumberOfOperands() const;
-    Value*      getOperand(unsigned index) const;
+
+    static UseList buildOperandList(unsigned numOperands, ...);
+
+    virtual ~ValueReferrer();
+
+    unsigned        getNumberOfOperands() const;
+    Value*          getOperand(unsigned i) const;
+    const UseList&  getOperandList() const;
+    Use&            getOperandUse(unsigned i);
+    const Use&      getOperandUse(unsigned i) const;
+    void            setOperand(unsigned i, Value* v);
+    void            replaceUsesOfWith(Value* from, Value* to);
 
 protected:
 
-    std::vector<Value*> operands;
+    UseList operandList;
 
-    void checkIndexInclusive(unsigned index) const;
+    ValueReferrer(const Type* type, unsigned vty);
+    ValueReferrer(const Type* type, unsigned vty, const UseList& operandList);
+
 } ;
 
 }

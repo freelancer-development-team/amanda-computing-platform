@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Javier Marrero
+ * Copyright (C) 2022 FreeLancer Development Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -97,23 +97,24 @@ public:
             const core::String& path);
     virtual ~Context();
     
-    void                addGlobalOptimizationCriteria(AdaptiveOptimizationCondition* condition);
-    void                cacheProcedure(const core::String& name, Procedure* proc) const;
-    int                 callLocal(const core::String& name, Stack& stack, Procedure::ProcessorFlags& eflags) const;
-    int                 callNative(const core::String& name, Stack& stack) const;
-    const Procedure*    getCachedLocalProcedure(const core::String& name) const;
-    MemoryAllocator&    getMemoryAllocator() const;
-    const core::String& getProperty(const core::String& key) const;
-    bool                isCachedProcedure(const core::String& name) const;
-    int                 loadAndExecute(const core::String& fullPath);
-    void                loadLibrary(const core::String& fullPath);
-    ExecutableModule*   loadModule(const core::String& fullPath);
-    NativeTypeList      parseFunctionArgumentTypes(const core::String& str) const;
-    bool                putProperty(const core::String& key, const core::String& value);
-    void                setMemoryAllocator(MemoryAllocator* memoryAllocator);
-    void                setProperty(const core::String& key, const core::String& value);
-    void                setScheduler(const ThreadScheduler* scheduler);
-    void                uncacheProcedure(const core::String& name) const;
+    void                    addGlobalOptimizationCriteria(AdaptiveOptimizationCondition* condition);
+    void                    cacheProcedure(const core::String& name, Procedure* proc) const;
+    int                     callLocal(const core::String& name, Stack& stack, Procedure::ProcessorFlags& eflags) const;
+    int                     callNative(const core::String& name, Stack& stack) const;
+    const Procedure*        getCachedLocalProcedure(const core::String& name) const;
+    logging::FileHandler*   getFileHandlerForLog() const;
+    MemoryAllocator&        getMemoryAllocator() const;
+    const core::String&     getProperty(const core::String& key) const;
+    bool                    isCachedProcedure(const core::String& name) const;
+    int                     loadAndExecute(const core::String& fullPath);
+    void                    loadLibrary(const core::String& fullPath);
+    ExecutableModule*       loadModule(const core::String& fullPath);
+    NativeTypeList          parseFunctionArgumentTypes(const core::String& str) const;
+    bool                    putProperty(const core::String& key, const core::String& value);
+    void                    setMemoryAllocator(MemoryAllocator* memoryAllocator);
+    void                    setProperty(const core::String& key, const core::String& value);
+    void                    setScheduler(const ThreadScheduler* scheduler);
+    void                    uncacheProcedure(const core::String& name) const;
 
 private:
 
@@ -153,7 +154,6 @@ private:
     static logging::ConsoleHandler              CONSOLE_HANDLER;
     static logging::GNUFormatter                FORMATTER;
     static logging::Logger&                     LOGGER;
-
 
     mutable NativeProceduresCache               cachedNativeProcedures;
     mutable ProceduresCache                     cachedProcedures;

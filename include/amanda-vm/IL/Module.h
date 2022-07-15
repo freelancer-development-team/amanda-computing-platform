@@ -26,6 +26,7 @@
 #define MODULE_H
 
 #include <amanda-vm/TypeSystem.h>
+#include <amanda-vm/IL/Function.h>
 
 namespace amanda
 {
@@ -41,11 +42,14 @@ public:
     Module(const core::String& id);
     virtual ~Module();
 
-    const core::String& getIdentifier() const;
+    void                            addFunction(Function* f);
+    const std::vector<Function*>&   getFunctions() const;
+    const core::String&             getIdentifier() const;
 
 protected:
 
-    core::String identifier;
+    std::vector<Function*>  functions;
+    core::String            identifier;
 } ;
 
 }

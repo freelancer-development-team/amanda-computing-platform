@@ -45,7 +45,7 @@ class LogRecord : public core::Object
     AMANDA_OBJECT(LogRecord, core::Object)
 public:
 
-    LogRecord(int level, const core::String& message, va_list va, const core::String& logger = core::String::EMPTY);
+    LogRecord(int level, const core::String& message, va_list& va, const core::String& logger = core::String::EMPTY);
     virtual ~LogRecord();
     
     int                 getThreadId() const ;
