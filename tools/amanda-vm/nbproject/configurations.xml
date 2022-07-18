@@ -557,6 +557,18 @@
                             perm="755"
                             owner="root"
                             group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/libamandavm-runtime.dll"
+                            from="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libamandavm-runtime.dll"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
         </packFileList>
       </packaging>
       <item path="include/amanda-vm/vm-configuration.h"
@@ -1074,6 +1086,18 @@
           <packFileListElem type="File"
                             to="${PACKAGE_TOP_DIR}bin/libamandavm-runtime.dll"
                             from="../../dist/bin/libamandavm-runtime.dll"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/libamandavm-runtime.dll"
+                            from="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libamandavm-runtime.dll"
                             perm="755"
                             owner="root"
                             group="bin"/>

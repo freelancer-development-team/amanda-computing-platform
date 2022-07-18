@@ -3,11 +3,11 @@
 int main(int argc, char** argv)
 {
 	int x = 0;
-	for (int i = 0; i < 100000; ++i)
+	for (int i = 0; i < 10000; ++i)
 	{
 		x = x + 1;
+		printf("x = %d\n", x);
 	}
 	
-	printf("x = %ld", x);
 	return 0;
 }

@@ -70,7 +70,7 @@ bool NBlock::hasStatements() const
     return !statements.empty();
 }
 
-Value* NBlock::generateCode(amanda::il::CodeGenContext& context)
+Value* NBlock::performSSATransformation(amanda::il::CodeGenContext& context)
 {
     return NULL;
 }

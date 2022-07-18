@@ -23,6 +23,8 @@
  */
 
 #include <amanda-vm/IL/BasicBlock.h>
+#include <amanda-vm/IL/Function.h>
+#include <amanda-vm/IL/Module.h>
 
 using namespace amanda;
 using namespace amanda::il;
@@ -30,10 +32,12 @@ using namespace amanda::il;
 BasicBlock::BasicBlock(CodeGenContext& context, const core::String& name, Function* parent, BasicBlock* insertBefore)
 :
 Value(context.getPrimitiveType(Type::ID_LabelType), context.allocateValueIdentifier()),
-name(name),
-parent(parent),
-module(context.getModule())
+module(context.getModule()),
+parent(parent)
 {
+    /// Set the name of the function
+    setName(name);
+
     if (insertBefore != NULL)
     {
         moveBefore(insertBefore);
@@ -58,10 +62,12 @@ const BasicBlock::InstListType& BasicBlock::getInstructionList() const
 
 const Module* BasicBlock::getModule() const
 {
+    return module;
 }
 
 const Function* BasicBlock::getParent() const
 {
+    return parent;
 }
 
 const BasicBlock* BasicBlock::getSinglePredecessor() const

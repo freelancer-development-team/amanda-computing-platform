@@ -50,3 +50,10 @@ nb-configuration.xml
 
 ### Amanda ###
 *.ax	# Amanda compiled files
+
+### Java ###
+*.class
+*.jar
+
+### Logs ###
+.log

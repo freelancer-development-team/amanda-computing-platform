@@ -23,6 +23,7 @@
  */
 
 #include <amanda-vm/IL/Argument.h>
+#include <amanda-vm/IL/Function.h>
 #include <amanda-vm/IL/CodeGenContext.h>
 
 using namespace amanda;

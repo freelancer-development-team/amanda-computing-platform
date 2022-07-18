@@ -87,8 +87,10 @@ il::Module* CompilationContext::performSSATransformation()
             performSemanticAnalysis();  // This throws an exception if fails
 
             // Now perform the SSA transformation
-            // il::CodeGenContext codeGenContex;
+            core::StrongReference<il::CodeGenContext> codeGenContext =
+                    new il::CodeGenContext();
 
+            result = abstractSyntaxTree->performSSATransformationForModule(codeGenContext->getReference());
         }
     }
     catch (core::Exception& ex)

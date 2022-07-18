@@ -53,17 +53,22 @@ public:
     AstNodeBase();
     virtual ~AstNodeBase();
 
+    Iterator                begin();
+    ConstIterator           begin() const;
     virtual void            doSemanticAnalysis(SemanticAnalysisContext& context);
-    virtual Value*          generateCode(CodeGenContext& context);
+    Iterator                end();
+    ConstIterator           end() const;
+    virtual Value*          performSSATransformation(CodeGenContext& context);
     unsigned                countChildren() const;
-    Location                getLocation() const ;
+    Location                getLocation() const;
     AstNodeBase&            getRootNode();
+    const AstNodeBase*      getParent() const;
     bool                    hasChildren() const;
     void                    setLocation(Location location);
     void                    setParent(AstNodeBase* parent);
     virtual void            printNode(unsigned indent = 0, const io::PrintStream& stream = io::console().err);
     virtual void            printNodeAndChildren(unsigned indent = 0, const io::PrintStream& stream = io::console().err);
-    virtual core::String    toString() const;    
+    virtual core::String    toString() const;
 
 protected:
 
@@ -76,9 +81,9 @@ private:
 
     core::String            makePadding(unsigned size);
 
-    AstNodeBase*                parent;
-    std::vector<AstNodeBase*>   children;
-    Location                    location;
+    AstNodeBase*                        parent;
+    std::vector<AstNodeBase*>           children;
+    Location                            location;
 } ;
 
 }

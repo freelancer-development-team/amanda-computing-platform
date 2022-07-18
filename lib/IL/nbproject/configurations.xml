@@ -13,7 +13,7 @@
       <itemPath>../../include/amanda-vm/IL/DerivedTypes.h</itemPath>
       <itemPath>../../include/amanda-vm/IL/Function.h</itemPath>
       <itemPath>../../include/amanda-vm/IL/ILExporter.h</itemPath>
-      <itemPath>il/Instruction.h</itemPath>
+      <itemPath>../../include/amanda-vm/IL/Instruction.h</itemPath>
       <itemPath>../../include/amanda-vm/IL/Location.h</itemPath>
       <itemPath>../../include/amanda-vm/IL/Module.h</itemPath>
       <itemPath>../../include/amanda-vm/IL/PassManager.h</itemPath>
@@ -133,6 +133,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="../../include/amanda-vm/IL/Instruction.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="../../include/amanda-vm/IL/Location.h"
             ex="false"
             tool="3"
@@ -201,8 +206,6 @@
       <item path="il/DerivedTypes.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="il/Instruction.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="il/Instruction.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="il/Type.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -302,6 +305,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="../../include/amanda-vm/IL/Instruction.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="../../include/amanda-vm/IL/Location.h"
             ex="false"
             tool="3"
@@ -370,8 +378,6 @@
       <item path="il/DerivedTypes.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="il/Instruction.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="il/Instruction.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="il/Type.cpp" ex="false" tool="1" flavor2="0">
       </item>

@@ -28,6 +28,9 @@
 #include <amanda-c/ast/NDeclaration.h>
 #include <amanda-c/ast/NNamespaceDeclaration.h>
 
+// AIL
+#include <amanda-vm/IL/Module.h>
+
 #include <stack>
 #include <vector>
 
@@ -51,17 +54,20 @@ public:
     NCompilationUnit(const core::String& name);
     virtual ~NCompilationUnit();
 
+    il::Module*             performSSATransformationForModule(il::CodeGenContext& context);
     NNamespaceDeclaration*  getCurrentNamespace() const;
     const core::String&     getName() const;
     void                    popNamespace();
     NNamespaceDeclaration&  pushNamespace(NNamespaceDeclaration* object);
-    
+
 protected:
 
     core::String                        name;
     std::stack<NNamespaceDeclaration*>  namespaces;
     std::stack<il::AstNodeBase*>        localScopes;
-    
+
+    std::vector<il::Value*> performSSATransformationForNamespace(il::CodeGenContext& context, NNamespaceDeclaration* current);
+
 } ;
 
 }

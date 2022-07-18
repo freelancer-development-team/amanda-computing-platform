@@ -57,7 +57,33 @@ void AssemblyILExporter::exportData(io::OutputStream& stream)
 
         stream.write(dateTimeBuffer);
     }
+    // Print the module name
+    stream.write("# Module identifier: " + module->getIdentifier() + "\n\n");
 
+    // Write the code section
+    stream.write(".section \".code\"\n.attributes \"rx\"\n\n");
+    for (Module::FunctionList::const_iterator it = module->getFunctions().begin(),
+         end = module->getFunctions().end(); it != end; ++it)
+    {
+        exportDataForFunction(stream, *it);
+    }
+
+    // Write the data & rodata section
+    stream.write(".section \".data\"\n.attributes \"rw\"\n\n");
 }
+
+void AssemblyILExporter::exportDataForFunction(io::OutputStream& stream, Function* f) const
+{
+    core::String result("# Generating code for function: " + f->getName() + "\n");
+    // Begin
+    result.append(".def " + f->getName() + "\n");
+    stream.write(result);
+
+    
+
+    // End
+    stream.writeln(".endef\n");
+}
+
 
 

@@ -30,10 +30,14 @@ using namespace amanda;
 using namespace amanda::il;
 
 Instruction::Instruction(const Type* type, unsigned iType, const UseList& operands, Instruction* insertBefore)
+:
+ValueReferrer(type, iType, operands)
 {
 }
 
 Instruction::Instruction(const Type* type, unsigned iType, const UseList& operands, BasicBlock* insertAtEnd)
+:
+ValueReferrer(type, iType, operands)
 {
 }
 
@@ -127,7 +131,7 @@ void Instruction::insert(Instruction* insertPosition, bool before)
 
 bool Instruction::isArithmeticShift() const
 {
-    
+
 }
 
 bool Instruction::isAssociative() const
@@ -231,22 +235,27 @@ void Instruction::setHasApproxFunction(bool b)
 
 void Instruction::setHasNoInfs(bool b)
 {
+    flags.ninfs = b;
 }
 
 void Instruction::setHasNoNans(bool b)
 {
+    flags.nnans = b;
 }
 
 void Instruction::setHasNoSignedWrap(bool b)
 {
+    flags.nsw = b;
 }
 
 void Instruction::setHasNoSignedZeros(bool b)
 {
+    flags.nsz = b;
 }
 
 void Instruction::setHasNoUnsignedWrap(bool b)
 {
+    flags.nuw = b;
 }
 
 

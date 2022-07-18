@@ -64,6 +64,31 @@ void AstNodeBase::addChild(AstNodeBase* child)
     children.push_back(child);
 }
 
+AstNodeBase::Iterator AstNodeBase::begin()
+{
+    return children.begin();
+}
+
+AstNodeBase::ConstIterator AstNodeBase::begin() const
+{
+    return children.begin();
+}
+
+AstNodeBase::Iterator AstNodeBase::end()
+{
+    return children.end();
+}
+
+AstNodeBase::ConstIterator AstNodeBase::end() const
+{
+    return children.end();
+}
+
+const AstNodeBase* AstNodeBase::getParent() const
+{
+    return parent;
+}
+
 AstNodeBase* AstNodeBase::getParent()
 {
     return parent;
@@ -101,7 +126,7 @@ void AstNodeBase::doSemanticAnalysis(SemanticAnalysisContext& context)
     }
 }
 
-Value* AstNodeBase::generateCode(CodeGenContext& context)
+Value* AstNodeBase::performSSATransformation(CodeGenContext& context)
 {
     return NULL;
 }

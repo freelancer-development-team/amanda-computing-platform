@@ -29,13 +29,10 @@ using namespace amanda::il;
 
 /* INTEGER TYPE */
 
-IntegerType* IntegerType::get(unsigned numBits)
-{
-    return NULL;
-}
 
-IntegerType::IntegerType(const unsigned numBits)
+IntegerType::IntegerType(CodeGenContext& context, const unsigned numBits)
 :
+Type(context, ID_IntegerType),
 numBits(numBits)
 {
 }

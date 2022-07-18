@@ -36,6 +36,7 @@ Function::Function(const Type* type, const core::String& name, Module* m)
 :
 Value(type, 0)
 {
+    setName(name);
 }
 
 Function::~Function()

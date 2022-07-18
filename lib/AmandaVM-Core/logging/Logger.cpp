@@ -58,14 +58,10 @@ Logger* Logger::getLogger(const core::String& name)
 #define DECLARE_SHORTCUT(name, l) \
     void Logger::name(const core::String& fmt, ...) const \
     { \
-        AMANDA_SYNCHRONIZED(lock); \
-        { \
             va_list va; \
             va_start(va, fmt); \
             logp(l, fmt, va); \
             va_end(va); \
-        } \
-        AMANDA_DESYNCHRONIZED(lock); \
     }
 
 #define DECLARE_SHORTCUTS \
@@ -146,26 +142,21 @@ bool Logger::getUseParentHandlers() const
 
 bool Logger::isLoggable(int level) const
 {
-    AMANDA_SYNCHRONIZED(lock);
+    if (level != L_NONE)
     {
-        if (level != L_NONE)
+        return this->level >= level;
+    }
+    else
+    {
+        if (parent != NULL)
         {
-            return this->level >= level;
+            return parent->isLoggable(level);
         }
         else
         {
-            if (parent != NULL)
-            {
-                return parent->isLoggable(level);
-            }
-            else
-            {
-                return false;
-            }
+            return false;
         }
     }
-    AMANDA_DESYNCHRONIZED(lock);
-
     return false;
 }
 
@@ -181,39 +172,39 @@ void Logger::log(Level level, const core::String& fmt, ...) const
 
 void Logger::log(const LogRecord& record) const
 {
-    AMANDA_SYNCHRONIZED(lock);
+    //    AMANDA_SYNCHRONIZED(lock);
+    //    {
+    if (isLoggable(record.getLevel()) && (filter != NULL ? filter->isLoggable(record) : true))
     {
-        if (isLoggable(record.getLevel()) && (filter != NULL ? filter->isLoggable(record) : true))
+        if (record.getLoggerName() == core::String::EMPTY)
         {
-            if (record.getLoggerName() == core::String::EMPTY)
-            {
-                record.setLoggerName(name);
-            }
-
-            AMANDA_SYNCHRONIZED(lm);
-            {
-                const Logger* currentLogger = this;
-
-                do
-                {
-                    for (unsigned i = 0; i < currentLogger->handlerList.size(); ++i)
-                    {
-                        currentLogger->handlerList.at(i)->publish(record);
-                    }
-
-                    if (currentLogger->useParentHandlers == false)
-                    {
-                        break;
-                    }
-
-                    currentLogger = currentLogger->getParent();
-                }
-                while (currentLogger != NULL);
-            }
-            AMANDA_DESYNCHRONIZED(lm);
+            record.setLoggerName(name);
         }
+
+        AMANDA_SYNCHRONIZED(lm);
+        {
+            const Logger* currentLogger = this;
+
+            do
+            {
+                for (unsigned i = 0; i < currentLogger->handlerList.size(); ++i)
+                {
+                    currentLogger->handlerList.at(i)->publish(record);
+                }
+
+                if (currentLogger->useParentHandlers == false)
+                {
+                    break;
+                }
+
+                currentLogger = currentLogger->getParent();
+            }
+            while (currentLogger != NULL);
+        }
+        AMANDA_DESYNCHRONIZED(lm);
     }
-    AMANDA_DESYNCHRONIZED(lock);
+    //    }
+    //    AMANDA_DESYNCHRONIZED(lock);
 }
 
 void Logger::setFilter(Filter* filter)
