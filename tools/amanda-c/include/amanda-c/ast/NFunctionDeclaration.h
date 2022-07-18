@@ -28,6 +28,8 @@
 #include <amanda-c/ast/NDeclaration.h>
 #include <amanda-c/ast/NBlock.h>
 
+#include <amanda-vm/IL/Function.h>
+
 #include <vector>
 
 namespace amanda
@@ -45,8 +47,10 @@ public:
 
     NFunctionDeclaration(const core::String& identifier, NBlock* statements);
     virtual ~NFunctionDeclaration();
-    
-    virtual core::String toString() const;
+
+    core::String            getFullyQualifiedName() const;
+    virtual il::Value*      performSSATransformation(il::CodeGenContext& context);
+    virtual core::String    toString() const;
 
 protected:
 

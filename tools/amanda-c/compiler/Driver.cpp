@@ -93,6 +93,7 @@ int Driver::compileFile(io::File* input, io::File* output)
 
         // Perform the different optimization passes as specified
 
+
         // Export the IL to assembly code
         core::StrongReference<il::ILExporter> exporter = new il::AssemblyILExporter(module);
         if (!assemble)

@@ -141,25 +141,25 @@ bool File::canWrite() const
 
 void File::close()
 {
-    AMANDA_SYNCHRONIZED(lock);
+    //AMANDA_SYNCHRONIZED(lock);
+    //{
+    if (handle)
     {
-        if (handle)
+        if (handle != stdout
+            && handle != stdin
+            && handle != stderr)
         {
-            if (handle != stdout
-                && handle != stdin
-                && handle != stderr)
-            {
-                fflush(handle);
-                rewind(handle);
-                clearerr(handle);
+            fflush(handle);
+            rewind(handle);
+            clearerr(handle);
 
-                fclose(handle);
+            fclose(handle);
 
-                attributes.attr_open = false;
-            }
+            attributes.attr_open = false;
         }
     }
-    AMANDA_DESYNCHRONIZED(lock);
+    //}
+    //AMANDA_DESYNCHRONIZED(lock);
 }
 
 bool File::exists() const
@@ -278,11 +278,11 @@ bool File::isError() const
     bool result = false;
     if (handle)
     {
-        AMANDA_SYNCHRONIZED(lock);
-        {
-            result = ferror(handle);
-        }
-        AMANDA_DESYNCHRONIZED(lock);
+        //AMANDA_SYNCHRONIZED(lock);
+        //{
+        result = ferror(handle);
+        //}
+        //AMANDA_DESYNCHRONIZED(lock);
     }
     return result;
 }
@@ -363,38 +363,38 @@ bool File::read(char* buffer, size_t size) const
 bool File::read(char* buffer, size_t size, size_t count) const
 {
     bool result = false;
-    AMANDA_SYNCHRONIZED(lock);
+    //AMANDA_SYNCHRONIZED(lock);
+    //{
+    if ((size > 0) && (buffer != NULL)
+        && handle != NULL
+        && (accessMode & READ)
+        && isFile())
     {
-        if ((size > 0) && (buffer != NULL)
-            && handle != NULL
-            && (accessMode & READ)
-            && isFile())
-        {
-            clearerr(handle);
-            size_t read = fread(buffer, size, count, handle);
+        clearerr(handle);
+        size_t read = fread(buffer, size, count, handle);
 
-            result = !ferror(handle) && (read > 0);
-        }
+        result = !ferror(handle) && (read > 0);
     }
-    AMANDA_DESYNCHRONIZED(lock);
+    //}
+    //AMANDA_DESYNCHRONIZED(lock);
     return result;
 }
 
 bool File::readline(char* buffer, size_t limit) const
 {
     bool result = false;
-    AMANDA_SYNCHRONIZED(lock);
+    //AMANDA_SYNCHRONIZED(lock);
+    //{
+    if ((handle != NULL) && canRead() && !isEndOfFile())
     {
-        if ((handle != NULL) && canRead() && !isEndOfFile())
-        {
-            clearerr(handle);
-            fgets(buffer, limit, handle);
-            buffer[strlen(buffer) - 1] = '\0';
+        clearerr(handle);
+        fgets(buffer, limit, handle);
+        buffer[strlen(buffer) - 1] = '\0';
 
-            result = ferror(handle) == false;
-        }
+        result = ferror(handle) == false;
     }
-    AMANDA_DESYNCHRONIZED(lock);
+    //}
+    //AMANDA_DESYNCHRONIZED(lock);
     return result;
 }
 
@@ -413,11 +413,11 @@ bool File::reset() const
     bool result = false;
     if (handle && isFile())
     {
-        AMANDA_SYNCHRONIZED(lock);
-        {
-            rewind(handle);
-        }
-        AMANDA_DESYNCHRONIZED(lock);
+        //AMANDA_SYNCHRONIZED(lock);
+        //{
+        rewind(handle);
+        //}
+        //AMANDA_DESYNCHRONIZED(lock);
         result = true;
     }
     return result;
@@ -425,64 +425,64 @@ bool File::reset() const
 
 void File::setPosition(uint64_t offset) const
 {
-    AMANDA_SYNCHRONIZED(lock);
+    //AMANDA_SYNCHRONIZED(lock);
+    //{
+    if (isOpen() && isFile())
     {
-        if (isOpen() && isFile())
-        {
-            // Reset the file indicator
-            rewind(handle);
+        // Reset the file indicator
+        rewind(handle);
 
-            // Get how many iterations and the final addendum
-            fseeko64(handle, (off64_t) offset, SEEK_SET);
-        }
+        // Get how many iterations and the final addendum
+        fseeko64(handle, (off64_t) offset, SEEK_SET);
     }
-    AMANDA_DESYNCHRONIZED(lock);
+    //}
+    //AMANDA_DESYNCHRONIZED(lock);
 }
 
 uint64_t File::tell() const
 {
     off64_t position = 0;
-    AMANDA_SYNCHRONIZED(lock);
+    //    AMANDA_SYNCHRONIZED(lock);
+    //    {
+    if (isOpen() && isFile())
     {
-        if (isOpen() && isFile())
-        {
-            position = ftello64(handle);
-        }
+        position = ftello64(handle);
     }
-    AMANDA_DESYNCHRONIZED(lock);
+    //    }
+    //    AMANDA_DESYNCHRONIZED(lock);
     return (uint64_t) position;
 }
 
 bool File::write(const char* str) const
 {
     bool result = false;
-    AMANDA_SYNCHRONIZED(lock);
+    //    AMANDA_SYNCHRONIZED(lock);
+    //    {
+    if (handle && (accessMode & WRITE) && isFile())
     {
-        if (handle && (accessMode & WRITE) && isFile())
-        {
-            size_t written = fwrite(str, sizeof (char), strlen(str), handle);
-            fflush(handle);
+        size_t written = fwrite(str, sizeof (char), strlen(str), handle);
+        fflush(handle);
 
-            result = (written == strlen(str));
-        }
+        result = (written == strlen(str));
     }
-    AMANDA_DESYNCHRONIZED(lock);
+    //    }
+    //    AMANDA_DESYNCHRONIZED(lock);
     return result;
 }
 
 bool File::write(const void* bytes, size_t size) const
 {
     bool result = false;
-    AMANDA_SYNCHRONIZED(lock);
+    //    AMANDA_SYNCHRONIZED(lock);
+    //    {
+    if (handle && (accessMode & WRITE) && isFile())
     {
-        if (handle && (accessMode & WRITE) && isFile())
-        {
-            size_t written = fwrite(bytes, sizeof (char), size, handle);
-            fflush(handle);
+        size_t written = fwrite(bytes, sizeof (char), size, handle);
+        fflush(handle);
 
-            result = (written == size);
-        }
+        result = (written == size);
     }
-    AMANDA_DESYNCHRONIZED(lock);
+    //    }
+    //    AMANDA_DESYNCHRONIZED(lock);
     return result;
 }

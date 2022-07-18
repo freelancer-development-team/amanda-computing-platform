@@ -99,8 +99,8 @@ public:
 
 protected:
 
-    core::WeakReference<Module*>    module;
-    core::WeakReference<Function*>  parent;
+    core::WeakReference<Module>     module;
+    core::WeakReference<Function>   parent;
 
 } ;
 

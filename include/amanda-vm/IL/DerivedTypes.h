@@ -26,6 +26,7 @@
 #define DERIVEDTYPES_H
 
 #include <amanda-vm/IL/Type.h>
+#include <amanda-vm/IL/CodeGenContext.h>
 
 /* C standard integer types. */
 #include <stdint.h>
@@ -38,6 +39,7 @@ namespace il
 
 class IntegerType : public Type
 {
+
     AMANDA_OBJECT(IntegerType, Type)
 
 public:
@@ -46,25 +48,21 @@ public:
     {
         MIN_INT_BITS = 1,
         MAX_INT_BITS = (1 << 23)
-    };
+    } ;
 
     typedef uint64_t    uinteger_t;
     typedef int64_t     integer_t;
 
-    static IntegerType* get(unsigned numBits);
+    IntegerType(CodeGenContext& context, const unsigned numBits);
 
     uinteger_t  getBitMask() const;
     unsigned    getNumberOfBits() const;
     uinteger_t  getSignBit() const;
-    
-protected:
-
-    IntegerType(const unsigned numBits);
 
 private:
 
     const unsigned numBits;
-};
+} ;
 
 }
 }

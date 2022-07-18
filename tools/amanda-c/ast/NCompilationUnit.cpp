@@ -23,8 +23,11 @@
  */
 
 #include <amanda-c/ast/NCompilationUnit.h>
+#include <amanda-c/ast/NFunctionDeclaration.h>
 
+// C++
 #include <cstdio>
+#include <algorithm>
 
 using namespace amanda;
 using namespace amanda::compiler::ast;
@@ -33,12 +36,36 @@ NCompilationUnit::NCompilationUnit(const core::String& name)
 :
 name(name)
 {
-    
 }
 
 NCompilationUnit::~NCompilationUnit()
 {
-    
+}
+
+il::Module* NCompilationUnit::performSSATransformationForModule(il::CodeGenContext& context)
+{
+    il::Module* result = new il::Module(getName());
+    for (ConstIterator it = begin(), end = this->end(); it != end; ++it)
+    {
+        AstNodeBase* node = (*it);
+        if (node->is<NNamespaceDeclaration>())
+        {
+            const std::vector<il::Value*>& values = performSSATransformationForNamespace(context, static_cast<NNamespaceDeclaration*> (node));
+            for (std::vector<il::Value*>::const_iterator it = values.begin(),
+                 end = values.end(); it != end; ++it)
+            {
+                if ((*it)->is<il::Function>())
+                {
+                    result->addFunction(static_cast<il::Function*> (*it));
+                }
+            }
+        }
+        else if (node->is<NFunctionDeclaration>())
+        {
+            result->addFunction(static_cast<il::Function*> (node->performSSATransformation(context)));
+        }
+    }
+    return result;
 }
 
 const core::String& NCompilationUnit::getName() const
@@ -64,6 +91,33 @@ NNamespaceDeclaration& NCompilationUnit::pushNamespace(NNamespaceDeclaration* ob
 
     object->grab();
     namespaces.push(object);
-    
+
     return *object;
 }
+
+std::vector<il::Value*> NCompilationUnit::performSSATransformationForNamespace(il::CodeGenContext& context, NNamespaceDeclaration* current)
+{
+    // Create the result vector and reserve 64 slots
+    // (512B memory in 64bit machines, 256B in 32bit machines)
+    std::vector<il::Value*> result;
+    result.reserve(64);
+
+    // Build all the IL in-memory. For this process we will descend recursively
+    // as long as there are name spaces with unprocessed symbols.
+    for (ConstIterator it = current->begin(), end = current->end(); it != end; ++it)
+    {
+        if ((*it)->is<NNamespaceDeclaration>())
+        {
+            const std::vector<il::Value*>& partial = performSSATransformationForNamespace(context, static_cast<NNamespaceDeclaration*> (*it));
+            std::copy(partial.begin(), partial.end(), std::back_inserter(result));
+        }
+        else
+        {
+            result.push_back((*it)->performSSATransformation(context));
+        }
+    }
+
+    // Return the results of that
+    return result;
+}
+

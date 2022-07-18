@@ -33,11 +33,25 @@ namespace amanda
 namespace il
 {
 
+/**
+ * A <code>Module</code> is the main container class for the Intermediate
+ * Language representation. A <code>Module</code> instance is used to store
+ * all the information related to a IL-module. They are top level containers
+ * of other IL objects.
+ * <p>
+ * Each module directly contains a list of functions and libraries (or modules)
+ * a module depends on, a global symbol table and various data about the
+ * target´s characteristics.
+ *
+ * @author J. Marrero
+ */
 class Module : public core::Object
 {
     AMANDA_OBJECT(Module, core::Object)
 
 public:
+
+    typedef std::vector<Function*>  FunctionList;
 
     Module(const core::String& id);
     virtual ~Module();

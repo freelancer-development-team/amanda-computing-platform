@@ -44,7 +44,7 @@ public:
     NBinaryOperator(BinaryOperator kind, NExpression* lhs, NExpression* rhs);
     virtual ~NBinaryOperator();
 
-    virtual il::Value*      generateCode(il::CodeGenContext& context);
+    virtual il::Value*      performSSATransformation(il::CodeGenContext& context);
     virtual core::String    toString() const;
 
 protected:

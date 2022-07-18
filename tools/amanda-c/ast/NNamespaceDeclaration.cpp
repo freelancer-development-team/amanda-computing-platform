@@ -25,6 +25,9 @@
 #include <amanda-c/ast/NNamespaceDeclaration.h>
 #include <amanda-vm/ADT/Array.h>
 
+// C++
+#include <stack>
+
 using namespace amanda;
 using namespace amanda::compiler::ast;
 
@@ -39,7 +42,7 @@ NNamespaceDeclaration* amanda::compiler::ast::buildNamespacesByQualifiedName(con
     // Create the parent node
     parent = new NNamespaceDeclaration(tokens.front());
     NNamespaceDeclaration* previous = parent;
-    
+
     for (std::vector<core::String>::iterator it = ++(tokens.begin());
          it != tokens.end(); ++it)
     {
@@ -71,10 +74,80 @@ NNamespaceDeclaration::~NNamespaceDeclaration()
 {
 }
 
+core::String NNamespaceDeclaration::buildRecursiveNameChain() const
+{
+    core::String result;
+    std::stack<core::String> names;
+
+    // Recursively build the name chain
+    const NNamespaceDeclaration* nspace = this;
+    do
+    {
+        names.push(nspace->getName());
+        nspace = walkNamespaceChainUpwards();
+    }
+    while (nspace != NULL);
+
+    // Now push them all
+    while (!names.empty())
+    {
+        result.append(names.top());
+        if (names.size() - 1 > 0)
+        {
+            result.append("::");
+        }
+
+        // Cleanse
+        names.pop();
+    }
+    return result;
+}
+
+const core::String& NNamespaceDeclaration::getName() const
+{
+    return name;
+}
+
 core::String NNamespaceDeclaration::toString() const
 {
     core::String buffer(buildHeaderString());
     buffer.append("Namespace name: ").append(name);
 
     return buffer;
+}
+
+NNamespaceDeclaration* NNamespaceDeclaration::walkNamespaceChainUpwards() const
+{
+    NNamespaceDeclaration* result = NULL;
+
+    // Get the parent
+    const AstNodeBase* baseNode = getParent();
+    if (baseNode != NULL)
+    {
+        if (baseNode->is<NNamespaceDeclaration>())
+        {
+            result = eliminateConstness(static_cast<const NNamespaceDeclaration*> (baseNode));
+        }
+        else
+        {
+            bool found = false;
+            const AstNodeBase* recursiveParent = baseNode->getParent();
+            while (recursiveParent != NULL && !found)
+            {
+                if (recursiveParent->is<NNamespaceDeclaration>())
+                {
+                    result = eliminateConstness(static_cast<const NNamespaceDeclaration*> (recursiveParent));
+                    found = true;
+                }
+                else
+                {
+                    // Recurse
+                    recursiveParent = baseNode->getParent();
+                }
+            }
+        }
+    }
+
+    // Return the result pointer
+    return result;
 }

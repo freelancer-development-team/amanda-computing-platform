@@ -1,0 +1,18 @@
+amanda-vm: info: creating virtual machine context object (0x0000011ec7d34fa0)
+amanda-vm: info: initializing virtual file-system server (root path 'D:/Workspace/freelancer-amanda-computing-platform-master/dist/amanda-sdk').
+amanda-vm: finest: successfully checked existence of directory: D:\Workspace\freelancer-amanda-computing-platform-master\dist\amanda-sdk\bin
+amanda-vm: finest: successfully checked existence of directory: D:\Workspace\freelancer-amanda-computing-platform-master\dist\amanda-sdk\lib
+amanda-vm: finest: successfully checked existence of directory: D:\Workspace\freelancer-amanda-computing-platform-master\dist\amanda-sdk\mods
+amanda-vm: info: loading runtime descriptor for the standard C library.
+amanda-vm: info: attempting load of native library: msvcrt
+amanda-vm: info: module 'msvcrt' loaded successfully as a native library. Handle at 0x00007ff92de10000
+amanda-vm: info: loading module: vfs://D:\Workspace\freelancer-amanda-computing-platform-master\benchmarks\b1.ax (scheme: vfs) [D:\Workspace\freelancer-amanda-computing-platform-master\benchmarks\b1.ax]
+amanda-vm: info: 	-- EXEC STARTED --
+amanda-vm: info: execution started (local date & time: Mon Jul 18 00:18:46 2022)
+amanda-vm: info: execution finished, return value: 0
+amanda-vm: info: destroying virtual machine context @ 0x0000011ec7d34fa0.
+amanda-vm: info: unloading dynamic link library 'msvcrt'.
+amanda-vm: info: un-caching local symbol '@@main?A_string@!l32'.
+amanda-vm: info: deleting global optimization criteria of class 'NullOptimizationCriteria'
+amanda-vm: info: 	-- EXEC FINISHED --
+

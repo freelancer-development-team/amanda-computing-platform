@@ -45,7 +45,10 @@ public:
     NNamespaceDeclaration(const core::String& name);
     virtual ~NNamespaceDeclaration();
 
-    virtual core::String toString() const;
+    core::String            buildRecursiveNameChain() const;
+    const core::String&     getName() const;
+    virtual core::String    toString() const;
+    NNamespaceDeclaration*  walkNamespaceChainUpwards() const;
 
 private:
 

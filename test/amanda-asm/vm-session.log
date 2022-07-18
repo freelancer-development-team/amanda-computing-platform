@@ -1,32 +1,26 @@
-amanda-vm: info: creating virtual machine context object (0x0000018e7814eae0)
+amanda-vm: info: creating virtual machine context object (0x000001f4d4894fa0)
 amanda-vm: info: initializing virtual file-system server (root path 'D:/Workspace/freelancer-amanda-computing-platform-master/dist/amanda-sdk').
 amanda-vm: finest: successfully checked existence of directory: D:\Workspace\freelancer-amanda-computing-platform-master\dist\amanda-sdk\bin
 amanda-vm: finest: successfully checked existence of directory: D:\Workspace\freelancer-amanda-computing-platform-master\dist\amanda-sdk\lib
 amanda-vm: finest: successfully checked existence of directory: D:\Workspace\freelancer-amanda-computing-platform-master\dist\amanda-sdk\mods
 amanda-vm: info: loading runtime descriptor for the standard C library.
 amanda-vm: info: attempting load of native library: msvcrt
-amanda-vm: info: module 'msvcrt' loaded successfully as a native library. Handle at 0x00007ffc1e6e0000
-amanda-vm: info: loading module: vfs://amanda-demo.ax (scheme: vfs) [amanda-demo.ax]
+amanda-vm: info: module 'msvcrt' loaded successfully as a native library. Handle at 0x00007ff92de10000
+amanda-vm: info: loading module: vfs://D:\Workspace\freelancer-amanda-computing-platform-master\test\amanda-asm\program-02.ax (scheme: vfs) [D:\Workspace\freelancer-amanda-computing-platform-master\test\amanda-asm\program-02.ax]
 amanda-vm: info: 	-- EXEC STARTED --
-amanda-vm: info: execution started (local date & time: Thu Jul 14 23:19:30 2022)
-amanda-vm: info: created native procedure handle to process at 0x00007ffc1e72e620, with name 'puts', and with 1 arguments.
-amanda-vm: info: created native procedure handle to process at 0x00007ffc1e727790, with name 'putchar', and with 1 arguments.
-amanda-vm: info: created native procedure handle to process at 0x00007ffc1e745340, with name 'clock', and with 0 arguments.
-amanda-vm: info: created native procedure handle to process at 0x00007ffc1e726fd0, with name 'getchar', and with 0 arguments.
+amanda-vm: info: execution started (local date & time: Mon Jul 18 00:19:06 2022)
+amanda-vm: info: created native procedure handle to process at 0x00007ff92de57790, with name 'putchar', and with 1 arguments.
+amanda-vm: info: created native procedure handle to process at 0x00007ff92de75340, with name 'clock', and with 0 arguments.
+amanda-vm: info: created native procedure handle to process at 0x00007ff92de56fd0, with name 'getchar', and with 0 arguments.
 amanda-vm: info: execution finished, return value: 0
-amanda-vm: info: destroying virtual machine context @ 0x0000018e7814eae0.
+amanda-vm: info: destroying virtual machine context @ 0x000001f4d4894fa0.
 amanda-vm: info: unloading dynamic link library 'msvcrt'.
 amanda-vm: info: un-caching native symbol 'clock'.
 amanda-vm: info: un-caching native symbol 'getchar'.
 amanda-vm: info: un-caching native symbol 'putchar'.
-amanda-vm: info: un-caching native symbol 'puts'.
 amanda-vm: info: un-caching local symbol '@@main?A_string@!l32'.
-amanda-vm: info: un-caching local symbol 'cls'.
 amanda-vm: info: un-caching local symbol 'delay'.
 amanda-vm: info: un-caching local symbol 'pause'.
-amanda-vm: info: un-caching local symbol 'print_heart'.
-amanda-vm: info: un-caching local symbol 'print_presentation'.
-amanda-vm: info: un-caching local symbol 'print_prologue'.
 amanda-vm: info: un-caching local symbol 'slowprint'.
 amanda-vm: info: deleting global optimization criteria of class 'NullOptimizationCriteria'
 amanda-vm: info: 	-- EXEC FINISHED --

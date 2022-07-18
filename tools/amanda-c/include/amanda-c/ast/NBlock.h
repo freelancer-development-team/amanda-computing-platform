@@ -49,7 +49,7 @@ public:
     void                        cloneBlockState(NBlock* block);
     const StatementList&        getStatementList() const;
     bool                        hasStatements() const;
-    virtual amanda::il::Value*  generateCode(amanda::il::CodeGenContext& context);
+    virtual amanda::il::Value*  performSSATransformation(amanda::il::CodeGenContext& context);
 
 protected:
 

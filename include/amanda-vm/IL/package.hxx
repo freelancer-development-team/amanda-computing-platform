@@ -30,11 +30,15 @@
  */
 
 #include "AbstractPass.h"
+#include "Argument.h"
+#include "AssemblyILExporter.h"
 #include "AstNodeBase.h"
 #include "BasicBlock.h"
 #include "CodeGenContext.h"
 #include "DerivedTypes.h"
+#include "Function.h"
 #include "ILExporter.h"
+#include "Instruction.h"
 #include "Location.h"
 #include "Module.h"
 #include "PassManager.h"
@@ -42,6 +46,7 @@
 #include "Symbol.h"
 #include "SymbolTable.h"
 #include "Type.h"
+#include "Use.h"
 #include "Value.h"
 #include "ValueReferrer.h"
 

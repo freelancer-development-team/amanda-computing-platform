@@ -23,6 +23,7 @@
  */
 
 #include <amanda-vm/IL/Value.h>
+#include <amanda-vm/IL/ValueListener.h>
 #include <amanda-vm/IL/ValueReferrer.h>
 
 using namespace amanda;

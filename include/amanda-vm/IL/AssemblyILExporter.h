@@ -26,6 +26,7 @@
 #define ASSEMBLYILEXPORTER_H
 
 #include <amanda-vm/IL/ILExporter.h>
+#include <amanda-vm/IL/Function.h>
 
 namespace amanda
 {
@@ -42,6 +43,9 @@ public:
 
     virtual void exportData(io::OutputStream& stream);
 
+private:
+
+    void exportDataForFunction(io::OutputStream& stream, Function* f) const;
 } ;
 
 }

@@ -23,6 +23,7 @@
  */
 
 #include <amanda-c/ast/NFunctionDeclaration.h>
+#include <amanda-c/ast/NNamespaceDeclaration.h>
 
 using namespace amanda;
 using namespace amanda::compiler::ast;
@@ -37,6 +38,33 @@ statements(statements)
 
 NFunctionDeclaration::~NFunctionDeclaration()
 {
+}
+
+core::String NFunctionDeclaration::getFullyQualifiedName() const
+{
+    core::String result("@@");
+    if (getParent() != NULL && (getParent()->is<NNamespaceDeclaration>()))
+    {
+        const NNamespaceDeclaration* ns = static_cast<const NNamespaceDeclaration*> (getParent());
+        result.append(ns->buildRecursiveNameChain()).append("::");
+    }
+    result.append(identifier);
+    return result;
+}
+
+il::Value* NFunctionDeclaration::performSSATransformation(il::CodeGenContext& context)
+{
+    core::String id = getFullyQualifiedName();
+    if (id.endsWith("main"))
+    {
+        //TODO: add all the other checks to ensure this is the main function
+        id = "@@main";
+    }
+
+    il::Function* result = il::Function::create(new il::Type(context, il::Type::ID_VoidType),
+                                                id,
+                                                NULL);
+    return result;
 }
 
 core::String NFunctionDeclaration::toString() const

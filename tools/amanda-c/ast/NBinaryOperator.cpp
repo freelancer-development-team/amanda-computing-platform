@@ -41,7 +41,7 @@ NBinaryOperator::~NBinaryOperator()
 {
 }
 
-il::Value* NBinaryOperator::generateCode(il::CodeGenContext& context)
+il::Value* NBinaryOperator::performSSATransformation(il::CodeGenContext& context)
 {
     il::Value* result = NULL;
 
